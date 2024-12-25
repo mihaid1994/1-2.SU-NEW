@@ -1,0 +1,356 @@
+/* Основные настройки для всего документа */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #e0e0e0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.unique-container {
+  margin: 15px auto; /* Отступы сверху и снизу по 15px, центрируем контейнер по горизонтали */
+  width: calc(100% - 160px); /* Ширина контейнера с учетом отступов */
+  background-size: cover; /* Изображение покрывает контейнер */
+  background-repeat: no-repeat; /* Избегаем повторения */
+  background-position: center; /* Центрируем изображение */
+  aspect-ratio: 19 / 8.2; /* Соотношение сторон, замените на нужное, если известно */
+  display: block; /* Обеспечиваем корректное отображение */
+  border-radius: 15px; /* Скругленные края */
+  overflow: hidden; /* Убираем выходящие за границы элементы */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+}
+
+.unique-container:hover {
+  transform: scale(1.005); /* Лёгкое увеличение при наведении */
+}
+
+/* Родительский контейнер */
+#banner-2 {
+  width: 1358px; /* 1024px * 0.3 */
+  height: 260px; /* 768px * 0.3 */
+  overflow: hidden; /* Скрыть лишнее содержимое */
+  position: relative;
+  display: flex;
+  margin: 15px auto; /* Центрирование контейнера по горизонтали */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  border-radius: 10px;
+}
+
+/* Iframe */
+.info-iframe {
+  transform-origin: center; /* Точка начала масштабирования */
+  border: none; /* Убираем границы */
+  position: absolute; /* Чтобы корректно позиционировать iframe */
+  top: 0;
+  left: 0;
+  width: 2090px; /* Исходная ширина содержимого */
+  height: 400px; /* Исходная высота содержимого */
+}
+
+/* Сетка */
+.grid-wrapper {
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 95%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transition: margin-bottom 0.3s ease;
+}
+
+.grid-container {
+  display: grid;
+  gap: 15px;
+  justify-content: center;
+  margin: 0px 27px 20px 27px;
+  grid-template-columns: repeat(8, 1fr);
+  background-color: #ededed;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+}
+
+.grid-item {
+  position: relative; /* Для абсолютного позиционирования текста */
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  background-color: #ededed;
+  border-radius: 10px;
+  aspect-ratio: 1 / 1;
+  cursor: pointer; /* Указатель при наведении */
+  overflow: hidden; /* Обрезка содержимого, если необходимо */
+  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+}
+
+.grid-item:hover {
+  transform: scale(1.03); /* Лёгкое увеличение при наведении */
+}
+
+.category-text {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.7); /* Полупрозрачный фон для читаемости */
+  border-radius: 5px;
+  font-size: 0.7em; /* Уменьшенный размер шрифта до 70% */
+  font-weight: bold;
+  color: #414141;
+  max-width: 90%;
+  box-sizing: border-box;
+  /* Адаптивность шрифта */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Ограничение до 2 строк */
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+/* Фирменные стили для брендов */
+.brand-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 27px 20px 27px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ededed;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+}
+
+.brand-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.5em;
+  text-align: left;
+  margin: 0 0 7px 13px; /* Отступ снизу для разделения с сеткой */
+  color: #555555; /* Тёмно-серый цвет */
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Всегда 6 колонок */
+  gap: 15px;
+}
+
+.brand-item {
+  background-size: contain; /* Подгонка изображения по ширине */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: white; /* Заполнение свободного места белым */
+  aspect-ratio: 2.85 / 2; /* Квадратные ячейки */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень */
+  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+  cursor: pointer;
+}
+
+.brand-item:hover {
+  transform: scale(1.02); /* Лёгкое увеличение при наведении */
+}
+
+/* Медиазапросы для адаптивности */
+@media (max-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .brand-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 10px; /* Уменьшаем отступы */
+  }
+}
+
+@media (max-width: 992px) {
+  .grid-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .brand-grid {
+    /* Уменьшаем размер ячеек без изменения количества колонок */
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .brand-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 8px; /* Ещё меньше отступы */
+  }
+}
+
+@media (max-width: 500px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 5px; /* Минимальные отступы */
+  }
+
+  .category-text {
+    font-size: 0.63em; /* 70% от 0.9em */
+  }
+
+  .brand-title {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+
+  .brand-item {
+    /* Возможно, уменьшить размеры или настроить другие параметры */
+  }
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  color: white;
+  padding: 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 73%;
+  margin: 0 auto;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Адаптация отступов и сетки при уменьшении ширины экрана */
+@media (max-width: 1200px) {
+  .grid-wrapper {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .grid-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .grid-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 70vw) {
+  .grid-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Фирменные стили для хитов продаж */
+.hits-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 27px 20px 27px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  background-color: #ededed; /* Дополнительная подложка, если необходимо */
+}
+
+.hits-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.5em;
+  text-align: left;
+  margin: 0 0 0px 13px;
+  color: #555555; /* Тёмно-серый цвет */
+}
+
+.hits-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Всегда 6 колонок */
+  gap: 10px;
+}
+
+.hits-item {
+  background-size: contain; /* Подгонка изображения по ширине */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: white; /* Заполнение свободного места белым */
+  aspect-ratio: 1 / 1.98; /* Квадратные ячейки */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень */
+  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+  cursor: pointer; /* Указатель при наведении */
+}
+
+.hits-item:hover {
+  transform: scale(1.015); /* Лёгкое увеличение при наведении */
+}
+
+/* Модификация существующих медиазапросов для нового грида */
+
+@media (max-width: 1200px) {
+  .hits-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 10px; /* Уменьшаем отступы */
+  }
+}
+
+@media (max-width: 992px) {
+  .hits-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 8px; /* Ещё меньше отступы */
+  }
+}
+
+@media (max-width: 768px) {
+  .hits-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 8px; /* Ещё меньше отступы */
+  }
+}
+
+@media (max-width: 500px) {
+  .hits-grid {
+    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
+    gap: 5px; /* Минимальные отступы */
+  }
+
+  .hits-title {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+}

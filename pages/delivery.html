@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Товары по доставкам</title>
+    <link rel="stylesheet" href="/css/delivery.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+    />
+  </head>
+
+  <body>
+    <div class="main-container">
+      <!-- Основное содержимое -->
+      <main class="content">
+        <div class="zone-container">
+          <!-- Первая строка -->
+          <div class="row-top">
+            <div class="header-section">
+              <div class="header-left">
+                <h1 class="header-title">
+                  Корзина
+                  <i class="ri-edit-2-line"></i>
+                  <i class="ri-save-3-line"></i>
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          <!-- Вторая строка -->
+          <div class="row-bottom">
+            <div class="toggle-section">
+              <!-- Левый блок -->
+              <div class="left-group">
+                <span class="last-change-text"
+                  >Последнее изменение: 25.10.2024 17:24:43</span
+                >
+              </div>
+              <!-- Правый блок -->
+              <div class="right-group">
+                <div class="toggle-alternate">
+                  <span id="toggleText2">Подбор товаров по коду</span>
+                  <i id="toggleIcon2" class="ri-list-ordered"></i>
+                </div>
+                <div class="toggle-alternate">
+                  <span id="toggleText2">Пакетная обработка цен</span>
+                  <i id="toggleIcon2" class="ri-percent-line"></i>
+                </div>
+                <div class="toggle-button">
+                  <span id="toggleText">Показать списком</span>
+                  <i id="toggleIcon" class="ri-file-list-3-line"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="delivery-sections"></div>
+      </main>
+
+      <!-- Сайдбар -->
+      <aside class="order-summary">
+        <!-- Карточка оформления заказа -->
+        <div class="order-summary-card">
+          <div class="middle-section">
+            <div class="input-box input-container">
+              <input
+                type="text"
+                id="query"
+                placeholder="Подбор получателя по ИНН"
+                autocomplete="off"
+              />
+              <div id="suggestions-inn" class="suggestions"></div>
+            </div>
+            <div class="input-box input-container">
+              <input
+                type="text"
+                id="org"
+                placeholder="По названию организации"
+                autocomplete="off"
+              />
+              <div id="suggestions-org" class="suggestions"></div>
+            </div>
+            <div class="input-box input-container">
+              <input
+                type="text"
+                id="management"
+                placeholder="ФИО получателя"
+                autocomplete="off"
+              />
+              <div id="suggestions-management" class="suggestions"></div>
+            </div>
+            <div class="input-box">
+              <input type="text" id="address" placeholder="Адрес доставки" />
+            </div>
+          </div>
+          <h3 class="order-title">Оформите заказ</h3>
+          <p class="order-items-count">
+            Всего позиций: <span id="total-items">5</span>
+          </p>
+          <p class="order-shipping">
+            Доставка: <span id="shipping-cost">1 350 ₽</span>
+          </p>
+          <p class="order-subtotal">
+            Стоимость без скидки: <span id="subtotal">15 000 ₽</span>
+          </p>
+          <p class="order-discount">
+            Скидка:
+            <input
+              type="number"
+              id="discount-percent"
+              value="14"
+              min="0"
+              max="100"
+              class="discount-percent-input"
+            />
+            %
+            <input
+              type="number"
+              id="discount-input"
+              value="2100"
+              min="0"
+              class="discount-input"
+            />
+            ₽
+          </p>
+          <input
+            type="text"
+            id="promo-code"
+            class="promo-code-input"
+            placeholder="Введите промокод..."
+          />
+          <p class="order-total">
+            Итого к оплате: <span id="total-to-pay">16&nbsp;350 ₽</span>
+          </p>
+          <button class="proceed-button">К оформлению</button>
+        </div>
+
+        <!-- Дополнительные действия -->
+        <div class="actions-card">
+          <button class="copy-to-cart-button">
+            Перенести выбранные в другую корзину
+          </button>
+          <button class="add-to-waitlist-button">
+            Добавить выбранные в лист ожидания
+          </button>
+          <button class="delete-selected-button">Удалить выбранные</button>
+        </div>
+
+        <!-- Уведомления -->
+        <div class="notification-card">
+          <div class="card-header">
+            <div class="exclamation-circle">!</div>
+            <span class="header-text">Есть позиции без остатка</span>
+          </div>
+          <button class="preorder-button">Оформить предзаказ</button>
+          <button class="add-to-waitlist-notif-button">
+            Добавить в лист ожидания
+          </button>
+          <button class="delete-notif-button">Удалить</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Кнопки сворачивания/разворачивания сайдбара -->
+    <button class="hide-right-sidebar">🡆</button>
+    <button class="show-right-sidebar">🡄</button>
+
+    <!-- Футер -->
+    <footer class="footer">
+      <div class="footer-container">
+        <p>© 2024 1-2.SU NEW. Все права защищены.</p>
+        <p>
+          <a href="http://energomix.ru" target="_blank" class="footer-link"
+            >energomix.ru</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <!-- Подключение библиотек -->
+    <!-- SheetJS для Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- jsPDF и html2canvas для PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Подключение дополнительных скриптов -->
+    <script src="/js/delivery.js" defer></script>
+    <script src="/js/excel_pdf.js" defer></script>
+    <script src="/js/sidebar.js" defer></script>
+
+    <!-- Скрипт автодополнения ИНН, Названия организации и ФИО получателя -->
+    <script src="/js/inn_input.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+/* Основные настройки для всего документа */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Баннеры */
+#banner-1,
+#banner-2 {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Базовый контейнер для баннеров */
+#banner-container {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#current-banner {
+  z-index: 2;
+}
+
+#next-banner {
+  z-index: 1;
+}
+
+#animation-banner {
+  z-index: 3;
+  transition: transform 0.5s ease;
+  display: none;
+}
+
+#banner-2 {
+  width: 73%;
+  height: 300px;
+  background-color: #cccccc;
+  margin: 20px auto;
+  position: relative;
+  min-height: 200px; /* Минимальная высота для безопасности */
+}
+
+/* Адаптивное уменьшение высоты баннера */
+@media (max-width: 1200px) {
+  #banner-container {
+    height: 35px; /* 80% от начальной высоты 60px */
+  }
+}
+
+@media (max-width: 992px) {
+  #banner-container {
+    height: 30px; /* 60% от начальной высоты 60px */
+  }
+}
+
+@media (max-width: 768px) {
+  #banner-container {
+    height: 25px; /* 50% от начальной высоты 60px */
+  }
+}
+
+/* Область для навигации */
+#navigation-area {
+  width: 100%;
+  height: 90px;
+  background-color: #d4d4d4;
+  margin: 0;
+  position: sticky;
+  top: 0;
+  z-index: 901;
+  display: flex;
+}
+
+/* Полноэкранное отображение iframe в контейнере */
+.iframe-content {
+  width: 100%;
+  height: 100%;
+  z-index: 13;
+  border: none;
+}
+
+/* Сетка */
+.grid-wrapper {
+  padding-left: 40px;
+  padding-right: 40px;
+  width: 73%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transition: margin-bottom 0.3s ease;
+}
+
+.grid-container {
+  display: grid;
+  gap: 20px;
+  justify-content: center;
+  margin: 40px 0;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-item {
+  position: relative; /* Для абсолютного позиционирования текста */
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  aspect-ratio: 1 / 1;
+  cursor: pointer; /* Указатель при наведении */
+  overflow: hidden; /* Обрезка содержимого, если необходимо */
+  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+}
+
+.grid-item:hover {
+  transform: scale(1.05); /* Лёгкое увеличение при наведении */
+}
+
+.category-text {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.7); /* Полупрозрачный фон для читаемости */
+
+  border-radius: 5px;
+  font-size: 0.7em; /* Уменьшенный размер шрифта до 70% */
+  font-weight: bold;
+  color: #000;
+  max-width: 90%;
+  box-sizing: border-box;
+  /* Адаптивность шрифта */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Ограничение до 2 строк */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* Медиазапросы для адаптивности */
+@media (max-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .category-text {
+    font-size: 0.63em; /* 70% от 0.9em */
+  }
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  color: white;
+  padding: 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 73%;
+  margin: 0 auto;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Адаптация отступов и сетки при уменьшении ширины экрана */
+@media (max-width: 1200px) {
+  .grid-wrapper {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .grid-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 70vw) {
+  .grid-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

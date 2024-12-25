@@ -1,0 +1,150 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.table-view .iksweb {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.table-view .iksweb td,
+.table-view .iksweb th {
+  border-top: 1px solid #ddd; /* Верхняя граница */
+  border-bottom: 1px solid #ddd; /* Нижняя граница */
+  border-left: none; /* Убираем левую границу */
+  border-right: none; /* Убираем правую границу */
+  padding: 8px;
+}
+
+.table-view .iksweb th {
+  background-color: #9e9e9e;
+  color: white;
+  white-space: nowrap;
+  transition: font-size 0.3s ease;
+}
+
+/* Градации для уменьшения шрифта */
+@media (max-width: 1700px) {
+  .table-view .iksweb th,
+  .table-view .iksweb td {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 1400px) {
+  .table-view .iksweb th,
+  .table-view .iksweb td {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 1200px) {
+  .table-view .iksweb th,
+  .table-view .iksweb td {
+    font-size: 0.7em;
+  }
+}
+
+.table-view .iksweb tbody tr {
+  background-color: #ffffff;
+}
+
+/* Эффект при наведении на строку */
+.table-view .iksweb tbody tr:hover {
+  background-color: #f3f3f3;
+}
+
+/* Стиль для ячеек с наименованием */
+.table-view .iksweb td.name-cell:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.table-view .nalich {
+  text-align: right;
+}
+
+.table-view .min-col {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table-view .product-image {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Всплывающее увеличенное изображение */
+.table-view .popup-image {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: none;
+  z-index: 1000;
+  border-radius: 15px;
+}
+
+.table-view .quantity-input {
+  width: 120px;
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s, background-color 0.2s, text-align 0.2s;
+  text-align: center;
+}
+
+.table-view .quantity-input:focus {
+  border-color: #838383;
+  background-color: #ffffff;
+  outline: none;
+  text-align: left;
+}
+
+.table-view .name-cell-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-view .cart-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.table-view .cart-icon:hover {
+  transform: scale(1.2);
+}
+
+.table-view .cart-icon:active {
+  transform: scale(1);
+}
+
+th.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+th.sortable .sort-arrow {
+  font-size: 14px;
+  margin-left: 5px;
+  color: transparent; /* Изначально стрелка скрыта */
+  transition: color 0.2s ease;
+}
+
+th.sortable[data-order="asc"] .sort-arrow,
+th.sortable[data-order="desc"] .sort-arrow {
+  color: orange; /* Показываем стрелку, если колонка отсортирована */
+}

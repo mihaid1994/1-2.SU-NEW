@@ -1,0 +1,1080 @@
+/* delivery.css */
+
+/* Основной стиль для документа */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+.zone-container {
+  display: flex;
+  flex-direction: column; /* Две строки сверху вниз */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 5px;
+  box-sizing: border-box;
+}
+
+/* Стили для первой строки */
+.row-top {
+  display: flex;
+  width: 97%;
+  margin: 0 auto; /* Центрирует строку в родительском элементе */
+}
+
+/* Стили для второй строки */
+.row-bottom {
+  display: flex;
+  width: 97%;
+  padding: 0;
+  margin: 0 auto; /* Центрирует строку в родительском элементе */
+}
+
+/* Контейнер для строки */
+.toggle-section {
+  display: flex; /* Включаем Flexbox */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  justify-content: space-between; /* Левый и правый блоки прижимаются к краям */
+  width: 100%; /* Контейнер занимает всю ширину строки */
+}
+
+/* Левый блок с текстом */
+.left-group {
+  display: flex; /* Для возможного добавления других элементов */
+  align-items: center; /* Центрируем элементы по вертикали */
+  gap: 8px; /* Расстояние между элементами внутри группы */
+}
+
+/* Текст "Последнее изменение" */
+.last-change-text {
+  font-size: 14px;
+  color: #888;
+  margin: 0; /* Убираем внешние отступы */
+  white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+/* Правый блок с кнопками */
+.right-group {
+  display: flex; /* Flexbox для кнопок */
+  align-items: center; /* Центрируем кнопки по вертикали */
+  gap: 20px; /* Расстояние между кнопками */
+
+  padding-right: 30px;
+}
+
+/* Базовый стиль для кнопок */
+.toggle-button,
+.toggle-alternate {
+  display: inline-flex; /* Горизонтальное выравнивание текста и иконки */
+  align-items: center; /* Центрируем текст и иконку по вертикали */
+  gap: 3px; /* Расстояние между текстом и иконкой */
+  font-size: 16px;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, font-weight 0.3s ease;
+}
+
+/* Иконки внутри кнопок */
+.toggle-button i {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-button:hover,
+.toggle-alternate:hover {
+  font-weight: bold;
+}
+
+/* Текст в кнопках */
+.toggle-button span {
+  font-size: 14px;
+  white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+/* Стили для средней части */
+.middle-section {
+  flex: 1;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.middle-section .input-box {
+  margin-bottom: 5px;
+}
+
+.middle-section input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #000;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.middle-section input::placeholder {
+  color: #aaa;
+}
+
+/* Обертка для всей страницы с Flexbox */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Хедер */
+header {
+  background-color: #377271;
+  color: white;
+  text-align: center;
+}
+
+/* Основной контейнер с контентом и сайдбаром */
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Основное содержимое */
+.content {
+  flex: 1;
+  padding: 10px;
+  margin-right: 325px;
+  transition: margin-right 0.3s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.content.full-width {
+  margin-right: 10px;
+}
+
+/* Заголовки */
+.header-left {
+  display: flex; /* Flexbox для горизонтального расположения */
+  justify-content: space-between; /* Разместить элементы по краям */
+  align-items: center; /* Выравнивание элементов по вертикали */
+  width: 100%; /* Контейнер занимает всю ширину строки */
+  padding: 0; /* Убираем отступы */
+  margin: 0; /* Убираем внешние отступы */
+}
+
+/* Заголовок */
+.content h1 {
+  font-size: 24px;
+  color: #333;
+  margin: 0;
+  display: flex; /* Flexbox для размещения иконок рядом с текстом */
+  align-items: center; /* Центрируем иконки по вертикали */
+}
+
+h1 i {
+  cursor: pointer;
+  color: rgb(146, 146, 146);
+  font-weight: normal;
+  margin-left: 8px;
+  transition: color 0.2s ease;
+}
+
+h1 i:hover {
+  color: rgb(57, 57, 57);
+}
+
+/* Раздел доставки */
+#delivery-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 5px;
+}
+
+/* Секция доставки */
+.delivery-section {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  overflow: hidden;
+}
+
+/* Заголовок секции доставки */
+.delivery-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delivery-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Контейнер для изображений товаров в заголовке */
+.header-images-container {
+  display: none;
+  flex-wrap: nowrap;
+  gap: 5px;
+  margin-left: 10px;
+  overflow-x: auto;
+}
+
+.header-images-container.collapsed {
+  display: flex;
+}
+
+.header-right.collapsed {
+  display: flex;
+}
+
+/* Стили для изображений товаров в заголовке */
+.header-images-container .product-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Контейнер для элементов справа в заголовке */
+.header-right {
+  display: none; /* Скрываем по умолчанию */
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  gap: 5px;
+}
+
+.collapsed-sum {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.collapsed-order-button {
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: #bbb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.collapsed-order-button:hover {
+  background-color: #999;
+}
+
+/* Контент секции доставки */
+.delivery-content {
+  padding-top: 10px;
+}
+
+.delivery-content.collapsed {
+  display: none;
+}
+
+/* Таблицы товаров */
+.iksweb {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Стили для заголовков таблицы */
+.iksweb th {
+  background-color: #9e9e9e;
+  color: white;
+  text-align: left;
+  padding: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  position: relative;
+  cursor: pointer;
+}
+
+.iksweb th:first-child, /* Для первой ячейки заголовков */
+.iksweb td:first-child {
+  /* Для первой ячейки данных */
+  text-align: center; /* Горизонтальное центрирование */
+  font-size: 1.2em; /* Масштаб шрифта (увеличение на 20%) */
+  font-weight: bold; /* Жирный шрифт */
+  color: #6d6d6d;
+  cursor: pointer;
+}
+
+.iksweb td:nth-child(6) {
+  text-align: center; /* Центрирование содержимого по горизонтали */
+}
+
+.iksweb td:nth-child(2),
+.iksweb td:nth-child(7) {
+  text-align: center; /* Центрирование содержимого по горизонтали */
+  font-size: 1.1em; /* Масштаб шрифта (увеличение на 20%) */
+}
+
+.iksweb th .sort-arrow {
+  margin-left: 5px;
+  color: transparent;
+  transition: color 0.2s ease;
+}
+
+.iksweb th.sortable:hover .sort-arrow {
+  color: orange;
+}
+
+/* Стили для ячеек таблицы */
+.iksweb td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Разрешение переноса текста только в столбце "Наименование" */
+.iksweb td:nth-child(4) {
+  overflow: hidden; /* Скрывает текст, выходящий за пределы контейнера */
+  text-overflow: ellipsis; /* Добавляет многоточие для обрезанного текста */
+  white-space: normal; /* Разрешает перенос строк */
+  line-height: 1.2em; /* Высота строки */
+  max-height: 3.6em; /* Ограничивает высоту до 3 строк */
+  padding: 8px;
+  vertical-align: center;
+}
+
+/* Увеличение ширины столбца "Кол." */
+.iksweb th:nth-child(8),
+.iksweb td:nth-child(8) {
+  width: 100px;
+}
+
+/* Стили для четных строк */
+.iksweb tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Стили для наведения на строки */
+.iksweb tbody tr:hover {
+  background-color: #f3f3f3;
+}
+
+/* Градация уменьшения шрифта */
+@media (max-width: 1700px) {
+  .iksweb th,
+  .iksweb td {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .iksweb th,
+  .iksweb td {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .iksweb th,
+  .iksweb td {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 800px) {
+  .iksweb {
+    font-size: 12px;
+  }
+
+  .download-excel,
+  .download-pdf {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .product-image {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cart-container input[type="number"] {
+    width: 50px;
+  }
+
+  .right-container {
+    align-items: center;
+  }
+
+  .actions-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions-container .delivery-sum {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .iksweb th,
+  .iksweb td {
+    font-size: 9px;
+    padding: 5px;
+  }
+
+  .product-image {
+    width: 25px;
+    height: 25px;
+  }
+
+  .cart-container input[type="number"] {
+    width: 50px;
+    font-size: 12px;
+  }
+
+  .download-excel,
+  .download-pdf,
+  .order-button {
+    font-size: 12px;
+    padding: 4px 6px;
+  }
+
+  .delivery-sum {
+    font-size: 14px;
+  }
+
+  .actions-section {
+    justify-content: center;
+  }
+
+  .actions-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions-container .delivery-sum {
+    margin-left: 0;
+  }
+}
+
+/* Интерактивные элементы */
+
+/* Общие стили для кнопок */
+.actions-section button {
+  background-color: #b0b0b0; /* Серый по умолчанию */
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.actions-section button:hover {
+  background-color: #8d8d8d; /* Темно-серый при наведении */
+}
+
+/* Оптимизированные стили для кнопки Excel */
+.download-excel {
+  /* Убираем предыдущее фиксированное значение фона, чтобы наследовать серый фон */
+  background-color: #b0b0b0; /* Серый по умолчанию */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-excel:hover {
+  background-color: rgb(88, 192, 129); /* Зелёный при наведении */
+}
+
+.download-excel:active {
+  transform: scale(0.95);
+}
+
+/* Добавляем стили для кнопки PDF */
+.download-pdf {
+  background-color: #b0b0b0; /* Серый по умолчанию */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-pdf:hover {
+  background-color: #ff6666; /* Бледно-красный при наведении */
+}
+
+.download-pdf:active {
+  transform: scale(0.95);
+}
+
+/* Стили для кнопки заказа */
+.order-button {
+  background-color: #b0b0b0; /* Серый по умолчанию */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: auto;
+}
+
+.order-button:hover {
+  background-color: #8d8d8d; /* Темно-серый при наведении */
+}
+
+.order-button:active {
+  transform: scale(0.95);
+}
+
+/* Остальные стили остаются без изменений */
+
+/* Продолжение вашего оригинального CSS */
+
+/* Контейнер для действий */
+.actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  padding-top: 5px;
+}
+
+/* Сумма доставки */
+.delivery-sum {
+  font-weight: bold;
+  color: #333;
+  text-align: right;
+  font-size: 16px;
+}
+
+/* Общие стили для текста в таблице */
+td,
+th {
+  color: #333;
+  font-family: "Roboto", Arial, sans-serif;
+}
+
+/* Стили для изображений товаров */
+.product-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.product-image:hover {
+  transform: scale(1.1);
+}
+
+/* Стили для ввода количества */
+.cart-container {
+  display: flex;
+  align-items: center;
+}
+
+.cart-container input[type="number"] {
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: left;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.cart-container input[type="number"]:focus {
+  border-color: #377271;
+  box-shadow: 0 0 4px rgba(55, 114, 113, 0.5);
+  outline: none;
+}
+
+/* Иконка корзины */
+.cart-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border-radius: 5px;
+}
+
+.cart-icon:hover {
+  transform: scale(1.2);
+}
+
+.cart-icon:active {
+  transform: scale(1);
+}
+
+/* Кнопка "Наверх" */
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #517672;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+  line-height: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scroll-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+  background-color: #377271;
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  color: white;
+  padding: 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 73%;
+  margin: 0 auto;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Стили для кнопок под корзиной */
+.actions-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+
+.actions-section button {
+  background-color: #b0b0b0; /* Серый по умолчанию */
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.actions-section button:hover {
+  background-color: #8d8d8d; /* Темно-серый при наведении */
+}
+
+/* Стрелка для сворачивания/разворачивания */
+.delivery-header.collapsed .arrow {
+  color: #5e5e5e;
+  transform: rotate(180deg); /* Поворачиваем стрелку */
+}
+
+/* Стрелка располагается вправо только в развернутом состоянии */
+.delivery-header .arrow {
+  font-size: 18px;
+  color: #5e5e5e;
+  cursor: pointer;
+  margin-right: 10px; /* Оставляем только отступ справа */
+  margin-left: 10px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.delivery-header:not(.collapsed) .arrow {
+  margin-left: auto;
+}
+
+/* Изображение в заголовке */
+.delivery-header img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 5px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+/* Дополнительные стили для состояния при наведении на изображения в заголовке */
+.header-images-container .product-image:hover {
+  transform: scale(1);
+}
+
+/* Дополнительные стили для корректного отображения свернутых секций */
+.delivery-header.collapsed .collapsed-sum,
+.delivery-header.collapsed .collapsed-order-button {
+  display: block;
+}
+
+.order-discount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.discount-percent-input {
+  width: 50px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: right;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.discount-input {
+  width: 100px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: left;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.discount-percent-input:focus,
+.discount-input:focus {
+  border-color: #377271;
+  box-shadow: 0 0 4px rgba(55, 114, 113, 0.5);
+  outline: none;
+}
+
+.discount-percent-input::placeholder,
+.discount-input::placeholder {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Основное оформление для карточки оформления заказа */
+.order-summary-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Заголовок "Оформите заказ" */
+.order-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* Общее количество позиций */
+.order-items-count {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Стоимость доставки */
+.order-shipping {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Стоимость без скидки */
+.order-subtotal {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Скидка */
+.order-discount {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Итоговая стоимость к оплате */
+.order-total {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-top: 16px;
+}
+
+/* Объединённые стили для обоих видов всплывающих окон */
+.waiting-list-popup,
+.restore-popup {
+  position: absolute; /* Абсолютное позиционирование */
+  z-index: 1000; /* Приоритет отображения */
+  background-color: #ffffff; /* Белый фон */
+  border: 1px solid #ddd; /* Легкая граница */
+  border-radius: 8px; /* Скругленные углы */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для окна */
+  padding: 8px 60px 8px 20px; /* Внутренние отступы */
+  width: 300px; /* Фиксированная ширина */
+  box-sizing: border-box; /* Учет отступов и границ */
+  font-family: Arial, sans-serif; /* Базовый шрифт */
+  font-size: 14px; /* Размер шрифта */
+  color: #333; /* Основной цвет текста */
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out; /* Плавная анимация появления */
+}
+
+/* Общие стили для текста внутри всплывающих окон */
+.waiting-list-popup p.waiting-list-text,
+.restore-popup p.restore-text {
+  cursor: pointer; /* Указатель мыши при наведении */
+  font-weight: bold; /* Жирный текст */
+  margin-bottom: 10px; /* Отступ от следующего элемента */
+  color: #517672; /* Цвет текста */
+  transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+.waiting-list-popup p.waiting-list-text:hover,
+.restore-popup p.restore-text:hover {
+  color: #3e5d5c; /* Цвет текста при наведении */
+}
+
+/* Общие стили для кнопок закрытия всплывающих окон */
+.waiting-list-popup button.close-popup,
+.restore-popup button.close-popup {
+  position: absolute; /* Абсолютное позиционирование в углу */
+  top: 8px; /* Позиция сверху */
+  right: 8px; /* Позиция справа */
+  background: transparent; /* Прозрачный фон */
+  border: none; /* Убираем рамку */
+  font-size: 18px; /* Размер символа */
+  font-weight: bold; /* Жирный текст */
+  cursor: pointer; /* Указатель мыши */
+  color: #888; /* Цвет символа */
+  transition: color 0.3s ease; /* Плавное изменение цвета */
+}
+
+.waiting-list-popup button.close-popup:hover,
+.restore-popup button.close-popup:hover {
+  color: #ffffff; /* Цвет символа при наведении */
+}
+
+/* Общие базовые стили для всех кнопок внутри всплывающих окон */
+.waiting-list-popup button,
+.restore-popup button {
+  display: inline-block; /* Кнопка как строчно-блочный элемент */
+  padding: 10px 16px; /* Отступы внутри кнопки */
+  font-size: 14px; /* Размер шрифта */
+  font-weight: bold; /* Жирный текст */
+  color: #fff; /* Белый цвет текста */
+  background-color: #517672; /* Основной цвет кнопки */
+  border: none; /* Без рамки */
+  border-radius: 4px; /* Скругленные углы */
+  cursor: pointer; /* Указатель мыши при наведении */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень для кнопки */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Плавные изменения цвета и масштаба */
+}
+
+.waiting-list-popup button:hover,
+.restore-popup button:hover {
+  background-color: #3e5d5c; /* Цвет кнопки при наведении */
+}
+
+.waiting-list-popup button:active,
+.restore-popup button:active {
+  transform: scale(0.98); /* Легкое уменьшение кнопки при нажатии */
+}
+
+/* Кнопка добавления в лист ожидания и восстановления */
+.waiting-list-popup button.add-to-waiting-list,
+.restore-popup button.restore-button {
+  width: 100%; /* Кнопка занимает всю ширину */
+  text-align: center; /* Выравнивание текста по центру */
+  margin-top: 10px; /* Отступ сверху */
+}
+
+/* Стили формы внутри всплывающих окон */
+.popup-form-content {
+  margin-top: 10px; /* Отступ сверху от текста */
+}
+
+.popup-form-content .form-group {
+  margin-bottom: 15px; /* Отступ между группами формы */
+}
+
+.popup-form-content label {
+  display: block; /* Метка занимает всю строку */
+  font-weight: bold; /* Жирный текст */
+  margin-bottom: 5px; /* Отступ от поля ввода */
+}
+
+.popup-form-content input.waiting-quantity,
+.popup-form-content textarea.waiting-comment {
+  width: 100%; /* Поля ввода занимают всю ширину */
+  padding: 8px; /* Внутренние отступы */
+  font-size: 14px; /* Размер шрифта */
+  border: 1px solid #ccc; /* Легкая граница */
+  border-radius: 5px; /* Скругленные углы */
+  box-sizing: border-box; /* Учет отступов и границ */
+  background-color: #f9f9f9; /* Фон поля ввода */
+}
+
+.popup-form-content textarea.waiting-comment {
+  resize: vertical; /* Позволяет менять размер только по вертикали */
+  min-height: 60px; /* Минимальная высота */
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes expand {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px; /* Максимальная высота для развернутого состояния */
+    opacity: 1;
+  }
+}
+
+/* Полупрозрачная строка при пометке на удаление */
+.deleted-row {
+  color: grey;
+  pointer-events: none;
+}
+
+/* Разрешаем клики только по иконке корзины в строке */
+.deleted-row .cart-icon {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* Всплывающее окно */
+.restore-popup,
+.waiting-list-popup {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1001;
+  pointer-events: auto; /* Разрешаем клики внутри всплывающего окна */
+}
+
+/* Стили для элементов внутри всплывающего окна */
+.restore-popup .restore-text,
+.restore-popup .delete-icon {
+  cursor: pointer;
+}
+
+/* Устанавливаем более высокий z-index для всплывающего окна */
+.restore-popup {
+  z-index: 1001;
+}
+
+.delete-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 5px;
+  transition: transform 0.2s ease;
+  border-radius: 5px;
+}
+
+.delete-icon:hover {
+  transform: scale(1.2);
+}
+
+.delete-icon:active {
+  transform: scale(1);
+}
+
+/* Стили для чекбокса "Выбрать все" */
+.select-all-checkbox {
+  appearance: none; /* Убираем стандартный стиль чекбокса */
+  width: 20px; /* Ширина чекбокса */
+  height: 20px; /* Высота чекбокса */
+  border: 3px solid #fff; /* Толстая белая рамка */
+  border-radius: 4px; /* Скругленные углы */
+  background-color: transparent; /* Прозрачный фон */
+  cursor: pointer; /* Указатель мыши */
+  position: relative; /* Для псевдоэлементов */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.select-all-checkbox:checked {
+  background-color: transparent; /* Прозрачный фон в выбранном состоянии */
+  border-color: #fff; /* Белая рамка сохраняется */
+}
+
+.select-all-checkbox:checked::after {
+  content: ""; /* Добавляем галочку */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 4px; /* Ширина галочки */
+  height: 7px; /* Высота галочки */
+  border: solid white;
+  border-width: 0 3px 3px 0; /* Толщина линий галочки */
+  pointer-events: none; /* Галочка не кликабельна */
+}

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Кабинет Поставщика</title>
+    <!-- Подключение Font Awesome для иконок -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Подключение Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Подключение основного стиля -->
+    <link rel="stylesheet" href="/css/cabinet_postavshika.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Боковая панель меню -->
+      <nav class="sidebar">
+        <ul>
+          <!-- Покупатель Section -->
+          <li>
+            <a href="#client" class="tab-link" data-tab="client">
+              <i class="fas fa-shopping-cart"></i> Покупатель 🛈
+            </a>
+            <ul class="submenu">
+              <!-- Мои Заказы -->
+              <li>
+                <a href="#myOrders" class="tab-link" data-tab="myOrders">
+                  <i class="fas fa-clipboard-list"></i> Мои Заказы
+                </a>
+              </li>
+              <!-- Баланс & Лояльность -->
+              <li>
+                <a
+                  href="#balanceLoyalty"
+                  class="tab-link"
+                  data-tab="balanceLoyalty"
+                >
+                  <i class="fas fa-wallet"></i> Баланс и система лояльности
+                </a>
+              </li>
+              <!-- Мои адреса и организации -->
+              <li>
+                <a href="#addresses" class="tab-link" data-tab="addresses">
+                  <i class="fas fa-map-marker-alt"></i> Мои адреса и организации
+                </a>
+              </li>
+
+              <!-- Лист Ожидания -->
+              <li>
+                <a href="#waitlist" class="tab-link" data-tab="waitlist">
+                  <i class="fas fa-list-alt"></i> Лист Ожидания
+                </a>
+              </li>
+              <!-- Аналитика для покупателя -->
+              <li>
+                <a
+                  href="#clientAnalytics"
+                  class="tab-link"
+                  data-tab="clientAnalytics"
+                >
+                  <i class="fas fa-chart-line"></i> Аналитика для покупателя
+                </a>
+              </li>
+              <!-- Претензии -->
+              <li>
+                <a href="#claims" class="tab-link" data-tab="claims">
+                  <i class="fas fa-exclamation-triangle"></i> Претензии
+                </a>
+              </li>
+              <!-- Возвраты -->
+              <li>
+                <a href="#returns" class="tab-link" data-tab="returns">
+                  <i class="fas fa-undo-alt"></i> Возвраты
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- Разделитель -->
+          <li class="separator"></li>
+
+          <!-- Поставщик Section -->
+          <li>
+            <a href="#supplier" class="tab-link" data-tab="supplier">
+              <i class="fas fa-truck"></i> Поставщик 🛈
+            </a>
+            <ul class="submenu">
+              <!-- Управление продуктами -->
+              <li>
+                <a href="#products" class="tab-link" data-tab="products">
+                  <i class="fas fa-box-open"></i> Управление продуктами
+                </a>
+              </li>
+              <!-- Складские остатки -->
+              <li>
+                <a href="#inventory" class="tab-link" data-tab="inventory">
+                  <i class="fas fa-warehouse"></i> Складские остатки
+                </a>
+              </li>
+              <!-- Акции и промо -->
+              <li>
+                <a href="#promotions" class="tab-link" data-tab="promotions">
+                  <i class="fas fa-tags"></i> Акции и промо
+                </a>
+              </li>
+              <!-- Аналитика для поставщика -->
+              <li>
+                <a
+                  href="#supplierAnalytics"
+                  class="tab-link"
+                  data-tab="supplierAnalytics"
+                >
+                  <i class="fas fa-chart-bar"></i> Аналитика для поставщика
+                </a>
+              </li>
+              <!-- Претензии и Возвраты -->
+              <li>
+                <a
+                  href="#supplierClaimsReturns"
+                  class="tab-link"
+                  data-tab="supplierClaimsReturns"
+                >
+                  <i class="fas fa-exclamation-triangle"></i> Обработка
+                  претензий и возвратов
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Разделитель -->
+          <li class="separator"></li>
+
+          <!-- Контакты -->
+          <li>
+            <a href="#contacts" class="tab-link" data-tab="contacts">
+              <i class="fas fa-address-book"></i> Контакты
+            </a>
+          </li>
+          <!-- Настройки 1-2.SU -->
+          <li>
+            <a href="#templates" class="tab-link" data-tab="templates">
+              <i class="fas fa-cog"></i> Настройки 1-2.SU
+            </a>
+          </li>
+        </ul>
+        <!-- Кнопка выхода -->
+        <div class="logout">
+          <button id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Выход
+          </button>
+        </div>
+      </nav>
+
+      <!-- Основной контентный блок -->
+      <div class="main-content" id="mainContent">
+        <!-- Рекомендации будут загружаться сюда -->
+      </div>
+    </div>
+
+    <!-- Модальные окна для различных действий -->
+
+    <!-- Модальное окно для добавления/редактирования адреса -->
+    <div id="addressModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Добавить новый адрес</h3>
+        <form id="addAddressForm">
+          <label for="address">Адрес:</label>
+          <input type="text" id="address" name="address" required />
+
+          <label for="contactName">Контактное лицо:</label>
+          <input type="text" id="contactName" name="contactName" required />
+
+          <label for="contactPhone">Телефон:</label>
+          <input type="tel" id="contactPhone" name="contactPhone" required />
+
+          <button type="submit">Добавить адрес</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования организации -->
+    <div id="organizationModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Добавить организацию</h3>
+        <form id="addOrganizationForm">
+          <label for="orgName">Название организации:</label>
+          <input type="text" id="orgName" name="orgName" required />
+
+          <label for="inn">ИНН:</label>
+          <input type="text" id="inn" name="inn" required />
+
+          <label for="kpp">КПП:</label>
+          <input type="text" id="kpp" name="kpp" required />
+
+          <label for="legalAddress">Юридический адрес:</label>
+          <input type="text" id="legalAddress" name="legalAddress" required />
+
+          <button type="submit">Добавить организацию</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования товара -->
+    <div id="productModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modalTitle">Добавить новый товар</h3>
+        <form id="productForm">
+          <label for="productName">Наименование товара:</label>
+          <input type="text" id="productName" name="productName" required />
+
+          <label for="sku">Артикул:</label>
+          <input type="text" id="sku" name="sku" required />
+
+          <label for="brand">Бренд:</label>
+          <input type="text" id="brand" name="brand" required />
+
+          <label for="vat">НДС (%):</label>
+          <input type="number" id="vat" name="vat" min="0" max="100" required />
+
+          <label for="fragile">Хрупкий товар:</label>
+          <input type="checkbox" id="fragile" name="fragile" />
+
+          <label for="oversized">Негабаритный товар:</label>
+          <input type="checkbox" id="oversized" name="oversized" />
+
+          <label for="baseUnit">Базовая единица:</label>
+          <input type="text" id="baseUnit" name="baseUnit" required />
+
+          <label for="barcode">Штрихкод:</label>
+          <input type="text" id="barcode" name="barcode" required />
+
+          <label for="weight">Вес (кг):</label>
+          <input type="number" id="weight" name="weight" step="0.01" required />
+
+          <label for="volume">Объем (л):</label>
+          <input type="number" id="volume" name="volume" step="0.01" required />
+
+          <label for="additionalPackaging">Дополнительные упаковки:</label>
+          <textarea
+            id="additionalPackaging"
+            name="additionalPackaging"
+            placeholder="Описание дополнительных упаковок"
+          ></textarea>
+
+          <label for="minPackaging">Минимальная упаковка:</label>
+          <input
+            type="number"
+            id="minPackaging"
+            name="minPackaging"
+            min="1"
+            required
+          />
+
+          <label for="country">Страна-производитель:</label>
+          <input type="text" id="country" name="country" required />
+
+          <label for="gtd">ГТД:</label>
+          <input type="text" id="gtd" name="gtd" />
+
+          <label for="certificates">Сертификаты/Декларации:</label>
+          <input
+            type="file"
+            id="certificates"
+            name="certificates"
+            accept=".pdf"
+            multiple
+          />
+
+          <label for="photos">Фотографии товара:</label>
+          <input
+            type="file"
+            id="photos"
+            name="photos"
+            accept="image/*"
+            multiple
+            required
+          />
+
+          <label for="descriptions">Описание товара:</label>
+          <textarea id="descriptions" name="descriptions" required></textarea>
+
+          <label for="technicalSpecs">Технические характеристики:</label>
+          <textarea
+            id="technicalSpecs"
+            name="technicalSpecs"
+            required
+          ></textarea>
+
+          <label for="price">Рекомендуемая розничная цена (РРЦ):</label>
+          <input type="number" id="price" name="price" step="0.01" required />
+
+          <label for="expiry">Срок годности:</label>
+          <input type="date" id="expiry" name="expiry" required />
+
+          <label for="returnPolicy">Условия возврата:</label>
+          <textarea id="returnPolicy" name="returnPolicy" required></textarea>
+
+          <label for="serviceCenters">Список сервисных центров:</label>
+          <textarea
+            id="serviceCenters"
+            name="serviceCenters"
+            placeholder="Ссылки на сервисные центры"
+          ></textarea>
+
+          <label for="category">Категория товара:</label>
+          <select id="category" name="category" required>
+            <option value="">Выберите категорию</option>
+            <option value="electronics">Электроника</option>
+            <option value="fashion">Мода</option>
+            <option value="home">Дом и сад</option>
+            <!-- Дополнительные категории -->
+          </select>
+
+          <button type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования акции -->
+    <div id="promotionModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="promotionModalTitle">Создать новую акцию</h3>
+        <form id="promotionForm">
+          <label for="promoName">Название акции:</label>
+          <input type="text" id="promoName" name="promoName" required />
+
+          <label for="promoConditions">Условия акции:</label>
+          <textarea
+            id="promoConditions"
+            name="promoConditions"
+            required
+          ></textarea>
+
+          <label for="promoStart">Начало акции:</label>
+          <input type="date" id="promoStart" name="promoStart" required />
+
+          <label for="promoEnd">Окончание акции:</label>
+          <input type="date" id="promoEnd" name="promoEnd" required />
+
+          <label for="promoProducts">Товары-участники:</label>
+          <input
+            type="text"
+            id="promoProducts"
+            name="promoProducts"
+            placeholder="Введите SKU через запятую"
+            required
+          />
+
+          <label for="promoStatus">Статус:</label>
+          <select id="promoStatus" name="promoStatus" required>
+            <option value="active">Активна</option>
+            <option value="completed">Завершена</option>
+            <option value="upcoming">Предстоящая</option>
+          </select>
+
+          <button type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования претензии -->
+    <div id="claimsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Создать претензию</h3>
+        <form id="claimsForm">
+          <label for="claimOrder">Выберите заказ:</label>
+          <select id="claimOrder" name="claimOrder" required>
+            <option value="">Выберите заказ</option>
+            <!-- Опции будут заполнены динамически -->
+          </select>
+
+          <label for="claimCategory">Категория претензии:</label>
+          <select id="claimCategory" name="claimCategory" required>
+            <option value="">Выберите категорию</option>
+            <option value="quantity">Расхождение по количеству</option>
+            <option value="defect">Брак</option>
+            <option value="other">Прочее</option>
+          </select>
+
+          <label for="claimDescription">Описание проблемы:</label>
+          <textarea
+            id="claimDescription"
+            name="claimDescription"
+            required
+          ></textarea>
+
+          <label for="claimFiles">Прикрепить фото/видео:</label>
+          <input
+            type="file"
+            id="claimFiles"
+            name="claimFiles"
+            accept="image/*,video/*"
+            multiple
+          />
+
+          <button type="submit">Отправить претензию</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования возврата -->
+    <div id="returnsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Создать заявку на возврат</h3>
+        <form id="returnsForm">
+          <label for="returnOrder">Выберите заказ:</label>
+          <select id="returnOrder" name="returnOrder" required>
+            <option value="">Выберите заказ</option>
+            <!-- Опции будут заполнены динамически -->
+          </select>
+
+          <label for="returnItems">Выберите позиции для возврата:</label>
+          <select id="returnItems" name="returnItems" multiple required>
+            <!-- Опции будут заполнены динамически -->
+          </select>
+
+          <label for="returnCategory">Категория возврата:</label>
+          <select id="returnCategory" name="returnCategory" required>
+            <option value="">Выберите категорию</option>
+            <option value="quality">Качественный товар</option>
+            <option value="defect">Брак</option>
+          </select>
+
+          <label for="returnFiles">Прикрепить фото/видео (если есть):</label>
+          <input
+            type="file"
+            id="returnFiles"
+            name="returnFiles"
+            accept="image/*,video/*"
+            multiple
+          />
+
+          <button type="submit">Отправить заявку</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для дополнительных функций покупателя -->
+    <div id="additionalClientModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Дополнительные функции</h3>
+        <!-- Здесь можно добавить формы и функции для дополнительных функций клиента -->
+        <p>
+          Здесь будут дополнительные функции, такие как загрузка документов, чат
+          с поддержкой и т.д.
+        </p>
+      </div>
+    </div>
+
+    <!-- Модальное окно для дополнительных функций поставщика -->
+    <div id="additionalSupplierModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Дополнительные функции</h3>
+        <!-- Здесь можно добавить формы и функции для дополнительных функций поставщика -->
+        <p>
+          Здесь будут дополнительные функции, такие как управление
+          пользователями, чат с менеджером и т.д.
+        </p>
+      </div>
+    </div>
+
+    <!-- Подключение JavaScript -->
+    <script src="/js/cabinet.js"></script>
+  </body>
+</html>

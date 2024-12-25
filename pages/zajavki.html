@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Журнал документов Заявки</title>
+    <link rel="stylesheet" href="/css/returns.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="search-container">
+        <div class="search-header-unique">
+          <input
+            type="text"
+            class="search-header-input-unique"
+            placeholder="Поиск заказам..."
+            aria-label="Поиск заказам"
+          />
+          <button class="search-header-button-unique">Поиск</button>
+          <section class="filters">
+            <button
+              class="expand-search"
+              aria-expanded="false"
+              aria-controls="search-filters-unique"
+            >
+              Расширенный поиск
+            </button>
+            <button
+              id="column-selector"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Выбор колонок
+            </button>
+            <div class="dropdown" aria-label="Меню выбора колонок"></div>
+
+            <button class="zkz-switch">Показать по заказам</button>
+          </section>
+        </div>
+
+        <!-- Секция расширенного поиска -->
+        <div class="search-filters-unique" id="search-filters-unique" hidden>
+          <label>
+            <input
+              type="checkbox"
+              class="search-checkbox-unique"
+              aria-label="Соответствие всем условиям"
+            />
+            Соответствие всем условиям:
+          </label>
+          <div class="filter-row-unique">
+            <label for="filter1-select1" class="visually-hidden"></label>
+            <select class="filter-select-unique" id="filter1-select1">
+              <option>Склад</option>
+              <option>Клиент</option>
+              <option>Дата</option>
+            </select>
+            <label for="filter1-select2" class="visually-hidden"></label>
+            <select class="filter-select-unique" id="filter1-select2">
+              <option>содержит</option>
+              <option>равно</option>
+            </select>
+            <label for="filter1-input" class="visually-hidden"></label>
+            <input
+              type="text"
+              class="filter-input-text-unique"
+              id="filter1-input"
+              placeholder="Введите значение"
+            />
+            <button class="filter-button-unique" aria-label="Добавить фильтр">
+              +
+            </button>
+          </div>
+          <div class="filter-row-unique">
+            <label for="filter2-select1" class="visually-hidden"></label>
+            <select class="filter-select-unique" id="filter2-select1">
+              <option>Тип документа</option>
+              <option>Сумма</option>
+            </select>
+            <label for="filter2-select2" class="visually-hidden"></label>
+            <select class="filter-select-unique" id="filter2-select2">
+              <option>равно</option>
+              <option>больше</option>
+            </select>
+            <label for="filter2-input" class="visually-hidden"></label>
+            <input
+              type="text"
+              class="filter-input-text-unique"
+              id="filter2-input"
+              placeholder="Введите значение"
+            />
+            <button class="filter-button-unique" aria-label="Добавить фильтр">
+              +
+            </button>
+          </div>
+          <div class="filter-row-unique">
+            <label for="filter-date-start">Дата с:</label>
+            <input
+              type="date"
+              class="filter-input-date-unique"
+              id="filter-date-start"
+            />
+            <label for="filter-date-end">по:</label>
+            <input
+              type="date"
+              class="filter-input-date-unique"
+              id="filter-date-end"
+            />
+            <label for="filters-confirmed">Не показывать подтвержденные:</label>
+            <input type="checkbox" id="filters-confirmed" />
+            <label for="filters-deletion">Не показывать на удаление:</label>
+            <input type="checkbox" id="filters-deletion" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Основной контент -->
+      <main class="content">
+        <!-- Таблица -->
+        <section class="data-table">
+          <table id="zajavki-table">
+            <thead>
+              <tr id="table-header">
+                <!-- Заголовки будут добавлены динамически -->
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Данные будут добавлены динамически -->
+            </tbody>
+          </table>
+        </section>
+      </main>
+
+      <div id="blur-overlay" aria-hidden="true"></div>
+
+      <!-- Футер -->
+      <footer class="footer">
+        <div class="footer-container">
+          <p>© 2024 1-2.SU NEW. Все права защищены.</p>
+          <p>
+            <a href="http://energomix.ru" target="_blank" class="footer-link"
+              >energomix.ru</a
+            >
+          </p>
+        </div>
+      </footer>
+
+      <!-- Всплывающее окно -->
+      <div
+        id="iframe-container"
+        class="hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="iframe-close"
+      >
+        <div id="iframe-close" role="button" tabindex="0" aria-label="Закрыть">
+          ✖
+        </div>
+        <iframe
+          id="iframe-content"
+          src=""
+          frameborder="0"
+          title="Содержимое документа"
+        ></iframe>
+      </div>
+    </div>
+
+    <script src="/js/zajavki.js"></script>
+    <!-- Подключение глобального скрипта коммуникации -->
+    <script src="/js/globalcomm.js"></script>
+    <!-- Подключение скрипта открытия вкладок -->
+    <script src="/js/tabs-from.js"></script>
+  </body>
+</html>

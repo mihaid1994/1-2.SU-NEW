@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Журнал документов Возвраты</title>
+    <link rel="stylesheet" href="/css/returns.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Верхнее меню -->
+      <header class="main-menu">
+        <nav>
+          <ul>
+            <li>Файл</li>
+            <li>Действия</li>
+            <li>Справочники</li>
+            <li>Журналы</li>
+            <li>Отчеты</li>
+            <li>Обработка</li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Панель инструментов -->
+      <section class="toolbar">
+        <div class="tool-icons">
+          <button class="tool-btn" title="Сохранить">🖫</button>
+          <button class="tool-btn" title="Поиск">🔍</button>
+          <button class="tool-btn" title="Настройки">⚙️</button>
+        </div>
+      </section>
+
+      <!-- Основной контент -->
+      <main class="content">
+        <!-- Фильтры -->
+        <section class="filters">
+          <label for="column-selector">Выберите колонки:</label>
+          <select id="column-selector" multiple></select>
+        </section>
+
+        <!-- Таблица -->
+        <section class="data-table">
+          <table id="returns-table">
+            <thead>
+              <tr id="table-header">
+                <!-- Заголовки будут добавлены динамически -->
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Данные будут добавлены динамически -->
+            </tbody>
+          </table>
+        </section>
+      </main>
+
+      <!-- Подвал с вкладками -->
+      <footer class="footer">
+        <nav>
+          <button class="tab">Журнал документов Возвраты</button>
+          <button class="tab">Структура для Лист заявки</button>
+        </nav>
+      </footer>
+    </div>
+
+    <script src="/js/returns.js"></script>
+    <!-- Подключение глобального скрипта коммуникации -->
+    <script src="/js/globalcomm.js"></script>
+    <!-- Подключение скрипта открытия вкладок -->
+    <script src="/js/tabs-from.js"></script>
+  </body>
+</html>

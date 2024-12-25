@@ -1,0 +1,78 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Чат 1-2.SU</title>
+    <link rel="stylesheet" href="/css/chat.css" />
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+  </head>
+  <body>
+    <!-- Заголовок чата -->
+    <div class="chat-header">
+      <h2>Чат 1-2.SU</h2>
+      <div class="chat-status">
+        <div class="status-indicator"></div>
+        <span>На связи</span>
+      </div>
+    </div>
+
+    <!-- Основная область -->
+    <div class="chat-container">
+      <!-- Левая панель со списком чатов -->
+      <div class="chat-sidebar">
+        <h3>Мои чаты</h3>
+        <ul class="chat-list" id="chatList">
+          <!-- Чаты будут динамически добавляться здесь -->
+        </ul>
+      </div>
+
+      <!-- Правая часть с сообщениями -->
+      <div class="chat-content">
+        <!-- Область сообщений -->
+        <div class="chat-messages" id="chatMessages">
+          <!-- Сообщения будут динамически добавляться здесь -->
+        </div>
+
+        <!-- Быстрые вопросы -->
+        <div class="quick-questions" id="quickQuestions">
+          <!-- Быстрые вопросы будут динамически добавляться здесь -->
+        </div>
+
+        <!-- Поле ввода сообщения -->
+        <div class="chat-input">
+          <span id="attachmentIcon" class="ri-attachment-line" title="Прикрепить файл"></span>
+          <span id="smileyIcon" class="ri-emotion-happy-line" title="Добавить смайл"></span>
+          <input type="text" id="chatInput" placeholder="Введите сообщение...">
+          <button class="send-button" type="button">Отправить</button>
+        </div>
+      </main>
+    </div>
+
+  <!-- Всплывающее окно загрузки файлов -->
+  <div id="fileUploadPopup" class="file-upload-popup">
+    <div class="popup-content">
+      <h3>Загрузите файл</h3>
+      <div class="drop-area">
+        Перетащите файл сюда или кликните для выбора
+      </div>
+      <label for="fileInput">Выбрать файл</label>
+      <input type="file" id="fileInput" multiple>
+    </div>
+  </div>
+
+  <!-- Плашка с эмодзи -->
+  <div id="emojiPicker" class="emoji-picker">
+    <div class="emoji-grid">
+      <!-- Эмодзи будут добавлены здесь скриптом -->
+    </div>
+  </div>
+
+    <script src="/js/chat.js"></script>
+    <!-- Подключение глобального скрипта коммуникации -->
+    <script src="/js/globalcomm.js"></script>
+  </body>
+</html>

@@ -1,0 +1,535 @@
+{
+  "dashboard": {
+    "annualSales": 25000000,
+    "currentInventoryValue": 5000000,
+    "activePromotions": 4,
+    "months": [
+      "Янв",
+      "Фев",
+      "Мар",
+      "Апр",
+      "Май",
+      "Июн",
+      "Июл",
+      "Авг",
+      "Сен",
+      "Окт",
+      "Ноя",
+      "Дек"
+    ],
+    "monthlySalesData": [
+      2000000, 2200000, 2100000, 2300000, 2500000, 2400000, 2600000, 2700000,
+      2800000, 3000000, 3200000, 3300000
+    ],
+    "topProducts": {
+      "names": [
+        "Samsung Galaxy S21",
+        "Bosch Washing Machine",
+        "IKEA Malm Bed",
+        "Sony WH-1000XM4",
+        "LG Refrigerator"
+      ],
+      "sales": [5000000, 4000000, 3500000, 3000000, 2500000]
+    }
+  },
+  "products": [
+    {
+      "id": 1,
+      "articul": "ELEC001",
+      "name": "Samsung Galaxy S21",
+      "category": "Электроника",
+      "price": 75000,
+      "stock": 150
+    },
+    {
+      "id": 2,
+      "articul": "ELEC002",
+      "name": "Sony WH-1000XM4",
+      "category": "Электроника",
+      "price": 30000,
+      "stock": 200
+    },
+    {
+      "id": 3,
+      "articul": "ELEC003",
+      "name": "Xiaomi Mi TV 55\"",
+      "category": "Электроника",
+      "price": 45000,
+      "stock": 100
+    },
+    {
+      "id": 4,
+      "articul": "ELEC004",
+      "name": "LG OLED TV 65\"",
+      "category": "Электроника",
+      "price": 150000,
+      "stock": 50
+    },
+    {
+      "id": 5,
+      "articul": "ELEC005",
+      "name": "Apple MacBook Pro",
+      "category": "Электроника",
+      "price": 120000,
+      "stock": 80
+    },
+    {
+      "id": 6,
+      "articul": "HT001",
+      "name": "Bosch Washing Machine Series 6",
+      "category": "Бытовая техника",
+      "price": 45000,
+      "stock": 60
+    },
+    {
+      "id": 7,
+      "articul": "HT002",
+      "name": "LG Refrigerator Inverter",
+      "category": "Бытовая техника",
+      "price": 80000,
+      "stock": 40
+    },
+    {
+      "id": 8,
+      "articul": "HT003",
+      "name": "Electrolux Dishwasher",
+      "category": "Бытовая техника",
+      "price": 35000,
+      "stock": 70
+    },
+    {
+      "id": 9,
+      "articul": "HT004",
+      "name": "Samsung Microwave Oven",
+      "category": "Бытовая техника",
+      "price": 15000,
+      "stock": 100
+    },
+    {
+      "id": 10,
+      "articul": "HT005",
+      "name": "Philips Air Conditioner",
+      "category": "Бытовая техника",
+      "price": 60000,
+      "stock": 30
+    },
+    {
+      "id": 11,
+      "articul": "FUR001",
+      "name": "IKEA Malm Bed",
+      "category": "Мебель",
+      "price": 25000,
+      "stock": 100
+    },
+    {
+      "id": 12,
+      "articul": "FUR002",
+      "name": "Hoff Office Chair",
+      "category": "Мебель",
+      "price": 15000,
+      "stock": 200
+    },
+    {
+      "id": 13,
+      "articul": "FUR003",
+      "name": "IKEA Kallax Shelf",
+      "category": "Мебель",
+      "price": 8000,
+      "stock": 150
+    },
+    {
+      "id": 14,
+      "articul": "FUR004",
+      "name": "Hoff Dining Table",
+      "category": "Мебель",
+      "price": 30000,
+      "stock": 50
+    },
+    {
+      "id": 15,
+      "articul": "FUR005",
+      "name": "IKEA Poäng Armchair",
+      "category": "Мебель",
+      "price": 12000,
+      "stock": 120
+    }
+  ],
+  "sales": {
+    "productNames": [
+      "Samsung Galaxy S21",
+      "Bosch Washing Machine Series 6",
+      "IKEA Malm Bed",
+      "Sony WH-1000XM4",
+      "LG Refrigerator Inverter",
+      "Xiaomi Mi TV 55\"",
+      "IKEA Poäng Armchair",
+      "Hoff Dining Table",
+      "Apple MacBook Pro",
+      "LG OLED TV 65\""
+    ],
+    "productSales": [
+      5000000, 4000000, 3500000, 3000000, 2500000, 2000000, 1800000, 1500000,
+      1200000, 1000000
+    ],
+    "regions": [
+      "Москва",
+      "Санкт-Петербург",
+      "Новосибирск",
+      "Екатеринбург",
+      "Казань",
+      "Нижний Новгород",
+      "Челябинск",
+      "Самара",
+      "Омск",
+      "Ростов-на-Дону"
+    ],
+    "regionSales": [
+      7000000, 5000000, 4000000, 3000000, 2000000, 1000000, 1500000, 2500000,
+      3500000, 4500000
+    ],
+    "months": ["Янв", "Фев", "Мар", "Апр", "Май", "Июн"],
+    "monthlySalesData": [6000000, 8000000, 7000000, 9000000, 8500000, 7500000],
+    "totalSales": 25000000
+  },
+  "inventory": {
+    "months": ["Янв", "Фев", "Мар", "Апр", "Май", "Июн"],
+    "products": [
+      {
+        "name": "Samsung Galaxy S21",
+        "stockData": [150, 140, 130, 120, 110, 100],
+        "color": "#1abc9c"
+      },
+      {
+        "name": "Bosch Washing Machine Series 6",
+        "stockData": [60, 58, 55, 53, 50, 48],
+        "color": "#3498db"
+      },
+      {
+        "name": "IKEA Malm Bed",
+        "stockData": [100, 95, 90, 85, 80, 75],
+        "color": "#9b59b6"
+      },
+      {
+        "name": "Sony WH-1000XM4",
+        "stockData": [200, 190, 180, 170, 160, 150],
+        "color": "#e74c3c"
+      },
+      {
+        "name": "LG Refrigerator Inverter",
+        "stockData": [40, 38, 36, 34, 32, 30],
+        "color": "#f1c40f"
+      },
+      {
+        "name": "Xiaomi Mi TV 55\"",
+        "stockData": [100, 95, 90, 85, 80, 75],
+        "color": "#2ecc71"
+      },
+      {
+        "name": "IKEA Poäng Armchair",
+        "stockData": [120, 115, 110, 105, 100, 95],
+        "color": "#34495e"
+      },
+      {
+        "name": "Hoff Dining Table",
+        "stockData": [50, 48, 46, 44, 42, 40],
+        "color": "#16a085"
+      },
+      {
+        "name": "Apple MacBook Pro",
+        "stockData": [80, 75, 70, 65, 60, 55],
+        "color": "#8e44ad"
+      },
+      {
+        "name": "LG OLED TV 65\"",
+        "stockData": [30, 28, 26, 24, 22, 20],
+        "color": "#f39c12"
+      }
+    ],
+    "stocks": [
+      {
+        "warehouse": "Москва",
+        "product": "Samsung Galaxy S21",
+        "quantity": 50
+      },
+      {
+        "warehouse": "Москва",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 20
+      },
+      {
+        "warehouse": "Москва",
+        "product": "IKEA Malm Bed",
+        "quantity": 30
+      },
+      {
+        "warehouse": "Москва",
+        "product": "Sony WH-1000XM4",
+        "quantity": 60
+      },
+      {
+        "warehouse": "Москва",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 10
+      },
+      {
+        "warehouse": "Санкт-Петербург",
+        "product": "Samsung Galaxy S21",
+        "quantity": 40
+      },
+      {
+        "warehouse": "Санкт-Петербург",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 15
+      },
+      {
+        "warehouse": "Санкт-Петербург",
+        "product": "IKEA Malm Bed",
+        "quantity": 25
+      },
+      {
+        "warehouse": "Санкт-Петербург",
+        "product": "Sony WH-1000XM4",
+        "quantity": 50
+      },
+      {
+        "warehouse": "Санкт-Петербург",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 8
+      },
+      {
+        "warehouse": "Новосибирск",
+        "product": "Samsung Galaxy S21",
+        "quantity": 30
+      },
+      {
+        "warehouse": "Новосибирск",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 10
+      },
+      {
+        "warehouse": "Новосибирск",
+        "product": "IKEA Malm Bed",
+        "quantity": 20
+      },
+      {
+        "warehouse": "Новосибирск",
+        "product": "Sony WH-1000XM4",
+        "quantity": 40
+      },
+      {
+        "warehouse": "Новосибирск",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 5
+      },
+      {
+        "warehouse": "Екатеринбург",
+        "product": "Samsung Galaxy S21",
+        "quantity": 25
+      },
+      {
+        "warehouse": "Екатеринбург",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 12
+      },
+      {
+        "warehouse": "Екатеринбург",
+        "product": "IKEA Malm Bed",
+        "quantity": 18
+      },
+      {
+        "warehouse": "Екатеринбург",
+        "product": "Sony WH-1000XM4",
+        "quantity": 35
+      },
+      {
+        "warehouse": "Екатеринбург",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 4
+      },
+      {
+        "warehouse": "Казань",
+        "product": "Samsung Galaxy S21",
+        "quantity": 20
+      },
+      {
+        "warehouse": "Казань",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 8
+      },
+      {
+        "warehouse": "Казань",
+        "product": "IKEA Malm Bed",
+        "quantity": 15
+      },
+      {
+        "warehouse": "Казань",
+        "product": "Sony WH-1000XM4",
+        "quantity": 25
+      },
+      {
+        "warehouse": "Казань",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 3
+      },
+      {
+        "warehouse": "Нижний Новгород",
+        "product": "Samsung Galaxy S21",
+        "quantity": 15
+      },
+      {
+        "warehouse": "Нижний Новгород",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 5
+      },
+      {
+        "warehouse": "Нижний Новгород",
+        "product": "IKEA Malm Bed",
+        "quantity": 10
+      },
+      {
+        "warehouse": "Нижний Новгород",
+        "product": "Sony WH-1000XM4",
+        "quantity": 20
+      },
+      {
+        "warehouse": "Нижний Новгород",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 2
+      },
+      {
+        "warehouse": "Челябинск",
+        "product": "Samsung Galaxy S21",
+        "quantity": 10
+      },
+      {
+        "warehouse": "Челябинск",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 4
+      },
+      {
+        "warehouse": "Челябинск",
+        "product": "IKEA Malm Bed",
+        "quantity": 8
+      },
+      {
+        "warehouse": "Челябинск",
+        "product": "Sony WH-1000XM4",
+        "quantity": 15
+      },
+      {
+        "warehouse": "Челябинск",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 1
+      },
+      {
+        "warehouse": "Самара",
+        "product": "Samsung Galaxy S21",
+        "quantity": 12
+      },
+      {
+        "warehouse": "Самара",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 6
+      },
+      {
+        "warehouse": "Самара",
+        "product": "IKEA Malm Bed",
+        "quantity": 9
+      },
+      {
+        "warehouse": "Самара",
+        "product": "Sony WH-1000XM4",
+        "quantity": 12
+      },
+      {
+        "warehouse": "Самара",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 1
+      },
+      {
+        "warehouse": "Омск",
+        "product": "Samsung Galaxy S21",
+        "quantity": 8
+      },
+      {
+        "warehouse": "Омск",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 3
+      },
+      {
+        "warehouse": "Омск",
+        "product": "IKEA Malm Bed",
+        "quantity": 5
+      },
+      {
+        "warehouse": "Омск",
+        "product": "Sony WH-1000XM4",
+        "quantity": 10
+      },
+      {
+        "warehouse": "Омск",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 1
+      },
+      {
+        "warehouse": "Ростов-на-Дону",
+        "product": "Samsung Galaxy S21",
+        "quantity": 5
+      },
+      {
+        "warehouse": "Ростов-на-Дону",
+        "product": "Bosch Washing Machine Series 6",
+        "quantity": 2
+      },
+      {
+        "warehouse": "Ростов-на-Дону",
+        "product": "IKEA Malm Bed",
+        "quantity": 3
+      },
+      {
+        "warehouse": "Ростов-на-Дону",
+        "product": "Sony WH-1000XM4",
+        "quantity": 5
+      },
+      {
+        "warehouse": "Ростов-на-Дону",
+        "product": "LG Refrigerator Inverter",
+        "quantity": 0
+      }
+    ]
+  },
+  "promotions": [
+    {
+      "id": 1,
+      "name": "Весеннее снижение цен",
+      "status": "Активна",
+      "startDate": "15.03.2024",
+      "endDate": "15.05.2024",
+      "effectiveness": 85
+    },
+    {
+      "id": 2,
+      "name": "Летняя распродажа",
+      "status": "Завершена",
+      "startDate": "01.06.2024",
+      "endDate": "31.08.2024",
+      "effectiveness": 70
+    },
+    {
+      "id": 3,
+      "name": "Осенняя акция",
+      "status": "Активна",
+      "startDate": "01.09.2024",
+      "endDate": "30.11.2024",
+      "effectiveness": 80
+    },
+    {
+      "id": 4,
+      "name": "Зимние скидки",
+      "status": "Планируется",
+      "startDate": "01.12.2024",
+      "endDate": "31.01.2025",
+      "effectiveness": 0
+    }
+  ]
+}

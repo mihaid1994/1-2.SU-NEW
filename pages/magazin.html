@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru-RU" dir="ltr" itemscope itemtype="https://schema.org/Article">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-mobile-web-app-capable" content="YES" />
+    <meta charset="utf-8" />
+    <title>Журнал «Энергомикс»</title>
+    <link rel="stylesheet" href="/css/magazine.css" />
+    <script src="/js/magazine.js" defer></script>
+  </head>
+  <body class="site">
+    <div class="container">
+      <div class="item-page">
+        <div class="item-title">
+          <h1 itemprop="headline">Журнал «Энергомикс»</h1>
+        </div>
+        <div itemprop="articleBody">
+          <p>
+            <strong
+              >Читайте предыдущие выпуски журнала Энергомикс в удобном
+              flip-формате, так же вы можете открыть и скачать привычный
+              PDF.</strong
+            >
+          </p>
+          <div class="magazine-grid" id="magazineGrid">
+            <!-- Карточки журналов будут добавлены скриптом -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer">
+      <div class="footer-container">
+        <p>© 2024 1-2.SU NEW. Все права защищены.</p>
+        <p>
+          <a href="http://energomix.ru" target="_blank" class="footer-link"
+            >energomix.ru</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <div id="imageModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="modalImage" alt="Обложка журнала" />
+      <div id="caption"></div>
+    </div>
+  </body>
+</html>

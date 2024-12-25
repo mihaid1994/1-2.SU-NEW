@@ -1,0 +1,528 @@
+/* Основные настройки для всего документа */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Базовые стили для иконок */
+a i {
+  cursor: pointer;
+  color: rgb(110, 110, 110);
+  font-weight: normal;
+  margin-left: 8px;
+  transition: color 0.2s ease;
+}
+
+.icon-group i {
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+.icon-group {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.icon-group:hover i {
+  color: rgb(0, 0, 0);
+}
+
+/* Навигация */
+.navigation {
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  z-index: 999;
+  position: relative;
+}
+
+/* Контейнер для основного меню */
+.container {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 150px;
+  transition: all 0.3s ease;
+}
+
+/* Контейнер для кнопок */
+.info-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.account {
+  align-self: flex-start;
+}
+
+/* Стиль кнопок */
+.info-button {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0px;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  width: 90%;
+  color: #000;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.info-button:hover {
+  color: #ff9100;
+  background: none;
+}
+
+.info-button .label {
+  text-align: left;
+  font-weight: bold;
+}
+
+.info-button .value {
+  text-align: right;
+}
+
+/* Кнопка "Категории" */
+.open-categories-button {
+  align-self: flex-start;
+  transform: scale(1.2);
+  font-size: 16px;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding-top: 5px;
+}
+
+/* Обертка для строки поиска */
+.search-bar {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  margin: 0 7px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none; /* Убираем стандартную обводку */
+  border: 1px solid transparent; /* Убираем стандартный бордер */
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2); /* Добавляем внутреннюю тень при фокусе с падением сверху слева */
+}
+
+/* Поле ввода поиска */
+.search-input {
+  flex: 1;
+  padding: 8px 50px 8px 8px;
+  border-radius: 10px;
+  outline: none; /* Убираем стандартную обводку */
+  border: 1px solid transparent; /* Убираем стандартный бордер */
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2); /* Добавляем внутреннюю тень при фокусе с падением сверху слева */
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-input::placeholder {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.search-input:focus::placeholder {
+  transform: translateX(100%);
+  opacity: 0; /* Скрываем текст, чтобы он не мешал */
+}
+
+/* Кнопка поиска */
+.search-button {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 12px;
+  border-radius: 6px;
+  background-color: #377271;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #ffad42;
+}
+
+/* Бонусы, Лимит, Корзина, Личный кабинет */
+.menu,
+.orders-button,
+.chat-button,
+.Cabinet-button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu,
+.orders-button,
+.chat-button ul,
+.Cabinet-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu,
+.orders-button,
+.chat-button ul li,
+.Cabinet-button {
+  list-style-type: none;
+}
+
+.bonus-limit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: nowrap;
+}
+
+.bonus-limit button,
+.secondary-button,
+.orders-button,
+.chat-button,
+.Cabinet-button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.bonus-limit button:hover,
+.secondary-button:hover,
+.orders-button:hover,
+.chat-button:hover,
+.Cabinet-button:hover {
+  color: #ffad42;
+}
+
+/* Ссылки на корзину и личный кабинет */
+.menu a {
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu a:hover {
+  color: #ffad42;
+}
+
+.menu {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+/* Шторка категорий */
+.category-drawer {
+  position: fixed;
+  top: 87px;
+  right: -100%;
+  width: 90%;
+  height: calc(100% - 150px);
+  background-color: white;
+  transition: right 0.3s ease;
+  z-index: 999;
+}
+
+.category-drawer.open {
+  right: 0;
+}
+
+/* Оверлей */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(121, 121, 121, 0.081); /* Цвет фона с прозрачностью */
+  backdrop-filter: blur(2px); /* Размытие */
+  display: none;
+  z-index: 10;
+}
+
+/* Вторая строка с кнопками */
+.secondary-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 80%;
+  box-sizing: border-box;
+  gap: 7px;
+}
+
+/* Кнопки во второй строке */
+.secondary-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  text-align: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.secondary-button::before,
+.secondary-button::after {
+  content: "";
+  flex-grow: 1;
+}
+
+/* Адаптация при уменьшении ширины экрана */
+@media (max-width: 1200px) {
+  .secondary-button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 992px) {
+  .secondary-button {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .secondary-row {
+    width: 90%;
+  }
+  .secondary-button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .secondary-row {
+    width: 80%;
+  }
+  .secondary-button {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+}
+
+/* Пропадание логотипа при увеличении масштаба (100% и выше) */
+@media (max-width: 1450px) {
+  .logo-button {
+    left: -150px;
+    opacity: 0;
+  }
+  .container {
+    padding-left: 10px;
+  }
+}
+
+/* Возвращение логотипа при уменьшении масштаба */
+@media (min-width: 1451px) {
+  .logo-button {
+    left: 30px;
+    opacity: 1;
+  }
+  .container {
+    padding-left: 150px;
+  }
+}
+
+/* Скрываем выпадающее меню по умолчанию */
+.account .dropdown {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  padding: 10px;
+  list-style-type: none;
+}
+
+.account:hover .dropdown {
+  display: block;
+}
+
+/* Стили для элементов выпадающего меню */
+.dropdown li {
+  padding: 8px 12px;
+}
+
+.dropdown li a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown li a:hover {
+  color: #ffad42;
+}
+
+.orders-button,
+.chat-button,
+.Cabinet-button {
+  font-size: 18px;
+}
+
+/* Базовые стили для логотипа */
+.logo-button {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  height: 50%;
+  transition: left 0.5s ease, opacity 0.5s ease;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.logo-button img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Стили для контейнера дополнительных кнопок в клоне */
+.clone-buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 5px;
+}
+
+/* Общие стили для новых кнопок */
+.clone-category-button,
+.scroll-top-button {
+  width: 32px; /* Ширина кнопки */
+  height: 32px; /* Высота кнопки, можно настроить под высоту клона */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  font-size: 18px;
+  color: #333333;
+}
+
+/* Эффекты при наведении и нажатии */
+.clone-category-button:hover,
+.scroll-top-button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.clone-category-button:active,
+.scroll-top-button:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(0.95);
+}
+
+/* Иконка категории в клоне */
+#cloned-open-categories {
+  font-size: 18px;
+}
+
+/* Обеспечиваем, чтобы контейнер клона и кнопок был на одной линии */
+.search-bar-clone {
+  display: flex;
+  align-items: center;
+  /* Остальные существующие стили */
+}
+
+/* Стили для клона строки поиска */
+.search-bar-clone {
+  position: fixed;
+  top: -100px;
+  left: 2px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: top 0.3s ease, width 0.3s ease;
+}
+
+.search-bar-clone.active {
+  top: 7px;
+}
+
+.search-bar-clone.focused {
+  width: 450px;
+}
+
+.search-bar-clone.inactive {
+  top: -100px;
+}
+
+.search-bar-clone .search-input {
+  flex: 1;
+  padding: 8px 50px 8px 8px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease, width 0.3s ease;
+  min-width: 200px;
+  max-width: 500px;
+  outline: none; /* Убираем стандартный бордер при фокусе */
+}
+
+.search-bar-clone.focused .search-input,
+.search-bar-clone.expanded .search-input {
+  width: 100%;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4); /* Добавляем тень вместо бордера */
+  border: 1px solid transparent; /* Прозрачный бордер для плавности */
+}
+
+/* Добавьте плавный переход для свойства right */
+.search-bar-clone .search-button {
+  right: 5px; /* Изначальный отступ от правого края */
+  padding: 5px 12px 5px 12px; /* Внутренние отступы */
+  border-radius: 7px;
+  background-color: #377271;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease, right 0.3s ease; /* Добавлен переход для свойства right */
+  display: flex;
+  align-items: center;
+}
+
+.search-bar-clone .search-button:hover {
+  background-color: #ffad42;
+}
+
+/* Класс для смещения кнопки при фокусе */
+.search-bar-clone.button-shifted .search-button {
+  right: 78px; /* Конечный отступ от правого края */
+}

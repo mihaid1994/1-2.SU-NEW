@@ -1,0 +1,205 @@
+/* Стили для каталога и категорий */
+#icon-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Расстояние между категориями */
+  padding: 12px; /* Добавляем внутренний отступ для общего каталога */
+}
+
+/* Общие стили для категории */
+.category {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Стили для заголовка категории */
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #eee;
+  border-bottom: 1px solid #ddd; /* Разделитель между заголовком и содержимым */
+  cursor: pointer;
+}
+
+.category-header span {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #d97706; /* Оранжевый темно-насыщенный */
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.toggle-btn:hover {
+  color: #b45309; /* Более насыщенный оттенок оранжевого при наведении */
+}
+
+/* Стили для обертки иконок */
+.icons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+/* Стили для отдельного блока иконки */
+.icon-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+  font-size: 20px;
+  white-space: nowrap; /* Запрет переноса названий иконок */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  flex: 1 1 auto; /* Позволяет блоку адаптироваться по ширине */
+  min-width: 100px; /* Минимальная ширина блока для предотвращения наложения */
+}
+
+.icon-block i {
+  font-size: 24px;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-block:hover i {
+  transform: scale(1.2);
+  color: #d97706; /* Цвет иконки при наведении */
+}
+
+/* Скрытые иконки */
+.icon-block.hidden {
+  display: none;
+}
+
+/* Стили для свернутой категории */
+.category.collapsed {
+  width: 32%; /* Около одной трети ширины экрана */
+  max-height: 150px; /* Фиксированная высота для свернутого состояния */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Лёгкая тень для акцента */
+}
+
+.category.collapsed .icons-wrapper {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.category.collapsed .icon-block {
+  flex: 0 0 32%; /* Меньшая ширина для иконок при сворачивании */
+}
+
+/* Стили для развернутой категории */
+.category.expanded {
+  width: 100%; /* Полная ширина экрана */
+  max-height: none; /* Убираем ограничение по высоте */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Усиленная тень для акцента */
+}
+
+.category.expanded .icons-wrapper {
+  flex-wrap: wrap;
+  overflow-x: visible;
+}
+
+.category.expanded .icon-block {
+  flex: 1 1 calc(33.333% - 8px); /* Возвращаем ширину иконок */
+}
+
+/* Стили для блока "невошедшее" */
+.missing-icons-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 8px;
+  background-color: #fff5f5; /* Светло-розовый фон */
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
+  margin-top: 12px; /* Отступ сверху */
+}
+
+.missing-icon {
+  white-space: nowrap;
+  margin: 4px;
+  padding: 8px;
+  background-color: #ffe6e6;
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #b91c1c; /* Тёмно-красный текст */
+}
+
+/* Стили строки поиска */
+#icon-search {
+  display: block;
+  width: calc(100% - 24px); /* Учитываем отступы */
+  margin: 12px auto;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+#icon-search:focus {
+  border-color: #d97706; /* Оранжевый темно-насыщенный */
+  box-shadow: 0 0 5px rgba(217, 119, 6, 0.5); /* Оранжевый акцент */
+  outline: none;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1200px) {
+  .category.collapsed {
+    width: 45%;
+  }
+
+  .category.expanded .icon-block {
+    flex: 1 1 calc(25% - 8px); /* Уменьшаем ширину блоков */
+  }
+}
+
+@media (max-width: 768px) {
+  .category.collapsed {
+    width: 100%;
+  }
+
+  .icon-block {
+    flex: 1 1 calc(50% - 8px); /* Уменьшаем ширину иконок для узких экранов */
+  }
+
+  .category.expanded .icon-block {
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+/* Стили для подсказки "Скопировано" */
+.copy-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(-5px); /* Лёгкий подъём при появлении */
+  z-index: 1000;
+}
+
+.copy-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}

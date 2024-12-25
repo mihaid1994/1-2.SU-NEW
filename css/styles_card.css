@@ -1,0 +1,377 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.product-card-custom {
+  width: 100%;
+  aspect-ratio: 3 / 6;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(16px * var(--card-scale));
+}
+
+.product-card-custom:hover {
+  transform: translateY(-5px);
+}
+
+.product-image-custom {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* Изображения в карточке */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-container img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto; /* Устанавливаем ширину автоматически */
+  height: calc(100% - 5px); /* Учитываем отступ сверху */
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* Заполнение контейнера */
+  display: none;
+  border-radius: 14px; /* Скругляем края */
+  margin-top: 5px; /* Отступ сверху */
+}
+
+.image-container img.active {
+  display: block;
+}
+
+/* Убедитесь, что индикаторы всегда имеют display: flex */
+.card-view .indicatorsContainer {
+  display: flex;
+}
+
+/* Увеличьте z-index, если overlay скрывает индикаторы */
+.card-view .indicatorsContainer {
+  z-index: 10;
+}
+
+/* Индикаторы */
+.card-view .indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card-view .indicator.active {
+  transform: scale(1.5);
+  background-color: #fe9c00;
+}
+
+.card-view .indicator:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.2);
+}
+
+.card-view .indicatorsContainer {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 4; /* Увеличен для гарантии видимости над overlay */
+  opacity: 0; /* Скрыты по умолчанию */
+  pointer-events: none; /* Отключаем клики по индикаторам, когда они скрыты */
+  transition: opacity 0.3s ease; /* Плавный переход */
+}
+
+.card-view .image-container:hover .indicatorsContainer {
+  opacity: 1; /* Показываем индикаторы при наведении */
+  pointer-events: all; /* Включаем клики по индикаторам */
+}
+
+/* Кнопки "Избранное" и "Сравнить" */
+.card-view .wishlist-button-custom,
+.card-view .compare-button-custom {
+  position: absolute;
+  top: 7px;
+  width: 2em;
+  height: 2em;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #838383;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card-view .wishlist-button-custom:hover,
+.card-view .compare-button-custom:hover {
+  background-color: #aaaaaa;
+  color: #fff;
+}
+
+.card-view .wishlist-button-custom {
+  left: 5px;
+}
+
+.card-view .compare-button-custom {
+  right: 5px;
+}
+
+/* Информация о продукте */
+.card-view .product-info-custom {
+  padding: 0.625em;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-view .product-brand-custom {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.card-view .product-brand-custom img {
+  width: 3.75em;
+  height: auto;
+  margin-right: 0.5em;
+  border-radius: 5px;
+  transition: transform 0.3s ease; /* Добавляем плавный переход */
+  cursor: pointer; /* Курсор указывает на кликабельность */
+}
+
+.card-view .product-brand-custom img:hover {
+  transform: scale(1.03); /* Увеличение на 5% (на пару пикселей) */
+}
+
+.card-view .product-brand-custom span {
+  color: #999;
+  font-size: 1em;
+}
+
+.card-view .product-title-custom {
+  font-size: 1rem; /* Размер шрифта 16px */
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+  line-height: 1.2; /* Высота строки */
+  height: calc(1.2em * 3); /* Высота блока для трех строк */
+  display: -webkit-box; /* Флекс-контейнер для текста */
+  -webkit-box-orient: vertical; /* Вертикальная ориентация текста */
+  overflow: hidden; /* Скрываем лишний текст */
+  text-overflow: ellipsis; /* Добавляем многоточие для обрезанного текста */
+  word-wrap: break-word; /* Переносим длинные слова */
+  white-space: normal; /* Позволяем перенос строк */
+}
+
+.card-view .product-code-custom,
+.card-view .product-article-custom,
+.card-view .product-packaging-custom {
+  font-size: 0.75em;
+  color: #666;
+  margin: 0.125em 0;
+}
+
+.card-view .product-code-custom span,
+.card-view .product-article-custom span {
+  color: #333;
+}
+
+.card-view .product-packaging-custom a {
+  color: #638a8e;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.card-view .product-packaging-custom a:hover {
+  color: #2ca6d2;
+}
+
+/* Цена продукта */
+.card-view .product-price-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.625em 0;
+}
+
+.card-view .price-current-custom,
+.card-view .price-retail-custom {
+  font-size: 0.75em;
+}
+
+.card-view .price-current-custom span,
+.card-view .price-retail-custom span {
+  color: #999;
+}
+
+.card-view .price-current-custom strong {
+  display: block;
+  color: #333;
+  font-size: 1.6em;
+  font-weight: 700;
+  margin-top: 0.125em;
+}
+
+.card-view .price-retail-custom strong {
+  display: block;
+  color: #bbb;
+  font-size: 0.875em;
+  font-weight: 500;
+  text-decoration: line-through;
+  margin-top: 0.125em;
+}
+
+/* Действия (Добавить в корзину, выбор количества) */
+.card-view .product-actions-custom {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.card-view .product-quantity-custom {
+  flex: 1;
+  padding: 0.46em;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-right: 0.5em;
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.card-view .add-to-cart-custom {
+  width: 7em;
+  padding: 0.58em;
+  background-color: #638a8e;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 0.5em;
+}
+
+.card-view .add-to-cart-custom:hover {
+  background-color: #376266;
+}
+
+/* Доступность продукта */
+.card-view .product-availability-custom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75em;
+  color: #666;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 0.5em;
+}
+
+.card-view .available-today-custom,
+.card-view .available-future-custom {
+  text-align: center;
+}
+
+.card-view .available-today-custom span,
+.card-view .available-future-custom span {
+  display: block;
+  color: #999;
+  font-size: 1em;
+  margin-bottom: 0.1em;
+}
+
+.card-view .available-today-custom strong,
+.card-view .available-future-custom strong {
+  color: #333;
+  font-size: 1.3em;
+}
+
+/* Адаптивные медиа-запросы */
+@media (min-width: 1900px) {
+  .card-view {
+    --card-scale: 0.6;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media (min-width: 1600px) and (max-width: 1899px) {
+  .card-view {
+    --card-scale: 0.7;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1300px) and (max-width: 1599px) {
+  .card-view {
+    --card-scale: 0.9;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1299px) {
+  .card-view {
+    --card-scale: 1;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 800px) and (max-width: 999px) {
+  .card-view {
+    --card-scale: 1.2;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 799px) {
+  .card-view {
+    --card-scale: 1.5;
+  }
+  .card-view .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 599px) {
+  .card-view {
+    --card-scale: 2;
+  }
+  .card-view .product-grid {
+    grid-template-columns: 1fr;
+  }
+}

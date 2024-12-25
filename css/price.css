@@ -1,0 +1,134 @@
+/* Общие стили */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #f5f5f7;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px 30px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.centered-text {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+}
+
+main {
+  flex: 1;
+  padding: 20px 30px;
+}
+
+.footer {
+  background-color: #d5d5d5;
+  color: #fff;
+  padding: 12px 0;
+  text-align: center;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Контейнер для регионов */
+.regions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Заголовок региона */
+.region-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background-color: #f0f0f5;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.region-header:hover {
+  background-color: #e0e0e0;
+}
+
+.region-header .arrow {
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+/* Таблицы */
+.region-table {
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  border-collapse: collapse;
+  margin-top: 0;
+}
+
+.region-table.expanded {
+  max-height: 1000px; /* Достаточно большое значение для отображения содержимого */
+}
+
+.region-table th,
+.region-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #e1e1e1;
+}
+
+.region-table th {
+  background-color: #f0f0f5;
+  color: #555;
+}
+
+.region-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Ссылки */
+a {
+  color: #207076;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #104e54;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .region-table th,
+  .region-table td {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+
+  .region-header {
+    padding: 12px 15px;
+  }
+}

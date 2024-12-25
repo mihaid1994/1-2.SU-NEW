@@ -1,0 +1,86 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    margin: 20px;
+    position: fixed; /* Располагаем поверх других элементов */
+    top: 50%; /* Центрируем по вертикали */
+    left: 50%; /* Центрируем по горизонтали */
+    transform: translate(-50%, -50%); /* Смещение для точного центрирования */
+    z-index: 9999; /* Поверх всех остальных элементов */
+    visibility: hidden; /* Скрыто по умолчанию */
+    opacity: 0; /* Прозрачность для скрытия */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Плавное появление */
+}
+
+.main-container.visible {
+    visibility: visible; /* Показываем элемент */
+    opacity: 1; /* Делаем элемент видимым */
+}
+
+
+.image-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    z-index: 0;
+}
+
+.image-container img.active {
+    display: block;
+}
+
+/* Полупрозрачный слой */
+.image-container .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0); /* Прозрачный фон */
+    z-index: 2; /* Перекрывает изображение */
+    pointer-events: all; /* Блокирует взаимодействие с изображением */
+}
+
+/* Стили индикаторов */
+.indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 3; /* Выше, чем изображение и overlay */
+    opacity: 0.8; /* Прозрачность */
+    transition: opacity 0.3s ease; /* Плавный переход */
+}
+
+.indicators.hidden {
+    opacity: 0; /* Прячем индикаторы */
+    pointer-events: none; /* Отключаем клики */
+}
+
+.indicator {
+    font-size: 20px; /* Размер кружочка */
+    color: grey; /* Цвет индикаторов */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.indicator.active {
+    transform: scale(1.3); /* Увеличение активного индикатора */
+}

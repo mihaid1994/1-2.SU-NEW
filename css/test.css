@@ -1,0 +1,157 @@
+/* Основные настройки для всего документа */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  position: relative; /* Добавлено для корректного позиционирования кнопки */
+  /* Убран z-index: -9999; */
+}
+
+.tabs-buttons {
+  display: flex;
+  gap: 4px; /* Расстояние между кнопками */
+  margin-left: auto; /* Отодвигает кнопку вправо */
+}
+
+/* Обновленные стили для кнопки "Добавить корзину" */
+.create-chat-button,
+.create-order-button,
+.create-cart-button {
+  background-color: #c4c4c4; /* Совпадает с базовым цветом вкладок */
+  color: #fff;
+  padding: 5px 7px 0px 7px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, height 0.3s, margin-top 0.3s; /* Плавные изменения */
+  height: 30px; /* Совпадает с высотой вкладок */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+}
+
+.create-chat-button:hover,
+.create-order-button:hover,
+.create-cart-button:hover {
+  background-color: #aaaaaa;
+  height: 35px; /* Увеличиваем высоту до полной строки */
+  margin-top: 0; /* Убираем отступ сверху, поднимая вкладку */
+  box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Добавляем эффект тени */
+}
+
+.create-chat-button:active,
+.create-order-button:active,
+.create-cart-button:active {
+  /* Эффект при нажатии */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  transform: translateY(0); /* Возвращается на место */
+}
+
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+  position: relative;
+  align-items: flex-end; /* Выровнять вкладки по нижнему краю */
+  height: 35px; /* Фиксированная высота строки */
+  transition: transform 0.5s ease, opacity 0.5s ease, margin-top 0.5s ease;
+  transform: translateY(0); /* Начальная позиция */
+  /* Убран z-index: -2; */
+}
+
+.tabs.collapsed {
+  transform: translateY(-100%); /* Полностью скрываем вверх */
+  opacity: 0; /* Уменьшаем видимость */
+  margin-top: -35px; /* Убираем место под вкладками */
+}
+
+.tabs.expanded {
+  transform: translateY(0); /* Возвращаем на место */
+  opacity: 1; /* Восстанавливаем видимость */
+  margin-top: 0; /* Восстанавливаем отступ */
+}
+
+.tab {
+  background-color: #48707a;
+  color: #fff;
+  padding: 5px 18px 0px 10px;
+  margin-top: 5px; /* Отступ сверху для стандартных вкладок */
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, height 0.3s, margin-top 0.3s; /* Плавные изменения */
+  height: 30px; /* Базовая высота вкладки */
+}
+
+.tab:hover {
+  background-color: #66999f;
+}
+
+.tab.active {
+  background-color: #ff8c00;
+  height: 35px; /* Увеличиваем высоту до полной строки */
+  margin-top: 0; /* Убираем отступ сверху, поднимая вкладку */
+  box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Добавляем эффект тени */
+}
+
+.tab .close-tab {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tab .close-tab:hover {
+  color: #ff4d4d;
+}
+
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Полноэкранное отображение iframe в контейнере */
+.iframe-content {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden; /* Отключает прокрутку внутри iframe */
+}
+
+/* Стили для iframe */
+.tab-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.edit-tab {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.edit-tab:hover {
+  color: #ffcc00; /* Светло-оранжевый при наведении */
+}

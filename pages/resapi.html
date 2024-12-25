@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>1-2.su REST API Documentation</title>
+    <!-- Внешний CSS -->
+    <link rel="stylesheet" href="/css/resapi.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1 class="header-title">readme.md</h1>
+      </header>
+      <main class="main-content">
+        <section class="api-overview">
+          <h2 class="section-title">1-2.su REST API</h2>
+          <p class="description">
+            Передача данных осуществляется по протоколу HTTP. Применяются
+            принципы REST API. Сервер отвечает в формате JSON.
+          </p>
+          <div class="api-address">
+            <span class="label">Адрес API:</span>
+            <div class="code-snippet">http://m1.1-2.su/api</div>
+          </div>
+          <div class="api-documentation">
+            <span class="label"
+              >Документация с примерами команд и выгрузок:</span
+            >
+            <div class="code-snippet">http://m1.1-2.su/api/apidoc/</div>
+          </div>
+        </section>
+
+        <section class="authorization">
+          <h2 class="section-title">Авторизация</h2>
+          <p class="description">
+            Каждый запрос к API серверу должен передавать HTTP Basic
+            Authentication. Логин и пароль зарегистрированных пользователей в
+            системе.
+          </p>
+        </section>
+
+        <section class="limitations">
+          <h2 class="section-title">Ограничения</h2>
+          <p class="description">
+            Действуют ограничения на количество запросов к сервису. На данный
+            момент <strong>разрешено 600 запросов в 1 минуту</strong>. Каждый
+            ответ сервера содержит HTTP заголовки содержащие оставшиеся лимиты.
+          </p>
+          <div class="code-snippet">
+            curl -i -u LOGIN:PASSWORD -X GET http://m1.1-2.su/api/user
+          </div>
+          <p class="error-message">Логин или пароль неверный:</p>
+          <pre class="response-example">
+HTTP/1.1 401 Unauthorized
+...
+www-authenticate: Basic
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+...
+          </pre>
+          <p class="success-message">Успешный ответ:</p>
+          <pre class="response-example">
+HTTP/1.1 200 OK
+...
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+...
+          </pre>
+          <p class="error-message">Превышение лимитов:</p>
+          <pre class="response-example">
+HTTP/1.1 429 Too Many Requests
+...
+x-ratelimit-limit: 60
+x-ratelimit-remaining: 0
+retry-after: 30
+x-ratelimit-reset: 1515948378
+...
+          </pre>
+        </section>
+
+        <section class="implemented-methods">
+          <h2 class="section-title">Реализованные методы</h2>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/user</h3>
+            <p class="description">
+              Данные текущего пользователя и складах его контекста.<br />
+              Ключу "code" соответствует значение - код склада.<br />
+              Ключу "title" - наименование склада.
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/sections</h3>
+            <p class="description">
+              Все разделы. Указан родительский и текущий id через которые
+              получается иерархия групп каталога.
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/sections/{section}</h3>
+            <p class="description">
+              Конкретный раздел по идентификатору. Выгружаются сведения как по
+              родительскому так и по всем дочерним группам.
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/products</h3>
+            <p class="description">
+              Все товары. Выгружаются как данные по товару так и группы, в
+              которых этот товар находится (товар может находиться сразу в
+              нескольких группах).<br />
+              В значениях ключей выгружаются следующие данные:<br />
+              "id" - код товара<br />
+              "article" - артикул поставщика<br />
+              "barcode" - штрих-код товара<br />
+              "pack" - упаковки товара перечисленные через "/"<br />
+              "min_amount" - минимальная кратность отгрузки<br />
+              "title" - наименование товара
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/products/{product}</h3>
+            <p class="description">
+              Конкретный товар по идентификатору. Кроме уже описанных данных,
+              данный запрос выдает:<br />
+              "price" - цена товара,<br />
+              "stock" - склад, на котором товар присутствует (складов может быть
+              несколько),<br />
+              "amount" - количество товара,<br />
+              "ontheway_amount" - количество товара в пути,<br />
+              "ontheway_date" - дата ближайшего поступления товара на склад,<br />
+              "delivery" - среднее время доставки товара со склада после
+              получения заказа.<br />
+              Этот запрос удобен для получения текущих данных по конкретному
+              товару.
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/prices</h3>
+            <p class="description">
+              Все цены товаров. С возможностью отбора по разделам и отдельным
+              товарам.
+            </p>
+          </article>
+
+          <article class="api-method">
+            <h3 class="api-method-title">GET /api/amounts</h3>
+            <p class="description">
+              Все остатки товаров. С возможностью отбора по отдельным складам и
+              товарам, а также по группам товаров.
+            </p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <!-- Подключение JavaScript для анимаций и интерактивности -->
+    <script src="/js/reasapi.js"></script>
+    <!-- Подключение глобального скрипта коммуникации -->
+    <script src="/js/globalcomm.js"></script>
+    <!-- Подключение скрипта открытия вкладок -->
+    <script src="/js/tabs-from.js"></script>
+    <!-- Футер -->
+    <footer class="footer">
+      <div class="footer-container">
+        <p>© 2024 1-2.SU NEW. Все права защищены.</p>
+        <p>
+          <a href="http://energomix.ru" target="_blank" class="footer-link"
+            >energomix.ru</a
+          >
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

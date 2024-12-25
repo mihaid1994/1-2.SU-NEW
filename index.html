@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1-2.SU NEW</title>
+    <link rel="stylesheet" href="/css/test.css" />
+    <link rel="stylesheet" href="/css/search_nav_style.css" />
+    <link rel="stylesheet" href="/css/categories.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <style></style>
+  <body>
+    <!-- Область для навигации -->
+    <div id="navigation-area" class="navigation-area">
+      <nav class="navigation">
+        <div class="container">
+          <!-- Обновленный логотип с изображением -->
+          <div class="logo-button" data-tooltip="На главную страницу">
+            <img
+              src="/images/svg/Logo/energomixlogo.svg"
+              alt="Energomix Logo"
+            />
+          </div>
+          <button
+            id="open-categories"
+            class="open-categories-button"
+            data-tooltip="Открыть список категорий товаров"
+          >
+            Категории ☰
+          </button>
+
+          <!-- Строка поиска с кнопкой -->
+          <div class="search-bar">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Поиск товаров..."
+              class="search-input"
+              data-tooltip="Введите название товара для поиска"
+            />
+            <button
+              id="searchButton"
+              class="search-button"
+              data-tooltip="Нажмите для поиска товаров"
+            >
+              Поиск
+            </button>
+          </div>
+
+          <!-- Бонусы, Лимит, Корзина, Личный кабинет -->
+          <div class="menu">
+            <div class="info-buttons">
+              <button
+                id="bonus-amount"
+                class="info-button"
+                data-tooltip="Ваши накопленные бонусы"
+              >
+                <span class="label">Бонусы:</span>
+                <span class="value">45 000 ₽</span>
+              </button>
+              <button
+                id="limit-amount"
+                class="info-button"
+                data-tooltip="Ваш текущий лимит покупок"
+              >
+                <span class="label">Доступный лимит:</span>
+                <span class="value">740 000 ₽</span>
+              </button>
+              <button
+                id="turnover"
+                class="info-button"
+                data-tooltip="Ваш текущий оборот за год"
+              >
+                <span class="label">Оборот за год:</span>
+                <span class="value">25 000 000,00 ₽</span>
+              </button>
+            </div>
+
+            <li class="account">
+              <a
+                href="supplier-account.html"
+                data-tooltip="Управление вашим аккаунтом"
+              >
+                Шуравин Михаил
+              </a>
+
+              <ul class="dropdown">
+                <li>
+                  <button
+                    data-tooltip="Ваш рабочий стол"
+                    class="Cabinet-button"
+                  >
+                    Личный кабинет
+                  </button>
+                </li>
+                <li>
+                  <button data-tooltip="Журнал заказов" class="orders-button">
+                    Заказы
+                  </button>
+                </li>
+                <li>
+                  <button
+                    data-tooltip="Связаться с поддержкой"
+                    class="chat-button"
+                  >
+                    Чат
+                  </button>
+                </li>
+                <li>
+                  <a href="contacts.html" data-tooltip="Наши контактные данные"
+                    >Контакты</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="returns.html"
+                    data-tooltip="Оформить возврат или оставить претензию"
+                    >Претензии и возвраты</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <a>
+              <i class="ri-door-open-fill" id="logout-icon"></i>
+              <span class="icon-group">
+                <i class="ri-group-3-line"></i>
+                <i class="ri-toggle-line"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        <!-- Вторая строка с кнопками -->
+        <div class="secondary-row">
+          <button
+            class="secondary-button"
+            data-tooltip="Акции и предложения к Новому году"
+          >
+            Новый год
+          </button>
+          <button
+            class="secondary-button"
+            data-tooltip="Текущие акции и скидки"
+          >
+            Акции
+          </button>
+          <button
+            class="secondary-button"
+            data-tooltip="Возможность выбрать продукцию для конкретного сезона"
+          >
+            Сезонные товары
+          </button>
+          <button class="secondary-button" data-tooltip="Важные разделы сайта">
+            Сюда добавляем важные разделы...
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Область для вкладок -->
+    <div id="tab-container" class="tab-container">
+      <div class="tabs collapsed">
+        <!-- Вкладки будут динамически добавляться здесь -->
+      </div>
+      <div class="tab-content">
+        <!-- Контент активной вкладки будет отображаться здесь -->
+      </div>
+    </div>
+
+    <!-- Шторка с содержимым категорий -->
+    <div class="category-drawer" id="categoryDrawer">
+      <div id="category-module">
+        <div class="top-container">
+          <div class="sidebar"></div>
+          <div class="subcategories-container">
+            <!-- Динамически будут добавляться подкатегории -->
+          </div>
+        </div>
+
+        <div class="brands">
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image1.jpg" alt="Изображение 1"
+          /></a>
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image2.jpg" alt="Изображение 2"
+          /></a>
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image3.jpg" alt="Изображение 3"
+          /></a>
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image4.jpg" alt="Изображение 4"
+          /></a>
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image5.jpg" alt="Изображение 5"
+          /></a>
+          <a href="#"
+            ><img src="/images/jpg/Brandfull/image6.jpg" alt="Изображение 6"
+          /></a>
+          <!-- Добавьте больше изображений по необходимости -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Оверлей -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Скрипт открытия вкладок командой из дочерних страниц -->
+    <script src="/js/tabs-from.js"></script>
+
+    <!-- Логика перетаскивания вкладок -->
+    <script src="/js/tabs-drag.js"></script>
+
+    <!-- Подключение глобального скрипта коммуникации между страницами проекта -->
+    <script src="/js/globalcomm.js"></script>
+
+    <!-- Открытие шторки с категориями -->
+    <script src="/js/categories.js"></script>
+
+    <!-- Имитация ввода текста в поиск -->
+    <script src="/js/inputimit.js"></script>
+  </body>
+</html>
