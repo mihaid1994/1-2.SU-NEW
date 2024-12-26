@@ -1,5 +1,3 @@
-// /js/tabs-from.js
-
 /**
  * GComm_TabOpener
  *
@@ -102,5 +100,11 @@
   /**
    * Инициализация GComm_TabOpener
    */
-  global.GComm_TabOpener = new GComm_TabOpener();
-})(window);
+  if (global.GComm_MessageBus) {
+    global.GComm_TabOpener = new GComm_TabOpener();
+  } else {
+    console.error(
+      `[${PREFIX}_TabOpener] GComm_MessageBus не инициализирован. TabOpener не будет создан.`
+    );
+  }
+})(window); // /js/tabs-from.js
