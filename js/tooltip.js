@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let tooltipsEnabled = false;
 
     // Добавляем кнопку "Включить подсказки"
-    const filterHeader = document.querySelector('.filter-header');
-    if (filterHeader) {
+    const filterheader = document.querySelector('.filter-header');
+    if (filterheader) {
         const tooltipToggleButton = document.createElement('button');
         tooltipToggleButton.textContent = 'Включить подсказки';
         tooltipToggleButton.setAttribute('id', 'toggle-tooltips');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltipToggleButton.style.color = tooltipsEnabled ? '#fff' : '#000';
         });
 
-        filterHeader.appendChild(tooltipToggleButton);
+        filterheader.appendChild(tooltipToggleButton);
     }
 
     // Функция для отображения подсказки
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fontSize: '14px',
             whiteSpace: 'nowrap',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-            zIndex: '1000',
+            zindex: '1000',
             pointerEvents: 'none',
             opacity: '0',
             transition: 'opacity 0.3s, transform 0.3s',

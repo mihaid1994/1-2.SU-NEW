@@ -186,7 +186,7 @@ function initializeChat() {
       e.target !== headerSearchIcon &&
       e.target !== headerSearchInput
     ) {
-      toggleHeaderSearchResults(false);
+      toggleheaderSearchResults(false);
     }
   });
 
@@ -221,7 +221,7 @@ function initializeChat() {
   }
 
   // Создаем поисковый инпут и иконку в заголовке
-  createHeaderSearchBar();
+  createheaderSearchBar();
 }
 
 // Функция для создания нового чата с начальными сообщениями
@@ -538,8 +538,8 @@ function getLocalResponse(userMessage) {
 
   if (matchedResponses.length > 0) {
     // Выбираем случайный ответ из совпавших интентов
-    const randomIndex = Math.floor(Math.random() * matchedResponses.length);
-    return matchedResponses[randomIndex];
+    const randomindex = Math.floor(Math.random() * matchedResponses.length);
+    return matchedResponses[randomindex];
   }
 
   return "Извините, я не смог понять ваш запрос. Пожалуйста, переформулируйте вопрос.";
@@ -838,8 +838,8 @@ function formatFileSize(bytes) {
 }
 
 // Функция для создания и добавления поискового инпута и иконки в заголовок
-function createHeaderSearchBar() {
-  const chatHeader = document.querySelector(".chat-header");
+function createheaderSearchBar() {
+  const chatheader = document.querySelector(".chat-header");
 
   const searchContainer = document.createElement("div");
   searchContainer.id = "headerSearchContainer";
@@ -864,7 +864,7 @@ function createHeaderSearchBar() {
   searchContainer.appendChild(searchResults);
 
   // Вставляем поисковый контейнер в заголовок
-  chatHeader.appendChild(searchContainer);
+  chatheader.appendChild(searchContainer);
 
   // Обработчик ввода в поисковый инпут
   searchInput.addEventListener("input", handleSearchInput);
@@ -879,7 +879,7 @@ function createHeaderSearchBar() {
 }
 
 // Функция для отображения или скрытия результатов поиска в заголовке
-function toggleHeaderSearchResults(show = true) {
+function toggleheaderSearchResults(show = true) {
   const searchResults = document.getElementById("headerSearchResults");
   if (show) {
     searchResults.style.display = "block";
@@ -894,7 +894,7 @@ function handleSearchInput(e) {
   currentSearchQuery = query; // Обновляем текущий поисковый запрос
 
   if (query === "") {
-    toggleHeaderSearchResults(false); // Скрываем результаты поиска
+    toggleheaderSearchResults(false); // Скрываем результаты поиска
     updateHighlightedMessages(); // Перерисовываем сообщения без выделения
     updateMatchCounts([]); // **Добавлено: Удаляем все счетчики совпадений**
     return;
@@ -938,7 +938,7 @@ function performSearch(query) {
           chatId,
           theme: chat.theme,
           message: msg.text,
-          messageIndex: index,
+          messageindex: index,
           fullMessage: msg.text,
         });
       }
@@ -985,7 +985,7 @@ function displaySearchResults(results, query) {
   searchResults.innerHTML = "";
 
   if (results.length === 0) {
-    toggleHeaderSearchResults(false);
+    toggleheaderSearchResults(false);
     renderMessages(); // Перерисовать сообщения без выделения
     return;
   }
@@ -1003,36 +1003,36 @@ function displaySearchResults(results, query) {
       getThemeKey(result.theme)
     )}</strong>: ${highlightedText}`;
     item.addEventListener("click", () => {
-      navigateToMatch(result.chatId, result.messageIndex, query);
-      toggleHeaderSearchResults(false);
+      navigateToMatch(result.chatId, result.messageindex, query);
+      toggleheaderSearchResults(false);
     });
     searchResults.appendChild(item);
   });
 
-  toggleHeaderSearchResults(true);
+  toggleheaderSearchResults(true);
 }
 
 // Функция для навигации к конкретному совпадению
-function navigateToMatch(chatId, messageIndex, query) {
+function navigateToMatch(chatId, messageindex, query) {
   // Переключаемся на нужный чат
   switchChat(chatId);
 
   // Ждём рендеринга сообщений
   setTimeout(() => {
     const messageDivs = chatMessages.querySelectorAll(".message-content");
-    if (messageDivs[messageIndex]) {
-      const messageText = messageDivs[messageIndex].innerText.toLowerCase();
+    if (messageDivs[messageindex]) {
+      const messageText = messageDivs[messageindex].innerText.toLowerCase();
       const queryLower = query.toLowerCase();
       const position = messageText.indexOf(queryLower);
       if (position !== -1) {
-        messageDivs[messageIndex].scrollIntoView({
+        messageDivs[messageindex].scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
         // Добавляем временное выделение с анимацией
-        messageDivs[messageIndex].classList.add("highlight");
+        messageDivs[messageindex].classList.add("highlight");
         setTimeout(() => {
-          messageDivs[messageIndex].classList.remove("highlight");
+          messageDivs[messageindex].classList.remove("highlight");
         }, 2000);
       }
     }

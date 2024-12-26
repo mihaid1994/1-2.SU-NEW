@@ -1,3 +1,5 @@
+// /js/tabs-from.js
+
 /**
  * GComm_TabOpener
  *
@@ -48,7 +50,7 @@
       // Делегирование события клика на body для обработки всех текущих и будущих элементов
       document.body.addEventListener("click", (e) => {
         const element = e.target.closest(
-          'span[data-open-tab="true"], button[data-open-tab="true"], a[data-open-tab="true"]'
+          'span[data-open-tab="true"], button[data-open-tab="true"]'
         );
         if (element) {
           e.preventDefault(); // Предотвращаем стандартное поведение ссылки или кнопки
@@ -100,11 +102,5 @@
   /**
    * Инициализация GComm_TabOpener
    */
-  if (global.GComm_MessageBus) {
-    global.GComm_TabOpener = new GComm_TabOpener();
-  } else {
-    console.error(
-      `[${PREFIX}_TabOpener] GComm_MessageBus не инициализирован. TabOpener не будет создан.`
-    );
-  }
-})(window); // /js/tabs-from.js
+  global.GComm_TabOpener = new GComm_TabOpener();
+})(window);

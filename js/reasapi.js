@@ -43,4 +43,49 @@ document.addEventListener("DOMContentLoaded", () => {
   elementsToAnimate.forEach((element) => {
     observer.observe(element);
   });
+
+  // Функция для переключения темы
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-theme");
+    document.body.classList.toggle("light-theme");
+
+    const containers = document.querySelectorAll(".container");
+    containers.forEach((container) => {
+      container.classList.toggle("dark-theme");
+      container.classList.toggle("light-theme");
+    });
+
+    const headers = document.querySelectorAll(".header");
+    headers.forEach((header) => {
+      header.classList.toggle("dark-theme");
+      header.classList.toggle("light-theme");
+    });
+
+    const sectionTitles = document.querySelectorAll(".section-title");
+    sectionTitles.forEach((title) => {
+      title.classList.toggle("dark-theme");
+      title.classList.toggle("light-theme");
+    });
+
+    const codeSnippets = document.querySelectorAll(".code-snippet");
+    codeSnippets.forEach((snippet) => {
+      snippet.classList.toggle("dark-theme");
+      snippet.classList.toggle("light-theme");
+    });
+
+    const responseExamples = document.querySelectorAll(".response-example");
+    responseExamples.forEach((example) => {
+      example.classList.toggle("dark-theme");
+      example.classList.toggle("light-theme");
+    });
+
+    // Изменение иконки переключателя
+    if (document.body.classList.contains("dark-theme")) {
+      themeToggle.textContent = "☀️";
+      themeToggle.setAttribute("aria-label", "Переключить на светлую тему");
+    } else {
+      themeToggle.textContent = "🌙";
+      themeToggle.setAttribute("aria-label", "Переключить на тёмную тему");
+    }
+  });
 });

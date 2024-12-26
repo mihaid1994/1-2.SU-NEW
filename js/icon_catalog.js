@@ -43,13 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
     category.classList.add("category", "collapsed"); // Добавляем класс 'collapsed' по умолчанию
 
     // Создание заголовка категории
-    const categoryHeader = document.createElement("div");
-    categoryHeader.classList.add("category-header");
-    categoryHeader.innerHTML = `
+    const categoryheader = document.createElement("div");
+    categoryheader.classList.add("category-header");
+    categoryheader.innerHTML = `
       <span>${categoryName}</span>
       <button class="toggle-btn">Развернуть</button>
     `;
-    category.appendChild(categoryHeader);
+    category.appendChild(categoryheader);
 
     // Создание контейнера иконок
     const iconsWrapper = document.createElement("div");
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const categories = document.querySelectorAll(".category");
 
     categories.forEach((category) => {
-      const categoryHeader = category.querySelector(".category-header");
+      const categoryheader = category.querySelector(".category-header");
       const toggleBtn = category.querySelector(".toggle-btn");
       const iconsWrapper = category.querySelector(".icons-wrapper");
       const iconBlocks = category.querySelectorAll(".icon-block");
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       // Клик по заголовку категории
-      categoryHeader.addEventListener("click", function (e) {
+      categoryheader.addEventListener("click", function (e) {
         // Если клик был по кнопке, ничего не делаем
         if (e.target === toggleBtn) return;
         toggleCategory();
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Справочник релевантных запросов
   let relevantQueries = {};
-  let synonymToMain = {};
+  let synonymTomain = {};
 
   // Функция для загрузки релевантных запросов из JSON
   const loadRelevantQueries = async () => {
@@ -144,10 +144,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Построение обратного словаря: синоним -> основной термин
       for (const [mainTerm, synonyms] of Object.entries(relevantQueries)) {
         synonyms.forEach((syn) => {
-          if (!synonymToMain[syn]) {
-            synonymToMain[syn] = [];
+          if (!synonymTomain[syn]) {
+            synonymTomain[syn] = [];
           }
-          synonymToMain[syn].push(mainTerm);
+          synonymTomain[syn].push(mainTerm);
         });
       }
     } catch (error) {

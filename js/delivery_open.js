@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const section = document.createElement("div");
     section.className = "delivery-section";
 
-    const header = createDeliveryHeader(deliveryDate, items);
+    const header = createDeliveryheader(deliveryDate, items);
     section.appendChild(header);
 
     const content = createDeliveryContent(items);
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return section;
   }
 
-  function createDeliveryHeader(deliveryDate, items) {
+  function createDeliveryheader(deliveryDate, items) {
     const header = document.createElement("div");
     header.className = "delivery-header";
 
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     headerImagesContainer.className = "header-images-container";
     headerImagesContainer.style.display = "none";
 
-    const headerRight = createHeaderRight(items);
+    const headerRight = createheaderRight(items);
 
     const arrowSpan = document.createElement("span");
     arrowSpan.className = "arrow";
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return currentDeliveryId++;
   }
 
-  function createHeaderRight(items) {
+  function createheaderRight(items) {
     const headerRight = document.createElement("div");
     headerRight.className = "header-right";
     headerRight.style.display = "none";
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     table.className = "iksweb";
 
-    const thead = createTableHead();
+    const thead = createTablehead();
     table.appendChild(thead);
 
     const tbody = createTableBody(items);
@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return table;
   }
 
-  function createTableHead() {
+  function createTablehead() {
     const thead = document.createElement("thead");
     thead.innerHTML = `
         <tr>
@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const headerText = document.createElement("h2");
     headerText.textContent = `Список товаров:`;
 
-    const headerRight = createHeaderRight(data);
+    const headerRight = createheaderRight(data);
 
     header.append(headerText, headerRight);
     section.appendChild(header);
@@ -666,7 +666,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupImage.style.width = `${imageWidth}px`;
         popupImage.style.height = `${imageHeight}px`;
         popupImage.style.position = "absolute";
-        popupImage.style.zIndex = "1000";
+        popupImage.style.zindex = "1000";
         popupImage.style.borderRadius = "10px";
       }
     });

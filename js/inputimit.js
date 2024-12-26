@@ -9,34 +9,34 @@ const placeholderTexts = [
 ];
 
 const inputElement = document.querySelector(".search-input");
-let currentIndex = 0;
+let currentindex = 0;
 let currentText = "";
-let charIndex = 0;
+let charindex = 0;
 let showDefaultText = true;
 
 function typePlaceholder() {
   if (!inputElement) return;
 
   // Если весь текст напечатан
-  if (charIndex === currentText.length) {
+  if (charindex === currentText.length) {
     if (showDefaultText) {
-      currentText = placeholderTexts[currentIndex];
+      currentText = placeholderTexts[currentindex];
       showDefaultText = false;
-      charIndex = 0;
+      charindex = 0;
       setTimeout(typePlaceholder, 3000); //
     } else {
-      currentIndex = (currentIndex + 1) % placeholderTexts.length;
+      currentindex = (currentindex + 1) % placeholderTexts.length;
       currentText = "Поиск товаров...";
       showDefaultText = true;
-      charIndex = 0;
+      charindex = 0;
       setTimeout(typePlaceholder, 5000);
     }
     return;
   }
 
   // Напечатать следующую букву
-  inputElement.setAttribute("placeholder", currentText.slice(0, charIndex + 1));
-  charIndex++;
+  inputElement.setAttribute("placeholder", currentText.slice(0, charindex + 1));
+  charindex++;
 
   // Ускоряем скорость набора для "Поиск товаров..."
   const typingSpeed = showDefaultText

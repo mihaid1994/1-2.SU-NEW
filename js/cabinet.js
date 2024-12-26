@@ -1111,7 +1111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  function createMainContent() {
+  function createmainContent() {
     let mainContent = document.getElementById("mainContent");
     if (!mainContent) {
       mainContent = document.createElement("div");
@@ -1136,7 +1136,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showStructure(tab) {
-    const mainContent = createMainContent();
+    const mainContent = createmainContent();
     mainContent.classList.remove("show");
     setTimeout(() => {
       if (structure[tab]) {

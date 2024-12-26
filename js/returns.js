@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("returns-table");
-  const tableHeader = document.getElementById("table-header");
+  const tableheader = document.getElementById("table-header");
   const tableBody = document.getElementById("table-body");
   const columnSelector = document.getElementById("column-selector");
 
@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Инициализация таблицы
   function initTable() {
-    tableHeader.innerHTML = "";
+    tableheader.innerHTML = "";
     columns.forEach((col) => {
       const th = document.createElement("th");
       th.textContent = col;
       th.addEventListener("click", () => sortTable(col));
-      tableHeader.appendChild(th);
+      tableheader.appendChild(th);
     });
     populateTableBody();
   }

@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Элементы таблицы
   const table = document.getElementById("zajavki-table");
-  const tableHeader = document.getElementById("table-header");
+  const tableheader = document.getElementById("table-header");
   const tableBody = document.getElementById("table-body");
 
   // Элементы расширенного поиска
@@ -98,12 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Инициализация таблицы
   function initTable() {
-    tableHeader.innerHTML = "";
+    tableheader.innerHTML = "";
 
     // Добавляем колонку "№"
     const thNumber = document.createElement("th");
     thNumber.textContent = "№";
-    tableHeader.appendChild(thNumber);
+    tableheader.appendChild(thNumber);
 
     // Добавляем заголовки колонок на основе userVisibleColumns
     userVisibleColumns.forEach((col) => {
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       th.innerHTML = `${displayCol}<span class="sort-arrow">&#9660;</span>`;
       th.addEventListener("click", () => sortTable(col, th));
-      tableHeader.appendChild(th);
+      tableheader.appendChild(th);
     });
 
     populateTableBody();
@@ -224,11 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.checked) {
           showColumn(col);
           // Вставляем колонку в userVisibleColumns в правильном порядке
-          const originalIndex = allColumns.indexOf(col);
-          const currentIndex = userVisibleColumns.indexOf(col);
-          if (currentIndex === -1) {
-            let insertAtIndex = allColumns.indexOf(col);
-            userVisibleColumns.splice(insertAtIndex, 0, col);
+          const originalindex = allColumns.indexOf(col);
+          const currentindex = userVisibleColumns.indexOf(col);
+          if (currentindex === -1) {
+            let insertAtindex = allColumns.indexOf(col);
+            userVisibleColumns.splice(insertAtindex, 0, col);
             initTable();
           }
         } else {
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
     });
 
-    const allTh = tableHeader.querySelectorAll("th");
+    const allTh = tableheader.querySelectorAll("th");
     allTh.forEach((th) => {
       th.classList.remove("sorted");
       const arrow = th.querySelector(".sort-arrow");
@@ -550,15 +550,15 @@ document.addEventListener("DOMContentLoaded", () => {
       data = uniqueOrders;
 
       // Удаляем "Доставка" из userVisibleColumns, если она присутствует
-      const deliveryIndex = userVisibleColumns.indexOf("Доставка");
-      if (deliveryIndex !== -1) {
-        userVisibleColumns.splice(deliveryIndex, 1);
+      const deliveryindex = userVisibleColumns.indexOf("Доставка");
+      if (deliveryindex !== -1) {
+        userVisibleColumns.splice(deliveryindex, 1);
       }
 
       // Удаляем "Склад" из userVisibleColumns, если она присутствует
-      const stockIndex = userVisibleColumns.indexOf("Склад");
-      if (stockIndex !== -1) {
-        userVisibleColumns.splice(stockIndex, 1);
+      const stockindex = userVisibleColumns.indexOf("Склад");
+      if (stockindex !== -1) {
+        userVisibleColumns.splice(stockindex, 1);
       }
 
       initTable();
@@ -568,17 +568,17 @@ document.addEventListener("DOMContentLoaded", () => {
       data = [...originalData];
 
       // Восстанавливаем "Доставка" в userVisibleColumns на её исходную позицию
-      const originalDeliveryIndex = allColumns.indexOf("Доставка");
-      const currentDeliveryIndex = userVisibleColumns.indexOf("Доставка");
-      if (currentDeliveryIndex === -1) {
-        userVisibleColumns.splice(originalDeliveryIndex, 0, "Доставка");
+      const originalDeliveryindex = allColumns.indexOf("Доставка");
+      const currentDeliveryindex = userVisibleColumns.indexOf("Доставка");
+      if (currentDeliveryindex === -1) {
+        userVisibleColumns.splice(originalDeliveryindex, 0, "Доставка");
       }
 
       // Восстанавливаем "Склад" в userVisibleColumns на её исходную позицию
-      const originalStockIndex = allColumns.indexOf("Склад");
-      const currentStockIndex = userVisibleColumns.indexOf("Склад");
-      if (currentStockIndex === -1) {
-        userVisibleColumns.splice(originalStockIndex, 0, "Склад");
+      const originalStockindex = allColumns.indexOf("Склад");
+      const currentStockindex = userVisibleColumns.indexOf("Склад");
+      if (currentStockindex === -1) {
+        userVisibleColumns.splice(originalStockindex, 0, "Склад");
       }
 
       initTable();
@@ -605,21 +605,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Функция скрытия колонки
   function hideColumn(columnName) {
-    const ths = tableHeader.querySelectorAll("th");
+    const ths = tableheader.querySelectorAll("th");
     const displayName = getDisplayColumnName(columnName);
-    const columnIndex = Array.from(ths).findIndex(
+    const columnindex = Array.from(ths).findindex(
       (th) =>
         th.textContent.trim() === columnName ||
         th.textContent.trim() === "Сумма общ." ||
         th.textContent.trim() === "Дата оформления"
     );
-    if (columnIndex !== -1) {
-      ths[columnIndex].style.display = "none";
+    if (columnindex !== -1) {
+      ths[columnindex].style.display = "none";
       const rows = tableBody.querySelectorAll("tr");
       rows.forEach((row) => {
         const cells = row.querySelectorAll("td");
-        if (cells[columnIndex + 1]) {
-          cells[columnIndex + 1].style.display = "none";
+        if (cells[columnindex + 1]) {
+          cells[columnindex + 1].style.display = "none";
         }
       });
     }
@@ -627,22 +627,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Функция показа колонки
   function showColumn(columnName) {
-    const ths = tableHeader.querySelectorAll("th");
+    const ths = tableheader.querySelectorAll("th");
     // Проверяем оба варианта заголовка для сумм и дат
-    const columnIndex = Array.from(ths).findIndex(
+    const columnindex = Array.from(ths).findindex(
       (th) =>
         th.textContent.trim() === columnName ||
         (columnName === "Сумма" && th.textContent.trim() === "Сумма общ.") ||
         (columnName === "Дата доставки" &&
           th.textContent.trim() === "Дата оформления")
     );
-    if (columnIndex !== -1) {
-      ths[columnIndex].style.display = "";
+    if (columnindex !== -1) {
+      ths[columnindex].style.display = "";
       const rows = tableBody.querySelectorAll("tr");
       rows.forEach((row) => {
         const cells = row.querySelectorAll("td");
-        if (cells[columnIndex + 1]) {
-          cells[columnIndex + 1].style.display = "";
+        if (cells[columnindex + 1]) {
+          cells[columnindex + 1].style.display = "";
         }
       });
     }

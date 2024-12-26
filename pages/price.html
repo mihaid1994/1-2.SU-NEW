@@ -726,12 +726,12 @@
         const container = document.getElementById("regions-container");
 
         // Создание заголовка региона
-        const regionHeader = document.createElement("h2");
-        regionHeader.innerHTML = `<a id="${region.name.replace(
+        const regionheader = document.createElement("h2");
+        regionheader.innerHTML = `<a id="${region.name.replace(
           /\s+/g,
           "_"
         )}"></a><div align="center">${region.name}</div>`;
-        container.appendChild(regionHeader);
+        container.appendChild(regionheader);
 
         // Создание таблицы
         const table = document.createElement("table");

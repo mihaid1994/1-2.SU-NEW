@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Функция для обновления количества выбранных чекбоксов в заголовках
-  function updateGroupHeaders() {
+  function updateGroupheaders() {
     document.querySelectorAll(".filter-section").forEach((section) => {
       const header = section.querySelector("h3"); // Заголовок группы
       const checkboxes = section.querySelectorAll(
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Обновляем заголовки групп и счетчик настроек после сброса
-    updateGroupHeaders();
+    updateGroupheaders();
     updateSettingsCount();
   }
 
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .querySelectorAll(".filter-section-content input[type='checkbox']")
     .forEach((checkbox) => {
       checkbox.addEventListener("change", function () {
-        updateGroupHeaders(); // Обновляем заголовки групп
+        updateGroupheaders(); // Обновляем заголовки групп
         updateSettingsCount(); // Обновляем текст рядом с иконкой настроек
       });
     });

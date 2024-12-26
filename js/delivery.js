@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const section = document.createElement("div");
     section.className = "delivery-section";
 
-    const header = createDeliveryHeader(deliveryDate, items);
+    const header = createDeliveryheader(deliveryDate, items);
     section.appendChild(header);
 
     const content = createDeliveryContent(items);
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return section;
   }
 
-  function createDeliveryHeader(deliveryDate, items) {
+  function createDeliveryheader(deliveryDate, items) {
     const header = document.createElement("div");
     header.className = "delivery-header";
 
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     headerImagesContainer.className = "header-images-container";
     headerImagesContainer.style.display = "none";
 
-    const headerRight = createHeaderRight(items);
+    const headerRight = createheaderRight(items);
 
     const arrowSpan = document.createElement("span");
     arrowSpan.className = "arrow";
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return header;
   }
 
-  function createHeaderRight(items) {
+  function createheaderRight(items) {
     const headerRight = document.createElement("div");
     headerRight.className = "header-right";
     headerRight.style.display = "none";
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     table.className = "iksweb";
 
-    const thead = createTableHead();
+    const thead = createTablehead();
     table.appendChild(thead);
 
     const tbody = createTableBody(items);
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return table;
   }
 
-  function createTableHead() {
+  function createTablehead() {
     const thead = document.createElement("thead");
     thead.innerHTML = `
       <tr>
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         deselectAllInTable(table, tbody);
       }
-      updateHeaderCheckboxState(table);
+      updateheaderCheckboxState(table);
     });
 
     return thead;
@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const headerText = document.createElement("h2");
     headerText.textContent = "Список товаров:";
 
-    const headerRight = createHeaderRight(data);
+    const headerRight = createheaderRight(data);
 
     header.append(headerText, headerRight);
     section.appendChild(header);
@@ -567,7 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.style.position = "absolute";
     popup.style.top = `${rowRect.bottom + scrollTop}px`;
     popup.style.left = `${rowRect.left + scrollLeft}px`;
-    popup.style.zIndex = "1001";
+    popup.style.zindex = "1001";
   }
 
   function getRestorePopupContent() {
@@ -698,7 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupImage.style.width = `${imageWidth}px`;
         popupImage.style.height = `${imageHeight}px`;
         popupImage.style.position = "absolute";
-        popupImage.style.zIndex = "1000";
+        popupImage.style.zindex = "1000";
         popupImage.style.borderRadius = "10px";
       }
     });
@@ -835,7 +835,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateValues();
 
     // Обновляем состояние всех чекбоксов заголовков после изменения данных
-    updateAllHeaderCheckboxes();
+    updateAllheaderCheckboxes();
   }
 
   function calculateShippingCost() {
@@ -883,7 +883,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Обновляем состояние чекбокса заголовка после изменения выделения
       const table = row.closest("table");
       if (table) {
-        updateHeaderCheckboxState(table);
+        updateheaderCheckboxState(table);
       }
     });
   }
@@ -920,7 +920,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Обновляем состояние чекбокса заголовка
-    updateHeaderCheckboxState(table);
+    updateheaderCheckboxState(table);
   }
 
   function selectAllInTable(table, tbody) {
@@ -960,7 +960,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Обновляем состояние всех чекбоксов заголовков
-    updateAllHeaderCheckboxes();
+    updateAllheaderCheckboxes();
   }
 
   function resetAllSelections() {
@@ -973,33 +973,33 @@ document.addEventListener("DOMContentLoaded", () => {
     deliveryContainer.classList.remove("all-selected");
 
     // Обновляем состояние всех чекбоксов заголовков
-    updateAllHeaderCheckboxes();
+    updateAllheaderCheckboxes();
   }
 
   function initializeAfterRender() {
-    // initializeHeaderSelection(); // Удалено, так как per-table selection теперь через чекбоксы
+    // initializeheaderSelection(); // Удалено, так как per-table selection теперь через чекбоксы
     // initializeNumberCellClicks(); // Необходима функция для инициализации событий, но в текущем коде её нет
     // Добавим инициализацию чекбоксов заголовков
-    initializeHeaderCheckboxes();
+    initializeheaderCheckboxes();
   }
 
-  function initializeHeaderCheckboxes() {
-    const allHeaders = deliveryContainer.querySelectorAll(
+  function initializeheaderCheckboxes() {
+    const allheaders = deliveryContainer.querySelectorAll(
       ".delivery-section table thead"
     );
-    allHeaders.forEach((thead) => {
+    allheaders.forEach((thead) => {
       const selectAllCheckbox = thead.querySelector(".select-all-checkbox");
       if (selectAllCheckbox) {
         // Устанавливаем состояние чекбокса в соответствии с выделенными строками
         const table = selectAllCheckbox.closest("table");
         if (table) {
-          updateHeaderCheckboxState(table);
+          updateheaderCheckboxState(table);
         }
       }
     });
   }
 
-  function updateHeaderCheckboxState(table) {
+  function updateheaderCheckboxState(table) {
     const selectAllCheckbox = table.querySelector(".select-all-checkbox");
     if (!selectAllCheckbox) return;
 
@@ -1018,10 +1018,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateAllHeaderCheckboxes() {
+  function updateAllheaderCheckboxes() {
     const allTables = deliveryContainer.querySelectorAll("table");
     allTables.forEach((table) => {
-      updateHeaderCheckboxState(table);
+      updateheaderCheckboxState(table);
     });
   }
 

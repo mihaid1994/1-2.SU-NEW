@@ -384,8 +384,8 @@ function showSubcategories(category) {
 
   // Распределяем подкатегории по колонкам
   category.subcategories.forEach((subcat, index) => {
-    const colIndex = index % numColumns;
-    const column = columns[colIndex];
+    const colindex = index % numColumns;
+    const column = columns[colindex];
 
     const block = document.createElement("div");
     block.className = "subcategory-block";

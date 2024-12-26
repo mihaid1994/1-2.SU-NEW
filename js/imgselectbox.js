@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Функция для проверки наличия файла
     async function fileExists(url) {
         try {
-            const response = await fetch(url, { method: 'HEAD' });
+            const response = await fetch(url, { method: 'head' });
             return response.ok;
         } catch (e) {
             return false;

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     draggedTab.classList.add("dragging");
     draggedTab.style.position = "absolute";
-    draggedTab.style.zIndex = "1000";
+    draggedTab.style.zindex = "1000";
     draggedTab.style.pointerEvents = "none";
     document.body.appendChild(draggedTab);
 
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     draggedTab.style.position = "";
     draggedTab.style.left = "";
     draggedTab.style.top = "";
-    draggedTab.style.zIndex = "";
+    draggedTab.style.zindex = "";
     draggedTab.style.pointerEvents = "";
     draggedTab.classList.remove("dragging");
 

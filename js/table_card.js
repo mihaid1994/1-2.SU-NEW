@@ -654,7 +654,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const popupImage = document.createElement("img");
     popupImage.style.display = "none";
     popupImage.style.position = "absolute";
-    popupImage.style.zIndex = "1000";
+    popupImage.style.zindex = "1000";
     popupImage.style.borderRadius = "10px";
     popupImage.setAttribute("data-tooltip", "Увеличенное изображение товара");
     document.body.appendChild(popupImage);
@@ -723,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
       popup.style.position = "absolute";
-      popup.style.zIndex = "1000";
+      popup.style.zindex = "1000";
       popup.style.left = "700px";
 
       row.appendChild(popup);
