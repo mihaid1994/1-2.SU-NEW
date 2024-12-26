@@ -4,7 +4,7 @@
  * GComm - Global Communication Module
  *
  * Этот модуль обеспечивает обмен сообщениями между различными страницами вашего проекта.
- * Используется BroadcastChannel API для передачи сообщений между страницами одного происхождения.
+ * Используется localStorage и событие storage для передачи сообщений между страницами одного происхождения.
  * Все компоненты системы имеют уникальные имена с префиксом "GComm_" для предотвращения конфликтов.
  */
 
@@ -40,20 +40,30 @@
    * GComm_MessageBus
    *
    * Класс управления сообщениями.
-   * Управляет отправкой и получением сообщений через BroadcastChannel.
+   * Управляет отправкой и получением сообщений через localStorage и событие storage.
    */
   class GComm_MessageBus {
     /**
      * Конструктор класса GComm_MessageBus.
-     * Инициализирует BroadcastChannel и устанавливает обработчик входящих сообщений.
-     * @param {string} channelName - Имя канала для BroadcastChannel. По умолчанию "GComm_global_message_bus".
+     * Инициализирует уникальный идентификатор и устанавливает обработчик события storage.
+     * @param {string} channelName - Имя канала для идентификации сообщений.
+     * По умолчанию "GComm_global_message_bus".
      */
     constructor(channelName = "GComm_global_message_bus") {
-      this.channel = new BroadcastChannel(channelName);
+      this.channelName = channelName;
       this.callbacks = {}; // Объект для хранения подписок на команды
+      this.senderId = this.generateUniqueId(); // Уникальный идентификатор отправителя
 
-      // Устанавливаем обработчик входящих сообщений
-      this.channel.onmessage = this.handleMessage.bind(this);
+      // Устанавливаем обработчик события storage
+      window.addEventListener("storage", this.handleStorageEvent.bind(this));
+    }
+
+    /**
+     * Генерация уникального идентификатора.
+     * @returns {string} - Уникальный идентификатор.
+     */
+    generateUniqueId() {
+      return `${PREFIX}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
     }
 
     /**
@@ -83,17 +93,30 @@
         return;
       }
 
-      this.channel.postMessage({
+      const message = {
         system: false, // Указывает, что это пользовательское сообщение
+        senderId: this.senderId, // Идентификатор отправителя
         target: targetPageId, // Целевая страница или "GComm_broadcast" для широковещательной отправки
         command: command, // Название команды
         payload: payload, // Полезная нагрузка
         timestamp: new Date().toISOString(), // Временная метка
-      });
+      };
+
+      // Отправляем сообщение через localStorage
+      try {
+        localStorage.setItem(this.channelName, JSON.stringify(message));
+        // Немедленно удаляем сообщение, чтобы избежать накопления в localStorage
+        localStorage.removeItem(this.channelName);
+      } catch (error) {
+        console.error(`[${PREFIX}] Ошибка при отправке сообщения:`, error);
+      }
 
       console.log(
         `[${PREFIX}] Команда "${command}" отправлена на "${targetPageId}".`
       );
+
+      // Немедленно вызываем колбэки в текущей вкладке, так как событие storage не срабатывает здесь
+      this.handleMessage(message);
     }
 
     /**
@@ -111,17 +134,33 @@
         return;
       }
 
-      this.channel.postMessage({
+      const message = {
         system: false,
+        senderId: this.senderId,
         target: "GComm_broadcast", // Специальное значение для широковещательной отправки
         command: command,
         payload: payload,
         timestamp: new Date().toISOString(),
-      });
+      };
+
+      // Отправляем сообщение через localStorage
+      try {
+        localStorage.setItem(this.channelName, JSON.stringify(message));
+        // Немедленно удаляем сообщение, чтобы избежать накопления в localStorage
+        localStorage.removeItem(this.channelName);
+      } catch (error) {
+        console.error(
+          `[${PREFIX}] Ошибка при широковещательной отправке сообщения:`,
+          error
+        );
+      }
 
       console.log(
         `[${PREFIX}] Команда "${command}" отправлена всем страницам.`
       );
+
+      // Немедленно вызываем колбэки в текущей вкладке
+      this.handleMessage(message);
     }
 
     /**
@@ -139,15 +178,38 @@
     }
 
     /**
+     * handleStorageEvent
+     *
+     * Обработка события storage для получения сообщений из других вкладок.
+     * @param {StorageEvent} event - Событие storage.
+     */
+    handleStorageEvent(event) {
+      if (event.key !== this.channelName || !event.newValue) return;
+
+      try {
+        const message = JSON.parse(event.newValue);
+
+        // Игнорируем сообщения, отправленные самим собой
+        if (message.senderId === this.senderId) return;
+
+        // Обработка полученного сообщения
+        this.handleMessage(message);
+      } catch (error) {
+        console.error(
+          `[${PREFIX}] Ошибка при обработке сообщения из storage:`,
+          error
+        );
+      }
+    }
+
+    /**
      * handleMessage
      *
      * Обработка входящих сообщений.
      * Вызывает соответствующие колбэки для полученных команд.
-     * @param {MessageEvent} event - Событие сообщения.
+     * @param {object} message - Полученное сообщение.
      */
-    handleMessage(event) {
-      const message = event.data;
-
+    handleMessage(message) {
       // Игнорировать системные сообщения (если они будут добавлены в будущем)
       if (message.system) return;
 
