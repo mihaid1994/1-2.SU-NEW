@@ -1,0 +1,53 @@
+{
+  "/pages/chat.html": {
+    "scripts": ["/js/chat.js"],
+    "initFunctions": ["initChat"]
+  },
+  "/pages/index.html": {
+    "scripts": ["/js/reasapi.js", "/js/cardview.js"],
+    "initFunctions": ["initBanners", "initCardViewShadow"]
+  },
+  "/pages/cabinet_postavshika.html": {
+    "scripts": ["/js/dashboard.js"],
+    "initFunctions": ["initializeDashboard"]
+  },
+  "/pages/search_cat.html": {
+    "scripts": ["/js/filterMenu.js", "/js/tableCardView.js", "/js/tooltips.js"],
+    "initFunctions": [
+      "initFilterMenu",
+      "initTableCardView",
+      "initTooltips",
+      "handleSearchQuery"
+    ]
+  },
+  "/pages/zajavki.html": {
+    "scripts": ["/js/zajavkiTable.js"],
+    "initFunctions": ["initZajavkiTable"]
+  },
+  "/pages/delivery.html": {
+    "scripts": [
+      "/js/delivery.js",
+      "/js/excelPdf.js",
+      "/js/sidebar.js",
+      "/js/innInput.js"
+    ],
+    "initFunctions": [
+      "initDelivery",
+      "initExcelPdf",
+      "initSidebar",
+      "initInnInput"
+    ]
+  },
+  "/pages/resapi.html": {
+    "scripts": ["/js/reasapi.js"],
+    "initFunctions": ["initReasApi"]
+  },
+  "/pages/price.html": {
+    "scripts": ["/js/price.js"],
+    "initFunctions": ["initPrice"]
+  },
+  "/pages/magazin.html": {
+    "scripts": ["/js/magazine.js"],
+    "initFunctions": ["initMagazineShadow"]
+  }
+}

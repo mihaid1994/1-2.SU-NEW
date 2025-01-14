@@ -206,11 +206,6 @@ body {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   overflow-y: auto; /* Прокрутка при необходимости */
   transition: opacity 0.5s ease-in-out;
-  opacity: 0;
-}
-
-.main-content.show {
-  opacity: 1;
 }
 
 /* Минималистичная прокрутка для основного контента */
@@ -568,55 +563,6 @@ nav ul li a.tab-link,
   width: 90%;
 }
 
-/* Адаптивность */
-@media (max-width: 1200px) {
-  .summary-cards .card {
-    flex: 1 1 calc(50% - 15px);
-  }
-
-  .recommendation-items .item {
-    width: calc(50% - 15px);
-  }
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 25%;
-  }
-
-  .summary-cards .card,
-  .recommendation-items .item {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .sidebar ul,
-  .submenu {
-    flex-direction: row;
-    padding-left: 0;
-  }
-
-  .sidebar ul li,
-  .submenu li {
-    margin: 10px;
-  }
-
-  .container {
-    flex-direction: column;
-  }
-
-  .main-content {
-    height: calc(100vh - 60px); /* Подгоняем под мобильные устройства */
-  }
-}
-
 ol {
   margin-top: 30px;
   padding-left: 40px;
@@ -629,4 +575,11 @@ ol > li > span {
 }
 ol > li ul {
   margin-top: 10px;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.show {
+  display: block;
 }

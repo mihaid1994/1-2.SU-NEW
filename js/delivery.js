@@ -1,9 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
+// --- Завёрнутый Скрипт: initdelivery ---
+window.initDelivery = function (root = window) {
+  // Изменено на window по умолчанию
   // Элементы управления сайдбаром
-  const hideSidebarButton = document.querySelector(".hide-right-sidebar");
-  const showSidebarButton = document.querySelector(".show-right-sidebar");
-  const orderSummary = document.querySelector(".order-summary");
-  const mainContent = document.querySelector(".content");
+  const hideSidebarButton = root.querySelector(".hide-right-sidebar");
+  const showSidebarButton = root.querySelector(".show-right-sidebar");
+  const orderSummary = root.querySelector(".order-summary");
+  const mainContent = root.querySelector(".content");
+
+  // Проверяем существование элементов перед работой с ними
+  if (
+    !hideSidebarButton ||
+    !showSidebarButton ||
+    !orderSummary ||
+    !mainContent
+  ) {
+    console.warn(
+      "Некоторые элементы управления сайдбаром не найдены внутри корня:",
+      root
+    );
+    return;
+  }
 
   const sidebarVisibleByDefault = true;
 
@@ -57,12 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateValues() {
     const elements = {
-      totalItems: document.getElementById("total-items"),
-      shippingCost: document.getElementById("shipping-cost"),
-      subtotal: document.getElementById("subtotal"),
-      discountInput: document.getElementById("discount-input"),
-      discountPercentInput: document.getElementById("discount-percent"),
-      totalToPay: document.getElementById("total-to-pay"),
+      totalItems: root.getElementById("total-items"),
+      shippingCost: root.getElementById("shipping-cost"),
+      subtotal: root.getElementById("subtotal"),
+      discountInput: root.getElementById("discount-input"),
+      discountPercentInput: root.getElementById("discount-percent"),
+      totalToPay: root.getElementById("total-to-pay"),
     };
 
     if (elements.totalItems) {
@@ -90,30 +106,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const deliveryContainer = document.getElementById("delivery-sections");
+  const deliveryContainer = root.getElementById("delivery-sections");
+  if (!deliveryContainer) {
+    console.warn(
+      "Элемент с id 'delivery-sections' не найден внутри корня:",
+      root
+    );
+    return;
+  }
+
   const currentDate = new Date();
-  const popupImage = document.createElement("img");
+  let popupImage = document.createElement("img"); // Перемещено внутрь функции
+  popupImage.className = "popup-image";
+  document.body.appendChild(popupImage); // Добавляем в тело документа
+
   let currentViewMode = "deliveries";
 
   // **Добавлено:** Получение элементов текста и иконки переключателя
-  const toggleText = document.getElementById("toggleText");
-  const toggleIcon = document.getElementById("toggleIcon");
+  const toggleText = root.getElementById("toggleText");
+  const toggleIcon = root.getElementById("toggleIcon");
 
-  const toggleButton = document.querySelector(".toggle-button");
-  toggleButton.addEventListener("click", toggleViewMode);
+  const toggleButton = root.querySelector(".toggle-button");
+  if (toggleButton) {
+    toggleButton.addEventListener("click", toggleViewMode);
+  }
 
   function toggleViewMode() {
     if (currentViewMode === "deliveries") {
       currentViewMode = "list";
-      toggleText.textContent = "Разделить список на доставки";
-      toggleIcon.classList.remove("ri-file-list-3-line");
-      toggleIcon.classList.add("ri-box-3-line");
+      if (toggleText) toggleText.textContent = "Разделить список на доставки";
+      if (toggleIcon) {
+        toggleIcon.classList.remove("ri-file-list-3-line");
+        toggleIcon.classList.add("ri-box-3-line");
+      }
       renderListView();
     } else {
       currentViewMode = "deliveries";
-      toggleText.textContent = "Показать списком";
-      toggleIcon.classList.remove("ri-box-3-line");
-      toggleIcon.classList.add("ri-file-list-3-line");
+      if (toggleText) toggleText.textContent = "Показать списком";
+      if (toggleIcon) {
+        toggleIcon.classList.remove("ri-box-3-line");
+        toggleIcon.classList.add("ri-file-list-3-line");
+      }
       renderDeliveryView();
     }
   }
@@ -300,18 +333,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Добавляем обработчик события для чекбокса "Выбрать все"
     const selectAllCheckbox = thead.querySelector(".select-all-checkbox");
-    selectAllCheckbox.addEventListener("change", (event) => {
-      const isChecked = event.target.checked;
-      const table = event.target.closest("table");
-      if (!table) return;
-      const tbody = table.querySelector("tbody");
-      if (isChecked) {
-        selectAllInTable(table, tbody);
-      } else {
-        deselectAllInTable(table, tbody);
-      }
-      updateheaderCheckboxState(table);
-    });
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener("change", (event) => {
+        const isChecked = event.target.checked;
+        const table = event.target.closest("table");
+        if (!table) return;
+        const tbody = table.querySelector("tbody");
+        if (isChecked) {
+          selectAllInTable(table, tbody);
+        } else {
+          deselectAllInTable(table, tbody);
+        }
+        updateheaderCheckboxState(table);
+      });
+    }
 
     return thead;
   }
@@ -533,26 +568,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (type === "restore") {
       const restoreText = popup.querySelector(".restore-text");
-      restoreText.style.cursor = "pointer";
-      restoreText.addEventListener("click", () => {
-        row.classList.remove("deleted-row");
-        const cartIcon = row.querySelector(".cart-icon");
-        if (cartIcon) {
-          cartIcon.src = "/images/svg/Icon/carted_ico.svg";
-        }
-        const quantityInput = row.querySelector(".quantity-input");
-        if (quantityInput) {
-          quantityInput.disabled = false;
-        }
-        popup.remove();
-      });
+      if (restoreText) {
+        restoreText.style.cursor = "pointer";
+        restoreText.addEventListener("click", () => {
+          row.classList.remove("deleted-row");
+          const cartIcon = row.querySelector(".cart-icon");
+          if (cartIcon) {
+            cartIcon.src = "/images/svg/Icon/carted_ico.svg";
+          }
+          const quantityInput = row.querySelector(".quantity-input");
+          if (quantityInput) {
+            quantityInput.disabled = false;
+          }
+          popup.remove();
+        });
+      }
 
       const deleteIcon = popup.querySelector(".delete-icon");
-      deleteIcon.style.cursor = "pointer";
-      deleteIcon.addEventListener("click", () => {
-        deleteProduct(row);
-        popup.remove();
-      });
+      if (deleteIcon) {
+        deleteIcon.style.cursor = "pointer";
+        deleteIcon.addEventListener("click", () => {
+          deleteProduct(row);
+          popup.remove();
+        });
+      }
     } else if (type === "waiting") {
       expandWaitingPopup(popup);
     }
@@ -567,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.style.position = "absolute";
     popup.style.top = `${rowRect.bottom + scrollTop}px`;
     popup.style.left = `${rowRect.left + scrollLeft}px`;
-    popup.style.zindex = "1001";
+    popup.style.zIndex = "1001";
   }
 
   function getRestorePopupContent() {
@@ -619,12 +658,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     popup.appendChild(formContent);
 
-    popup
-      .querySelector(".add-to-waiting-list")
-      .addEventListener("click", () => {
+    const addButton = popup.querySelector(".add-to-waiting-list");
+    if (addButton) {
+      addButton.addEventListener("click", () => {
         console.log("Добавлено в лист ожидания");
         popup.remove();
       });
+    }
   }
 
   function toggleCartIcon(icon) {
@@ -655,16 +695,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initializeRowEvents(row, item, index) {
     const quantityInput = row.querySelector(".quantity-input");
-    quantityInput.value = item.quantity || 0;
-    quantityInput.addEventListener("input", () =>
-      validateAndCorrectInput(quantityInput, true)
-    );
+    if (quantityInput) {
+      quantityInput.value = item.quantity || 0;
+      quantityInput.addEventListener("input", () =>
+        validateAndCorrectInput(quantityInput, true)
+      );
+    }
 
     const productImage = row.querySelector(".product-image");
-    initializeImageEvents(productImage);
+    if (productImage) {
+      initializeImageEvents(productImage);
+    }
 
     const numberCell = row.querySelector(".number-cell");
-    initializeNumberCellEvents(numberCell, row, item, index);
+    if (numberCell) {
+      initializeNumberCellEvents(numberCell, row, item, index);
+    }
 
     updateSum(quantityInput);
   }
@@ -673,7 +719,6 @@ document.addEventListener("DOMContentLoaded", () => {
     imageElement.addEventListener("mouseover", function () {
       popupImage.src = imageElement.dataset.fullsrc || imageElement.src;
       popupImage.style.display = "block";
-      document.body.appendChild(popupImage);
     });
 
     imageElement.addEventListener("mousemove", function (e) {
@@ -697,9 +742,9 @@ document.addEventListener("DOMContentLoaded", () => {
         popupImage.style.top = `${topPosition}px`;
         popupImage.style.width = `${imageWidth}px`;
         popupImage.style.height = `${imageHeight}px`;
-        popupImage.style.position = "absolute";
-        popupImage.style.zindex = "1000";
-        popupImage.style.borderRadius = "10px";
+        popupImage.style.position = "absolute"; // Уже задано в CSS
+        popupImage.style.zIndex = "1000"; // Уже задано в CSS
+        popupImage.style.borderRadius = "10px"; // Уже задано в CSS
       }
     });
 
@@ -772,8 +817,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeTh = thead.querySelector(`th[data-column="${currentColumn}"]`);
     if (activeTh) {
       const arrow = activeTh.querySelector(".sort-arrow");
-      arrow.textContent = currentSortOrder === "asc" ? "▲" : "▼";
-      arrow.style.color = "orange";
+      if (arrow) {
+        arrow.textContent = currentSortOrder === "asc" ? "▲" : "▼";
+        arrow.style.color = "orange";
+      }
     }
   }
 
@@ -811,22 +858,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    const discountInput = document.getElementById("discount-input");
-    const discountPercentInput = document.getElementById("discount-percent");
+    const discountInput = root.getElementById("discount-input");
+    const discountPercentInput = root.getElementById("discount-percent");
 
-    if (!discountInput.dataset.manual && !discountPercentInput.dataset.manual) {
-      discountPercent = 14;
-      discount = (subtotal * discountPercent) / 100;
-      discountInput.value = discount.toFixed(2);
-      discountPercentInput.value = discountPercent.toFixed(2);
-    } else if (discountPercentInput.dataset.manual) {
-      discountPercent = parseFloat(discountPercentInput.value) || 0;
-      discount = (subtotal * discountPercent) / 100;
-      discountInput.value = discount.toFixed(2);
-    } else if (discountInput.dataset.manual) {
-      discount = parseFloat(discountInput.value.replace(/\s/g, "")) || 0;
-      discountPercent = subtotal > 0 ? (discount / subtotal) * 100 : 0;
-      discountPercentInput.value = discountPercent.toFixed(2);
+    if (discountInput && discountPercentInput) {
+      if (
+        !discountInput.dataset.manual &&
+        !discountPercentInput.dataset.manual
+      ) {
+        discountPercent = 14;
+        discount = (subtotal * discountPercent) / 100;
+        discountInput.value = discount.toFixed(2);
+        discountPercentInput.value = discountPercent.toFixed(2);
+      } else if (discountPercentInput.dataset.manual) {
+        discountPercent = parseFloat(discountPercentInput.value) || 0;
+        discount = (subtotal * discountPercent) / 100;
+        discountInput.value = discount.toFixed(2);
+      } else if (discountInput.dataset.manual) {
+        discount = parseFloat(discountInput.value.replace(/\s/g, "")) || 0;
+        discountPercent = subtotal > 0 ? (discount / subtotal) * 100 : 0;
+        discountPercentInput.value = discountPercent.toFixed(2);
+      }
     }
 
     totalToPay = subtotal - discount;
@@ -891,16 +943,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // **Modified:** Changed to display a checkmark with dark orange color
   function selectRow(row) {
     const numberCell = row.querySelector(".number-cell");
-    numberCell.textContent = "✔";
-    numberCell.style.color = "darkorange"; // Устанавливаем темно-оранжевый цвет
+    if (numberCell) {
+      numberCell.textContent = "✔";
+      numberCell.style.color = "darkorange"; // Устанавливаем темно-оранжевый цвет
+    }
     row.classList.add("selected");
   }
 
   // **Modified:** Revert back to the original number from data-number and reset color
   function deselectRow(row) {
     const numberCell = row.querySelector(".number-cell");
-    numberCell.textContent = numberCell.dataset.number;
-    numberCell.style.color = ""; // Сбрасываем цвет на дефолтный
+    if (numberCell) {
+      numberCell.textContent = numberCell.dataset.number;
+      numberCell.style.color = ""; // Сбрасываем цвет на дефолтный
+    }
     row.classList.remove("selected");
   }
 
@@ -1035,33 +1091,35 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Ошибка загрузки данных:", error));
 
-  const discountInput = document.getElementById("discount-input");
-  const discountPercentInput = document.getElementById("discount-percent");
+  const discountInput = root.getElementById("discount-input");
+  const discountPercentInput = root.getElementById("discount-percent");
 
-  discountInput.addEventListener("input", () => {
-    discountInput.dataset.manual = true;
-    discountPercentInput.dataset.manual = false;
-    discount = parseFloat(discountInput.value.replace(/\s/g, "")) || 0;
-    discountPercent = subtotal > 0 ? (discount / subtotal) * 100 : 0;
-    discountPercentInput.value = discountPercent.toFixed(2);
-    totalToPay = subtotal - discount;
-    updateValues();
-  });
+  if (discountInput && discountPercentInput) {
+    discountInput.addEventListener("input", () => {
+      discountInput.dataset.manual = true;
+      discountPercentInput.dataset.manual = false;
+      discount = parseFloat(discountInput.value.replace(/\s/g, "")) || 0;
+      discountPercent = subtotal > 0 ? (discount / subtotal) * 100 : 0;
+      discountPercentInput.value = discountPercent.toFixed(2);
+      totalToPay = subtotal - discount;
+      updateValues();
+    });
 
-  discountPercentInput.addEventListener("input", () => {
-    discountPercentInput.dataset.manual = true;
-    discountInput.dataset.manual = false;
-    discountPercent = parseFloat(discountPercentInput.value) || 0;
-    discount = (subtotal * discountPercent) / 100;
-    discountInput.value = discount.toFixed(2);
-    totalToPay = subtotal - discount;
-    updateValues();
-    discountInput.dataset.manual = true;
-    recalculateSubtotalAndTotal();
-  });
+    discountPercentInput.addEventListener("input", () => {
+      discountPercentInput.dataset.manual = true;
+      discountInput.dataset.manual = false;
+      discountPercent = parseFloat(discountPercentInput.value) || 0;
+      discount = (subtotal * discountPercent) / 100;
+      discountInput.value = discount.toFixed(2);
+      totalToPay = subtotal - discount;
+      updateValues();
+      discountInput.dataset.manual = true;
+      recalculateSubtotalAndTotal();
+    });
+  }
 
   function getCartDate() {
-    const lastChangeText = document.querySelector(".last-change-text");
+    const lastChangeText = root.querySelector(".last-change-text");
     if (!lastChangeText) return "N/A";
     const text = lastChangeText.textContent;
     const match = text.match(/Последнее изменение:\s*(\d{2}\.\d{2}\.\d{4})/);
@@ -1095,4 +1153,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-});
+};
+
+// Если вы динамически добавляете новые контейнеры-info, вызывайте initDelivery с соответствующим root
+// Например:
+// const newRoot = document.querySelector('#new-container');
+// window.initDelivery(newRoot);

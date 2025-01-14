@@ -1,7 +1,17 @@
-// sidebar.js
+// --- Завёрнутый Скрипт: initSidebar ---
 
-document.addEventListener("DOMContentLoaded", function () {
-  const notificationCard = document.querySelector(".notification-card");
+window.initSidebar = function (root = document) {
+  // Получаем элемент уведомления внутри переданного корня
+  const notificationCard = root.querySelector(".notification-card");
+
+  // Проверяем наличие элемента
+  if (!notificationCard) {
+    console.warn(
+      "Элемент с классом '.notification-card' не найден внутри корня:",
+      root
+    );
+    return;
+  }
 
   // Инициализация: развернутое состояние
   function initializeNotificationCard() {
@@ -33,6 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Обработчик клика по уведомлению
   notificationCard.addEventListener("click", toggleNotificationCard);
 
-  // Инициализация
+  // Инициализация состояния уведомления при запуске
   initializeNotificationCard();
-});
+};
+
+// Если вы динамически добавляете новые контейнеры, вызывайте initSidebar с соответствующим root
+// Например:
+// const newRoot = document.querySelector('#new-container');
+// window.initSidebar(newRoot);

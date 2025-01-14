@@ -1,6 +1,5 @@
 body {
   display: flex;
-  overflow: hidden; /* Отключает прокрутку страницы */
   flex-direction: column;
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -30,431 +29,7 @@ body {
   text-decoration: underline;
 }
 
-.iksweb {
-  width: 100%;
-  border-collapse: collapse;
-}
-.iksweb td,
-.iksweb th {
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  padding: 8px;
-}
-.iksweb th {
-  background-color: #9e9e9e;
-  color: white;
-  white-space: nowrap; /* Запрещает перенос текста */
-  transition: font-size 0.3s ease; /* Анимация при изменении размера */
-}
-
-/* Градации для уменьшения шрифта */
-@media (max-width: 1700px) {
-  .iksweb th,
-  .iksweb tr {
-    font-size: 1em;
-  }
-}
-
-@media (max-width: 1400px) {
-  .iksweb th,
-  .iksweb tr {
-    font-size: 0.9em;
-  }
-}
-
-@media (max-width: 1200px) {
-  .iksweb th,
-  .iksweb tr {
-    font-size: 0.7em;
-  }
-}
-
-.iksweb tbody tr {
-  background-color: #ffffff;
-}
-
-/* Эффект при наведении на строку */
-.iksweb tbody tr:hover {
-  background-color: #f3f3f3;
-}
-
-/* Стиль для ячеек с наименованием */
-.iksweb td.name-cell:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.nalich {
-  text-align: right;
-}
-
-.Nalich-col {
-  text-align: left; /* Выравнивание текста по левому краю */
-  text-indent: 20px; /* Отступ первой строки */
-}
-
-/* Стиль для миниатюры изображения */
-.product-image {
-  width: 50px;
-  height: 50px;
-  transition: transform 0.3s ease;
-  border-radius: 5px; /* Скругление краев миниатюр */
-}
-
-/* Стиль для всплывающего увеличенного изображения */
-.popup-image {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  display: none;
-  z-index: 1000;
-  border-radius: 15px; /* Скругление краев всплывающего изображения */
-}
-
-.quantity-input {
-  display: flex;
-  align-items: center;
-}
-
-.quantity-stock-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-}
-
-.waiting-list-popup {
-  position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Анимация плавности */
-  opacity: 0; /* Начальное состояние невидимости */
-}
-
-.waiting-list-popup p {
-  margin: 0;
-  font-size: 14px;
-}
-
-.waiting-list-popup .close-popup {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-/* Стили для всплывающего окна */
-.waiting-list-popup {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 400px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-  opacity: 0;
-  transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-}
-
-.waiting-list-popup.animate-popup {
-  opacity: 1;
-  transform: translateY(134px); /* Смещение вниз на 70px */
-}
-
-/* Кнопка закрытия */
-.waiting-list-popup .close-popup {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #999;
-  transition: color 0.2s;
-}
-
-.waiting-list-popup .close-popup:hover {
-  color: #333;
-}
-
-/* Текст ссылки */
-.waiting-list-popup .waiting-list-text {
-  font-size: 16px;
-  color: #1d7c91;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  transition: color 0.2s;
-}
-
-.waiting-list-popup .waiting-list-text:hover {
-  color: #3d7a8b;
-}
-
-/* Расширенное всплывающее окно */
-.waiting-list-popup.expand-popup {
-  height: auto;
-  overflow: hidden;
-  transition: height 0.5s ease;
-}
-
-/* Контейнер формы */
-.popup-form-content {
-  margin-top: 20px;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-/* Группы форм */
-.popup-form-content .form-group {
-  margin-bottom: 15px;
-}
-
-.popup-form-content label {
-  display: block;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.popup-form-content input[type="number"],
-.popup-form-content textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #f9f9f9;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-
-.popup-form-content input[type="number"]:focus,
-.popup-form-content textarea:focus {
-  border-color: #3c716e;
-  background-color: #fff;
-  outline: none;
-}
-
-/* Поле комментария на 4 строки */
-.popup-form-content textarea {
-  resize: none;
-  height: 100px; /* Примерно 4 строки */
-}
-
-/* Кнопка "Добавить" */
-.popup-form-content .add-to-waiting-list {
-  width: 100%;
-  padding: 12px;
-  background-color: #416b76;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.popup-form-content .add-to-waiting-list:hover {
-  background-color: #18676e;
-}
-
-/* Анимация полупрозрачного текста */
-.popup-form-content input::placeholder,
-.popup-form-content textarea::placeholder {
-  color: rgba(0, 0, 0, 0.5);
-  opacity: 1; /* Для Firefox */
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-.popup-form-content input::placeholder,
-.popup-form-content textarea::placeholder {
-  display: inline-block;
-  overflow: hidden;
-  animation: typing 2s steps(30, end);
-}
-
-.quantity-input {
-  width: 120px; /* Устанавливаем фиксированную ширину */
-  padding: 7px; /* Внутренние отступы */
-  border: 1px solid #ccc; /* Лёгкая рамка */
-  border-radius: 5px; /* Скругление краёв */
-  font-size: 14px; /* Размер текста */
-  background-color: #f9f9f9; /* Цвет фона */
-  transition: border-color 0.2s, background-color 0.2s, text-align 0.2s; /* Плавные переходы */
-  text-align: center; /* Центрируем текст, если поле пустое */
-}
-
-.quantity-input:focus {
-  border-color: #838383; /* Цвет рамки при фокусе */
-  background-color: #ffffff; /* Цвет фона при фокусе */
-  outline: none; /* Убираем обводку браузера */
-  text-align: left; /* Выравнивание по левому краю при вводе текста */
-  padding: 7px; /* Внутренние отступы */
-}
-
-/* Общие стили поиска*/
-.search-menu {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 15px;
-  position: relative;
-  transition: max-height 0.5s ease;
-  overflow: hidden;
-}
-
-.search-menu-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  align-items: center;
-}
-
-.search-menu-title {
-  flex-basis: 100%;
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold; /* Жирный шрифт для "Поиск по каталогу" */
-  color: #888; /* Черный текст */
-  margin-bottom: 10px;
-}
-
-.catalog-link {
-  color: #888; /* Серый цвет текста для ссылок */
-  text-decoration: none; /* Убираем подчеркивание */
-  transition: color 0.3s ease; /* Плавный переход при наведении */
-}
-
-.catalog-link:hover {
-  color: #555; /* Более темный серый при наведении */
-}
-
-.catalog-link:active {
-  color: #333; /* Еще темнее при клике */
-}
-
-/* Стиль кнопки настроек */
-.settings-icon {
-  display: inline-flex; /* Выравнивание содержимого внутри кнопки */
-  align-items: center; /* Центровка содержимого по вертикали */
-  padding: 4px 8px; /* Внутренние отступы */
-  border: none; /* Убираем стандартную границу */
-  border-radius: 5px; /* Скругление углов */
-  background-color: #48707a; /* Цвет фона */
-  cursor: pointer; /* Указатель курсора при наведении */
-  transition: background-color 0.3s; /* Плавный переход при наведении */
-  font-size: 1.5em; /* Уменьшенный размер текста */
-  gap: 8px; /* Расстояние между иконкой и текстом */
-  white-space: nowrap; /* Запрет на перенос текста */
-}
-
-/* Цвет фона кнопки при наведении */
-.settings-icon:hover {
-  background-color: #e0e0e0;
-}
-
-/* Иконка внутри кнопки */
-.settings-icon-img {
-  width: 30px; /* Размер иконки */
-  height: 30px;
-}
-
-/* Текст внутри кнопки */
-.settings-text {
-  font-size: 0.7em; /* Уменьшенный размер текста */
-  color: #ffffff; /* Цвет текста */
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group label {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.input-group input,
-.input-group select {
-  width: 150px;
-  height: 35px;
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.input-group {
-  color: black; /* Цвет текста по умолчанию */
-}
-
-.input-group:has(option[value="Склад"]) select,
-.input-group:has(option[value="Статус"]) select {
-  color: gray;
-}
-
-.checkbox-group {
-  display: flex;
-  gap: 15px;
-}
-
-.checkbox-group label {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-group input {
-  margin-right: 5px;
-}
-
-.action-buttons {
-  width: 500px;
-  display: flex;
-  gap: 10px;
-  margin-left: auto;
-}
-
-.action-buttons button {
-  height: 30px;
-  padding: 0 15px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 7px;
-}
-
-.results-info {
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-/* Контейнер фильтра */
+/* Фильтр */
 .filter-container {
   position: absolute;
   background: #fff;
@@ -467,13 +42,11 @@ body {
   min-width: 300px;
 }
 
-/* Плавное раскрытие */
 .filter-container.active {
   display: block;
   transform: translateX(0);
 }
 
-/* Кнопка закрытия */
 .close-button {
   position: absolute;
   top: 16px;
@@ -484,7 +57,6 @@ body {
   cursor: pointer;
 }
 
-/* Общие стили для фильтров */
 .filter-header {
   font-size: 18px;
   font-weight: bold;
@@ -513,7 +85,6 @@ body {
   margin-right: 8px;
 }
 
-/* Общий стиль кнопок */
 .filter-actions {
   display: flex;
   justify-content: flex-end; /* Выравнивание кнопок справа */
@@ -530,7 +101,6 @@ body {
   position: relative;
 }
 
-/* Сбросить все */
 .filter-actions .reset {
   background: #ccc;
   color: #000;
@@ -541,7 +111,6 @@ body {
   background: #bbb;
 }
 
-/* Применить */
 .filter-actions .apply {
   background: #436884;
   color: #fff;
@@ -552,76 +121,7 @@ body {
   background: #36526b;
 }
 
-.custom-tooltip {
-  position: absolute;
-  background: rgba(37, 78, 88, 0.9); /* Прозрачный темный фон */
-  color: #fff; /* Белый текст */
-  padding: 8px 12px; /* Внутренние отступы */
-  border-radius: 6px; /* Скругленные углы */
-  font-size: 14px; /* Размер текста */
-  white-space: nowrap; /* Запрет на перенос текста */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Лёгкая тень */
-  z-index: 1000; /* Поверх остальных элементов */
-  pointer-events: none; /* Подсказка не мешает взаимодействию */
-  opacity: 0; /* По умолчанию подсказка скрыта */
-  transition: opacity 0.3s; /* Плавный эффект появления */
-}
-
-.custom-tooltip.visible {
-  opacity: 1; /* Подсказка становится видимой */
-}
-
-/* Разделительные линии */
-.divider {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 16px 0;
-}
-
-/* Горизонтальный переключатель (тумблер) */
-.toggle-switch {
-  appearance: none;
-  width: 20px;
-  height: 10px;
-  background: #ccc;
-  border-radius: 7px;
-  position: relative;
-  outline: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.toggle-switch:checked {
-  background: #416378;
-}
-
-.toggle-switch::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 7px;
-  height: 7px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.3s;
-}
-
-.toggle-switch:checked::before {
-  transform: translateX(10px);
-}
-
-/* Стиль для подписей */
-label span {
-  margin-right: 4px;
-}
-
-/* Общие стили для чекбоксов */
-label > input[type="checkbox"] {
-  margin-right: 5px; /* Отступ между чекбоксом и текстом */
-}
-
-/* Общие стили для текста внутри label */
+/* Метки и чекбоксы */
 label {
   font-size: 14px;
   display: flex;
@@ -630,98 +130,165 @@ label {
   transition: color 0.3s; /* Плавный переход цвета */
 }
 
-/* Цвет текста при наведении на label */
 label:hover {
   color: #436884;
 }
 
-/* Эффект для самого чекбокса при наведении */
-label > input[type="checkbox"]:checked {
-  accent-color: #436884; /* Цвет чекбокса в современных браузерах */
+label > input[type="checkbox"] {
+  margin-right: 5px; /* Отступ между чекбоксом и текстом */
 }
 
-/* Обёртка для элементов внутри ячейки */
-.name-cell-wrapper {
-  display: inline-flex;
+label span {
+  margin-right: 4px;
+}
+
+/* Меню поиска */
+.search-menu {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  position: relative;
+  transition: max-height 0.5s ease;
+  overflow: hidden;
+}
+
+.search-menu-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
   align-items: center;
-  gap: 10px; /* Расстояние между input и иконкой */
 }
 
-/* Стили для иконки */
-.cart-icon {
-  width: 24px; /* Размер иконки */
-  height: 24px;
-  border-radius: 5px; /* Скруглённые края */
-  cursor: pointer; /* Указатель мыши */
-  transition: transform 0.1s ease-in-out; /* Плавный переход для увеличения */
+.search-menu-title {
+  flex-basis: 100%;
+  font-size: 24px;
+  margin: 0;
+  font-weight: bold; /* Жирный шрифт для "Поиск по каталогу" */
+  color: #888; /* Серый текст */
+  margin-bottom: 10px;
 }
 
-/* Эффект при наведении */
-.cart-icon:hover {
-  transform: scale(1.2); /* Увеличение на 10% */
+.catalog-link {
+  color: #888; /* Серый цвет текста для ссылок */
+  text-decoration: none; /* Убираем подчеркивание */
+  transition: color 0.3s ease; /* Плавный переход при наведении */
 }
 
-/* Эффект при нажатии */
-.cart-icon:active {
-  transform: scale(1); /* Уменьшение на 10% */
+.catalog-link:hover {
+  color: #555; /* Более темный серый при наведении */
 }
 
-.min-col {
-  text-align: center; /* Центрирование текста по горизонтали */
-  vertical-align: middle; /* Центрирование текста по вертикали */
+.catalog-link:active {
+  color: #333; /* Еще темнее при клике */
 }
 
-#toggleViewButton {
-  background: none;
-  border: none;
+/* Кнопка настроек */
+.settings-icon {
+  display: inline-flex; /* Выравнивание содержимого внутри кнопки */
+  align-items: center; /* Центровка содержимого по вертикали */
+  padding: 4px 8px; /* Внутренние отступы */
+  border: none; /* Убираем стандартную границу */
+  border-radius: 5px; /* Скругление углов */
+  background-color: #48707a; /* Цвет фона */
+  cursor: pointer; /* Указатель курсора при наведении */
+  transition: background-color 0.3s; /* Плавный переход при наведении */
+  font-size: 1.5em; /* Уменьшенный размер текста */
+  gap: 8px; /* Расстояние между иконкой и текстом */
+  white-space: nowrap; /* Запрет на перенос текста */
+  margin-right: 20px;
+}
+
+.settings-icon:hover {
+  background-color: #e0e0e0;
+}
+
+.settings-icon-img {
+  width: 30px; /* Размер иконки */
+  height: 30px;
+}
+
+.settings-text {
+  font-size: 0.7em; /* Уменьшенный размер текста */
+  color: #ffffff; /* Цвет текста */
+}
+
+.results-info {
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+/* Группы форм */
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select {
+  width: 150px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group:has(option[value="Склад"]) select,
+.input-group:has(option[value="Статус"]) select {
+  color: gray;
+}
+
+/* Чекбоксы */
+.checkbox-group {
+  display: flex;
+  gap: 15px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.checkbox-group label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group input {
+  margin-right: 5px;
+}
+
+/* Кнопки действий */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  height: 30px;
+  font-size: 14px;
   cursor: pointer;
-  outline: none;
+  border-radius: 7px;
 }
 
-#toggleViewButton .toggle-button-image {
-  height: 30px; /* Настройте высоту по вашему усмотрению */
-  transition: transform 0.2s ease;
-}
-
-#toggleViewButton .toggle-button-image:active {
-  transform: scale(0.95); /* Эффект сжатия при нажатии */
-}
-
-/* Анимация при смене изображения */
-.toggle-button-image.animate-toggle {
-  animation: toggleImageAnimation 0.2s ease;
-}
-
-@keyframes toggleImageAnimation {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02); /* Увеличение на 2% */
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.clear-button,
+/* Кнопка "Вы смотрели" */
 .viewed-button {
   background-color: #bababa; /* Серая заливка */
   border: none; /* Убираем рамку */
   color: #fff; /* Белый текст */
 }
 
-.clear-button:hover,
 .viewed-button:hover {
   background-color: #898989; /* Чуть более тёмная заливка при наведении */
 }
 
-.clear-button:active,
 .viewed-button:active {
   transform: scale(0.95); /* Эффект сжатия при нажатии */
 }
 
-/* Контейнер пагинации */
+/* Пагинация */
 .pagination-container {
   display: flex;
   justify-content: space-between;
@@ -729,7 +296,6 @@ label > input[type="checkbox"]:checked {
   margin: 0 10px;
 }
 
-/* Пагинация */
 .pagination {
   margin-top: 10px;
   display: flex;
@@ -762,7 +328,6 @@ label > input[type="checkbox"]:checked {
   color: #fff;
 }
 
-/* Кнопка "Перейти на" */
 .pagination .go-to {
   background-color: #f8f9fa;
   border: 1px solid #ccc;
@@ -772,7 +337,6 @@ label > input[type="checkbox"]:checked {
   font-size: 14px;
 }
 
-/* Поле ввода */
 .pagination input {
   width: 50px;
   padding: 5px;
@@ -782,7 +346,7 @@ label > input[type="checkbox"]:checked {
   text-align: center;
 }
 
-/* Опция "Выводить по" */
+/* Опции отображения */
 .display-option {
   display: flex;
   align-items: center;
@@ -838,24 +402,36 @@ label > input[type="checkbox"]:checked {
   color: #fff;
 }
 
-/* Адаптация отступов и пропорций */
-.pagination-container,
-.popular-brands {
-  padding: 0 20px;
+/* Кнопка переключения вида */
+#toggleViewButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
 }
 
-.pagination span,
-.pagination a,
-.pagination .go-to,
-.pagination input,
-.display-option select {
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#toggleViewButton .toggle-button-image {
+  height: 30px; /* Настройте высоту по вашему усмотрению */
+  transition: transform 0.2s ease;
 }
 
-.popular-brands .brands a {
-  min-width: 80px;
-  text-align: center;
+#toggleViewButton .toggle-button-image:active {
+  transform: scale(0.95); /* Эффект сжатия при нажатии */
+}
+
+.toggle-button-image.animate-toggle {
+  animation: toggleImageAnimation 0.2s ease;
+}
+
+/* Анимация для кнопки переключения вида */
+@keyframes toggleImageAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02); /* Увеличение на 2% */
+  }
+  100% {
+    transform: scale(1);
+  }
 }

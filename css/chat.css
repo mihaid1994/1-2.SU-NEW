@@ -1,30 +1,15 @@
-/* chat.css */
-
 /* Сброс стандартных стилей */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Изменено на border-box для корректного расчёта размеров */
-}
-
 html,
-body {
-  height: 100%;
-}
-
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Гарантирует, что тело документа занимает минимум высоту окна */
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   margin: 0; /* Убираем отступы по умолчанию */
-  overflow: hidden; /* Предотвращаем прокрутку тела документа */
 }
 
 /* Разделитель дат */
 .date-divider {
-  /* Изменено с .chat-date-divider на .date-divider */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +71,6 @@ body {
   overflow: hidden; /* Предотвращаем прокрутку основной области */
 }
 
-/* Левая панель со списком чатов */
 .chat-sidebar {
   width: 250px;
   background-color: #ffffff;
@@ -156,6 +140,8 @@ body {
 /* Стили для списка чатов */
 .chat-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .chat-list-item {
@@ -207,16 +193,17 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  height: 657px;
 }
 
-/* Область сообщений */
 .chat-messages {
-  flex: 1; /* Растягивается, заполняя доступное пространство */
+  flex: 1;
   padding: 20px;
-  overflow-y: auto; /* Внутренняя прокрутка сообщений */
   background-color: #ffffff;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Включение вертикальной прокрутки */
 }
 
 /* Сообщения */
@@ -271,6 +258,14 @@ body {
   word-break: break-word; /* Разрешает перенос длинных слов */
   hyphens: auto; /* Разрешает перенос по дефисам */
   transition: background-color 1s ease; /* Добавлено для плавного изменения цвета */
+  font-size: 1em; /* Обычный размер текста */
+  unicode-bidi: plaintext;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji",
+    sans-serif;
+}
+
+.message-content::after {
+  content: ""; /* Заглушка для дополнительного поиска */
 }
 
 .message .message-time {
@@ -279,7 +274,7 @@ body {
   margin-top: 5px;
 }
 
-.message .avatar {
+.avatar {
   width: 60px; /* Ширина аватара */
   height: 60px; /* Высота аватара */
   border-radius: 50%; /* Делаем аватар круглым */
@@ -291,9 +286,6 @@ body {
 
 .message.user .avatar {
   align-self: flex-start; /* Выравнивание верхней части аватара по верхнему краю */
-}
-
-.message.user .avatar {
   background-image: url("/images/jpg/user.jpg");
 }
 
@@ -334,7 +326,6 @@ body {
   border-top: 1px solid #ccc;
   background-color: #f9f9f9;
   position: relative;
-  margin-top: auto; /* Прижимаем к низу окна */
   flex-shrink: 0; /* Предотвращает сжатие поля ввода */
 }
 
@@ -433,11 +424,10 @@ body {
 
 /* Плашка загрузки файлов */
 .file-upload-popup {
-  /* Изменено позиционирование */
   display: none; /* Скрыто по умолчанию */
   position: absolute; /* Изменено с fixed на absolute */
   bottom: 60px; /* Расположено над полем ввода */
-  left: 20px;
+  left: 300px;
   background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -580,21 +570,4 @@ body {
   100% {
     background-color: transparent;
   }
-}
-
-.message-content {
-  font-size: 1em; /* Обычный размер текста */
-}
-
-.message-content {
-  unicode-bidi: plaintext;
-}
-
-.message-content::after {
-  content: ""; /* Заглушка для дополнительного поиска */
-}
-
-.message-content {
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji",
-    sans-serif;
 }

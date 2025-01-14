@@ -1,9 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const magazineGrid = document.getElementById("magazineGrid");
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-  const captionText = document.getElementById("caption");
-  const closeBtn = document.querySelector(".close");
+// Функция инициализации внутри переданного root
+window.initMagazineFunction = function (root) {
+  const magazineGrid = root.getElementById("magazineGrid");
+  const modal = root.getElementById("imageModal");
+  const modalImg = root.getElementById("modalImage");
+  const captionText = root.getElementById("caption");
+  const closeBtn = root.querySelector(".close");
 
   const issues = [
     {
@@ -326,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
     magazineGrid.appendChild(wrapper);
   }
 
-  const imageElements = document.querySelectorAll(".pop-up_img img");
+  const imageElements = root.querySelectorAll(".pop-up_img img");
   imageElements.forEach((img) => {
     img.addEventListener("click", (e) => {
       e.preventDefault();
@@ -341,9 +342,17 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "none";
   });
 
-  window.addEventListener("click", (e) => {
+  root.addEventListener("click", (e) => {
     if (e.target == modal) {
       modal.style.display = "none";
     }
   });
-});
+};
+
+/**
+ * Обёрточная функция, которую вызовет GComm_TabManager.
+ * Она просто пробрасывает shadowRoot внутрь initMagazineFunction.
+ */
+window.initMagazineShadow = async function (shadowRoot) {
+  await window.initMagazineFunction(shadowRoot);
+};

@@ -12,7 +12,6 @@
       rel="stylesheet"
     />
   </head>
-  <style></style>
   <body>
     <!-- Область для навигации -->
     <div id="navigation-area" class="navigation-area">
@@ -87,7 +86,6 @@
               >
                 Шуравин Михаил
               </a>
-
               <ul class="dropdown">
                 <li>
                   <button
@@ -210,9 +208,6 @@
     <!-- Подключение глобального скрипта коммуникации между страницами проекта -->
     <script src="/js/globalcomm.js"></script>
 
-    <!-- Скрипт открытия вкладок командой из дочерних страниц -->
-    <script src="/js/tabs-from.js"></script>
-
     <!-- Логика перетаскивания вкладок -->
     <script src="/js/tabs-drag.js"></script>
 
@@ -221,5 +216,58 @@
 
     <!-- Имитация ввода текста в поиск -->
     <script src="/js/inputimit.js"></script>
+
+    <!-- 
+      === БЛОК ДЛЯ СКРИПТОВ ДОЧЕРНИХ СТРАНИЦ ===
+
+      Сюда вы будете добавлять/подключать любые 
+      JS-функции, которые относятся к контенту, 
+      загружаемому через fetch().
+
+      Например, если вы подгружаете /pages/info.html,
+      и там должен быть какой-то интерактив — 
+      перенесите в этот блок JS-логику, которая
+      будет работать с разметкой info.html.
+    -->
+    <!-- Скрипт страницы чат -->
+    <script src="/js/chat.js"></script>
+
+    <!-- Скрипты страницы главная -->
+    <script src="/js/info.js"></script>
+    <script src="/js/cardview.js"></script>
+
+    <!-- Подключение скриптов корзины -->
+    <script src="/js/delivery.js"></script>
+    <script src="/js/excel_pdf.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/inn_input.js"></script>
+
+    <!-- Подключение библиотек для формирования документов -->
+    <!-- SheetJS для Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- jsPDF и html2canvas для PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- скрипт страницы заказы -->
+    <script src="/js/zajavki.js"></script>
+
+    <!-- Скрипт для страницы поиск -->
+    <script src="/js/filter.js"></script>
+    <script src="/js/tooltip.js"></script>
+    <script src="/js/table_card.js"></script>
+
+    <!-- Скрипт для страницы Личный кабинет -->
+    <script src="/js/cabinet.js"></script>
+
+    <!-- Скрипт для страницы Инструкция -->
+    <script src="/js/reasapi.js"></script>
+
+    <!-- Скрипт для страницы Прайс -->
+    <script src="/js/price.js"></script>
+
+    <!-- Скрипт для страницы Наш журнал -->
+    <script src="/js/magazine.js"></script>
   </body>
 </html>

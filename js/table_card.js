@@ -1,7 +1,14 @@
-document.addEventListener("DOMContentLoaded", function () {
-  let isCardView = true;
+window.initTableCardView = function (root = document) {
+  let isCardView = false;
   let dataCache = null;
   let imageCache = {};
+
+  // Вспомогательная функция для установки нескольких стилей одновременно
+  function setStyles(element, styles) {
+    for (let property in styles) {
+      element.style[property] = styles[property];
+    }
+  }
 
   // Справочник брендов
   const brandMapping = {
@@ -91,79 +98,149 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      container.innerHTML = ""; // Очистка контейнера перед добавлением изображений
-      indicatorsContainer.innerHTML = ""; // Очистка контейнера перед добавлением индикаторов
+      container.innerHTML = ""; // Очистка контейнера
+      indicatorsContainer.innerHTML = ""; // Очистка индикаторов
 
       images.forEach((src, index) => {
-        const img = document.createElement("img");
+        const img = root.createElement
+          ? root.createElement("img")
+          : document.createElement("img");
         img.src = src;
-        img.loading = "lazy"; // Ленивая загрузка
+        img.loading = "lazy";
         img.classList.add("product-image");
-        if (index === 0) img.classList.add("active");
+
+        // Применение стилей inline для image-container img
+        setStyles(img, {
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: "auto",
+          height: "calc(100% - 5px)",
+          transform: "translate(-50%, -50%)",
+          objectFit: "cover",
+          display: index === 0 ? "block" : "none",
+          borderRadius: "14px",
+          marginTop: "5px",
+        });
+
+        img.setAttribute("data-fullsrc", src);
+        img.setAttribute("data-tooltip", "Просмотреть изображение товара");
         container.appendChild(img);
       });
 
       images.forEach((_, index) => {
-        const indicator = document.createElement("div");
+        const indicator = root.createElement
+          ? root.createElement("div")
+          : document.createElement("div");
         indicator.classList.add("indicator");
-        if (index === 0) indicator.classList.add("active");
+
+        // Применение стилей inline для индикаторов
+        setStyles(indicator, {
+          width: "10px",
+          height: "10px",
+          borderRadius: "50%",
+          backgroundColor: "#ffffff",
+          boxShadow: "0 3px 4px rgba(0, 0, 0, 0.2)",
+          cursor: "pointer",
+          transition: "transform 0.3s ease, background-color 0.3s ease",
+        });
+
+        if (index === 0) {
+          indicator.classList.add("active");
+          setStyles(indicator, {
+            transform: "scale(1.5)",
+            backgroundColor: "#fe9c00",
+          });
+        }
+
+        indicator.style.zIndex = "10";
+        indicator.style.display = "flex";
         indicatorsContainer.appendChild(indicator);
       });
 
-      // Обработчики событий через делегирование
+      // Делегирование событий на индикаторы
       indicatorsContainer.addEventListener("click", function (event) {
         if (event.target.classList.contains("indicator")) {
           const indicators = indicatorsContainer.querySelectorAll(".indicator");
-          const images = container.querySelectorAll(".product-image");
-          const index = Array.from(indicators).indexOf(event.target);
-          if (index !== -1) {
-            images.forEach((img) => img.classList.remove("active"));
-            images[index].classList.add("active");
+          const imgs = container.querySelectorAll(".product-image");
+          const idx = Array.from(indicators).indexOf(event.target);
+          if (idx !== -1) {
+            imgs.forEach((img) => (img.style.display = "none"));
+            imgs[idx].style.display = "block";
 
-            indicators.forEach((ind) => ind.classList.remove("active"));
-            event.target.classList.add("active");
+            indicators.forEach((ind, index) => {
+              if (index === idx) {
+                ind.classList.add("active");
+                setStyles(ind, {
+                  transform: "scale(1.5)",
+                  backgroundColor: "#fe9c00",
+                });
+              } else {
+                ind.classList.remove("active");
+                setStyles(ind, {
+                  transform: "scale(1)",
+                  backgroundColor: "#ffffff",
+                });
+              }
+            });
           }
         }
       });
 
+      // При движении мыши — «горизонтальное колесо»
       container.addEventListener("mousemove", function (e) {
         const rect = container.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const segmentWidth = rect.width / images.length;
-        const index = Math.min(Math.floor(x / segmentWidth), images.length - 1);
+        const idx = Math.min(Math.floor(x / segmentWidth), images.length - 1);
 
-        const currentActive = container.querySelector("img.active");
-        const targetImage = container.querySelectorAll("img")[index];
-        if (currentActive !== targetImage) {
-          container
-            .querySelectorAll("img")
-            .forEach((img) => img.classList.remove("active"));
-          targetImage.classList.add("active");
+        const imgs = container.querySelectorAll(".product-image");
+        imgs.forEach((img, index) => {
+          img.style.display = index === idx ? "block" : "none";
+        });
 
-          const indicators = indicatorsContainer.querySelectorAll(".indicator");
-          indicators.forEach((ind) => ind.classList.remove("active"));
-          indicators[index].classList.add("active");
-        }
-      });
-
-      container.addEventListener("mouseleave", () => {
-        // Сброс активного изображения к первому
-        const images = container.querySelectorAll("img");
-        if (images.length > 0) {
-          images.forEach((img) => img.classList.remove("active"));
-          images[0].classList.add("active");
-        }
-
-        // Сброс активного индикатора к первому
         const indicators = indicatorsContainer.querySelectorAll(".indicator");
-        if (indicators.length > 0) {
-          indicators.forEach((ind) => ind.classList.remove("active"));
-          indicators[0].classList.add("active");
-        }
+        indicators.forEach((ind, index) => {
+          if (index === idx) {
+            ind.classList.add("active");
+            setStyles(ind, {
+              transform: "scale(1.5)",
+              backgroundColor: "#fe9c00",
+            });
+          } else {
+            ind.classList.remove("active");
+            setStyles(ind, {
+              transform: "scale(1)",
+              backgroundColor: "#ffffff",
+            });
+          }
+        });
       });
 
-      // Удаляем управление видимостью индикаторов через JS
-      // Это будет управляться через CSS
+      // При покидании зоны — сбрасываем на первое
+      container.addEventListener("mouseleave", () => {
+        const imgs = container.querySelectorAll(".product-image");
+        imgs.forEach((img, index) => {
+          img.style.display = index === 0 ? "block" : "none";
+        });
+
+        const indicators = indicatorsContainer.querySelectorAll(".indicator");
+        indicators.forEach((ind, index) => {
+          if (index === 0) {
+            ind.classList.add("active");
+            setStyles(ind, {
+              transform: "scale(1.5)",
+              backgroundColor: "#fe9c00",
+            });
+          } else {
+            ind.classList.remove("active");
+            setStyles(ind, {
+              transform: "scale(1)",
+              backgroundColor: "#ffffff",
+            });
+          }
+        });
+      });
     } catch (error) {
       console.error(
         `Ошибка при рендеринге изображений для артикула ${article}: ${error}`
@@ -173,106 +250,58 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Загрузка данных из JSON
-  fetch("/data/data.json")
-    .then((response) => response.json())
-    .then((data) => {
-      dataCache = data.map((item) => {
-        const retailPrice =
-          parseFloat(item["Розничная цена"] || item["Цена"]) || 0;
-        item["Розничная цена"] = (retailPrice * 1.25).toFixed(2); // Увеличиваем на 25%
-        return item;
-      });
-
-      // Определяем стартовый вид (по умолчанию - табличный)
-      const currentView = localStorage.getItem("currentView") || "table-view";
-      document.body.classList.add(currentView);
-
-      if (currentView === "card-view") {
-        renderCardView(dataCache);
-      } else {
-        renderTableView(dataCache);
-      }
-
-      cleanQuantityInputs(); // Очистка значений "0" при загрузке страницы
-
-      const toggleButton = document.getElementById("toggleViewButton");
-      const toggleButtonImage = toggleButton.querySelector(
-        ".toggle-button-image"
-      );
-      toggleButtonImage.src =
-        currentView === "card-view"
-          ? "/images/svg/Icon/table.svg"
-          : "/images/svg/Icon/card.svg";
-
-      toggleButton.addEventListener("click", function () {
-        const productContainer = document.getElementById("productContainer");
-        productContainer.innerHTML = ""; // Очищаем контейнер
-
-        if (document.body.classList.contains("table-view")) {
-          // Переключаем на карточный вид
-          document.body.classList.remove("table-view");
-          document.body.classList.add("card-view");
-          renderCardView(dataCache);
-          toggleButtonImage.src = "/images/svg/Icon/table.svg";
-          localStorage.setItem("currentView", "card-view"); // Сохраняем состояние
-        } else if (document.body.classList.contains("card-view")) {
-          // Переключаем на табличный вид
-          document.body.classList.remove("card-view");
-          document.body.classList.add("table-view");
-          renderTableView(dataCache);
-          toggleButtonImage.src = "/images/svg/Icon/card.svg";
-          localStorage.setItem("currentView", "table-view"); // Сохраняем состояние
-        }
-
-        // Добавляем эффект анимации на изображение кнопки
-        toggleButtonImage.classList.add("animate-toggle");
-        setTimeout(() => {
-          toggleButtonImage.classList.remove("animate-toggle");
-        }, 200);
-
-        cleanQuantityInputs(); // Очистка значений "0" после переключения вида
-      });
-    })
-    .catch((error) => {
-      console.error(`Ошибка при загрузке данных: ${error}`);
-    });
-
-  // Функция для очистки значений "0"
-  function cleanQuantityInputs() {
-    document.querySelectorAll(".product-quantity-custom").forEach((input) => {
-      if (input.value === "0") {
-        input.value = "";
-      }
-
-      input.addEventListener("blur", function () {
-        if (this.value === "0") {
-          this.value = "";
-        }
-      });
-    });
-  }
-
+  // Функция для рендера карточного вида
   function renderCardView(data) {
-    const productContainer = document.getElementById("productContainer");
-    productContainer.className = "product-grid";
+    const productContainer = root.getElementById("productContainer");
+    if (!productContainer) {
+      console.warn("Отсутствует контейнер #productContainer");
+      return;
+    }
+
+    // Сброс стилей контейнера
+    setStyles(productContainer, {
+      display: "",
+      gridTemplateColumns: "",
+      gap: "",
+      justifyContent: "",
+      padding: "",
+      margin: "",
+      width: "",
+      borderCollapse: "",
+      borderSpacing: "",
+    });
+
+    // Применение стилей inline для productContainer (product-grid)
+    setStyles(productContainer, {
+      display: "grid",
+      gridTemplateColumns: "repeat(6, 1fr)",
+      gap: "10px",
+      justifyContent: "center",
+      padding: "10px",
+    });
 
     const maxRows = 7;
-    let cardsPerRow = 4;
+    let cardsPerRow = 6;
 
     function updateCardsPerRow() {
       const width = window.innerWidth;
       if (width <= 900) {
-        cardsPerRow = 2;
+        cardsPerRow = 2; // Для небольших экранов — 2 карточки
       } else if (width <= 1200) {
-        cardsPerRow = 3;
+        cardsPerRow = 4; // Для средних экранов — 4 карточки
       } else {
-        cardsPerRow = 4;
+        cardsPerRow = 6; // Для больших экранов — 6 карточек
       }
+
+      // Обновление grid-template-columns в зависимости от cardsPerRow
+      setStyles(productContainer, {
+        gridTemplateColumns: `repeat(${cardsPerRow}, 1fr)`,
+      });
     }
 
     updateCardsPerRow();
 
+    // Обработчик изменения размера окна для адаптивности
     if (!window.resizeHandlerAdded) {
       window.addEventListener(
         "resize",
@@ -284,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
             renderCards(data, productContainer, maxRows * cardsPerRow);
           }
         }, 200)
-      ); // Задержка 200ms
+      );
       window.resizeHandlerAdded = true;
     }
 
@@ -292,38 +321,101 @@ document.addEventListener("DOMContentLoaded", function () {
     renderCards(data, productContainer, maxRows * cardsPerRow);
   }
 
+  // Функция для рендера карточек продуктов с изменениями для Card View
   function renderCards(data, container, maxCards) {
-    const fragment = document.createDocumentFragment();
+    const fragment = root.createDocumentFragment
+      ? root.createDocumentFragment()
+      : document.createDocumentFragment();
 
     data.slice(0, maxCards).forEach((item) => {
       const brandInfo = getBrandInfo(item["Наименование"]);
 
-      const card = document.createElement("div");
-      card.classList.add("product-card-custom");
+      const card = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
 
-      // Изображение продукта
-      const imageDiv = document.createElement("div");
-      imageDiv.classList.add("product-image-custom");
+      // Применение стилей inline для product-card-custom
+      setStyles(card, {
+        width: "100%",
+        aspectRatio: "3 / 6",
+        border: "1px solid #e0e0e0",
+        borderRadius: "8px",
+        overflow: "hidden",
+        backgroundColor: "#fff",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        transition: "transform 0.3s ease",
+        display: "flex",
+        flexDirection: "column",
+        fontSize: "calc(16px * var(--card-scale))",
+        position: "relative",
+      });
 
-      const mainContainer = document.createElement("div");
-      mainContainer.classList.add("main-container", "image-container");
+      // Эффект hover для карточки
+      card.addEventListener("mouseover", () => {
+        card.style.transform = "translateY(-5px)";
+      });
+      card.addEventListener("mouseout", () => {
+        card.style.transform = "translateY(0)";
+      });
 
-      // Добавляем контейнер для изображений
-      const imagesContainer = document.createElement("div");
-      imagesContainer.classList.add("imagesContainer");
+      // Блок с изображением
+      const imageDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(imageDiv, {
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        height: "300px",
+      });
+
+      const mainContainer = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(mainContainer, {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+      });
+
+      const imagesContainer = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(imagesContainer, {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+      });
       mainContainer.appendChild(imagesContainer);
 
-      // Добавляем overlay
-      const overlay = document.createElement("div");
-      overlay.classList.add("overlay");
-      mainContainer.appendChild(overlay);
-
-      // Добавляем индикаторы
-      const indicatorsContainer = document.createElement("div");
-      indicatorsContainer.classList.add("indicatorsContainer");
+      const indicatorsContainer = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(indicatorsContainer, {
+        position: "absolute",
+        bottom: "10px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        gap: "10px",
+        zIndex: "4",
+        opacity: "0",
+        pointerEvents: "none",
+        transition: "opacity 0.3s ease",
+      });
       mainContainer.appendChild(indicatorsContainer);
 
-      // Добавляем индикаторы для изображений
+      mainContainer.addEventListener("mouseover", () => {
+        indicatorsContainer.style.opacity = "1";
+        indicatorsContainer.style.pointerEvents = "all";
+      });
+      mainContainer.addEventListener("mouseout", () => {
+        indicatorsContainer.style.opacity = "0";
+        indicatorsContainer.style.pointerEvents = "none";
+      });
+
       const article = item["Код"];
       if (article) {
         renderImages(imagesContainer, indicatorsContainer, article);
@@ -332,90 +424,223 @@ document.addEventListener("DOMContentLoaded", function () {
           "<p>Нет изображений для данного артикула.</p>";
       }
 
-      // Вставляем все в основную карточку
       imageDiv.appendChild(mainContainer);
       card.appendChild(imageDiv);
 
-      // Добавляем информацию о продукте
-      const infoDiv = document.createElement("div");
-      infoDiv.classList.add("product-info-custom");
+      // Информация о продукте
+      const infoDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(infoDiv, {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        padding: "8px",
+      });
 
-      const brandDiv = document.createElement("div");
-      brandDiv.classList.add("product-brand-custom");
+      const brandDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(brandDiv, {
+        display: "flex",
+        alignItems: "end",
+        marginBottom: "0.5em",
+      });
 
-      const brandImg = document.createElement("img");
+      const brandImg = root.createElement
+        ? root.createElement("img")
+        : document.createElement("img");
       brandImg.src = brandInfo.logo;
       brandImg.alt = brandInfo.name;
-      brandImg.setAttribute("data-tooltip", `Логотип бренда ${brandInfo.name}`);
+      setStyles(brandImg, {
+        width: "2.5em",
+        height: "auto",
+        marginRight: "0.5em",
+        borderRadius: "5px",
+        transition: "transform 0.3s ease",
+        cursor: "pointer",
+      });
+      brandImg.addEventListener("mouseover", () => {
+        brandImg.style.transform = "scale(1.03)";
+      });
+      brandImg.addEventListener("mouseout", () => {
+        brandImg.style.transform = "scale(1)";
+      });
 
-      const brandSpan = document.createElement("span");
+      const brandSpan = root.createElement
+        ? root.createElement("span")
+        : document.createElement("span");
       brandSpan.textContent = brandInfo.name;
+      setStyles(brandSpan, {
+        color: "#999",
+        fontSize: "0.9em",
+      });
 
       brandDiv.appendChild(brandImg);
       brandDiv.appendChild(brandSpan);
 
-      const title = document.createElement("h2");
-      title.classList.add("product-title-custom");
+      const title = root.createElement
+        ? root.createElement("h2")
+        : document.createElement("h2");
       title.textContent = item["Наименование"];
       title.setAttribute(
         "data-tooltip",
         `Перейти к подробному описанию товара: ${item["Наименование"]}`
       );
+      setStyles(title, {
+        fontSize: "0.8rem",
+        fontWeight: "600",
+        color: "#333",
+        marginBottom: "5px",
+        lineHeight: "1.2",
+        height: "3.6em",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        WebkitBoxOrient: "vertical",
+        wordWrap: "break-word",
+        whiteSpace: "normal",
+      });
 
-      const codeP = document.createElement("p");
-      codeP.classList.add("product-code-custom");
+      const codeP = root.createElement
+        ? root.createElement("p")
+        : document.createElement("p");
       codeP.innerHTML = `Код товара: <span>${item["Код"]}</span>`;
-      codeP.setAttribute(
-        "data-tooltip",
-        `Уникальный код товара: ${item["Код"]}`
-      );
+      codeP.setAttribute("data-tooltip", `Код товара: ${item["Код"]}`);
+      setStyles(codeP, {
+        fontSize: "0.75em",
+        color: "#666",
+        margin: "0.125em 0",
+      });
+      setStyles(codeP.querySelector("span"), {
+        color: "#333",
+      });
 
-      const articleP = document.createElement("p");
-      articleP.classList.add("product-article-custom");
+      const articleP = root.createElement
+        ? root.createElement("p")
+        : document.createElement("p");
       articleP.innerHTML = `Артикул: <span>${
         item["Артикул"] || "Не указан"
       }</span>`;
       articleP.setAttribute(
         "data-tooltip",
-        `Артикул товара для заказа: ${item["Артикул"] || "Не указан"}`
+        `Артикул товара: ${item["Артикул"] || "Не указан"}`
       );
+      setStyles(articleP, {
+        fontSize: "0.75em",
+        color: "#666",
+        margin: "0.125em 0",
+      });
+      setStyles(articleP.querySelector("span"), {
+        color: "#333",
+      });
 
-      const packagingP = document.createElement("p");
-      packagingP.classList.add("product-packaging-custom");
+      const packagingP = root.createElement
+        ? root.createElement("p")
+        : document.createElement("p");
       packagingP.innerHTML = `Упаковка: <a href="#">${
         item["Упаковка"] || "1 шт."
       }</a>`;
       packagingP.setAttribute(
         "data-tooltip",
-        `Информация об упаковке товара: ${item["Упаковка"] || "1 шт."}`
+        `Информация об упаковке: ${item["Упаковка"] || "1 шт."}`
       );
+      setStyles(packagingP, {
+        fontSize: "0.75em",
+        color: "#666",
+        margin: "0.125em 0",
+      });
+      const packagingLink = packagingP.querySelector("a");
+      setStyles(packagingLink, {
+        color: "#638a8e",
+        textDecoration: "none",
+        transition: "color 0.3s ease",
+      });
+      packagingLink.addEventListener("mouseover", () => {
+        packagingLink.style.color = "#2ca6d2";
+      });
+      packagingLink.addEventListener("mouseout", () => {
+        packagingLink.style.color = "#638a8e";
+      });
 
-      const priceDiv = document.createElement("div");
-      priceDiv.classList.add("product-price-custom");
+      // Цены
+      const priceDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(priceDiv, {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        margin: "0.625em 0",
+      });
 
-      const currentPriceDiv = document.createElement("div");
-      currentPriceDiv.classList.add("price-current-custom");
+      const currentPriceDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
       currentPriceDiv.innerHTML = `<span>Ваша цена</span><strong>${item["Цена"]} ₽</strong>`;
       currentPriceDiv.setAttribute(
         "data-tooltip",
         `Цена для вас: ${item["Цена"]} ₽`
       );
+      setStyles(currentPriceDiv, {
+        fontSize: "0.6em",
+      });
+      setStyles(currentPriceDiv.querySelector("span"), {
+        color: "#999",
+      });
+      const currentPriceStrong = currentPriceDiv.querySelector("strong");
+      setStyles(currentPriceStrong, {
+        display: "block",
+        color: "#333",
+        fontSize: "1.6em",
+        fontWeight: "700",
+        marginTop: "0.125em",
+      });
 
-      const retailPriceDiv = document.createElement("div");
-      retailPriceDiv.classList.add("price-retail-custom");
+      const retailPriceDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
       retailPriceDiv.innerHTML = `<span>Розн. цена</span><strong>${item["Розничная цена"]} ₽</strong>`;
       retailPriceDiv.setAttribute(
         "data-tooltip",
-        `Розничная цена товара: ${item["Розничная цена"]} ₽`
+        `Розничная цена: ${item["Розничная цена"]} ₽`
       );
+      setStyles(retailPriceDiv, {
+        fontSize: "0.75em",
+      });
+      setStyles(retailPriceDiv.querySelector("span"), {
+        color: "#999",
+      });
+      const retailPriceStrong = retailPriceDiv.querySelector("strong");
+      setStyles(retailPriceStrong, {
+        display: "block",
+        color: "#bbb",
+        fontSize: "0.875em",
+        fontWeight: "500",
+        textDecoration: "line-through",
+        marginTop: "0.125em",
+      });
 
       priceDiv.appendChild(currentPriceDiv);
       priceDiv.appendChild(retailPriceDiv);
 
-      const actionsDiv = document.createElement("div");
-      actionsDiv.classList.add("product-actions-custom");
+      // Действия
+      const actionsDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(actionsDiv, {
+        display: "flex",
+        gap: "5px",
+        width: "100%",
+        boxSizing: "border-box",
+        alignItems: "stretch",
+        height: "25px",
+        marginBottom: "7px",
+      });
 
-      const quantityInput = document.createElement("input");
+      const quantityInput = root.createElement
+        ? root.createElement("input")
+        : document.createElement("input");
       quantityInput.type = "number";
       quantityInput.value = "0";
       quantityInput.min = item["Мин. Кол."] || 1;
@@ -423,44 +648,112 @@ document.addEventListener("DOMContentLoaded", function () {
       quantityInput.classList.add("product-quantity-custom");
       quantityInput.setAttribute(
         "data-tooltip",
-        `Введите количество товара (Минимум: ${item["Мин. Кол."] || 1})`
+        `Введите количество (Мин: ${item["Мин. Кол."] || 1})`
       );
+      setStyles(quantityInput, {
+        flex: "2",
+        padding: "10px",
+        border: "1px solid #ddd",
+        borderRadius: "4px",
+        fontSize: "14px",
+        textAlign: "left",
+        width: "100px", // Фиксированная ширина
+      });
 
-      const addToCartButton = document.createElement("button");
-      addToCartButton.classList.add("add-to-cart-custom");
+      const addToCartButton = root.createElement
+        ? root.createElement("button")
+        : document.createElement("button");
       addToCartButton.textContent = "В корзину";
+      addToCartButton.classList.add("add-to-cart-button");
       addToCartButton.setAttribute(
         "data-tooltip",
         "Добавить этот товар в корзину"
       );
+      setStyles(addToCartButton, {
+        flex: "1",
+        padding: "2px",
+        backgroundColor: "#4caf50",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        fontSize: "12px",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease",
+      });
+
+      addToCartButton.addEventListener("mouseover", () => {
+        addToCartButton.style.backgroundColor = "#45a049";
+      });
+      addToCartButton.addEventListener("mouseout", () => {
+        addToCartButton.style.backgroundColor = "#4caf50";
+      });
 
       actionsDiv.appendChild(quantityInput);
       actionsDiv.appendChild(addToCartButton);
 
-      const availabilityDiv = document.createElement("div");
-      availabilityDiv.classList.add("product-availability-custom");
+      const availabilityDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
+      setStyles(availabilityDiv, {
+        display: "flex",
+        justifyContent: "space-between",
+        fontSize: "0.75em",
+        color: "#666",
+        borderTop: "1px solid #e0e0e0",
+        paddingTop: "0.5em",
+      });
 
-      const availableTodayDiv = document.createElement("div");
-      availableTodayDiv.classList.add("available-today-custom");
+      const availableTodayDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
       availableTodayDiv.innerHTML = `<span>В наличии</span><strong>${
         item["Наличие"] || "0"
       } шт.</strong>`;
       availableTodayDiv.setAttribute(
         "data-tooltip",
-        `Количество товара в наличии: ${item["Наличие"] || "0"} шт.`
+        `Количество товара в наличии: ${item["Наличие"] || "0"}`
       );
+      setStyles(availableTodayDiv, {
+        textAlign: "center",
+      });
+      setStyles(availableTodayDiv.querySelector("span"), {
+        display: "block",
+        color: "#999",
+        fontSize: "1em",
+        marginBottom: "0.1em",
+      });
+      const availableTodayStrong = availableTodayDiv.querySelector("strong");
+      setStyles(availableTodayStrong, {
+        color: "#333",
+        fontSize: "1.3em",
+      });
 
-      const availableFutureDiv = document.createElement("div");
-      availableFutureDiv.classList.add("available-future-custom");
+      const availableFutureDiv = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
       availableFutureDiv.innerHTML = `<span>${
         item["Дата поступления"] || "В пути"
       }</span><strong>${item["В пути"] || "0"} шт.</strong>`;
       availableFutureDiv.setAttribute(
         "data-tooltip",
-        `Количество товара в пути: ${item["В пути"] || "0"} шт. (${
-          item["Дата поступления"] || "Дата неизвестна"
+        `Товар в пути: ${item["В пути"] || 0} (ожидается ${
+          item["Дата поступления"] || "неизвестно"
         })`
       );
+      setStyles(availableFutureDiv, {
+        textAlign: "center",
+      });
+      setStyles(availableFutureDiv.querySelector("span"), {
+        display: "block",
+        color: "#999",
+        fontSize: "1em",
+        marginBottom: "0.1em",
+      });
+      const availableFutureStrong = availableFutureDiv.querySelector("strong");
+      setStyles(availableFutureStrong, {
+        color: "#333",
+        fontSize: "1.3em",
+      });
 
       availabilityDiv.appendChild(availableTodayDiv);
       availabilityDiv.appendChild(availableFutureDiv);
@@ -482,18 +775,51 @@ document.addEventListener("DOMContentLoaded", function () {
     container.appendChild(fragment);
   }
 
+  // Функция для рендера табличного вида
   function renderTableView(data) {
-    const productContainer = document.getElementById("productContainer");
-    productContainer.className = "";
+    const productContainer = root.getElementById("productContainer");
+    if (!productContainer) {
+      console.warn("Отсутствует контейнер #productContainer");
+      return;
+    }
+
+    // Очистка контейнера и сброс стилей
     productContainer.innerHTML = "";
+    setStyles(productContainer, {
+      display: "block", // Устанавливаем блок для таблицы
+      margin: "0 auto", // Центрируем таблицу
+      padding: "0",
+      width: "calc(100%)", // Задаем ширину таблицы с отступами
+    });
 
-    const table = document.createElement("table");
-    table.className = "iksweb";
+    const table = root.createElement
+      ? root.createElement("table")
+      : document.createElement("table");
+    setStyles(table, {
+      width: "100%",
+      borderCollapse: "collapse",
+      margin: "0 auto",
+      padding: "0",
+      borderSpacing: "0", // Убирает отступы между ячейками
+    });
 
-    const thead = document.createElement("thead");
-    const headerRow = document.createElement("tr");
+    const rows = table.querySelectorAll("tr");
+    rows.forEach((row) => {
+      setStyles(row, {
+        borderLeft: "none",
+        borderRight: "none",
+      });
+    });
 
-    // Заголовки таблицы
+    table.classList.add("iksweb"); // Добавляем класс для функциональности, если необходимо
+
+    const thead = root.createElement
+      ? root.createElement("thead")
+      : document.createElement("thead");
+    const headerRow = root.createElement
+      ? root.createElement("tr")
+      : document.createElement("tr");
+
     const headers = [
       "",
       "",
@@ -510,15 +836,15 @@ document.addEventListener("DOMContentLoaded", function () {
       "Сумма",
     ];
 
-    // Хранение текущего состояния сортировки
-    let currentSortColumn = "Цена"; // По умолчанию сортировка по "Цена"
-    let currentSortOrder = "asc"; // По умолчанию по возрастанию
+    let currentSortColumn = "Цена";
+    let currentSortOrder = "asc";
 
     headers.forEach((headerText) => {
-      const th = document.createElement("th");
+      const th = root.createElement
+        ? root.createElement("th")
+        : document.createElement("th");
       th.textContent = headerText;
 
-      // Если колонка подлежит сортировке
       if (
         [
           "Код",
@@ -532,10 +858,22 @@ document.addEventListener("DOMContentLoaded", function () {
         ].includes(headerText)
       ) {
         th.classList.add("sortable");
-        th.dataset.column = headerText;
-        th.dataset.order = ""; // Изначально не отсортировано
-        th.innerHTML = `${headerText} <span class="sort-arrow"></span>`;
+        th.setAttribute("data-column", headerText);
+        th.setAttribute("data-order", "");
+        th.innerHTML = `${headerText} <span style="position: absolute; right: 5px;"></span>`;
       }
+
+      // Применение базовых стилей для заголовков
+      setStyles(th, {
+        padding: "8px",
+        border: "1px solid #ddd",
+        backgroundColor: "#9e9e9e",
+        color: "white",
+        whiteSpace: "nowrap",
+        cursor: "pointer",
+        position: "relative",
+        userSelect: "none",
+      });
 
       headerRow.appendChild(th);
     });
@@ -543,79 +881,86 @@ document.addEventListener("DOMContentLoaded", function () {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    const tbody = document.createElement("tbody");
+    const tbody = root.createElement
+      ? root.createElement("tbody")
+      : document.createElement("tbody");
 
-    // Функция обновления строк таблицы
     function updateTableRows(sortedData) {
-      tbody.innerHTML = ""; // Очищаем тело таблицы
+      tbody.innerHTML = "";
       sortedData.forEach((row, index) => {
-        const tr = document.createElement("tr");
+        const tr = root.createElement
+          ? root.createElement("tr")
+          : document.createElement("tr");
+        setStyles(tr, {
+          backgroundColor: "#ffffff",
+        });
+
         tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${
-                      row["Изображение"]
-                        ? `<img src="${row["Изображение"]}" alt="image" class="product-image" data-fullsrc="${row["Изображение"]}" data-tooltip="Просмотреть изображение товара">`
-                        : ""
-                    }</td>
-                    <td>${row["Код"]}</td>
-                    <td class="name-cell" data-tooltip="Перейти к подробному описанию товара">${
-                      row["Наименование"]
-                    }</td>
-                    <td data-tooltip="Цена товара">${row["Прайс"] || ""}</td>
-                    <td data-tooltip="Входная цена товара">${
-                      row["Вход. Цена"] || ""
-                    }</td>
-                    <td data-tooltip="Процент отказа">${
-                      row["Отказ %"] || ""
-                    }</td>
-                    <td class="price-cell" data-tooltip="Цена товара">${
-                      row["Цена"] || ""
-                    }</td>
-                    <td class="min-col" data-tooltip="Минимальное количество для заказа">${
-                      row["Мин. Кол."] || 1
-                    }</td>
-                    <td class="nalich" data-tooltip="Количество товара в наличии">${
-                      row["Наличие"] || "0"
-                    }</td>
-                    <td data-tooltip="Информация о логистике">${
-                      row["Логистика"] || ""
-                    }</td>
-                    <td class="name-cell">
-                        <div class="name-cell-wrapper">
-                            <input type="number" class="quantity-input" value="0" min="${
-                              row["Мин. Кол."] || 1
-                            }" step="${row["Мин. Кол."] || 1}"
-                                data-min-qty="${
-                                  row["Мин. Кол."] || 1
-                                }" data-max-qty="${
-          row["Наличие"] || 0
-        }" data-tooltip="Введите количество товара (Минимум: ${
-          row["Мин. Кол."] || 1
-        })">
-                            <img src="/images/svg/Icon/cart_ico.svg" alt="Cart Icon" class="cart-icon" data-tooltip="Добавить этот товар в корзину">
-                        </div>
-                    </td>
-                    <td class="sum-cell" data-tooltip="Сумма заказа">${
-                      row["Сумма"] || ""
-                    }</td>
-                `;
+          <td style="padding: 8px; border: 1px solid #ddd;">${index + 1}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${
+            row["Изображение"]
+              ? `<img src="${row["Изображение"]}" alt="image" class="product-image" 
+                   data-fullsrc="${row["Изображение"]}" data-tooltip="Просмотреть изображение товара"
+                   style="width: 50px; height: 50px; object-fit: cover; cursor: pointer; border-radius: 5px; transition: transform 0.3s ease;">`
+              : ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${row["Код"]}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Описание">${
+            row["Наименование"]
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Цена товара">${
+            row["Прайс"] || ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Входная цена">${
+            row["Вход. Цена"] || ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Процент отказа">${
+            row["Отказ %"] || ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Цена товара">${
+            row["Цена"] || ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Минимальное количество">${
+            row["Мин. Кол."] || 1
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;" data-tooltip="Наличие">${
+            row["Наличие"] || "0"
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Логистика">${
+            row["Логистика"] || ""
+          }</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">
+            <div style="display: inline-flex; align-items: center; gap: 10px;">
+              <input type="number" class="quantity-input" value="0" min="${
+                row["Мин. Кол."] || 1
+              }" step="${row["Мин. Кол."] || 1}"
+                data-min-qty="${row["Мин. Кол."] || 1}"
+                data-max-qty="${row["Наличие"] || 0}"
+                data-tooltip="Введите количество"
+                style="width: 120px; padding: 7px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; background-color: #f9f9f9; transition: border-color 0.2s, background-color 0.2s, text-align 0.2s; text-align: center;">
+              <img src="/images/svg/Icon/cart_ico.svg" alt="Cart Icon"
+                class="cart-icon" data-tooltip="Добавить этот товар в корзину"
+                style="width: 24px; height: 24px; border-radius: 5px; cursor: pointer; transition: transform 0.1s ease-in-out;">
+            </div>
+          </td>
+          <td style="padding: 8px; border: 1px solid #ddd;" data-tooltip="Сумма">${
+            row["Сумма"] || ""
+          }</td>
+        `;
         tbody.appendChild(tr);
       });
     }
 
-    updateTableRows(data); // Изначально заполняем строки таблицы
-
+    // Первоначальная отрисовка
+    updateTableRows(data);
     table.appendChild(tbody);
     productContainer.appendChild(table);
 
-    // Обработчик сортировки
+    // Обработчик сортировки по клику на заголовок
     thead.addEventListener("click", (event) => {
       const target = event.target.closest("th");
-
-      if (target && target.classList.contains("sortable")) {
-        const column = target.dataset.column;
-
-        // Определяем новый порядок сортировки
+      if (target && target.hasAttribute("data-column")) {
+        const column = target.getAttribute("data-column");
         const newOrder =
           currentSortColumn === column && currentSortOrder === "asc"
             ? "desc"
@@ -623,11 +968,9 @@ document.addEventListener("DOMContentLoaded", function () {
         currentSortColumn = column;
         currentSortOrder = newOrder;
 
-        // Сортируем данные
         const sortedData = [...data].sort((a, b) => {
           const valueA = a[column] || "";
           const valueB = b[column] || "";
-
           if (newOrder === "asc") {
             return valueA > valueB ? 1 : -1;
           } else {
@@ -635,35 +978,80 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
 
-        // Обновляем строки таблицы
         updateTableRows(sortedData);
 
-        // Обновляем заголовки
-        Array.from(thead.querySelectorAll(".sortable")).forEach((th) => {
-          const arrow = th.querySelector(".sort-arrow");
-          if (th.dataset.column === column) {
+        Array.from(thead.querySelectorAll("th")).forEach((th) => {
+          const arrow = th.querySelector("span");
+          if (th.getAttribute("data-column") === column) {
             arrow.textContent = newOrder === "asc" ? "▲" : "▼";
             arrow.style.color = "orange";
           } else {
             arrow.textContent = "";
+            arrow.style.color = "";
           }
         });
       }
     });
 
-    const popupImage = document.createElement("img");
-    popupImage.style.display = "none";
-    popupImage.style.position = "absolute";
-    popupImage.style.zindex = "1000";
-    popupImage.style.borderRadius = "10px";
+    // Всплывающее увеличенное изображение
+    const popupImage = root.createElement
+      ? root.createElement("img")
+      : document.createElement("img");
+    setStyles(popupImage, {
+      display: "none",
+      position: "absolute",
+      zIndex: "1000",
+      borderRadius: "15px",
+      width: "200px",
+      height: "200px",
+      border: "1px solid #ddd",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+    });
     popupImage.setAttribute("data-tooltip", "Увеличенное изображение товара");
-    document.body.appendChild(popupImage);
+    root.appendChild(popupImage);
 
+    // Обработчики для всплывающего изображения
+    tbody.addEventListener("mouseover", function (event) {
+      if (event.target.classList.contains("product-image")) {
+        const fullSrc = event.target.getAttribute("data-fullsrc");
+        popupImage.src = fullSrc;
+        popupImage.style.display = "block";
+      }
+    });
+
+    tbody.addEventListener("mousemove", function (event) {
+      if (popupImage.style.display === "block") {
+        const imageWidth = 200;
+        const imageHeight = 200;
+        const padding = 20;
+
+        let leftPosition = event.pageX + padding;
+        let topPosition = event.pageY + padding;
+
+        if (leftPosition + imageWidth > window.innerWidth + window.scrollX) {
+          leftPosition = event.pageX - imageWidth - padding;
+        }
+        if (topPosition + imageHeight > window.innerHeight + window.scrollY) {
+          topPosition = event.pageY - imageHeight - padding;
+        }
+
+        setStyles(popupImage, {
+          left: `${leftPosition}px`,
+          top: `${topPosition}px`,
+        });
+      }
+    });
+
+    tbody.addEventListener("mouseout", function (event) {
+      if (event.target.classList.contains("product-image")) {
+        popupImage.style.display = "none";
+      }
+    });
+
+    // Обработчики для инпутов количества
     const quantityInputs = tbody.querySelectorAll(".quantity-input");
-
-    quantityInputs.forEach(function (input) {
+    quantityInputs.forEach((input) => {
       validateAndCorrectInput(input, false);
-
       input.addEventListener("blur", function () {
         validateAndCorrectInput(this, true);
       });
@@ -671,18 +1059,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateAndCorrectInput(input, showPopup = true) {
       let value = parseInt(input.value, 10) || 0;
-      const minQty = parseInt(input.dataset.minQty, 10) || 1;
-      const maxQty = parseInt(input.dataset.maxQty, 10) || 0;
+      const minQty = parseInt(input.getAttribute("data-min-qty"), 10) || 1;
+      const maxQty = parseInt(input.getAttribute("data-max-qty"), 10) || 0;
 
       if (value < 0) {
         value = 0;
       }
 
+      // Округление до ближайшего шага (минимальной партии)
       value = Math.ceil(value / minQty) * minQty;
 
       if (value > maxQty) {
         value = maxQty;
-
         if (showPopup) {
           showWaitingListPopup(input);
         }
@@ -699,32 +1087,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateSum(input) {
       const row = input.closest("tr");
-      const priceText = row
-        .querySelector("td.price-cell")
-        .textContent.replace(",", ".");
+      const priceCell = row.querySelector(".price-cell");
+      if (!priceCell) return;
+      const priceText = priceCell.textContent.replace(",", ".");
       const price = parseFloat(priceText) || 0;
       const quantity = parseInt(input.value, 10) || 0;
-      const sumCell = row.querySelector("td.sum-cell");
-      sumCell.textContent = (price * quantity).toFixed(2);
+      const sumCell = row.querySelector(".sum-cell");
+      if (sumCell) sumCell.textContent = (price * quantity).toFixed(2);
     }
 
     function showWaitingListPopup(input) {
       const row = input.closest("tr");
-
       if (row.querySelector(".waiting-list-popup")) {
         return;
       }
 
-      const popup = document.createElement("div");
+      const popup = root.createElement
+        ? root.createElement("div")
+        : document.createElement("div");
       popup.classList.add("waiting-list-popup");
       popup.innerHTML = `
-                <p class="waiting-list-text" data-tooltip="Добавить товар в лист ожидания">Добавить в лист ожидания?</p>
-                <button class="close-popup" data-tooltip="Закрыть всплывающее окно">&times;</button>
-            `;
+        <p class="waiting-list-text" data-tooltip="Добавить товар в лист ожидания">
+          Добавить в лист ожидания?
+        </p>
+        <button class="close-popup" data-tooltip="Закрыть">&times;</button>
+      `;
 
-      popup.style.position = "absolute";
-      popup.style.zindex = "1000";
-      popup.style.left = "700px";
+      // Применение стилей inline для popup
+      setStyles(popup, {
+        position: "absolute",
+        zIndex: "1000",
+        left: "700px",
+        top: "0px",
+        backgroundColor: "#fff",
+        border: "1px solid #ccc",
+        padding: "10px",
+        borderRadius: "5px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+        width: "200px",
+        transition: "opacity 0.3s ease",
+        opacity: "1",
+      });
 
       row.appendChild(popup);
 
@@ -732,116 +1135,182 @@ document.addEventListener("DOMContentLoaded", function () {
       const table = row.closest("table");
       if (table) {
         const tableRect = table.getBoundingClientRect();
-        popup.style.top = rowRect.bottom - tableRect.top + "px";
+        popup.style.top = `${rowRect.bottom - tableRect.top}px`;
       } else {
         popup.style.top = `${rowRect.bottom}px`;
       }
 
-      popup.classList.add("animate-popup");
+      const closeButton = popup.querySelector(".close-popup");
+      setStyles(closeButton, {
+        cursor: "pointer",
+        background: "none",
+        border: "none",
+        fontSize: "1.2em",
+        lineHeight: "1em",
+        color: "#333",
+        position: "absolute",
+        top: "5px",
+        right: "10px",
+      });
 
-      popup
-        .querySelector(".close-popup")
-        .addEventListener("click", function () {
+      closeButton.addEventListener("click", function () {
+        popup.remove();
+      });
+
+      const waitingListText = popup.querySelector(".waiting-list-text");
+      setStyles(waitingListText, {
+        cursor: "pointer",
+      });
+
+      function handleClick() {
+        popup.style.height = "auto";
+        popup.innerHTML = `
+          <div class="popup-form-content">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label>Количество:</label>
+              <input type="number" class="waiting-quantity" placeholder="Сколько?"
+                data-tooltip="Введите количество для листа ожидания"
+                style="width: 100%; padding: 5px; margin-top: 5px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label>Комментарий:</label>
+              <textarea class="waiting-comment" placeholder="Например: Прошу связаться со мной..."
+                data-tooltip="Добавьте комментарий для листа ожидания"
+                style="width: 100%; padding: 5px; margin-top: 5px;"></textarea>
+            </div>
+            <button class="add-to-waiting-list" data-tooltip="Добавить товар в лист ожидания"
+              style="padding: 5px 10px; background-color: #638a8e; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+              Добавить
+            </button>
+          </div>
+        `;
+
+        const addToWaitingListButton = popup.querySelector(
+          ".add-to-waiting-list"
+        );
+        addToWaitingListButton.addEventListener("click", () => {
+          // Здесь логика "Добавлено в лист ожидания"
+          console.log("Добавлено в лист ожидания");
           popup.remove();
         });
 
-      const waitingListText = popup.querySelector(".waiting-list-text");
-      waitingListText.style.cursor = "pointer";
-
-      waitingListText.addEventListener("click", function handleClick() {
-        popup.classList.add("expand-popup");
-
-        const formContent = document.createElement("div");
-        formContent.classList.add("popup-form-content");
-
-        formContent.innerHTML = `
-                    <div class="form-group">
-                        <label>Количество:</label>
-                        <input type="number" class="waiting-quantity" placeholder="Сколько?" data-tooltip="Введите количество для листа ожидания" />
-                    </div>
-                    <div class="form-group">
-                        <label>Комментарий:</label>
-                        <textarea class="waiting-comment" placeholder="Например: Прошу связаться со мной по номеру +79..., чтобы уточнить детали" data-tooltip="Добавьте комментарий к листу ожидания"></textarea>
-                    </div>
-                    <button class="add-to-waiting-list" data-tooltip="Добавить товар в лист ожидания">Добавить</button>
-                `;
-
-        popup.appendChild(formContent);
-
-        const inputs = formContent.querySelectorAll("input, textarea");
-        inputs.forEach(function (input) {
-          input.style.opacity = "0.7";
-          input.addEventListener("focus", function () {
-            this.style.opacity = "1";
-          });
-          input.addEventListener("blur", function () {
-            if (!this.value) {
-              this.style.opacity = "0.7";
-            }
-          });
-        });
-
-        popup
-          .querySelector(".add-to-waiting-list")
-          .addEventListener("click", function () {
-            // Логика добавления в лист ожидания
-
-            popup.remove();
-          });
-
         waitingListText.removeEventListener("click", handleClick);
-      });
+      }
+
+      waitingListText.addEventListener("click", handleClick);
     }
 
-    tbody.addEventListener("mouseover", function (event) {
-      const target = event.target;
-      if (target.classList.contains("product-image")) {
-        const fullSrc = target.getAttribute("data-fullsrc");
-        popupImage.src = fullSrc;
-        popupImage.style.display = "block";
-      }
-    });
-
-    tbody.addEventListener("mousemove", function (event) {
-      if (popupImage.style.display === "block") {
-        const imageWidth = 300;
-        const imageHeight = 300;
-        const padding = 20;
-
-        let leftPosition = event.pageX + padding;
-        let topPosition = event.pageY + padding;
-
-        if (leftPosition + imageWidth > window.innerWidth + window.scrollX) {
-          leftPosition = event.pageX - imageWidth - padding;
+    // Глобальный обработчик для кликов по иконке корзины
+    document.body.addEventListener("click", function (event) {
+      if (event.target.classList.contains("cart-icon")) {
+        const icon = event.target;
+        if (icon.src.includes("/images/svg/Icon/cart_ico.svg")) {
+          icon.src = "/images/svg/Icon/carted_ico.svg";
+        } else {
+          icon.src = "/images/svg/Icon/cart_ico.svg";
         }
-
-        if (topPosition + imageHeight > window.innerHeight + window.scrollY) {
-          topPosition = event.pageY - imageHeight - padding;
-        }
-
-        popupImage.style.left = leftPosition + "px";
-        popupImage.style.top = topPosition + "px";
-        popupImage.style.width = imageWidth + "px";
-        popupImage.style.height = imageHeight + "px";
-      }
-    });
-
-    tbody.addEventListener("mouseout", function (event) {
-      if (event.target.classList.contains("product-image")) {
-        popupImage.style.display = "none";
       }
     });
   }
 
-  // Обработчик для иконок корзины
-  document.body.addEventListener("click", function (event) {
-    if (event.target.classList.contains("cart-icon")) {
-      const icon = event.target;
-      if (icon.src.includes("/images/svg/Icon/cart_ico.svg")) {
-        icon.src = "/images/svg/Icon/carted_ico.svg";
-      } else {
-        icon.src = "/images/svg/Icon/cart_ico.svg";
+  // Функция для очистки значений "0"
+  function cleanQuantityInputs() {
+    // ищем внутри root
+    const inputs = root.querySelectorAll(".product-quantity-custom");
+    inputs.forEach((input) => {
+      if (input.value === "0") {
+        input.value = "";
       }
-    }
-  });
-});
+      input.addEventListener("blur", function () {
+        if (this.value === "0") {
+          this.value = "";
+        }
+      });
+    });
+  }
+
+  // Загрузка данных из JSON
+  fetch("/data/data.json")
+    .then((response) => response.json())
+    .then((data) => {
+      dataCache = data.map((item) => {
+        const retailPrice =
+          parseFloat(item["Розничная цена"] || item["Цена"]) || 0;
+        // Увеличиваем на 25%
+        item["Розничная цена"] = (retailPrice * 1.25).toFixed(2);
+        return item;
+      });
+
+      // Определяем стартовый вид (по умолчанию - табличный)
+      const currentView = localStorage.getItem("currentView") || "table-view";
+      // Здесь оставляем именно document.body,
+      // т.к. хотим менять классы на весь документ
+      document.body.classList.add(currentView);
+
+      if (currentView === "card-view") {
+        renderCardView(dataCache);
+      } else {
+        renderTableView(dataCache);
+      }
+
+      cleanQuantityInputs(); // Очистка значений "0" при загрузке
+
+      const toggleButton = root.getElementById("toggleViewButton");
+      if (!toggleButton) {
+        console.warn("Кнопка переключения вида #toggleViewButton не найдена");
+        return;
+      }
+
+      const toggleButtonImage = toggleButton.querySelector(
+        ".toggle-button-image"
+      );
+      if (toggleButtonImage) {
+        toggleButtonImage.src =
+          currentView === "card-view"
+            ? "/images/svg/Icon/table.svg"
+            : "/images/svg/Icon/card.svg";
+      }
+
+      toggleButton.addEventListener("click", function () {
+        const productContainer = root.getElementById("productContainer");
+        if (!productContainer) {
+          console.warn("#productContainer не найден");
+          return;
+        }
+        productContainer.innerHTML = ""; // Очищаем контейнер
+
+        if (document.body.classList.contains("table-view")) {
+          // Переключаем на карточный вид
+          document.body.classList.remove("table-view");
+          document.body.classList.add("card-view");
+
+          renderCardView(dataCache);
+          if (toggleButtonImage)
+            toggleButtonImage.src = "/images/svg/Icon/table.svg";
+          localStorage.setItem("currentView", "card-view");
+        } else if (document.body.classList.contains("card-view")) {
+          // Переключаем на табличный вид
+          document.body.classList.remove("card-view");
+          document.body.classList.add("table-view");
+
+          renderTableView(dataCache);
+          if (toggleButtonImage)
+            toggleButtonImage.src = "/images/svg/Icon/card.svg";
+          localStorage.setItem("currentView", "table-view");
+        }
+
+        // Добавляем эффект анимации
+        if (toggleButtonImage) {
+          toggleButtonImage.classList.add("animate-toggle");
+          setTimeout(() => {
+            toggleButtonImage.classList.remove("animate-toggle");
+          }, 200);
+        }
+
+        cleanQuantityInputs(); // Повторно чистим "0"
+      });
+    })
+    .catch((error) => {
+      console.error(`Ошибка при загрузке данных: ${error}`);
+    });
+};

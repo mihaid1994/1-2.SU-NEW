@@ -1,265 +1,116 @@
-// /js/globalcomm.js
-
-/**
- * GComm - Global Communication Module
- *
- * Этот модуль обеспечивает обмен сообщениями между различными страницами вашего проекта.
- * Используется BroadcastChannel API для передачи сообщений между страницами одного происхождения.
- * Все компоненты системы имеют уникальные имена с префиксом "GComm_" для предотвращения конфликтов.
- */
-
 (function (global) {
-  // Уникальный префикс для всех компонентов системы
-  const PREFIX = "GComm";
-
-  /**
-   * GComm_PageRegistry
-   *
-   * Глобальный реестр страниц с уникальными идентификаторами и путями.
-   * Содержит сопоставление путей страниц с уникальными идентификаторами.
-   * Убедитесь, что все ваши страницы включены в этот объект с правильными путями и уникальными идентификаторами.
-   */
-  const GComm_PageRegistry = {
-    "/index.html": "GComm_parent", // Добавьте вашу родительскую страницу
-    "/test.html": "GComm_testPage",
-    "/pages/cabinet_postavshika.html": "GComm_cabinetPostavshika",
-    "/pages/categories.html": "GComm_categories",
-    "/pages/chat.html": "GComm_chat",
-    "/pages/delivery.html": "GComm_delivery",
-    "/pages/index.html": "GComm_home",
-    "/pages/info.html": "GComm_info",
-    "/pages/resapi.html": "GComm_resapi",
-    "/pages/returns.html": "GComm_returns",
-    "/pages/search_cat.html": "GComm_searchCat",
-    "/pages/zajavka_open.html": "GComm_zajavkaOpen",
-    "/pages/zajavki.html": "GComm_zajavki",
-    // Добавьте новые страницы здесь
-  };
-
-  /**
-   * GComm_MessageBus
-   *
-   * Класс управления сообщениями.
-   * Управляет отправкой и получением сообщений через BroadcastChannel.
-   */
-  class GComm_MessageBus {
-    /**
-     * Конструктор класса GComm_MessageBus.
-     * Инициализирует BroadcastChannel и устанавливает обработчик входящих сообщений.
-     * @param {string} channelName - Имя канала для BroadcastChannel. По умолчанию "GComm_global_message_bus".
-     */
-    constructor(channelName = "GComm_global_message_bus") {
-      this.channel = new BroadcastChannel(channelName);
-      this.callbacks = {}; // Объект для хранения подписок на команды
-
-      // Устанавливаем обработчик входящих сообщений
-      this.channel.onmessage = this.handleMessage.bind(this);
-    }
-
-    /**
-     * getCurrentPageId
-     *
-     * Получение уникального идентификатора текущей страницы на основе пути URL.
-     * @returns {string} - Уникальный идентификатор страницы.
-     */
-    getCurrentPageId() {
-      const path = window.location.pathname;
-      return GComm_PageRegistry[path] || "GComm_unknownPage";
-    }
-
-    /**
-     * GComm_sendCommand
-     *
-     * Отправка команды конкретной странице по её идентификатору.
-     * @param {string} targetPageId - Уникальный идентификатор целевой страницы.
-     * @param {string} command - Название команды.
-     * @param {object} payload - Полезная нагрузка команды (опционально).
-     */
-    GComm_sendCommand(targetPageId, command, payload = {}) {
-      if (!targetPageId || !command) {
-        console.error(
-          `[${PREFIX}] Target Page ID и Command обязательны для отправки команды.`
-        );
-        return;
-      }
-
-      this.channel.postMessage({
-        system: false, // Указывает, что это пользовательское сообщение
-        target: targetPageId, // Целевая страница или "GComm_broadcast" для широковещательной отправки
-        command: command, // Название команды
-        payload: payload, // Полезная нагрузка
-        timestamp: new Date().toISOString(), // Временная метка
-      });
-
-      console.log(
-        `[${PREFIX}] Команда "${command}" отправлена на "${targetPageId}".`
-      );
-    }
-
-    /**
-     * GComm_broadcastCommand
-     *
-     * Широковещательная отправка команды всем страницам.
-     * @param {string} command - Название команды.
-     * @param {object} payload - Полезная нагрузка команды (опционально).
-     */
-    GComm_broadcastCommand(command, payload = {}) {
-      if (!command) {
-        console.error(
-          `[${PREFIX}] Command обязателен для широковещательной отправки.`
-        );
-        return;
-      }
-
-      this.channel.postMessage({
-        system: false,
-        target: "GComm_broadcast", // Специальное значение для широковещательной отправки
-        command: command,
-        payload: payload,
-        timestamp: new Date().toISOString(),
-      });
-
-      console.log(
-        `[${PREFIX}] Команда "${command}" отправлена всем страницам.`
-      );
-    }
-
-    /**
-     * GComm_on
-     *
-     * Подписка на определённые команды.
-     * @param {string} command - Название команды для подписки.
-     * @param {function} callback - Функция обратного вызова при получении команды.
-     */
-    GComm_on(command, callback) {
-      if (!this.callbacks[command]) {
-        this.callbacks[command] = [];
-      }
-      this.callbacks[command].push(callback);
-    }
-
-    /**
-     * handleMessage
-     *
-     * Обработка входящих сообщений.
-     * Вызывает соответствующие колбэки для полученных команд.
-     * @param {MessageEvent} event - Событие сообщения.
-     */
-    handleMessage(event) {
-      const message = event.data;
-
-      // Игнорировать системные сообщения (если они будут добавлены в будущем)
-      if (message.system) return;
-
-      const { target, command, payload } = message;
-
-      const currentPageId = this.getCurrentPageId();
-
-      // Проверка, адресовано ли сообщение текущей странице или это широковещательное сообщение
-      if (target !== "GComm_broadcast" && target !== currentPageId) {
-        return; // Сообщение не предназначено для этой страницы
-      }
-
-      console.log(
-        `[${PREFIX}] Получена команда "${command}" от "${
-          payload.sender || "unknown"
-        }".`
-      );
-
-      // Выполнение всех зарегистрированных колбэков для команды
-      if (this.callbacks[command]) {
-        this.callbacks[command].forEach((cb) => cb(payload, message));
-      }
-    }
-
-    /**
-     * GComm_getRegisteredPages
-     *
-     * Получение списка зарегистрированных страниц.
-     * В текущей реализации возвращает статический реестр, но может быть расширено для динамической регистрации.
-     * @returns {object} - Объект с зарегистрированными страницами.
-     */
-    GComm_getRegisteredPages() {
-      return GComm_PageRegistry;
-    }
-  }
-
   /**
    * GComm_TabManager
    *
-   * Класс управления вкладками на родительской странице.
-   * Включает функции создания, активации и закрытия вкладок.
-   * Также обрабатывает команды открытия вкладок, полученные от дочерних страниц.
+   * Класс управления вкладками. Вместо iframe используем fetch для загрузки HTML
+   * и динамической вставки. Используется Shadow DOM для изоляции стилей и скриптов.
+   * Реализована динамическая регулировка высоты страницы под содержимое.
    */
   class GComm_TabManager {
     constructor() {
-      this.tabs = document.querySelector(".tabs"); // Контейнер для вкладок
-      this.tabContent = document.querySelector(".tab-content"); // Контейнер для содержимого вкладок
+      this.specLoad = {}; // Объект для хранения данных specload.json
 
-      // Создание общего контейнера для кнопок
-      this.buttonsContainer = document.createElement("div");
-      this.buttonsContainer.classList.add("tabs-buttons"); // Добавляем CSS-класс
+      // Проверяем состояние загрузки документа
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          this.init();
+        });
+      } else {
+        this.init();
+      }
+    }
 
-      // Создание кнопки добавления корзины
-      this.createCartButton = document.createElement("button");
-      this.createCartButton.id = "create-cart-button";
-      this.createCartButton.classList.add("create-cart-button");
-      this.createCartButton.setAttribute(
-        "data-tooltip",
-        "Создать новую корзину"
-      );
-      this.createCartButton.innerHTML = `
-        <i class="ri-add-fill" style="margin-right: 5px; pointer-events: none;"></i>
-        <i class="ri-shopping-cart-2-line" style="pointer-events: none;"></i>
-      `;
+    async init() {
+      // Загружаем specload.json
+      try {
+        const response = await fetch("/data/specload.json");
+        if (!response.ok) {
+          throw new Error(
+            `Не удалось загрузить specload.json: ${response.statusText}`
+          );
+        }
+        this.specLoad = await response.json();
+        console.log("specload.json загружен успешно.");
+      } catch (error) {
+        console.error("Ошибка при загрузке specload.json:", error);
+      }
 
-      // Создание кнопки "Заказы"
-      this.createOrderButton = document.createElement("button");
-      this.createOrderButton.id = "create-order-button";
-      this.createOrderButton.classList.add("create-order-button");
-      this.createOrderButton.setAttribute(
-        "data-tooltip",
-        "Открыть журнал заказов"
-      );
-      this.createOrderButton.innerHTML = `
-        <i class="ri-list-check-3" style="margin-right: 5px; pointer-events: none;"></i>
-      `;
+      this.tabs = document.querySelector(".tabs");
+      this.tabContent = document.querySelector(".tab-content");
 
-      // Создание кнопки "Чат"
-      this.createChatButton = document.createElement("button");
-      this.createChatButton.id = "create-chat-button";
-      this.createChatButton.classList.add("create-chat-button");
-      this.createChatButton.setAttribute("data-tooltip", "Написать в чат");
-      this.createChatButton.innerHTML = `
-        <i class="ri-chat-check-fill" style="margin-right: 5px; pointer-events: none;"></i>
-      `;
+      if (!this.tabs) {
+        console.error("Элемент с классом .tabs не найден на странице.");
+        return;
+      }
 
-      // Добавляем кнопки в общий контейнер
-      this.buttonsContainer.appendChild(this.createChatButton);
-      this.buttonsContainer.appendChild(this.createOrderButton);
-      this.buttonsContainer.appendChild(this.createCartButton);
+      // Проверяем, существует ли уже контейнер для специальных кнопок
+      this.buttonsContainer = this.tabs.querySelector(".tabs-buttons");
+      if (!this.buttonsContainer) {
+        // Если не существует, создаём его
+        this.buttonsContainer = document.createElement("div");
+        this.buttonsContainer.classList.add("tabs-buttons");
 
-      // Добавляем общий контейнер кнопок в основной контейнер вкладок
-      this.tabs.appendChild(this.buttonsContainer);
+        // Кнопка «Создать корзину»
+        this.createCartButton = document.createElement("button");
+        this.createCartButton.id = "create-cart-button";
+        this.createCartButton.classList.add("create-cart-button");
+        this.createCartButton.setAttribute(
+          "data-tooltip",
+          "Создать новую корзину"
+        );
+        this.createCartButton.innerHTML = `
+          <i class="ri-add-fill" style="margin-right: 5px; pointer-events: none;"></i>
+          <i class="ri-shopping-cart-2-line" style="pointer-events: none;"></i>
+        `;
 
-      this.activeCartNames = {}; // Справочник активных корзин: { tabId: 'Корзина 1' }
+        // Кнопка «Заказы»
+        this.createOrderButton = document.createElement("button");
+        this.createOrderButton.id = "create-order-button";
+        this.createOrderButton.classList.add("create-order-button");
+        this.createOrderButton.setAttribute(
+          "data-tooltip",
+          "Открыть журнал заказов"
+        );
+        this.createOrderButton.innerHTML = `
+          <i class="ri-list-check-3" style="margin-right: 5px; pointer-events: none;"></i>
+        `;
 
+        // Кнопка «Чат»
+        this.createChatButton = document.createElement("button");
+        this.createChatButton.id = "create-chat-button";
+        this.createChatButton.classList.add("create-chat-button");
+        this.createChatButton.setAttribute("data-tooltip", "Написать в чат");
+        this.createChatButton.innerHTML = `
+          <i class="ri-chat-check-fill" style="margin-right: 5px; pointer-events: none;"></i>
+        `;
+
+        // Добавляем кнопки в общий контейнер
+        this.buttonsContainer.appendChild(this.createChatButton);
+        this.buttonsContainer.appendChild(this.createOrderButton);
+        this.buttonsContainer.appendChild(this.createCartButton);
+
+        // Добавляем общий контейнер кнопок в основной контейнер вкладок
+        this.tabs.appendChild(this.buttonsContainer);
+      } else {
+        // Если контейнер уже существует, находим кнопки внутри него
+        this.createCartButton = this.buttonsContainer.querySelector(
+          "#create-cart-button"
+        );
+        this.createOrderButton = this.buttonsContainer.querySelector(
+          "#create-order-button"
+        );
+        this.createChatButton = this.buttonsContainer.querySelector(
+          "#create-chat-button"
+        );
+      }
+
+      // Отслеживаем корзины
+      this.activeCartNames = {};
       this.tabCounter = 0;
       this.cartNumbers = new Set();
       this.tabNames = new Set();
 
-      // Глобальные переменные для корректировки высоты iframe
-      this.isAdjustingHeight = false;
-      this.MIN_HEIGHT_DIFF = 10; // Минимальная разница в пикселях
-
-      // Получаем список вкладок, при активации которых отображается кнопка создания корзины
-      this.cartButtonTriggerTabs = new Set(
-        Array.from(
-          document.querySelectorAll("#cart-button-trigger-tabs li")
-        ).map((li) => li.textContent.trim())
-      );
-
-      // Инициализация Set с именами существующих вкладок
+      // Инициализация табов (если есть изначальные)
       Array.from(this.tabs.children).forEach((child) => {
         if (child !== this.buttonsContainer) {
           const tab = child.querySelector(".tab");
@@ -275,144 +126,199 @@
         }
       });
 
-      // Устанавливаем обработчики событий для кнопки создания корзины
-      this.createCartButton.addEventListener("click", () => {
-        const url = "/pages/delivery.html";
-        this.createTab("Корзина", url, true);
-      });
+      // Флаг для отслеживания процесса создания корзины
+      this.isCreatingCart = false;
 
-      // Устанавливаем обработчики событий для кнопки Чата
-      this.createChatButton.addEventListener("click", () => {
-        const url = "/pages/chat.html";
-        this.createTab("Чат", url, false); // Передаем false для isCart
-      });
+      // Обработчики кнопок
+      this.createCartButton.addEventListener("click", async () => {
+        if (this.isCreatingCart) {
+          console.warn("Создание корзины уже в процессе.");
+          return; // Прекращаем выполнение, если уже создается корзина
+        }
 
-      // Устанавливаем обработчики событий для кнопки "Заказы"
-      this.createOrderButton.addEventListener("click", () => {
-        const url = "/pages/zajavki.html"; // URL страницы заказов
-        this.openPageAsTab("Заказы", url);
-      });
+        this.isCreatingCart = true; // Устанавливаем флаг
+        this.createCartButton.disabled = true; // Отключаем кнопку
 
-      // Обработчики меню для открытия страниц в вкладках
-      const menuLinks = document.querySelectorAll(".menu a, .secondary-button");
-      menuLinks.forEach((link) => {
-        if (link) {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const title = link.textContent.trim();
-            const url = link.getAttribute("data-page");
-            if (url) {
-              this.openPageAsTab(title, url);
-            }
-          });
+        try {
+          const url = "/pages/delivery.html";
+          // Всегда создаём новую корзину с уникальным именем
+          await this.createTab("Корзина", url, true); // Ждем завершения создания вкладки
+        } catch (error) {
+          console.error("Ошибка при создании корзины:", error);
+        } finally {
+          this.isCreatingCart = false; // Сбрасываем флаг после завершения
+          this.createCartButton.disabled = false; // Включаем кнопку обратно
         }
       });
 
-      // Обработчик кнопки "Заказы"
+      this.createChatButton.addEventListener("click", async () => {
+        const url = "/pages/chat.html";
+        await this.openPageAsTab("Чат", url);
+      });
+
+      this.createOrderButton.addEventListener("click", async () => {
+        const url = "/pages/zajavki.html";
+        await this.openPageAsTab("Заказы", url);
+      });
+
+      // Обработка меню для открытия вкладок
+      const menuLinks = document.querySelectorAll(".menu a, .secondary-button");
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const title = link.textContent.trim();
+          const url = link.getAttribute("data-page");
+          if (url) {
+            await this.openPageAsTab(title, url);
+          }
+        });
+      });
+
       const ordersButton = document.querySelector(".orders-button");
       if (ordersButton) {
-        ordersButton.addEventListener("click", (e) => {
+        ordersButton.addEventListener("click", async (e) => {
           e.preventDefault();
           const title = "Заказы";
           const url = "/pages/zajavki.html";
-          this.openPageAsTab(title, url);
+          await this.openPageAsTab(title, url);
         });
       }
 
-      // Обработчик кнопки "Личный кабинет"
       const cabinetButton = document.querySelector(".Cabinet-button");
       if (cabinetButton) {
-        cabinetButton.addEventListener("click", (e) => {
+        cabinetButton.addEventListener("click", async (e) => {
           e.preventDefault();
           const title = "Личный кабинет";
           const url = "/pages/cabinet_postavshika.html";
-          this.openPageAsTab(title, url);
+          await this.openPageAsTab(title, url);
         });
       }
 
-      // Обработчик кнопки "Чат"
       const chatButton = document.querySelector(".chat-button");
       if (chatButton) {
-        chatButton.addEventListener("click", (e) => {
+        chatButton.addEventListener("click", async (e) => {
           e.preventDefault();
           const title = "Чат";
           const url = "/pages/chat.html";
-          this.openPageAsTab(title, url);
+          await this.openPageAsTab(title, url);
         });
       }
 
-      // Обработчик логотипа (например, для главной страницы)
       const logoButton = document.querySelector(".logo-button");
       if (logoButton) {
-        logoButton.addEventListener("click", (e) => {
+        logoButton.addEventListener("click", async (e) => {
           e.preventDefault();
           const title = "Главная";
           const url = "/pages/index.html";
-          this.openPageAsTab(title, url);
+          await this.openPageAsTab(title, url);
         });
       }
 
-      // Обработчик кнопки поиска
-      const searchButton = document.querySelector(".search-button");
-      if (searchButton) {
-        searchButton.addEventListener("click", (e) => {
-          e.preventDefault();
-          const query = document.querySelector(".search-input").value.trim();
-          const title = query ? `Результаты: ${query}` : "Поиск";
-          const url = `/pages/search_cat.html?q=${encodeURIComponent(query)}`;
-          this.openPageAsTab(title, url);
-        });
-      }
+      // Добавление обработчика для кнопки поиска на основной странице
+      this.initializeMainSearchHandler();
 
-      // Инициализация с открытой главной страницей
+      // Изначально открываем «Главная»
       this.openPageAsTab("Главная", "/pages/index.html");
 
-      // Первоначальная проверка видимости кнопки создания корзины
       this.updateCreateCartButtonVisibility();
 
-      // Обработчик изменения размера окна для корректировки высоты iframe "Чат", "Личный кабинет" и других iframes
+      // Обработчик события resize для динамической регулировки высоты страницы
       window.addEventListener("resize", () => {
-        document
-          .querySelectorAll(
-            'iframe[data-is-chat="true"], iframe[data-is-cabinet="true"]'
-          )
-          .forEach((iframe) => {
-            if (iframe.dataset.isChat === "true") {
-              this.setChatIframeHeight(iframe);
-            }
-            if (iframe.dataset.isCabinet === "true") {
-              this.setCabinetIframeHeight(iframe);
-            }
-          });
-
-        // Дополнительно корректируем высоту всех других iframe
-        document
-          .querySelectorAll(
-            'iframe:not([data-is-chat="true"]):not([data-is-cabinet="true"])'
-          )
-          .forEach((iframe) => {
-            this.adjustIframeHeight(iframe);
-          });
+        this.updatePageHeight();
       });
 
-      // Подписка на команды открытия вкладок от дочерних страниц
-      global.GComm_MessageBus.GComm_on("GComm_openTab", (payload) => {
-        const { title, url } = payload;
-        if (title && url) {
-          this.openPageAsTab(title, url);
-        } else {
-          console.error(
-            `[${PREFIX}] Некорректные данные для команды "GComm_openTab":`,
-            payload
-          );
+      // Добавляем обработчик кликов в основной документ
+      this.initializeMainDocumentLinkHandler();
+    }
+
+    /**
+     * Инициализирует обработчик для кликов в основном документе.
+     */
+    initializeMainDocumentLinkHandler() {
+      document.body.addEventListener("click", async (e) => {
+        const el = e.target.closest('[data-open-tab="true"]');
+        if (el) {
+          e.preventDefault();
+          const title =
+            el.getAttribute("data-tab-title") || el.textContent.trim();
+          const url =
+            el.getAttribute("data-tab-url") || el.getAttribute("href");
+          if (url) {
+            await this.openPageAsTab(title, url);
+          }
         }
       });
     }
 
     /**
+     * Инициализирует обработчик для кликов внутри Shadow Root.
+     * @param {ShadowRoot} shadowRoot
+     */
+    initializeShadowLinkHandler(shadowRoot) {
+      shadowRoot.addEventListener("click", async (e) => {
+        const el = e.target.closest('[data-open-tab="true"]');
+        if (el) {
+          e.preventDefault();
+          const title =
+            el.getAttribute("data-tab-title") || el.textContent.trim();
+          const url =
+            el.getAttribute("data-tab-url") || el.getAttribute("href");
+          if (url) {
+            await this.openPageAsTab(title, url);
+          }
+        }
+      });
+    }
+
+    /**
+     * Инициализирует обработчик для кнопки поиска на основной странице.
+     */
+    initializeMainSearchHandler() {
+      // Используем ID для уникальности
+      const searchButton = document.getElementById("searchButton");
+      const searchInput = document.getElementById("searchInput");
+
+      if (searchButton && searchInput) {
+        console.log("Search button and input found."); // Для отладки
+
+        searchButton.addEventListener("click", async (e) => {
+          e.preventDefault();
+          console.log("Кнопка поиска на основной странице нажата.");
+
+          const query = searchInput.value.trim();
+          let title, contentURL;
+
+          if (query === "") {
+            // console.warn("Поиск: пустой запрос"); // Удаляем предупреждение
+            title = "Поиск";
+            contentURL = "/pages/search_cat.html";
+          } else {
+            title = `Результаты: ${query}`;
+            contentURL = "/pages/search_cat.html";
+            // Передаём параметр поиска через глобальную переменную
+            window.currentSearchQuery = query;
+          }
+
+          console.log(
+            `Основной поиск: title="${title}", contentURL="${contentURL}"`
+          );
+
+          // Открываем вкладку с результатами поиска
+          await this.openPageAsTab(title, contentURL);
+        });
+      } else {
+        if (!searchButton) {
+          console.error("Основная кнопка поиска (#searchButton) не найдена.");
+        }
+        if (!searchInput) {
+          console.error("Поле ввода поиска (#searchInput) не найдено.");
+        }
+      }
+    }
+
+    /**
      * notifyCartUpdate
-     *
-     * Уведомление об изменении данных корзин.
+     * Уведомляем, что изменились данные по корзинам.
      */
     notifyCartUpdate() {
       const event = new CustomEvent("cartUpdate", {
@@ -423,9 +329,7 @@
 
     /**
      * findNextCartName
-     *
-     * Функция для поиска следующего доступного имени корзины.
-     * @returns {string} - Название следующей корзины.
+     * Подбираем уникальное имя "Корзина X".
      */
     findNextCartName() {
       let index = 1;
@@ -437,36 +341,35 @@
 
     /**
      * createTab
+     * Создаём вкладку, загружаем HTML-фрагмент вместо iframe,
+     * вставляем содержимое в Shadow DOM для изоляции стилей и скриптов.
      *
-     * Функция для создания вкладки.
-     * @param {string} title - Заголовок вкладки.
-     * @param {string} contentURL - URL содержимого вкладки.
-     * @param {boolean} isCart - Флаг, указывающий, является ли вкладка корзиной.
-     * @returns {string} - ID созданной вкладки.
+     * @param {string} title
+     * @param {string} contentURL
+     * @param {boolean} isCart
+     * @returns {string} tabId
      */
-    createTab(title, contentURL, isCart = false) {
-      // Проверка на существующую вкладку (только для не-корзин)
-      if (!isCart) {
+    async createTab(title, contentURL, isCart = false) {
+      // Для корзин всегда создаём новую вкладку с уникальным названием
+      if (isCart) {
+        title = this.findNextCartName();
+        this.cartNumbers.add(parseInt(title.split(" ")[1]));
+      } else {
+        // Проверка: если вкладка не корзина и уже существует, активируем её
         const existingTab = Array.from(this.tabs.children).find(
           (child) =>
             child !== this.buttonsContainer && child.dataset.name === title
         );
         if (existingTab) {
           this.activateTab(existingTab.dataset.tab);
-          return existingTab.dataset.tab; // Возвращаем ID существующей вкладки
+          return existingTab.dataset.tab;
         }
-      }
-
-      // Для корзин ищем следующий доступный номер
-      if (isCart) {
-        title = this.findNextCartName();
-        this.cartNumbers.add(parseInt(title.split(" ")[1]));
       }
 
       this.tabCounter++;
       const tabId = `tab-${this.tabCounter}`;
 
-      // Создание элемента вкладки
+      // Заголовок вкладки
       const tab = document.createElement("div");
       tab.classList.add("tab");
       tab.setAttribute("data-tab", tabId);
@@ -475,359 +378,362 @@
         <span class="tab-title">${title}</span>
         <button class="close-tab" title="Закрыть вкладку">&times;</button>
       `;
-      this.tabs.insertBefore(tab, this.buttonsContainer); // Вставляем перед контейнером кнопок
+      this.tabs.insertBefore(tab, this.buttonsContainer);
       this.tabNames.add(title);
 
-      // Добавляем корзину в справочник активных корзин
       if (isCart) {
         this.activeCartNames[tabId] = title;
-        this.notifyCartUpdate(); // Уведомляем об изменении
+        this.notifyCartUpdate();
       }
 
-      // Добавление редактирования названия для вкладок-корзин
+      // Редактирование названия для корзин
       const titleElement = tab.querySelector(".tab-title");
       if (isCart) {
         titleElement.setAttribute("contenteditable", "true");
         titleElement.addEventListener("blur", () => {
           const newName = titleElement.textContent.trim();
           if (newName) {
-            tab.dataset.name = newName; // Обновляем имя вкладки
-            this.activeCartNames[tabId] = newName; // Обновляем справочник
+            tab.dataset.name = newName;
+            this.activeCartNames[tabId] = newName;
           } else {
-            titleElement.textContent = this.activeCartNames[tabId]; // Восстанавливаем старое имя, если новое пустое
+            titleElement.textContent = this.activeCartNames[tabId];
           }
-          this.notifyCartUpdate(); // Уведомляем об изменении
+          this.notifyCartUpdate();
+          this.updatePageHeight();
         });
       }
 
-      // Создание элемента контента с iframe
-      const content = document.createElement("div");
-      content.classList.add("content");
-      content.setAttribute("data-content", tabId);
-      const iframe = document.createElement("iframe");
-      iframe.src = contentURL;
-      iframe.setAttribute("frameborder", "0");
+      // Создаём контейнер содержимого
+      const contentDiv = document.createElement("div");
+      contentDiv.classList.add("content");
+      contentDiv.setAttribute("data-content", tabId);
+      contentDiv.style.display = "none";
 
-      // Установка стилей для iframe
-      iframe.style.width = "100%";
-      iframe.style.border = "none";
-      iframe.style.overflow = "hidden";
-      iframe.style.display = "block";
-      iframe.style.height = "0px";
+      // Создаём Shadow Root для изоляции
+      const shadowRoot = contentDiv.attachShadow({ mode: "open" });
 
-      // Проверка, является ли вкладка "Чат" или "Личный кабинет"
-      if (title === "Чат" || contentURL.includes("/pages/chat.html")) {
-        iframe.setAttribute("data-is-chat", "true");
-      }
-      if (
-        title === "Личный кабинет" ||
-        contentURL.includes("/pages/cabinet_postavshika.html")
-      ) {
-        iframe.setAttribute("data-is-cabinet", "true");
-      }
+      this.tabContent.appendChild(contentDiv);
 
-      content.appendChild(iframe);
-      this.tabContent.appendChild(content);
-
-      // Активация новой вкладки
-      this.activateTab(tabId);
-      this.updateTabsVisibility(); // Обновляем видимость вкладок
-      this.updateCreateCartButtonVisibility(); // Обновляем видимость кнопки
-
-      // Добавление обработчиков событий
+      // Обработчик закрытия вкладки
       tab.querySelector(".close-tab").addEventListener("click", (e) => {
         e.stopPropagation();
         this.closeTab(tabId);
       });
-
+      // Клик по самой вкладке => активация
       tab.addEventListener("click", () => {
         this.activateTab(tabId);
       });
 
-      // Обработчик загрузки iframe
-      iframe.addEventListener("load", () => {
-        console.log(`Iframe с URL ${iframe.src} загружен`);
-        this.adjustIframeHeight(iframe);
-
-        try {
-          const iframeDocument =
-            iframe.contentDocument || iframe.contentWindow.document;
-          const iframeBody = iframeDocument.body;
-
-          const observer = new MutationObserver(() => {
-            this.adjustIframeHeight(iframe);
-          });
-
-          const config = {
-            childList: true,
-            subtree: true,
-            characterData: true,
-          };
-          observer.observe(iframeBody, config);
-
-          if ("ResizeObserver" in window) {
-            const resizeObserver = new ResizeObserver(() => {
-              this.adjustIframeHeight(iframe);
-            });
-            resizeObserver.observe(iframeBody);
-          }
-        } catch (error) {
-          console.error("Ошибка наблюдения за iframe:", error);
-        }
-      });
-
-      return tabId; // Возвращаем ID созданной вкладки
-    }
-
-    /**
-     * adjustIframeHeight
-     *
-     * Функция для корректировки высоты iframe на основе футтера и доступного пространства.
-     * @param {HTMLIFrameElement} iframe - Элемент iframe.
-     */
-    adjustIframeHeight(iframe) {
-      // Проверяем, является ли это iframe "Чатом" или "Личным кабинетом"
-      if (iframe.dataset.isChat === "true") {
-        this.setChatIframeHeight(iframe);
-        return;
-      }
-
-      if (iframe.dataset.isCabinet === "true") {
-        this.setCabinetIframeHeight(iframe);
-        return;
-      }
-
-      if (this.isAdjustingHeight) return; // Выходим, если уже идет корректировка
-
+      // --- Загружаем HTML-фрагмент через fetch ---
       try {
-        this.isAdjustingHeight = true; // Устанавливаем флаг
-
-        const iframeDocument =
-          iframe.contentDocument || iframe.contentWindow.document;
-
-        let contentHeight;
-        // Поиск футтера по классу "footer"
-        const footer = iframeDocument.querySelector(".footer");
-        if (footer) {
-          const footerRect = footer.getBoundingClientRect();
-
-          // Вычисляем нижнюю позицию футтера относительно верхней части документа
-          const footerBottom = footerRect.bottom;
-
-          // Добавляем небольшой отступ, например, 20px
-          contentHeight = Math.ceil(footerBottom + 0);
-        } else {
-          // Если футтер не найден, используем scrollHeight как резервный вариант
-          contentHeight = iframeDocument.body.scrollHeight;
-          this.logMessage(
-            `Футтер не найден. Используем scrollHeight: ${contentHeight}px`
+        console.log(`Загружается содержимое из URL: ${contentURL}`);
+        const response = await fetch(contentURL);
+        if (!response.ok) {
+          throw new Error(
+            `Не удалось загрузить содержимое: ${contentURL} (${response.status})`
           );
         }
+        const html = await response.text();
 
-        // Вычисляем доступную высоту для iframe
-        const iframeRect = iframe.getBoundingClientRect();
-        const availableHeight = window.innerHeight - iframeRect.top;
+        // Создаём tempDiv для парсинга
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
 
-        // Устанавливаем высоту как максимум между контентом и доступной высотой
-        const newHeight = Math.max(contentHeight, availableHeight);
+        // Обрабатываем стили и скрипты внутри Shadow DOM
+        this.processStyles(tempDiv, shadowRoot);
+        this.processScripts(tempDiv, shadowRoot);
 
-        const currentHeight = parseInt(iframe.style.height, 10) || 0;
-        if (Math.abs(newHeight - currentHeight) > this.MIN_HEIGHT_DIFF) {
-          iframe.style.height = `${newHeight}px`;
-          this.logMessage(
-            `Установлена высота iframe: max(${contentHeight}px, ${availableHeight}px) = ${newHeight}px`
-          );
-        }
-      } catch (error) {
-        console.error("Не удалось изменить высоту iframe:", error);
-        iframe.style.height = "100vh";
-      } finally {
-        this.isAdjustingHeight = false; // Сбрасываем флаг
-      }
-    }
+        // Вставляем остаток внутрь Shadow Root (без <script> и <style>)
+        shadowRoot.append(...Array.from(tempDiv.childNodes));
 
-    /**
-     * setChatIframeHeight
-     *
-     * Функция для установки высоты iframe "Чат".
-     * @param {HTMLIFrameElement} iframe - Элемент iframe.
-     */
-    setChatIframeHeight(iframe) {
-      try {
-        const windowHeight = window.innerHeight;
-        const tabsHeight = this.tabs.offsetHeight;
-        const offsetTop = this.tabs.getBoundingClientRect().top;
-        const newHeight = windowHeight - offsetTop - tabsHeight;
+        // Инициализируем обработчики кликов внутри Shadow Root
+        this.initializeShadowLinkHandler(shadowRoot);
 
-        const currentHeight = parseInt(iframe.style.height, 10) || 0;
-        if (Math.abs(newHeight - currentHeight) > this.MIN_HEIGHT_DIFF) {
-          iframe.style.height = `${newHeight}px`;
-          this.logMessage(`Установлена высота iframe Чат: ${newHeight}px`);
-        }
+        // Специфичная инициализация для различных страниц через specload.json
+        await this.initializePageSpecific(contentURL, shadowRoot);
 
-        // Убираем прокрутку внутри iframe
-        iframe.style.overflow = "hidden";
-      } catch (error) {
-        console.error("Не удалось установить высоту iframe Чат:", error);
-        iframe.style.height = "100vh";
-      }
-    }
-
-    /**
-     * setCabinetIframeHeight
-     *
-     * Функция для установки высоты iframe "Личный кабинет".
-     * @param {HTMLIFrameElement} iframe - Элемент iframe.
-     */
-    setCabinetIframeHeight(iframe) {
-      try {
-        const windowHeight = window.innerHeight;
-        const tabsHeight = this.tabs.offsetHeight;
-        const offsetTop = this.tabs.getBoundingClientRect().top;
-        const newHeight = windowHeight - offsetTop - tabsHeight;
-
-        const currentHeight = parseInt(iframe.style.height, 10) || 0;
-        if (Math.abs(newHeight - currentHeight) > this.MIN_HEIGHT_DIFF) {
-          iframe.style.height = `${newHeight}px`;
-          this.logMessage(
-            `Установлена высота iframe Личный кабинет: ${newHeight}px`
-          );
-        }
-
-        // Убираем прокрутку внутри iframe
-        iframe.style.overflow = "hidden";
+        // Устанавливаем MutationObserver для отслеживания изменений содержимого
+        const observer = new MutationObserver(() => {
+          this.updatePageHeight();
+        });
+        observer.observe(shadowRoot, { childList: true, subtree: true });
       } catch (error) {
         console.error(
-          "Не удалось установить высоту iframe Личный кабинет:",
+          `(TabManager) Ошибка при загрузке "${contentURL}":`,
           error
         );
-        iframe.style.height = "100vh";
+        shadowRoot.innerHTML = `<p>Не удалось загрузить ${contentURL}. ${error.message}</p>`;
       }
+
+      // Активируем вкладку после успешного создания
+      this.activateTab(tabId);
+      this.updateTabsVisibility();
+      this.updateCreateCartButtonVisibility();
+      this.updatePageHeight();
+
+      return tabId;
+    }
+
+    /**
+     * Инициализирует специфичные для страницы функции из specload.json
+     *
+     * @param {string} contentURL
+     * @param {ShadowRoot} shadowRoot
+     */
+    async initializePageSpecific(contentURL, shadowRoot) {
+      if (this.specLoad[contentURL]) {
+        const { scripts, initFunctions } = this.specLoad[contentURL];
+
+        // Функция для загрузки отдельных скриптов
+        const loadScript = (src) => {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = () =>
+              reject(new Error(`Не удалось загрузить скрипт: ${src}`));
+            document.head.appendChild(script);
+          });
+        };
+
+        // Загружаем все скрипты
+        for (const scriptSrc of scripts) {
+          try {
+            await loadScript(scriptSrc);
+            console.log(`Скрипт ${scriptSrc} загружен успешно.`);
+          } catch (err) {
+            console.error(err.message);
+          }
+        }
+
+        // Выполняем функции инициализации
+        for (const funcName of initFunctions) {
+          if (typeof window[funcName] === "function") {
+            try {
+              await window[funcName](shadowRoot);
+              console.log(`Функция ${funcName} выполнена успешно.`);
+            } catch (err) {
+              console.error(`Ошибка при выполнении функции ${funcName}:`, err);
+            }
+          } else {
+            console.error(`Функция ${funcName} не определена.`);
+          }
+        }
+      } else {
+        console.warn(
+          `Конфигурация для "${contentURL}" не найдена в specload.json.`
+        );
+      }
+    }
+
+    /**
+     * openPageAsTab
+     * Открывает/активирует вкладку
+     *
+     * @param {string} title
+     * @param {string} url
+     */
+    async openPageAsTab(title, url) {
+      const existingTab = Array.from(this.tabs.children).find(
+        (child) =>
+          child !== this.buttonsContainer && child.dataset.name === title
+      );
+      if (existingTab) {
+        const tabId = existingTab.dataset.tab;
+        this.activateTab(tabId);
+      } else {
+        // Проверяем, если это вкладка корзины
+        const isCart = title.startsWith("Корзина");
+        await this.createTab(title, url, isCart);
+      }
+    }
+
+    /**
+     * processScripts
+     * Извлекает <script> теги из tempDiv и выполняет их внутри Shadow Root.
+     * Скрипты без атрибута data-global изолируются, скрипты с data-global="true" взаимодействуют с глобальным контекстом.
+     *
+     * @param {HTMLElement} tempDiv - временный контейнер с загруженным HTML
+     * @param {ShadowRoot} shadowRoot - Shadow Root контейнера содержимого вкладки
+     */
+    processScripts(tempDiv, shadowRoot) {
+      const scripts = tempDiv.querySelectorAll("script");
+      scripts.forEach((script) => {
+        const newScript = document.createElement("script");
+
+        // Проверяем наличие атрибута data-global
+        const isGlobal = script.getAttribute("data-global") === "true";
+
+        if (isGlobal) {
+          // Скрипты, взаимодействующие с глобальным контекстом
+          // Копируем атрибуты (например, src)
+          Array.from(script.attributes).forEach((attr) => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+
+          // Вставляем скрипт в document.head для глобального выполнения
+          document.head.appendChild(newScript);
+        } else {
+          // Изолированные скрипты
+          // Копируем атрибуты (например, src)
+          Array.from(script.attributes).forEach((attr) => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+
+          if (script.src) {
+            // Внешний скрипт
+            newScript.src = script.src;
+            newScript.async = false; // Чтобы сохранить порядок выполнения
+          } else {
+            // Инлайновый скрипт
+            newScript.textContent = `(function() { ${script.textContent} })();`;
+          }
+
+          // Добавляем скрипт в Shadow Root для выполнения
+          shadowRoot.appendChild(newScript);
+        }
+
+        // Удаляем оригинальный скрипт из tempDiv
+        script.remove();
+      });
+    }
+
+    /**
+     * processStyles
+     * Извлекает <style> и <link rel="stylesheet"> теги из tempDiv и подключает их внутри Shadow Root.
+     *
+     * @param {HTMLElement} tempDiv - временный контейнер с загруженным HTML
+     * @param {ShadowRoot} shadowRoot - Shadow Root контейнера содержимого вкладки
+     */
+    processStyles(tempDiv, shadowRoot) {
+      const styleTags = tempDiv.querySelectorAll(
+        "style, link[rel='stylesheet']"
+      );
+      styleTags.forEach((style) => {
+        if (style.tagName.toLowerCase() === "style") {
+          // Инлайновый стиль
+          const newStyle = document.createElement("style");
+          newStyle.textContent = style.textContent;
+          shadowRoot.appendChild(newStyle);
+        } else if (style.tagName.toLowerCase() === "link") {
+          // Внешний стиль
+          const href = style.getAttribute("href");
+          if (href) {
+            const newLink = document.createElement("link");
+            newLink.rel = "stylesheet";
+            newLink.href = href;
+            shadowRoot.appendChild(newLink);
+          }
+        }
+        // Удаляем оригинальный тег из tempDiv
+        style.remove();
+      });
     }
 
     /**
      * activateTab
+     * Активирует вкладку с указанным ID
      *
-     * Функция для активации вкладки.
-     * @param {string} tabId - ID вкладки для активации.
+     * @param {string} tabId
      */
     activateTab(tabId) {
       // Деактивируем все вкладки
-      document.querySelectorAll(".tab").forEach((tab) => {
-        tab.classList.remove("active");
-        // Удаляем изменение z-index для отдельных вкладок
-        // tab.style.zindex = "1"; // Комментируем эту строку
-        const titleElement = tab.querySelector(".tab-title");
-        if (titleElement && tab.dataset.tab !== tabId) {
-          titleElement.setAttribute("contenteditable", "false");
+      this.tabs.querySelectorAll(".tab").forEach((t) => {
+        t.classList.remove("active");
+        const titleEl = t.querySelector(".tab-title");
+        if (titleEl && t.dataset.tab !== tabId) {
+          titleEl.setAttribute("contenteditable", "false");
         }
       });
 
-      // Скрываем все содержимое вкладок
-      document.querySelectorAll(".content").forEach((content) => {
-        content.style.display = "none";
+      // Скрываем все содержимые вкладки
+      this.tabContent.querySelectorAll(".content").forEach((c) => {
+        c.style.display = "none";
       });
 
-      // Активируем выбранную вкладку и показываем её содержимое
-      const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-      const activeContent = document.querySelector(
+      // Активируем выбранную вкладку и отображаем её содержимое
+      const activeTab = this.tabs.querySelector(`.tab[data-tab="${tabId}"]`);
+      const activeContent = this.tabContent.querySelector(
         `.content[data-content="${tabId}"]`
       );
       if (activeTab && activeContent) {
         activeTab.classList.add("active");
-        // Удаляем изменение z-index для активной вкладки
-        // activeTab.style.zindex = "10"; // Комментируем эту строку
         activeContent.style.display = "block";
 
-        const titleElement = activeTab.querySelector(".tab-title");
-        if (titleElement && activeTab.dataset.name.startsWith("Корзина")) {
-          titleElement.setAttribute("contenteditable", "true");
+        // Если это корзина, разрешаем редактирование
+        if (activeTab.dataset.name.startsWith("Корзина")) {
+          const titleEl = activeTab.querySelector(".tab-title");
+          if (titleEl) {
+            titleEl.setAttribute("contenteditable", "true");
+          }
         }
+
+        // Обновляем текущую активную вкладку
+        this.currentActiveTab = tabId;
+
+        // Обновляем высоту страницы под содержимое активной вкладки
+        this.updatePageHeight();
+        console.log(`Вкладка "${activeTab.dataset.name}" активирована.`);
+      } else {
+        console.warn(`Не удалось найти вкладку или содержимое с ID: ${tabId}`);
       }
     }
 
     /**
      * closeTab
+     * Закрывает вкладку
      *
-     * Функция для закрытия вкладки.
-     * @param {string} tabId - ID вкладки для закрытия.
+     * @param {string} tabId
      */
     closeTab(tabId) {
-      const tab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-      const content = document.querySelector(
+      const tabEl = this.tabs.querySelector(`.tab[data-tab="${tabId}"]`);
+      const contentEl = this.tabContent.querySelector(
         `.content[data-content="${tabId}"]`
       );
-
-      if (tab && content) {
-        const isActive = tab.classList.contains("active");
-        const tabName = tab.dataset.name;
-        tab.remove();
-        content.remove();
+      if (tabEl && contentEl) {
+        const isActive = tabEl.classList.contains("active");
+        const tabName = tabEl.dataset.name;
+        tabEl.remove();
+        contentEl.remove();
         this.tabNames.delete(tabName);
 
-        // Удаляем из справочника активных корзин
         if (tabId in this.activeCartNames) {
           delete this.activeCartNames[tabId];
-          this.notifyCartUpdate(); // Уведомляем об изменении
+          this.notifyCartUpdate();
         }
-
         if (tabName.startsWith("Корзина")) {
           const number = parseInt(tabName.split(" ")[1]);
           if (!isNaN(number)) {
             this.cartNumbers.delete(number);
           }
         }
-
         if (isActive) {
-          const remainingTabs = document.querySelectorAll(".tab");
+          const remainingTabs = this.tabs.querySelectorAll(".tab");
           if (remainingTabs.length > 0) {
             const lastTabId =
               remainingTabs[remainingTabs.length - 1].getAttribute("data-tab");
             this.activateTab(lastTabId);
           }
         }
+        this.updateTabsVisibility();
+        this.updateCreateCartButtonVisibility();
+        this.updatePageHeight();
 
-        this.updateTabsVisibility(); // Обновляем видимость вкладок
-        this.updateCreateCartButtonVisibility(); // Обновляем видимость кнопки
-
-        // Если после закрытия вкладок осталась только главная, скрываем раздел вкладок
-        const openTabs = document.querySelectorAll(".tab");
-        const isOnlymain =
+        const openTabs = this.tabs.querySelectorAll(".tab");
+        const isOnlyMain =
           openTabs.length === 1 && openTabs[0].dataset.name === "Главная";
-        if (openTabs.length === 0 || isOnlymain) {
+        if (openTabs.length === 0 || isOnlyMain) {
           this.openPageAsTab("Главная", "/pages/index.html");
         }
       }
     }
 
     /**
-     * openPageAsTab
-     *
-     * Функция для открытия страницы в новой вкладке или активации существующей.
-     * @param {string} title - Заголовок вкладки.
-     * @param {string} url - URL содержимого вкладки.
-     */
-    openPageAsTab(title, url) {
-      const existingTab = Array.from(this.tabs.children).find(
-        (child) =>
-          child !== this.buttonsContainer && child.dataset.name === title
-      );
-
-      if (existingTab) {
-        const tabId = existingTab.dataset.tab;
-        this.activateTab(tabId);
-      } else {
-        this.createTab(title, url);
-      }
-    }
-
-    /**
      * updateTabsVisibility
-     *
-     * Функция для обновления видимости раздела вкладок.
+     * Если осталась одна "Главная", сворачиваем .tabs
      */
     updateTabsVisibility() {
-      const openTabs = document.querySelectorAll(".tab");
+      const openTabs = this.tabs.querySelectorAll(".tab");
       if (openTabs.length === 1 && openTabs[0].dataset.name === "Главная") {
         this.tabs.classList.add("collapsed");
       } else {
@@ -837,33 +743,55 @@
 
     /**
      * updateCreateCartButtonVisibility
-     *
-     * Обновлённая функция для обновления видимости кнопки создания корзины.
-     * В данном случае кнопка всегда видна.
+     * Упрощённо оставляем всегда видимой
      */
     updateCreateCartButtonVisibility() {
-      // Кнопки всегда отображаются
       this.createCartButton.style.display = "block";
       this.createOrderButton.style.display = "block";
-
-      // Логируем текущее состояние кнопок
-      this.logMessage("Кнопки 'Добавить корзину' и 'Заказы' всегда видны.");
+      // console.log("Кнопки 'Создать корзину' и 'Заказы' видны.");
     }
 
     /**
-     * logMessage
-     *
-     * Функция логирования для отладки.
-     * @param {string} message - Сообщение для логирования.
+     * updatePageHeight
+     * Обновляет высоту страницы под содержимое активной вкладки,
+     * но не меньше полной высоты экрана.
      */
-    logMessage(message) {
-      console.log(`[LOG]: ${message}`);
+    updatePageHeight() {
+      // Находим активную вкладку
+      const activeContentDiv =
+        this.tabContent.querySelector(
+          `.content[data-content="${this.currentActiveTab}"]`
+        ) ||
+        Array.from(this.tabContent.children).find(
+          (div) => div.style.display === "block"
+        );
+
+      if (activeContentDiv) {
+        // Получаем высоту содержимого Shadow DOM
+        const shadowRoot = activeContentDiv.shadowRoot;
+        if (shadowRoot) {
+          const contentHeight = shadowRoot.scrollHeight;
+          const viewportHeight = window.innerHeight;
+
+          // Вычисляем новую высоту: максимальное значение между содержимым и высотой экрана
+          const newHeight = Math.max(contentHeight, viewportHeight);
+
+          // Устанавливаем высоту основного контейнера
+          document.body.style.height = `${newHeight}px`;
+          document.documentElement.style.height = `${newHeight}px`;
+        }
+      } else {
+        // Если нет активного содержимого, устанавливаем минимальную высоту
+        const viewportHeight = window.innerHeight;
+        document.body.style.height = `${viewportHeight}px`;
+        document.documentElement.style.height = `${viewportHeight}px`;
+      }
     }
   }
 
   /**
-   * Инициализация GComm_MessageBus и GComm_TabManager
+   * Инициализация
    */
-  global.GComm_MessageBus = new GComm_MessageBus(); // Экземпляр MessageBus
-  global.GComm_TabManager = new GComm_TabManager(); // Экземпляр TabManager
+  global.GComm_TabManager = new GComm_TabManager();
+  // global.GComm_TabOpener = new GComm_TabOpener(global.GComm_TabManager);
 })(window);

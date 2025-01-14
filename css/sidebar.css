@@ -4,7 +4,7 @@
 .order-summary {
   position: sticky; /* Фиксирует объект внутри видимой области iframe */
   right: 0;
-  top: 0;
+  top: 137px;
   width: 300px; /* Фиксированная ширина сайдбара */
   background-color: #efefef;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
@@ -13,6 +13,7 @@
   overflow-y: hidden; /* Прокрутка по вертикали */
   z-index: 1000;
   border-bottom-left-radius: 12px;
+  border-top-left-radius: 12px;
 }
 
 /* Стили для блока предложений автодополнения */
@@ -84,7 +85,7 @@ input[type="text"] {
 /* Кнопка разворачивания сайдбара */
 .show-right-sidebar {
   position: fixed;
-  top: 10px;
+  top: 145px;
   right: 20px;
   width: 40px; /* Уменьшенная ширина кнопки */
   height: 40px; /* Уменьшенная высота кнопки */
@@ -112,7 +113,7 @@ input[type="text"] {
 /* Кнопка сворачивания сайдбара */
 .hide-right-sidebar {
   position: fixed;
-  top: 10px;
+  top: 145px;
   right: 270px;
   width: 40px; /* Уменьшенная ширина кнопки */
   height: 40px; /* Уменьшенная высота кнопки */

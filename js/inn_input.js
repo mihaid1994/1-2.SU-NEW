@@ -1,16 +1,16 @@
-// inn_input.js
+// --- Завёрнутый Скрипт: initInnInput ---
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Получаем элементы формы
-  const innInput = document.getElementById("query"); // Поле ввода ИНН
-  const orgInput = document.getElementById("org"); // Поле названия организации
-  const managementInput = document.getElementById("management"); // Поле ФИО получателя
-  const addressInput = document.getElementById("address"); // Поле адреса доставки
+window.initInnInput = function (root = document) {
+  // Получаем элементы формы внутри переданного корня
+  const innInput = root.getElementById("query"); // Поле ввода ИНН
+  const orgInput = root.getElementById("org"); // Поле названия организации
+  const managementInput = root.getElementById("management"); // Поле ФИО получателя
+  const addressInput = root.getElementById("address"); // Поле адреса доставки
 
-  // Получаем блоки для предложений
-  const innSuggestionsBox = document.getElementById("suggestions-inn");
-  const orgSuggestionsBox = document.getElementById("suggestions-org");
-  const managementSuggestionsBox = document.getElementById(
+  // Получаем блоки для предложений внутри переданного корня
+  const innSuggestionsBox = root.getElementById("suggestions-inn");
+  const orgSuggestionsBox = root.getElementById("suggestions-org");
+  const managementSuggestionsBox = root.getElementById(
     "suggestions-management"
   );
 
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Функция для получения случайных предложений
   function getRandomSuggestions(data, count) {
-    const shuffled = data.sort(() => 0.5 - Math.random());
+    const shuffled = [...data].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }
 
@@ -157,103 +157,134 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Обработчики событий для ИНН
-  innInput.addEventListener("input", () => {
-    const query = innInput.value.trim();
+  if (innInput && innSuggestionsBox) {
+    innInput.addEventListener("input", () => {
+      const query = innInput.value.trim();
 
-    // Очистка предыдущих таймаутов
-    clearTimeout(innDebounceTimeout);
+      // Очистка предыдущих таймаутов
+      clearTimeout(innDebounceTimeout);
 
-    // Если поле пустое, скрыть предложения и очистить связанные поля
-    if (query.length === 0) {
-      innSuggestionsBox.innerHTML = "";
-      innSuggestionsBox.style.display = "none";
-      orgInput.value = "";
-      addressInput.value = "";
-      managementInput.value = "";
-      return;
-    }
+      // Если поле пустое, скрыть предложения и очистить связанные поля
+      if (query.length === 0) {
+        innSuggestionsBox.innerHTML = "";
+        innSuggestionsBox.style.display = "none";
+        orgInput.value = "";
+        addressInput.value = "";
+        managementInput.value = "";
+        return;
+      }
 
-    // Валидация ввода (только цифры, до 13 символов)
-    if (!/^\d{0,13}$/.test(query)) {
-      innSuggestionsBox.innerHTML =
-        '<div class="suggestion-item">Введите только цифры (до 13 символов)</div>';
-      innSuggestionsBox.style.display = "block";
-      orgInput.value = "";
-      addressInput.value = "";
-      managementInput.value = "";
-      return;
-    }
+      // Валидация ввода (только цифры, до 13 символов)
+      if (!/^\d{0,13}$/.test(query)) {
+        innSuggestionsBox.innerHTML =
+          '<div class="suggestion-item">Введите только цифры (до 13 символов)</div>';
+        innSuggestionsBox.style.display = "block";
+        orgInput.value = "";
+        addressInput.value = "";
+        managementInput.value = "";
+        return;
+      }
 
-    // Дебаунсинг (задержка перед отображением предложений)
-    innDebounceTimeout = setTimeout(() => {
-      showSuggestions(query, innSuggestionsBox, organizations, "inn");
-    }, 300); // Задержка 300 мс
-  });
+      // Дебаунсинг (задержка перед отображением предложений)
+      innDebounceTimeout = setTimeout(() => {
+        showSuggestions(query, innSuggestionsBox, organizations, "inn");
+      }, 300); // Задержка 300 мс
+    });
 
-  // Обработчик фокуса для ИНН
-  innInput.addEventListener("focus", () => {
-    const query = innInput.value.trim();
-    if (query.length === 0) {
-      showSuggestions("", innSuggestionsBox, organizations, "inn");
-    }
-  });
+    // Обработчик фокуса для ИНН
+    innInput.addEventListener("focus", () => {
+      const query = innInput.value.trim();
+      if (query.length === 0) {
+        showSuggestions("", innSuggestionsBox, organizations, "inn");
+      }
+    });
+  }
 
   // Обработчики событий для Названия организации
-  orgInput.addEventListener("input", () => {
-    const query = orgInput.value.trim();
+  if (orgInput && orgSuggestionsBox) {
+    orgInput.addEventListener("input", () => {
+      const query = orgInput.value.trim();
 
-    // Очистка предыдущих таймаутов
-    clearTimeout(orgDebounceTimeout);
+      // Очистка предыдущих таймаутов
+      clearTimeout(orgDebounceTimeout);
 
-    // Дебаунсинг (задержка перед отображением предложений)
-    orgDebounceTimeout = setTimeout(() => {
-      showSuggestions(query, orgSuggestionsBox, organizations, "org");
-    }, 300); // Задержка 300 мс
-  });
+      // Дебаунсинг (задержка перед отображением предложений)
+      orgDebounceTimeout = setTimeout(() => {
+        showSuggestions(query, orgSuggestionsBox, organizations, "org");
+      }, 300); // Задержка 300 мс
+    });
 
-  // Обработчик фокуса для Названия организации
-  orgInput.addEventListener("focus", () => {
-    const query = orgInput.value.trim();
-    if (query.length === 0) {
-      showSuggestions("", orgSuggestionsBox, organizations, "org");
-    }
-  });
+    // Обработчик фокуса для Названия организации
+    orgInput.addEventListener("focus", () => {
+      const query = orgInput.value.trim();
+      if (query.length === 0) {
+        showSuggestions("", orgSuggestionsBox, organizations, "org");
+      }
+    });
+  }
 
   // Обработчики событий для ФИО получателя
-  managementInput.addEventListener("input", () => {
-    const query = managementInput.value.trim();
+  if (managementInput && managementSuggestionsBox) {
+    managementInput.addEventListener("input", () => {
+      const query = managementInput.value.trim();
 
-    // Очистка предыдущих таймаутов
-    clearTimeout(managementDebounceTimeout);
+      // Очистка предыдущих таймаутов
+      clearTimeout(managementDebounceTimeout);
 
-    // Дебаунсинг (задержка перед отображением предложений)
-    managementDebounceTimeout = setTimeout(() => {
-      showSuggestions(
-        query,
-        managementSuggestionsBox,
-        managements,
-        "management"
-      );
-    }, 300); // Задержка 300 мс
-  });
+      // Дебаунсинг (задержка перед отображением предложений)
+      managementDebounceTimeout = setTimeout(() => {
+        showSuggestions(
+          query,
+          managementSuggestionsBox,
+          managements,
+          "management"
+        );
+      }, 300); // Задержка 300 мс
+    });
 
-  // Обработчик фокуса для ФИО получателя
-  managementInput.addEventListener("focus", () => {
-    const query = managementInput.value.trim();
-    if (query.length === 0) {
-      showSuggestions("", managementSuggestionsBox, managements, "management");
-    }
-  });
+    // Обработчик фокуса для ФИО получателя
+    managementInput.addEventListener("focus", () => {
+      const query = managementInput.value.trim();
+      if (query.length === 0) {
+        showSuggestions(
+          "",
+          managementSuggestionsBox,
+          managements,
+          "management"
+        );
+      }
+    });
+  }
 
   // Скрытие предложений при клике вне полей ввода
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".input-container")) {
-      innSuggestionsBox.innerHTML = "";
-      innSuggestionsBox.style.display = "none";
-      orgSuggestionsBox.innerHTML = "";
-      orgSuggestionsBox.style.display = "none";
-      managementSuggestionsBox.innerHTML = "";
-      managementSuggestionsBox.style.display = "none";
-    }
-  });
-});
+  if (root) {
+    root.addEventListener("click", (e) => {
+      // Проверяем, содержит ли кликнутый элемент контейнеры с полями ввода
+      const isInsideInputContainer =
+        e.target.closest("#query") ||
+        e.target.closest("#org") ||
+        e.target.closest("#management") ||
+        e.target.closest(".suggestions-box"); // Предполагается, что классы или ID у boxes соответствуют
+
+      if (!isInsideInputContainer) {
+        if (innSuggestionsBox) {
+          innSuggestionsBox.innerHTML = "";
+          innSuggestionsBox.style.display = "none";
+        }
+        if (orgSuggestionsBox) {
+          orgSuggestionsBox.innerHTML = "";
+          orgSuggestionsBox.style.display = "none";
+        }
+        if (managementSuggestionsBox) {
+          managementSuggestionsBox.innerHTML = "";
+          managementSuggestionsBox.style.display = "none";
+        }
+      }
+    });
+  }
+};
+
+// Если вы динамически добавляете новые контейнеры, вызывайте initInnInput с соответствующим root
+// Например:
+// const newRoot = document.querySelector('#new-container');
+// window.initInnInput(newRoot);
