@@ -176,7 +176,12 @@ window.initFilterMenu = function (root = document) {
 
   // 3) ФУНКЦИЯ ДЛЯ ОТОБРАЖЕНИЯ/СКРЫТИЯ ФИЛЬТРА ПРИ НАЖАТИИ НА ИКОНКУ НАСТРОЕК
   // (Если хотите оставить её глобальной, вынесите из функции)
-  function toggleFilterMenu() {
+  function toggleFilterMenu(event) {
+    // Предотвращаем всплытие события клика
+    if (event) {
+      event.stopPropagation();
+    }
+
     const filterContainer = root.getElementById("unique-filter-container");
     const settingsIcon = root.querySelector(".settings-icon");
     if (!filterContainer || !settingsIcon) return;
@@ -194,10 +199,12 @@ window.initFilterMenu = function (root = document) {
     }
   }
 
-  // Привязка функции toggleFilterMenu к иконке настроек
+  // Привязка функции toggleFilterMenu к иконке настроек с передачей события и предотвращением всплытия
   const settingsIcon = root.querySelector(".settings-icon");
   if (settingsIcon) {
-    settingsIcon.addEventListener("click", toggleFilterMenu);
+    settingsIcon.addEventListener("click", function (event) {
+      toggleFilterMenu(event);
+    });
   }
 
   // 4) ФУНКЦИЯ ДЛЯ СВЕРНУТЬ/РАЗВЕРНУТЬ ОТДЕЛЬНЫЕ СЕКЦИИ
@@ -212,6 +219,67 @@ window.initFilterMenu = function (root = document) {
       isExpanded ? "▼" : "▲"
     );
   }
+
+  // Новые добавления начинаются здесь
+
+  // 5) Добавление обработчиков событий на заголовки секций для сворачивания/разворачивания
+  const sectionHeaders = root.querySelectorAll(".filter-section h3");
+  sectionHeaders.forEach((header) => {
+    header.style.cursor = "pointer"; // Изменяем курсор для лучшего UX
+    header.addEventListener("click", function (event) {
+      // Предотвращаем всплытие события клика до глобального обработчика
+      event.stopPropagation();
+      toggleSection(header);
+      updateGroupheaders();
+      updateSettingsCount();
+    });
+  });
+
+  // 6) Скрытие unique-filter-container при клике на кнопку .apply
+  const applyButton = root.querySelector(".filter-actions .apply");
+  if (applyButton) {
+    applyButton.addEventListener("click", function (event) {
+      // Предотвращаем всплытие события клика
+      event.stopPropagation();
+      const filterContainer = root.getElementById("unique-filter-container");
+      if (filterContainer) {
+        filterContainer.classList.remove("active");
+        filterContainer.style.display = "none";
+      }
+    });
+  }
+
+  // 7) Скрытие unique-filter-container при клике вне контейнера и иконки настроек
+  root.addEventListener("click", function (event) {
+    const filterContainer = root.getElementById("unique-filter-container");
+    const settingsIcon = root.querySelector(".settings-icon");
+
+    if (
+      filterContainer &&
+      !filterContainer.contains(event.target) &&
+      settingsIcon &&
+      !settingsIcon.contains(event.target)
+    ) {
+      filterContainer.classList.remove("active");
+      filterContainer.style.display = "none";
+    }
+  });
+
+  // 8) Скрытие unique-filter-container при клике на кнопку .close-button
+  const closeButton = root.querySelector(".close-button");
+  if (closeButton) {
+    closeButton.addEventListener("click", function (event) {
+      // Предотвращаем всплытие события клика
+      event.stopPropagation();
+      const filterContainer = root.getElementById("unique-filter-container");
+      if (filterContainer) {
+        filterContainer.classList.remove("active");
+        filterContainer.style.display = "none";
+      }
+    });
+  }
+
+  // Конец новых добавлений
 
   // Если вам нужно обращаться к toggleFilterMenu и toggleSection извне —
   // можете вернуть их, например, как методы:
