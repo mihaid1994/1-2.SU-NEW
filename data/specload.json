@@ -4,15 +4,15 @@
     "initFunctions": ["initChat"]
   },
   "/pages/index.html": {
-    "scripts": ["/js/reasapi.js", "/js/cardview.js"],
+    "scripts": ["/js/info.js", "/js/cardview.js"],
     "initFunctions": ["initBanners", "initCardViewShadow"]
   },
   "/pages/cabinet_postavshika.html": {
-    "scripts": ["/js/dashboard.js"],
+    "scripts": ["/js/cabinet.js"],
     "initFunctions": ["initializeDashboard"]
   },
   "/pages/search_cat.html": {
-    "scripts": ["/js/filterMenu.js", "/js/tableCardView.js", "/js/tooltips.js"],
+    "scripts": ["/js/filter.js", "/js/table_card.js", "/js/tooltip.js"],
     "initFunctions": [
       "initFilterMenu",
       "initTableCardView",
@@ -21,7 +21,7 @@
     ]
   },
   "/pages/zajavki.html": {
-    "scripts": ["/js/zajavkiTable.js"],
+    "scripts": ["/js/zajavki.js"],
     "initFunctions": ["initZajavkiTable"]
   },
   "/pages/delivery.html": {
@@ -53,5 +53,9 @@
   "/pages/registration.html": {
     "scripts": ["/js/registration.js"],
     "initFunctions": ["initRegisterFunction"]
+  },
+  "/pages/Contacts.html": {
+    "scripts": ["/js/contacts.js"],
+    "initFunctions": ["initContactsopenFunction"]
   }
 }

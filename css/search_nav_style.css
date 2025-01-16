@@ -172,6 +172,7 @@ a i {
 /* Бонусы, Лимит, Корзина, Личный кабинет */
 .menu,
 .orders-button,
+.contacts-button,
 .chat-button,
 .Cabinet-button {
   display: flex;
@@ -206,6 +207,7 @@ a i {
 .secondary-button,
 .orders-button,
 .chat-button,
+.contacts-button,
 .Cabinet-button {
   background: none;
   border: none;
@@ -218,6 +220,7 @@ a i {
 .bonus-limit button:hover,
 .secondary-button:hover,
 .orders-button:hover,
+.contacts-button:hover,
 .chat-button:hover,
 .Cabinet-button:hover {
   color: #ffad42;
@@ -387,6 +390,7 @@ a i {
 
 .orders-button,
 .chat-button,
+.contacts-button,
 .Cabinet-button {
   font-size: 18px;
 }

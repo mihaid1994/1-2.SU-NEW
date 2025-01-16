@@ -184,6 +184,16 @@
         });
       }
 
+      const contactsButton = document.querySelector(".contacts-button");
+      if (contactsButton) {
+        contactsButton.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const title = "Контакты";
+          const url = "/pages/Contacts.html";
+          await this.openPageAsTab(title, url);
+        });
+      }
+
       const registrationButton = document.querySelector(".menu .account a");
       if (registrationButton) {
         registrationButton.addEventListener("click", async (e) => {
