@@ -49,5 +49,9 @@
   "/pages/magazin.html": {
     "scripts": ["/js/magazine.js"],
     "initFunctions": ["initMagazineShadow"]
+  },
+  "/pages/registration.html": {
+    "scripts": ["/js/registration.js"],
+    "initFunctions": ["initRegisterFunction"]
   }
 }

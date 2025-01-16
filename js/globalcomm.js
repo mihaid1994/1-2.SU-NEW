@@ -184,6 +184,16 @@
         });
       }
 
+      const registrationButton = document.querySelector(".menu .account a");
+      if (registrationButton) {
+        registrationButton.addEventListener("click", async (e) => {
+          e.preventDefault(); // Предотвращаем переход по ссылке
+          const title = "Вход в аккаунт";
+          const url = "/pages/registration.html";
+          await this.openPageAsTab(title, url);
+        });
+      }
+
       const cabinetButton = document.querySelector(".Cabinet-button");
       if (cabinetButton) {
         cabinetButton.addEventListener("click", async (e) => {

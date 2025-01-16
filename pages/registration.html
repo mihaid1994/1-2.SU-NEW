@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/registration.css" />
+  </head>
+  <body>
+    <div class="registration-container">
+      <!-- Этап 1: Вход или Создание Профиля -->
+      <div id="step-1" class="step">
+        <h1 class="registration-title">Войти или создать профиль</h1>
+        <div class="input-group">
+          <div class="phone-input">
+            <i class="ri-phone-line flag-icon"></i>
+            <!-- Используем Remix Icon вместо изображения флага -->
+            <span class="phone-prefix">+7 </span>
+            <input
+              type="text"
+              id="phone-number"
+              placeholder="000 000-00-00"
+              class="phone-number"
+              maxlength="13"
+            />
+          </div>
+          <button id="get-code-button" class="get-code-button">
+            Получить код
+          </button>
+        </div>
+        <div class="terms">
+          <span class="terms-label">
+            Соглашаюсь с
+            <span class="clickable-text">
+              правилами пользования торговой площадкой
+            </span>
+          </span>
+
+          <span class="custom-checkbox unchecked" id="terms-checkbox"></span>
+        </div>
+        <span class="clickable-text2"> Войти, используя логин и пароль </span>
+        <div class="checkbox-message hidden" id="terms-message">
+          Требуется согласие с условиями использования.
+        </div>
+      </div>
+
+      <!-- Этап 2: Ввод кода подтверждения -->
+      <div id="step-2" class="step hidden">
+        <h2 class="step-title">
+          Отправлено SMS на номер <span id="display-phone"></span>
+        </h2>
+        <div class="verification-code-wrapper">
+          <input
+            type="text"
+            id="verification-code"
+            placeholder="___-___"
+            class="verification-code"
+            maxlength="7"
+            autocomplete="one-time-code"
+            inputmode="numeric"
+          />
+        </div>
+        <div class="timer-container">
+          <button id="resend-code-button" class="resend-code-button" disabled>
+            Запросить новый код через <span id="timer">00:46</span>
+          </button>
+        </div>
+        <div class="checkbox-message hidden" id="code-message">
+          Пожалуйста, введите правильный код подтверждения.
+        </div>
+      </div>
+
+      <!-- Этап 3: Регистрация -->
+      <div id="step-3" class="step hidden">
+        <h2 class="step-title">Регистрация</h2>
+        <div class="client-question">
+          <p>Являетесь ли вы клиентом группы компаний "Энергомикс"?</p>
+          <div class="tabs">
+            <button class="tab-button active" data-value="yes">ДА</button>
+            <button class="tab-button" data-value="no">НЕТ</button>
+          </div>
+        </div>
+
+        <!-- Форма для клиентов "Энергомикс" -->
+        <div id="client-form" class="hidden">
+          <form id="client-registration-form">
+            <div class="form-group">
+              <label for="client-company-name">Наименование</label>
+              <input
+                type="text"
+                id="client-company-name"
+                placeholder="Введите наименование юридического лица"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-inn">ИНН</label>
+              <input
+                type="text"
+                id="client-inn"
+                placeholder="Введите ИНН"
+                maxlength="10"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-email">Электронная почта</label>
+              <input
+                type="email"
+                id="client-email"
+                placeholder="Введите электронную почту"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-phone">Телефон</label>
+              <div class="phone-input">
+                <span class="phone-prefix">+7 </span>
+                <input
+                  type="text"
+                  id="client-phone"
+                  placeholder="000 000-00-00"
+                  class="phone-number"
+                  maxlength="10"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <span class="terms-label" for="client-personal-data">
+                Согласен(на) на обработку персональных данных
+              </span>
+              <span
+                class="custom-checkbox unchecked"
+                id="client-personal-data"
+              ></span>
+            </div>
+            <div class="checkbox-message hidden" id="client-data-message">
+              Требуется согласие на обработку персональных данных.
+            </div>
+            <button type="submit" class="submit-button">
+              Отправить заявку
+            </button>
+          </form>
+        </div>
+
+        <!-- Форма для юридических лиц -->
+        <div id="company-form" class="hidden">
+          <form id="registration-form">
+            <div class="form-group">
+              <label for="company-name">Наименование</label>
+              <input
+                type="text"
+                id="company-name"
+                placeholder="Введите наименование юридического лица"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="inn">ИНН</label>
+              <input
+                type="text"
+                id="inn"
+                placeholder="Введите ИНН"
+                maxlength="10"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="kpp">КПП</label>
+              <input
+                type="text"
+                id="kpp"
+                placeholder="Введите КПП"
+                maxlength="9"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="legal-address">Юридический адрес</label>
+              <input
+                type="text"
+                id="legal-address"
+                placeholder="Введите юридический адрес"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="postal-address">Почтовый адрес</label>
+              <input
+                type="text"
+                id="postal-address"
+                placeholder="Введите почтовый адрес"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="delivery-address">Адрес доставки</label>
+              <input
+                type="text"
+                id="delivery-address"
+                placeholder="Введите адрес доставки"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <div class="phone-input">
+                <span class="phone-prefix">+7 </span>
+                <input
+                  type="text"
+                  id="company-phone"
+                  placeholder="000 000-00-00"
+                  class="phone-number"
+                  maxlength="10"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Электронная почта</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Введите электронную почту"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="account-number">Номер расчетного счета</label>
+              <input
+                type="text"
+                id="account-number"
+                placeholder="Введите номер расчетного счета"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="bank-name">Наименование банка</label>
+              <input
+                type="text"
+                id="bank-name"
+                placeholder="Введите наименование банка"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="corr-account">Номер корреспондентского счета</label>
+              <input
+                type="text"
+                id="corr-account"
+                placeholder="Введите номер корреспондентского счета"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="bic">БИК</label>
+              <input
+                type="text"
+                id="bic"
+                placeholder="Введите БИК"
+                maxlength="9"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="tax-system">Система налогообложения</label>
+              <select id="tax-system" required>
+                <option value="">Выберите</option>
+                <option value="OSNO">ОСНО</option>
+                <option value="USN">УСН</option>
+                <option value="ENVD">ЕНВД</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="representation">Выбор представительства</label>
+              <select id="representation" required>
+                <option value="">Выберите город</option>
+                <option value="Moscow">Москва</option>
+                <option value="Saint Petersburg">Санкт-Петербург</option>
+                <option value="Novosibirsk">Новосибирск</option>
+                <!-- Добавьте другие города по необходимости -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="comments">Комментарии</label>
+              <textarea
+                id="comments"
+                placeholder="Укажите ваши пожелания, например, работа с конкретным торговым представителем"
+              ></textarea>
+            </div>
+            <div class="form-group checkbox-group">
+              <span class="terms-label" for="personal-data">
+                Согласен(на) на обработку персональных данных
+              </span>
+              <span class="custom-checkbox unchecked" id="personal-data"></span>
+            </div>
+            <div class="checkbox-message hidden" id="company-data-message">
+              Требуется согласие на обработку персональных данных.
+            </div>
+            <button type="submit" class="submit-button">
+              Зарегистрироваться
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
