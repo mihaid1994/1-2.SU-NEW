@@ -25,12 +25,7 @@
     "initFunctions": ["initZajavkiTable"]
   },
   "/pages/delivery.html": {
-    "scripts": [
-      "/js/delivery.js",
-      "/js/excelPdf.js",
-      "/js/sidebar.js",
-      "/js/innInput.js"
-    ],
+    "scripts": ["/js/delivery.js", "/js/sidebar.js", "/js/inn_input.js"],
     "initFunctions": [
       "initDelivery",
       "initExcelPdf",
