@@ -63,10 +63,148 @@ function initializeDashboard(root) {
         modal.style.display = "none";
       });
     }
-    window.addEventListener("click", (event) => {
+    modal.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
       }
     });
   });
+
+  // Функция для загрузки дополнительных продуктов из JSON
+  function loadAdditionalProducts() {
+    fetch("/data/lk-data.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Ошибка при загрузке данных");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const products = data.products;
+        const tableBody = root.querySelector(".products-table tbody");
+
+        products.forEach((product) => {
+          const row = document.createElement("tr");
+
+          // Фото
+          const photoCell = document.createElement("td");
+          const img = document.createElement("img");
+          img.src = `/images/jpg/Product/${product.photo}`;
+          img.alt = product.name;
+          img.width = 50;
+          photoCell.appendChild(img);
+          row.appendChild(photoCell);
+
+          // Наименование
+          const nameCell = document.createElement("td");
+          nameCell.textContent = product.name;
+          row.appendChild(nameCell);
+
+          // Артикул
+          const skuCell = document.createElement("td");
+          skuCell.textContent = product.sku;
+          row.appendChild(skuCell);
+
+          // Бренд
+          const brandCell = document.createElement("td");
+          brandCell.textContent = product.brand;
+          row.appendChild(brandCell);
+
+          // Цена
+          const priceCell = document.createElement("td");
+          priceCell.textContent = product.price;
+          row.appendChild(priceCell);
+
+          // Статус
+          const statusCell = document.createElement("td");
+          statusCell.textContent = product.status;
+          row.appendChild(statusCell);
+
+          // Действия
+          const actionsCell = document.createElement("td");
+
+          // Кнопка редактирования
+          const editBtn = document.createElement("button");
+          editBtn.classList.add("edit-product");
+          const editIcon = document.createElement("i");
+          editIcon.classList.add("ri-edit-2-line");
+          editBtn.appendChild(editIcon);
+          actionsCell.appendChild(editBtn);
+
+          // Кнопка удаления
+          const deleteBtn = document.createElement("button");
+          deleteBtn.classList.add("delete-product");
+          const deleteIcon = document.createElement("i");
+          deleteIcon.classList.add("ri-delete-bin-line");
+          deleteBtn.appendChild(deleteIcon);
+          actionsCell.appendChild(deleteBtn);
+
+          // Кнопка аналитики
+          const analyticsBtn = document.createElement("button");
+          analyticsBtn.classList.add("view-analytics");
+          analyticsBtn.textContent = "Аналитика";
+          actionsCell.appendChild(analyticsBtn);
+
+          row.appendChild(actionsCell);
+
+          tableBody.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error("Ошибка:", error);
+      });
+  }
+
+  // Функция для настройки обработчиков событий для кнопок действий
+  function setupActionButtons() {
+    const productsTable = root.querySelector(".products-table");
+
+    productsTable.addEventListener("click", function (event) {
+      const target = event.target;
+
+      // Обработка кнопки редактирования
+      if (target.closest(".edit-product")) {
+        const row = target.closest("tr");
+        const productName = row.querySelector("td:nth-child(2)").textContent;
+        alert(`Редактировать продукт: ${productName}`);
+        // Здесь можно открыть модальное окно для редактирования
+      }
+
+      // Обработка кнопки удаления
+      if (target.closest(".delete-product")) {
+        const row = target.closest("tr");
+        const productName = row.querySelector("td:nth-child(2)").textContent;
+        if (
+          confirm(`Вы уверены, что хотите удалить продукт "${productName}"?`)
+        ) {
+          row.remove();
+          // Здесь можно добавить дополнительную логику удаления из базы данных
+        }
+      }
+
+      // Обработка кнопки аналитики
+      if (target.closest(".view-analytics")) {
+        const row = target.closest("tr");
+        const productName = row.querySelector("td:nth-child(2)").textContent;
+        alert(`Просмотр аналитики для продукта: ${productName}`);
+        // Здесь можно открыть модальное окно с аналитикой
+      }
+    });
+  }
+
+  // Обработчик кнопки "Добавить новый товар"
+  const addProductBtn = root.getElementById("addProductBtn");
+  if (addProductBtn) {
+    addProductBtn.addEventListener("click", () => {
+      // Логика открытия модального окна для добавления нового товара
+      alert("Открыть форму добавления нового товара");
+      // Например, показать модальное окно:
+      // const addModal = root.querySelector('.add-product-modal');
+      // addModal.style.display = 'block';
+    });
+  }
+
+  // Вызов функций для загрузки продуктов и настройки кнопок
+  loadAdditionalProducts();
+  setupActionButtons();
 }

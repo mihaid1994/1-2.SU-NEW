@@ -11,6 +11,29 @@ p {
   box-sizing: border-box;
 }
 
+.contact-info {
+  margin-top: 15px;
+  margin-left: 25px;
+  line-height: 2; /* Высота строки */
+}
+
+.white-button {
+  background-color: #bdbdbd;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.white-button:hover {
+  background-color: #ffa938;
+  color: #ffffff;
+}
+
 /* Контейнер для заголовка с изображением */
 .header-image {
   width: 100%; /* Занимает всю ширину окна */

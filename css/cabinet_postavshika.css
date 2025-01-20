@@ -26,9 +26,27 @@ body {
   overflow: hidden; /* Предотвращаем прокрутку контейнера */
 }
 
+.white-button {
+  background-color: #bdbdbd;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.white-button:hover {
+  background-color: #ffa938;
+  color: #ffffff;
+}
+
 /* Сайдбар */
 .sidebar {
   width: 20%; /* 20% ширины */
+  min-height: 715px;
   flex-shrink: 0; /* Отключаем уменьшение */
   flex-grow: 0; /* Отключаем увеличение */
   background-color: #eeeeee;
@@ -72,7 +90,7 @@ body {
 .sidebar ul li a.tab-link {
   color: #6a6a6a;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   transition: color 0.3s;
@@ -89,6 +107,29 @@ body {
 }
 
 .sidebar ul li a.tab-link.active i {
+  color: #1abc9c;
+}
+
+.sidebar ul li a.tab-nolink {
+  color: #6a6a6a;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.sidebar ul li a.tab-nolink i {
+  margin-right: 10px;
+  color: #3d6d91;
+}
+
+.sidebar ul li a.tab-nolink:hover,
+.sidebar ul li a.tab-nolink.active {
+  color: #1abc9c;
+}
+
+.sidebar ul li a.tab-nolink.active i {
   color: #1abc9c;
 }
 
@@ -134,7 +175,7 @@ body {
 /* Кнопка выхода */
 .logout {
   text-align: center;
-  margin-top: auto; /* Размещаем кнопку выхода внизу сайдбара */
+  margin-top: 10px;
 }
 
 #downloadStatements,
@@ -146,11 +187,9 @@ body {
 #addProductBtn,
 #exportInventoryBtn,
 #createPromotionBtn,
-#logoutBtn,
+#createClaimBtn,
 #addRoleBtn,
-.edit-address,
-.delete-address,
-.set-default,
+#createReturnBtn,
 .edit-organization,
 .delete-organization,
 .remove-wait,
@@ -159,15 +198,47 @@ body {
 .remove-role,
 .remove-integration,
 #addAddressBtn,
-.logout button {
+#documentsBtn {
   background-color: #1abc9c;
   border: none;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px 10px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 15px;
+  margin-bottom: 10px; /* Добавляет отступ между кнопками */
+}
+
+#logoutBtn {
+  background-color: #c4c4c4;
+  border: none;
+  color: #fff;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-top: 30px;
+}
+
+#logoutBtn:hover {
+  background-color: #e69832;
+  transform: translateY(-1px);
+}
+
+.edit-address,
+.delete-address,
+.set-default {
+  background-color: #1abc9c;
+  border: none;
+  color: #fff;
+  padding: 8px 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-bottom: 5px; /* Добавляет отступ между кнопками */
 }
 
 #downloadStatements:hover,
@@ -176,11 +247,13 @@ body {
 #addOrganizationBtn:hover,
 #notifyMeBtn:hover,
 #downloadStats:hover,
+#createReturnBtn:hover,
 #addProductBtn:hover,
 #exportInventoryBtn:hover,
 #createPromotionBtn:hover,
-#logoutBtn:hover,
+#createClaimBtn:hover,
 #addRoleBtn:hover,
+#documentsBtn:hover,
 .edit-address:hover,
 .delete-address:hover,
 .set-default:hover,
@@ -191,8 +264,7 @@ body {
 .edit-role:hover,
 .remove-role:hover,
 .remove-integration:hover,
-#addAddressBtn:hover,
-.logout button:hover {
+#addAddressBtn:hover {
   background-color: #16a085;
   transform: translateY(-2px);
 }
@@ -267,6 +339,10 @@ form label {
   color: #34495e;
 }
 
+.feedback-form {
+  margin-top: 140px;
+}
+
 form input[type="text"],
 form input[type="number"],
 form input[type="email"],
@@ -278,6 +354,7 @@ form textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  margin-top: 8px;
 }
 
 form input[type="password"] {
@@ -345,8 +422,9 @@ table img {
 
 /* Кнопки действий в таблицах */
 table button {
-  padding: 5px 10px;
-  margin-right: 5px;
+  padding: 8px 8px;
+  margin-top: 4px;
+  margin-right: 8px;
   background-color: #1abc9c;
   border: none;
   color: #fff;
@@ -403,6 +481,7 @@ table button:hover {
 
 /* Кнопки навигации и краткого резюме */
 nav ul li a.tab-link,
+nav ul li a.tab-nolink,
 .summary-button,
 .nav-button {
   cursor: pointer;

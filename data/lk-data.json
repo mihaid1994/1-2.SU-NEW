@@ -1,167 +1,244 @@
 {
-  "customer": {
-    "balance": 15000,
-    "loyaltyPoints": 250,
-    "orders": [
-      {
-        "id": 201,
-        "date": "20.12.2023",
-        "status": "Обработан",
-        "amount": 4500,
-        "items": [
-          {
-            "name": "Товар A",
-            "quantity": 2,
-            "price": 1500
-          },
-          {
-            "name": "Товар B",
-            "quantity": 1,
-            "price": 1500
-          }
-        ]
-      },
-      {
-        "id": 202,
-        "date": "15.12.2023",
-        "status": "Отменён",
-        "amount": 3000,
-        "items": [
-          {
-            "name": "Товар C",
-            "quantity": 3,
-            "price": 1000
-          }
-        ]
-      }
-    ],
-    "financialTransactions": [
-      {
-        "date": "01.12.2023",
-        "description": "Пополнение баланса",
-        "amount": 10000,
-        "type": "Кредит"
-      },
-      {
-        "date": "20.12.2023",
-        "description": "Оплата заказа №201",
-        "amount": -4500,
-        "type": "Дебет"
-      }
-    ],
-    "reviews": [
-      {
-        "productName": "Товар A",
-        "rating": 5,
-        "comment": "Отличный товар! Рекомендую."
-      },
-      {
-        "productName": "Товар B",
-        "rating": 4,
-        "comment": "Хорошее качество, но доставка была задержана."
-      }
-    ],
-    "loyaltyHistory": [
-      {
-        "date": "20.12.2023",
-        "description": "Использование баллов",
-        "points": -50
-      },
-      {
-        "date": "01.12.2023",
-        "description": "Накопление баллов",
-        "points": 100
-      }
-    ],
-    "profile": {
-      "name": "Иван Иванов",
-      "email": "ivan.ivanov@example.com",
-      "deliveryAddress": "ул. Ленина, д. 10, кв. 5",
-      "notificationSettings": "all"
-    },
-    "addresses": [
-      {
-        "id": 1,
-        "address": "ул. Ленина, д. 10, кв. 5"
-      },
-      {
-        "id": 2,
-        "address": "ул. Пушкина, д. 20, кв. 8"
-      }
-    ],
-    "organizations": [
-      {
-        "id": 1,
-        "name": "ООО Ромашка",
-        "inn": "1234567890",
-        "address": "ул. Цветочная, д. 15, г. Москва"
-      },
-      {
-        "id": 2,
-        "name": "ЗАО Василек",
-        "inn": "0987654321",
-        "address": "ул. Лесная, д. 5, г. Санкт-Петербург"
-      }
-    ],
-    "templates": {
-      "cartTemplates": [
-        {
-          "id": 1,
-          "name": "Стандартная корзина",
-          "description": "Обычная корзина без дополнительных настроек."
-        },
-        {
-          "id": 2,
-          "name": "Быстрая корзина",
-          "description": "Корзина для быстрого оформления заказа."
-        }
-      ],
-      "filterSettings": [
-        {
-          "id": 1,
-          "name": "Фильтр по цене",
-          "description": "Фильтр товаров по диапазону цен."
-        },
-        {
-          "id": 2,
-          "name": "Фильтр по категории",
-          "description": "Фильтр товаров по выбранным категориям."
-        }
-      ]
-    },
-    "contacts": {
-      "phone": "+7 (495) 123-45-67",
-      "email": "support@example.com",
-      "address": "ул. Свободы, д. 25, г. Москва"
-    }
-  },
   "products": [
     {
-      "id": 1,
-      "articul": "A123",
-      "name": "Товар A",
-      "category": "Категория 1",
-      "price": 1500,
-      "stock": 30,
-      "image": "/images/product_a.jpg"
+      "photo": "smart.jpg",
+      "name": "Смартфон XYZ",
+      "sku": "XYZ123",
+      "brand": "TechBrand",
+      "price": "15,000 ₽",
+      "status": "Активен"
     },
     {
-      "id": 2,
-      "articul": "B456",
-      "name": "Товар B",
-      "category": "Категория 2",
-      "price": 1500,
-      "stock": 20,
-      "image": "/images/product_b.jpg"
+      "photo": "note.jpg",
+      "name": "Ноутбук ABC",
+      "sku": "ABC456",
+      "brand": "ComputeX",
+      "price": "45,000 ₽",
+      "status": "Активен"
     },
     {
-      "id": 3,
-      "articul": "C789",
-      "name": "Товар C",
-      "category": "Категория 1",
-      "price": 1000,
-      "stock": 15,
-      "image": "/images/product_c.jpg"
+      "photo": "smartphone_abc_pro.jpg",
+      "name": "Смартфон ABC Pro",
+      "sku": "ABC789",
+      "brand": "ABC Tech",
+      "price": "25,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "tablet_def_10_1.jpg",
+      "name": "Планшет DEF 10.1",
+      "sku": "DEF101",
+      "brand": "DEF Devices",
+      "price": "18,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "earbuds_ghi_wireless.jpg",
+      "name": "Беспроводные наушники GHI",
+      "sku": "GHI202",
+      "brand": "GHI Audio",
+      "price": "4,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "smartwatch_jkl_series.jpg",
+      "name": "Смарт-часы JKL Series",
+      "sku": "JKL303",
+      "brand": "JKL Wearables",
+      "price": "12,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "laptop_mno_slim.jpg",
+      "name": "Ноутбук MNO Slim",
+      "sku": "MNO404",
+      "brand": "MNO Compute",
+      "price": "55,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "camera_pqr_x200.jpg",
+      "name": "Цифровая камера PQR X200",
+      "sku": "PQR505",
+      "brand": "PQR Photography",
+      "price": "30,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "printer_stu_plus.jpg",
+      "name": "Принтер STU Plus",
+      "sku": "STU606",
+      "brand": "STU Office",
+      "price": "8,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "monitor_vwx_24.jpg",
+      "name": "Монитор VWX 24\"",
+      "sku": "VWX707",
+      "brand": "VWX Displays",
+      "price": "10,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "keyboard_yza_pro.jpg",
+      "name": "Механическая клавиатура YZA Pro",
+      "sku": "YZA808",
+      "brand": "YZA Keyboards",
+      "price": "3,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "mouse_bcd_xtreme.jpg",
+      "name": "Игровая мышь BCD Xtreme",
+      "sku": "BCD909",
+      "brand": "BCD Gaming",
+      "price": "2,800 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "router_efg_max.jpg",
+      "name": "Роутер EFG Max",
+      "sku": "EFG010",
+      "brand": "EFG Networking",
+      "price": "6,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "ssd_hij_1tb.jpg",
+      "name": "SSD HJK 1TB",
+      "sku": "HIJ111",
+      "brand": "HJK Storage",
+      "price": "9,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "external_drive_klm_2tb.jpg",
+      "name": "Внешний диск KLM 2TB",
+      "sku": "KLM222",
+      "brand": "KLM Drives",
+      "price": "7,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "webcam_nop_hd.jpg",
+      "name": "Веб-камера NOP HD",
+      "sku": "NOP333",
+      "brand": "NOP Vision",
+      "price": "3,200 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "microphone_qrs_studio.jpg",
+      "name": "Студийный микрофон QRS",
+      "sku": "QRS444",
+      "brand": "QRS Audio",
+      "price": "5,800 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "graphics_card_tuv_gtx1660.jpg",
+      "name": "Видеокарта TUV GTX 1660",
+      "sku": "TUV555",
+      "brand": "TUV Graphics",
+      "price": "20,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "cpu_wxy_ryzen5.jpg",
+      "name": "Процессор WXY Ryzen 5",
+      "sku": "WXY666",
+      "brand": "WXY Compute",
+      "price": "15,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "motherboard_zab_pro.jpg",
+      "name": "Материнская плата ZAB Pro",
+      "sku": "ZAB777",
+      "brand": "ZAB Hardware",
+      "price": "12,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "power_supply_cde_650w.jpg",
+      "name": "Блок питания CDE 650W",
+      "sku": "CDE888",
+      "brand": "CDE Power",
+      "price": "4,700 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "cooler_fgh_liquid.jpg",
+      "name": "Кулер FGH Liquid",
+      "sku": "FGH999",
+      "brand": "FGH Cooling",
+      "price": "3,300 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "case_ijk_mid_tower.jpg",
+      "name": "Корпус IJK Mid Tower",
+      "sku": "IJK000",
+      "brand": "IJK Cases",
+      "price": "5,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "hdmi_cable_lmn_2m.jpg",
+      "name": "HDMI кабель LMN 2m",
+      "sku": "LMN111",
+      "brand": "LMN Cables",
+      "price": "800 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "usb_hub_opq_7port.jpg",
+      "name": "USB хаб OPQ 7-портовый",
+      "sku": "OPQ222",
+      "brand": "OPQ Accessories",
+      "price": "1,500 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "projector_rst_hd.jpg",
+      "name": "Проектор RST HD",
+      "sku": "RST333",
+      "brand": "RST Visuals",
+      "price": "25,000 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "scanner_uvx_3000.jpg",
+      "name": "Сканер UVX 3000",
+      "sku": "UVX444",
+      "brand": "UVX Imaging",
+      "price": "7,800 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "tablet_case_yza.jpg",
+      "name": "Чехол для планшета YZA",
+      "sku": "YZA555",
+      "brand": "YZA Accessories",
+      "price": "1,200 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "stylus_bcd.jpg",
+      "name": "Стилизованный стилус BCD",
+      "sku": "BCD666",
+      "brand": "BCD Tools",
+      "price": "900 ₽",
+      "status": "Активен"
+    },
+    {
+      "photo": "gaming_headset_cde_pro.jpg",
+      "name": "Игровая гарнитура CDE Pro",
+      "sku": "CDE777",
+      "brand": "CDE Gaming",
+      "price": "4,500 ₽",
+      "status": "Активен"
     }
   ]
 }
