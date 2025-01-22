@@ -1,3 +1,4 @@
+// Ваша функция initializeDashboard
 function initializeDashboard(root) {
   const tabLinks = root.querySelectorAll(
     ".tab-link, .nav-button, .summary-button"
@@ -50,9 +51,6 @@ function initializeDashboard(root) {
       // Доп. логика выхода
     });
   }
-
-  // Пример инициализации некоторых кнопок, модалок и т.д.
-  // --- Здесь можно разместить логику открытия/закрытия модальных окон и прочее ---
 
   // Закрытие модалок по клику на .close
   const modals = root.querySelectorAll(".modal");
@@ -208,3 +206,9 @@ function initializeDashboard(root) {
   loadAdditionalProducts();
   setupActionButtons();
 }
+
+// Инициализация при загрузке страницы
+document.addEventListener("DOMContentLoaded", function () {
+  const root = document.getElementById("mainContent");
+  initializeDashboard(root);
+});

@@ -6,8 +6,9 @@ window.initRegisterFunction = function (root) {
 
   const getCodeButton = root.getElementById("get-code-button");
   const phoneNumberInput = root.getElementById("phone-number");
-  const termsCheckbox = root.getElementById("terms-checkbox");
-  const termsMessage = root.getElementById("terms-message");
+  // Удалены:
+  // const termsCheckbox = root.getElementById("terms-checkbox");
+  // const termsMessage = root.getElementById("terms-message");
 
   const displayPhone = root.getElementById("display-phone");
   const verificationCodeInput = root.getElementById("verification-code");
@@ -34,23 +35,37 @@ window.initRegisterFunction = function (root) {
   const companyPersonalDataCheckbox = root.getElementById("personal-data");
   const companyDataMessage = root.getElementById("company-data-message");
 
+  // Новые элементы для сторонних сервисов и альтернативного входа
+  const vkLogin = root.getElementById("vk-login");
+  const yandexLogin = root.getElementById("yandex-login");
+  const loginButton = root.getElementById("login-button");
+  const toggleAlternativeLoginButton = root.getElementById(
+    "toggle-alternative-login"
+  );
+  const alternativeLogin = root.getElementById("alternative-login");
+  const usernameInput = root.getElementById("username");
+  const passwordInput = root.getElementById("password");
+
   // Этап 1: Получение кода
   getCodeButton.addEventListener("click", function () {
     const phone = phoneNumberInput.value.trim();
     if (!validatePhone(phone)) {
       showMessage(
-        termsMessage,
+        // Используйте соответствующий элемент для отображения сообщений, если требуется
+        // Например, можно создать отдельное сообщение для ошибок телефона
+        codeMessage, // Или другой элемент, который отображает ошибки на этапе 1
         "Пожалуйста, введите корректный номер телефона."
       );
       return;
     }
-    if (!termsCheckbox.classList.contains("checked")) {
-      showMessage(
-        termsMessage,
-        "Требуется согласие с условиями использования."
-      );
-      return;
-    }
+    // Удалена проверка согласия:
+    // if (!termsCheckbox.classList.contains("checked")) {
+    //   showMessage(
+    //     termsMessage,
+    //     "Требуется согласие с условиями использования."
+    //   );
+    //   return;
+    // }
 
     // Здесь должен быть AJAX запрос на сервер для отправки SMS
     // Например: sendSMS(phone).then(...)
@@ -97,6 +112,7 @@ window.initRegisterFunction = function (root) {
       timeLeft--;
       const mins = String(Math.floor(timeLeft / 60)).padStart(2, "0");
       const secs = String(timeLeft % 60).padStart(2, "0");
+      timerSpan.textContent = `${mins}:${secs}`;
       resendCodeButton.textContent = `Запросить новый код через ${mins}:${secs}`;
 
       if (timeLeft <= 0) {
@@ -245,6 +261,54 @@ window.initRegisterFunction = function (root) {
       this.classList.toggle("unchecked");
     });
   });
+
+  // Обработчики для сторонних сервисов входа
+  vkLogin.addEventListener("click", function () {
+    simulateThirdPartyLogin();
+  });
+
+  yandexLogin.addEventListener("click", function () {
+    simulateThirdPartyLogin();
+  });
+
+  // Обработчик для альтернативного входа с логином и паролем
+  loginButton.addEventListener("click", function () {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (username !== "" && password !== "") {
+      // Изменил условие с || на &&
+      simulateLogin();
+    } else {
+      alert("Пожалуйста, введите логин и пароль.");
+    }
+  });
+
+  // Обработчик для кнопки "Войти, используя логин и пароль"
+  toggleAlternativeLoginButton.addEventListener("click", function () {
+    alternativeLogin.classList.toggle("hidden");
+  });
+
+  // Функция имитации успешного входа через альтернативный метод
+  function simulateLogin() {
+    // Здесь можно добавить дополнительные действия при успешном входе
+    window.location.reload();
+
+    // Установка номера телефона в формы регистрации
+    const phone = phoneNumberInput.value.trim();
+    clientPhoneInput.value = phone || "000 000-00-00";
+    companyPhoneInput.value = phone || "000 000-00-00";
+  }
+
+  // Функция имитации успешного входа через сторонние сервисы
+  function simulateThirdPartyLogin() {
+    // Здесь можно добавить дополнительные действия при успешном входе
+    window.location.reload();
+
+    // Установка номера телефона в формы регистрации (можно оставить пустым или задать дефолтное значение)
+    clientPhoneInput.value = "000 000-00-00";
+    companyPhoneInput.value = "000 000-00-00";
+  }
 };
 
 /**

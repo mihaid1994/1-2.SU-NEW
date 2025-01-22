@@ -11,12 +11,14 @@ p {
   box-sizing: border-box;
 }
 
+/* Блок контактной информации */
 .contact-info {
   margin-top: 15px;
   margin-left: 25px;
   line-height: 2; /* Высота строки */
 }
 
+/* Стили для кнопки */
 .white-button {
   background-color: #bdbdbd;
   border: none;
@@ -38,8 +40,8 @@ p {
 .header-image {
   width: 100%; /* Занимает всю ширину окна */
   height: 100px;
-  position: relative; /* Для возможного добавления контента поверх */
-  overflow: hidden; /* Для обрезания изображения, если оно больше контейнера */
+  position: relative; /* Для добавления контента поверх */
+  overflow: hidden; /* Обрезаем изображение, если больше контейнера */
   margin-top: 10px;
   border-radius: 0 0 10px 10px; /* Закругление только снизу */
 }
@@ -47,40 +49,43 @@ p {
 /* Изображение внутри контейнера */
 .header-image img {
   width: 100%; /* Растянуть на всю ширину */
-  height: auto; /* Сохранять пропорции изображения */
-  display: block; /* Убрать нижние пробелы изображения */
-  filter: blur(1px) brightness(0.8); /* Размытие по Гауссу и уменьшение яркости */
+  height: auto; /* Сохранять пропорции */
+  display: block; /* Убрать нижние пробелы */
+  filter: blur(1px) brightness(0.8); /* Лёгкое размытие + затемнение */
 }
 
-/* Контейнер для текста поверх изображения */
+/* Повторно указываем для ясности */
 .header-image {
-  position: relative; /* Позволяет размещать текст поверх изображения */
+  position: relative;
 }
 
+/* Текст поверх изображения */
 .header-text {
-  position: absolute; /* Абсолютное позиционирование внутри контейнера */
-  top: 44%; /* Центрирование по вертикали */
-  right: 30%; /* Центрирование по горизонтали */
-  transform: translate(+50%, -50%); /* Смещение центра */
-  text-align: center; /* Центровка текста */
-  color: rgb(241, 241, 241); /* Белый текст */
+  position: absolute;
+  top: 44%; /* Смещение вниз по вертикали */
+  right: 30%; /* Смещение по горизонтали */
+  transform: translate(+50%, -50%);
+  text-align: center;
+  color: rgb(241, 241, 241);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif; /* Стиль Apple */
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Лёгкая тень для читабельности */
+    "Helvetica Neue", Arial, sans-serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .header-text h1 {
-  font-size: 40px; /* Крупный шрифт */
-  font-weight: 700; /* Жирный текст */
-  line-height: 1.2; /* Высота строки */
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
+/* Адаптивность заголовка */
 @media (max-width: 800px) {
   .header-text h1 {
-    font-size: 28px; /* Уменьшение шрифта для мобильных устройств */
+    font-size: 28px;
   }
 }
 
+/* Контейнер для всех букв и городов */
 .contacts {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -88,11 +93,10 @@ p {
   padding: 20px;
 }
 
-/* Контейнер для каждой буквы */
+/* Карточка для каждой буквы */
 .letter-group {
   background-color: #ffffff;
-  /* Убираем рамки */
-  border: none;
+  border: none; /* убираем рамку */
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -103,7 +107,7 @@ p {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Заголовок буквы */
+/* Заголовок с буквой */
 .letter-group h3 {
   color: #555555;
   font-size: 24pt;
@@ -117,12 +121,12 @@ p {
   list-style: none;
 }
 
-/* Каждый город */
+/* Элемент города */
 .city {
   margin-bottom: 12px;
 }
 
-/* Кнопка переключения */
+/* Кнопка для раскрытия информации о городе */
 .city .toggle {
   background: none;
   border: none;
@@ -143,24 +147,24 @@ p {
   background-color: #e0e0e0;
 }
 
-/* Изменение цвета заголовка при активном состоянии */
+/* Меняем цвет при активном состоянии (раскрыто) */
 .city.active .toggle {
   color: #ff6600; /* Оранжевый цвет */
 }
 
-/* Стрелка */
+/* Стрелка на кнопке (▼) */
 .city .toggle::after {
   content: "▼";
   font-size: 10pt;
   transition: transform 0.3s ease;
 }
 
-/* Поворот стрелки при активном состоянии */
+/* Переворот стрелки при активном состоянии */
 .city.active .toggle::after {
   transform: rotate(180deg);
 }
 
-/* Раздел с деталями */
+/* Скрытый блок с деталями */
 .city .details {
   max-height: 0;
   overflow: hidden;
@@ -172,13 +176,13 @@ p {
   border-radius: 4px;
 }
 
-/* При активном состоянии, развернуть детали */
+/* Когда .city имеет класс .active, блок .details раскрыт */
 .city.active .details {
-  max-height: 500px; /* Достаточно большое значение для контента */
+  max-height: 500px; /* Достаточно большое значение для видимого контента */
   padding: 10px;
 }
 
-/* Стилизация текста внутри деталей */
+/* Стили текста в деталях */
 .details p {
   margin-bottom: 6px;
   font-size: 10pt;
@@ -186,7 +190,7 @@ p {
   line-height: 1.4;
 }
 
-/* Адаптивность */
+/* Дополнительная адаптивность */
 @media (max-width: 1200px) {
   .letter-group {
     grid-column: span 1;

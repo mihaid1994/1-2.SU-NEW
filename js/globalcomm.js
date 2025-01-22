@@ -1,14 +1,8 @@
 (function (global) {
-  /**
-   * GComm_TabManager
-   *
-   * Класс управления вкладками. Вместо iframe используем fetch для загрузки HTML
-   * и динамической вставки. Используется Shadow DOM для изоляции стилей и скриптов.
-   * Реализована динамическая регулировка высоты страницы под содержимое.
-   */
   class GComm_TabManager {
     constructor() {
       this.specLoad = {}; // Объект для хранения данных specload.json
+      this.tabShadowRoots = {}; // Объект для хранения Shadow Root по tabId
 
       // Проверяем состояние загрузки документа
       if (document.readyState === "loading") {
@@ -63,18 +57,6 @@
           <i class="ri-shopping-cart-2-line" style="pointer-events: none;"></i>
         `;
 
-        // Кнопка «Заказы»
-        this.createOrderButton = document.createElement("button");
-        this.createOrderButton.id = "create-order-button";
-        this.createOrderButton.classList.add("create-order-button");
-        this.createOrderButton.setAttribute(
-          "data-tooltip",
-          "Открыть журнал заказов"
-        );
-        this.createOrderButton.innerHTML = `
-          <i class="ri-list-check-3" style="margin-right: 5px; pointer-events: none;"></i>
-        `;
-
         // Кнопка «Чат»
         this.createChatButton = document.createElement("button");
         this.createChatButton.id = "create-chat-button";
@@ -86,7 +68,6 @@
 
         // Добавляем кнопки в общий контейнер
         this.buttonsContainer.appendChild(this.createChatButton);
-        this.buttonsContainer.appendChild(this.createOrderButton);
         this.buttonsContainer.appendChild(this.createCartButton);
 
         // Добавляем общий контейнер кнопок в основной контейнер вкладок
@@ -96,9 +77,7 @@
         this.createCartButton = this.buttonsContainer.querySelector(
           "#create-cart-button"
         );
-        this.createOrderButton = this.buttonsContainer.querySelector(
-          "#create-order-button"
-        );
+
         this.createChatButton = this.buttonsContainer.querySelector(
           "#create-chat-button"
         );
@@ -156,11 +135,6 @@
         await this.openPageAsTab("Чат", url);
       });
 
-      this.createOrderButton.addEventListener("click", async () => {
-        const url = "/pages/zajavki.html";
-        await this.openPageAsTab("Заказы", url);
-      });
-
       // Обработка меню для открытия вкладок
       const menuLinks = document.querySelectorAll(".menu a, .secondary-button");
       menuLinks.forEach((link) => {
@@ -178,7 +152,17 @@
       if (ordersButton) {
         ordersButton.addEventListener("click", async (e) => {
           e.preventDefault();
-          const title = "Заказы";
+          const title = "Журнал заказов";
+          const url = "/pages/zajavki.html";
+          await this.openPageAsTab(title, url);
+        });
+      }
+
+      const ordersButton2 = document.querySelector(".orders-button2");
+      if (ordersButton2) {
+        ordersButton2.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const title = "Журнал заказов";
           const url = "/pages/zajavki.html";
           await this.openPageAsTab(title, url);
         });
@@ -194,7 +178,7 @@
         });
       }
 
-      const registrationButton = document.querySelector(".menu .account a");
+      const registrationButton = document.getElementById("loginButton");
       if (registrationButton) {
         registrationButton.addEventListener("click", async (e) => {
           e.preventDefault(); // Предотвращаем переход по ссылке
@@ -204,13 +188,54 @@
         });
       }
 
-      const cabinetButton = document.querySelector(".Cabinet-button");
-      if (cabinetButton) {
-        cabinetButton.addEventListener("click", async (e) => {
+      const openwaitlistButton = document.querySelector(".waitlist-button");
+      if (openwaitlistButton) {
+        openwaitlistButton.addEventListener("click", async (e) => {
           e.preventDefault();
+
+          // Открываем вкладку "Личный кабинет" и получаем её ID
           const title = "Личный кабинет";
           const url = "/pages/cabinet_postavshika.html";
-          await this.openPageAsTab(title, url);
+          const parentTabId = await this.openPageAsTab(title, url);
+
+          // Активируем внутреннюю вкладку "Настройки аккаунта"
+          const innerDataTab = "waitlist";
+          this.activateInnerTab(parentTabId, innerDataTab);
+        });
+      }
+
+      const openbalanceLoyalityElements = document.querySelectorAll(
+        ".label, .value, .Cabinet-button"
+      );
+
+      openbalanceLoyalityElements.forEach((element) => {
+        element.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          // Открываем вкладку "Личный кабинет" и получаем её ID
+          const title = "Личный кабинет";
+          const url = "/pages/cabinet_postavshika.html";
+          const parentTabId = await this.openPageAsTab(title, url);
+
+          // Активируем внутреннюю вкладку "Баланс и система лояльности"
+          const innerDataTab = "balanceLoyalty";
+          this.activateInnerTab(parentTabId, innerDataTab);
+        });
+      });
+
+      const openSettingsButton = document.querySelector(".settings-ac-button");
+      if (openSettingsButton) {
+        openSettingsButton.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          // Открываем вкладку "Личный кабинет" и получаем её ID
+          const title = "Личный кабинет";
+          const url = "/pages/cabinet_postavshika.html";
+          const parentTabId = await this.openPageAsTab(title, url);
+
+          // Активируем внутреннюю вкладку "Настройки аккаунта"
+          const innerDataTab = "templates";
+          this.activateInnerTab(parentTabId, innerDataTab);
         });
       }
 
@@ -472,6 +497,9 @@
         // Специфичная инициализация для различных страниц через specload.json
         await this.initializePageSpecific(contentURL, shadowRoot);
 
+        // Сохраняем ссылку на Shadow Root
+        this.tabShadowRoots[tabId] = shadowRoot;
+
         // Устанавливаем MutationObserver для отслеживания изменений содержимого
         const observer = new MutationObserver(() => {
           this.updatePageHeight();
@@ -491,7 +519,37 @@
       this.updateCreateCartButtonVisibility();
       this.updatePageHeight();
 
-      return tabId;
+      return tabId; // Возвращаем ID вкладки
+    }
+
+    /**
+     * Метод для активации внутренней вкладки внутри Shadow Root родительской вкладки.
+     *
+     * @param {string} parentTabId - ID родительской вкладки
+     * @param {string} innerTabDataTab - Значение data-tab внутренней вкладки
+     */
+    activateInnerTab(parentTabId, innerTabDataTab) {
+      const shadowRoot = this.tabShadowRoots[parentTabId];
+      if (!shadowRoot) {
+        console.error(
+          `Shadow Root для вкладки с ID "${parentTabId}" не найден.`
+        );
+        return;
+      }
+
+      const innerTabLink = shadowRoot.querySelector(
+        `.tab-link[data-tab="${innerTabDataTab}"]`
+      );
+      if (innerTabLink) {
+        innerTabLink.click(); // Имитируем нажатие на внутреннюю вкладку
+        console.log(
+          `Внутренняя вкладка "${innerTabDataTab}" активирована внутри "${parentTabId}".`
+        );
+      } else {
+        console.error(
+          `Внутренняя ссылка с data-tab="${innerTabDataTab}" не найдена внутри "${parentTabId}".`
+        );
+      }
     }
 
     /**
@@ -561,10 +619,12 @@
       if (existingTab) {
         const tabId = existingTab.dataset.tab;
         this.activateTab(tabId);
+        return tabId; // Возвращаем ID существующей вкладки
       } else {
         // Проверяем, если это вкладка корзины
         const isCart = title.startsWith("Корзина");
-        await this.createTab(title, url, isCart);
+        const tabId = await this.createTab(title, url, isCart);
+        return tabId; // Возвращаем ID новой вкладки
       }
     }
 
@@ -691,6 +751,9 @@
         // Обновляем текущую активную вкладку
         this.currentActiveTab = tabId;
 
+        // Обновляем ссылку на Shadow Root уже активной вкладки
+        this.tabShadowRoots[tabId] = activeContent.shadowRoot;
+
         // Обновляем высоту страницы под содержимое активной вкладки
         this.updatePageHeight();
         console.log(`Вкладка "${activeTab.dataset.name}" активирована.`);
@@ -767,8 +830,7 @@
      */
     updateCreateCartButtonVisibility() {
       this.createCartButton.style.display = "block";
-      this.createOrderButton.style.display = "block";
-      // console.log("Кнопки 'Создать корзину' и 'Заказы' видны.");
+      // console.log("Кнопки 'Создать корзину' и 'Журнал заказов' видны.");
     }
 
     /**

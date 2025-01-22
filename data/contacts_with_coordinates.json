@@ -1,0 +1,1015 @@
+{
+  "А": [
+    {
+      "name": "Абакан",
+      "address": "ул. Пушкина, д. 207а, каб.12",
+      "phones": ["+7 (983) 196-70-70", "+7 (983) 054-74-98"],
+      "emails": ["gerasimenko_m@krasnoyarsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.721152,
+        "longitude": 91.442396
+      }
+    },
+    {
+      "name": "Ангарск",
+      "address": "",
+      "phones": ["+7 (902) 515-56-50"],
+      "emails": ["angarsk@irk.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.374557,
+        "longitude": 103.276479
+      }
+    },
+    {
+      "name": "Апатиты",
+      "address": "",
+      "phones": ["+7 (81555) 6-42-01", "+7 (921) 164-22-92"],
+      "emails": ["apatity@aneva.ru"],
+      "coordinates": {
+        "latitude": 67.568023,
+        "longitude": 33.407187
+      }
+    },
+    {
+      "name": "Армавир",
+      "address": "",
+      "phones": ["+7 (86137) 7-71-61", "+7 (918) 442-40-07"],
+      "emails": ["armavir@aneva.ru"],
+      "coordinates": {
+        "latitude": 44.997655,
+        "longitude": 41.129644
+      }
+    },
+    {
+      "name": "Архангельск",
+      "address": "",
+      "phones": ["+7 (8182) 24-25-10"],
+      "emails": ["arhangelsk@aneva.ru"],
+      "coordinates": {
+        "latitude": 64.539911,
+        "longitude": 40.515762
+      }
+    },
+    {
+      "name": "Астрахань",
+      "address": "",
+      "phones": [],
+      "emails": ["astrahan@astrahan.sbat.ru"],
+      "coordinates": null
+    }
+  ],
+  "Б": [
+    {
+      "name": "Балашиха",
+      "address": "",
+      "phones": ["+7 (499) 702-57-52"],
+      "emails": ["balashiha@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.797007,
+        "longitude": 37.938118
+      }
+    },
+    {
+      "name": "Барнаул",
+      "address": "",
+      "phones": ["+7 (3852) 56-78-96"],
+      "emails": ["barnaul@barnaul.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.346785,
+        "longitude": 83.776856
+      }
+    },
+    {
+      "name": "Белгород",
+      "address": "",
+      "phones": ["+7 (991) 2104574"],
+      "emails": [],
+      "coordinates": {
+        "latitude": 50.595414,
+        "longitude": 36.587277
+      }
+    },
+    {
+      "name": "Бийск",
+      "address": "",
+      "phones": ["+7 (3852) 25-04-75", "+7 (905) 084-54-75"],
+      "emails": ["biysk@biysk.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.541811,
+        "longitude": 85.220656
+      }
+    },
+    {
+      "name": "Братск",
+      "address": "",
+      "phones": ["+7 (924) 624-12-88", "+7 (924) 824-20-00"],
+      "emails": ["bratsk@irk.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.151682,
+        "longitude": 101.633505
+      }
+    },
+    {
+      "name": "Брянск",
+      "address": "",
+      "phones": ["+7 (4832) 26-43-58", "+7 (906) 698-08-68"],
+      "emails": ["briansk@briansk.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.2434,
+        "longitude": 34.363991
+      }
+    }
+  ],
+  "В": [
+    {
+      "name": "Великие Луки",
+      "address": "",
+      "phones": ["+7 (911) 384-03-53", "+7 (905) 238-72-91"],
+      "emails": ["v-luki@v-luki.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.343703,
+        "longitude": 30.515671
+      }
+    },
+    {
+      "name": "Великий Новгород",
+      "address": "",
+      "phones": ["+7 (8162) 63-43-66"],
+      "emails": ["novgorod@aneva.ru"],
+      "coordinates": {
+        "latitude": 58.522857,
+        "longitude": 31.269816
+      }
+    },
+    {
+      "name": "Владимир",
+      "address": "",
+      "phones": ["+7 (4922) 44-35-07", "+7 (961) 257-00-07"],
+      "emails": ["vladimir@vladimir.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.129057,
+        "longitude": 40.406635
+      }
+    },
+    {
+      "name": "Волгоград",
+      "address": "",
+      "phones": ["+7 (927) 250-48-81"],
+      "emails": ["volgograd@volgograd.sbat.ru"],
+      "coordinates": {
+        "latitude": 48.707067,
+        "longitude": 44.516975
+      }
+    },
+    {
+      "name": "Вологда",
+      "address": "",
+      "phones": ["+7 (8172) 27-44-08"],
+      "emails": ["vologda@aneva.ru"],
+      "coordinates": {
+        "latitude": 59.220501,
+        "longitude": 39.891523
+      }
+    },
+    {
+      "name": "Воронеж",
+      "address": "",
+      "phones": ["+7 (920) 213-15-28"],
+      "emails": ["voronezh@voronezh.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.660781,
+        "longitude": 39.200296
+      }
+    }
+  ],
+  "Г": [
+    {
+      "name": "Глазов",
+      "address": "",
+      "phones": ["8 (34141) 666-90"],
+      "emails": ["glazov@glazov.sbat.ru"],
+      "coordinates": {
+        "latitude": 58.140801,
+        "longitude": 52.674253
+      }
+    }
+  ],
+  "Е": [
+    {
+      "name": "Екатеринбург",
+      "address": "",
+      "phones": ["+7 (343) 222-79-79", "+7 (495) 419-09-10"],
+      "emails": ["ekt@ekt.sbat.ru (офисный отдел)"],
+      "coordinates": {
+        "latitude": 56.838011,
+        "longitude": 60.597474
+      }
+    },
+    {
+      "name": "Екатеринбург (Восток)",
+      "address": "",
+      "phones": ["+7 (343) 243-53-86"],
+      "emails": ["ekt_op@ekt.sbat.ru"],
+      "coordinates": null
+    },
+    {
+      "name": "Екатеринбург (Запад)",
+      "address": "",
+      "phones": ["+7 (904) 98-000-55 (WhatsApp)"],
+      "emails": ["zapad@ekt.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.838011,
+        "longitude": 60.597474
+      }
+    },
+    {
+      "name": "Екатеринбург (Север)",
+      "address": "",
+      "phones": ["+7 (343) 385-67-20"],
+      "emails": ["sever@ekt.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.838011,
+        "longitude": 60.597474
+      }
+    },
+    {
+      "name": "Екатеринбург (Центральный офис)",
+      "address": "",
+      "phones": ["+7 (343) 288-78-88"],
+      "emails": [
+        "zakup@ekt.sbat.ru (отд. закупок)",
+        "it@ekt.sbat.ru (ИТ- отдел)",
+        "allbuh@ekt.sbat.ru (Бухгалтерия)",
+        "feedback@sbat.ru (Директор)",
+        "demidov@ekt.sbat.ru (Региональный центр)"
+      ],
+      "coordinates": {
+        "latitude": 56.838011,
+        "longitude": 60.597474
+      }
+    }
+  ],
+  "З": [
+    {
+      "name": "Зеленоград",
+      "address": "",
+      "phones": [],
+      "emails": ["zelenograd@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.991893,
+        "longitude": 37.21439
+      }
+    },
+    {
+      "name": "Златоуст",
+      "address": "",
+      "phones": ["+7 (3513) 65-56-56", "+7 (922) 634-38-68"],
+      "emails": ["zlatoust@zlatoust.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.11148,
+        "longitude": 59.720809
+      }
+    }
+  ],
+  "И": [
+    {
+      "name": "Иваново",
+      "address": "",
+      "phones": ["+7 (4932) 58-53-30"],
+      "emails": ["ivanovo@ivanovo.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.999799,
+        "longitude": 40.973014
+      }
+    },
+    {
+      "name": "Ижевск",
+      "address": "",
+      "phones": ["+7 (3412) 60-21-21"],
+      "emails": ["izhevsk@izhevsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.852676,
+        "longitude": 53.2069
+      }
+    },
+    {
+      "name": "Иркутск",
+      "address": "",
+      "phones": ["+7 (3952) 503-510", "+7 (3952) 503-610"],
+      "emails": ["energia2000@irk.sbat.ru", "opt@irk.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.289588,
+        "longitude": 104.280606
+      }
+    }
+  ],
+  "К": [
+    {
+      "name": "Казань",
+      "address": "",
+      "phones": ["+7 (843) 273-66-56"],
+      "emails": ["kazan@kazan.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.796127,
+        "longitude": 49.106414
+      }
+    },
+    {
+      "name": "Калуга",
+      "address": "",
+      "phones": ["+7 (910) 528-01-80"],
+      "emails": ["kaluga@kaluga.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.513678,
+        "longitude": 36.261341
+      }
+    },
+    {
+      "name": "Кемерово",
+      "address": "",
+      "phones": ["+7 (905) 067-38-30", "+7 (3842) 49-21-69"],
+      "emails": ["kemerovo@kemerovo.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.352818,
+        "longitude": 86.115198
+      }
+    },
+    {
+      "name": "Киров",
+      "address": "",
+      "phones": ["+7 (8332) 71-22-02"],
+      "emails": ["kirov@aneva.ru"],
+      "coordinates": {
+        "latitude": 58.603595,
+        "longitude": 49.668023
+      }
+    },
+    {
+      "name": "Кострома",
+      "address": "",
+      "phones": ["+7 (920) 642-38-38"],
+      "emails": ["kostroma@kostroma.sbat.ru"],
+      "coordinates": {
+        "latitude": 57.767918,
+        "longitude": 40.926894
+      }
+    },
+    {
+      "name": "Кострома",
+      "address": "",
+      "phones": ["+7 (921) 254-71-44"],
+      "emails": ["kostroma@aneva.ru"],
+      "coordinates": {
+        "latitude": 57.767918,
+        "longitude": 40.926894
+      }
+    },
+    {
+      "name": "Красногорск",
+      "address": "ул. Жуковского, д. 19, 2 этаж, офис 18",
+      "phones": ["+7 (499) 702-69-94"],
+      "emails": ["savchenko_s@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.820369,
+        "longitude": 37.319484
+      }
+    },
+    {
+      "name": "Краснодар",
+      "address": "",
+      "phones": ["+7 (861) 205-64-74", "+7 (929) 837-04-22"],
+      "emails": ["krasnodar@aneva.ru"],
+      "coordinates": {
+        "latitude": 45.03547,
+        "longitude": 38.975313
+      }
+    },
+    {
+      "name": "Красноярск",
+      "address": "ул. Маерчака, д. 50, оф. 2-01",
+      "phones": ["+7 (391) 291-10-91"],
+      "emails": ["krasnoyarsk@krasnoyarsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.010543,
+        "longitude": 92.852581
+      }
+    },
+    {
+      "name": "Курган",
+      "address": "",
+      "phones": ["+7 (3522) 64-48-14", "+7 (909) 177-48-78"],
+      "emails": ["kurgan@kurgan.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.441004,
+        "longitude": 65.341118
+      }
+    },
+    {
+      "name": "Курск",
+      "address": "",
+      "phones": ["+7 (910) 743-61-13"],
+      "emails": ["kursk@kursk.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.730846,
+        "longitude": 36.193015
+      }
+    }
+  ],
+  "Л": [
+    {
+      "name": "Липецк",
+      "address": "",
+      "phones": ["+7 (951) 309-10-36"],
+      "emails": ["lipetsk@lipetsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.608826,
+        "longitude": 39.599229
+      }
+    },
+    {
+      "name": "Ленинск-Кузнецкий",
+      "address": "",
+      "phones": ["+7 (38456) 49-577"],
+      "emails": ["venskov_d@novokuznetsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.663609,
+        "longitude": 86.162243
+      }
+    }
+  ],
+  "М": [
+    {
+      "name": "Магнитогорск",
+      "address": "",
+      "phones": ["+7 (3519) 26-77-08", "+7 (3519) 26-73-21"],
+      "emails": ["magnit@magnit.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.407163,
+        "longitude": 58.980291
+      }
+    },
+    {
+      "name": "Москва",
+      "address": "",
+      "phones": ["+7 (495) 780-10-41"],
+      "emails": ["moscow@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.755819,
+        "longitude": 37.617644
+      }
+    },
+    {
+      "name": "Мурманск",
+      "address": "",
+      "phones": ["+7 (8152) 68-55-60", "+7 (921) 047-84-33"],
+      "emails": ["murmansk@aneva.ru"],
+      "coordinates": {
+        "latitude": 68.970663,
+        "longitude": 33.074918
+      }
+    }
+  ],
+  "Н": [
+    {
+      "name": "Набережные Челны",
+      "address": "",
+      "phones": ["+7 (8552) 91-51-09"],
+      "emails": ["n@nchelny.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.741272,
+        "longitude": 52.403662
+      }
+    },
+    {
+      "name": "Нижний Новгород",
+      "address": "",
+      "phones": ["+7 (915) 950-42-45"],
+      "emails": ["nnovg_zarechye@nnovgorod.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.326797,
+        "longitude": 44.006516
+      }
+    },
+    {
+      "name": "Нижний Новгород 2",
+      "address": "ул. Короленко, д. 19Б, офис 18, 2-й этаж",
+      "phones": ["+7 (831) 274-67-94"],
+      "emails": ["nosikova_i@nnovgorod.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.323852,
+        "longitude": 43.97468
+      }
+    },
+    {
+      "name": "Нижний Тагил",
+      "address": "",
+      "phones": ["+7 (3435) 47-88-44", "+7 (922) 039-02-02"],
+      "emails": ["tagil@tagil.sbat.ru"],
+      "coordinates": {
+        "latitude": 57.907562,
+        "longitude": 59.971474
+      }
+    },
+    {
+      "name": "Новокузнецк",
+      "address": "",
+      "phones": ["+7 (3843) 20-01-53"],
+      "emails": ["shkolnikov_v@novokuznetsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.805005,
+        "longitude": 86.864088
+      }
+    },
+    {
+      "name": "Новороссийск",
+      "address": "",
+      "phones": ["+7 (8617) 67-23-21", "+7 (928) 256-10-33"],
+      "emails": ["novoross@aneva.ru"],
+      "coordinates": {
+        "latitude": 44.723771,
+        "longitude": 37.768813
+      }
+    },
+    {
+      "name": "Новосибирск",
+      "address": "",
+      "phones": ["+7 (383) 363-2015", "+7 (383) 292-92-89"],
+      "emails": ["novosibirsk@novosibirsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.030204,
+        "longitude": 82.92043
+      }
+    },
+    {
+      "name": "Новосибирск 2",
+      "address": "",
+      "phones": [
+        "+7 (913) 796-48-69",
+        "+7 (953) 778-40-96",
+        "+7 (383) 209-26-60"
+      ],
+      "emails": ["novosibirsk2@novosibirsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.030204,
+        "longitude": 82.92043
+      }
+    }
+  ],
+  "О": [
+    {
+      "name": "Одинцово",
+      "address": "",
+      "phones": ["+7 (499) 702-57-73"],
+      "emails": ["odintsovo@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.655397,
+        "longitude": 37.270481
+      }
+    },
+    {
+      "name": "Октябрьский",
+      "address": "",
+      "phones": [],
+      "emails": ["oktyabrskiy@oktyabrskiy.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.481454,
+        "longitude": 53.46557
+      }
+    },
+    {
+      "name": "Омск",
+      "address": "",
+      "phones": ["+7 (3812) 90-52-72", "+7 (3812) 90-55-52"],
+      "emails": ["omsk@omsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.989347,
+        "longitude": 73.368221
+      }
+    },
+    {
+      "name": "Орел",
+      "address": "",
+      "phones": ["+7 (4862) 44-32-84", "+7 (910) 743-61-13"],
+      "emails": ["oriol@oriol.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.970756,
+        "longitude": 36.064358
+      }
+    },
+    {
+      "name": "Оренбург",
+      "address": "ул. Терешковой, д. 263/2, офис 408",
+      "phones": ["+7 (922) 808-06-01"],
+      "emails": ["orenburgSB@orenburg.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.768205,
+        "longitude": 55.097
+      }
+    },
+    {
+      "name": "Орск",
+      "address": "",
+      "phones": ["+7 (3537) 40-17-00"],
+      "emails": ["orsk@orsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.2293,
+        "longitude": 58.474675
+      }
+    }
+  ],
+  "П": [
+    {
+      "name": "Пенза",
+      "address": "",
+      "phones": ["+7 (927) 379-57-42"],
+      "emails": ["penza@penza.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.195042,
+        "longitude": 45.018316
+      }
+    },
+    {
+      "name": "Пермь",
+      "address": "",
+      "phones": ["+7 (342) 256-61-03", "+7 (342) 257-65-65"],
+      "emails": ["perm@perm.sbat.ru"],
+      "coordinates": {
+        "latitude": 58.010455,
+        "longitude": 56.229443
+      }
+    },
+    {
+      "name": "Петрозаводск",
+      "address": "",
+      "phones": ["+7 (911) 409-24-13"],
+      "emails": ["zamyatina@aneva.ru"],
+      "coordinates": {
+        "latitude": 61.791316,
+        "longitude": 34.390222
+      }
+    },
+    {
+      "name": "Псков",
+      "address": "",
+      "phones": ["+7 (8112) 53-32-32"],
+      "emails": ["pskov@aneva.ru"],
+      "coordinates": {
+        "latitude": 57.819307,
+        "longitude": 28.332792
+      }
+    },
+    {
+      "name": "Пятигорск",
+      "address": "",
+      "phones": ["+7 (928) 635-77-76"],
+      "emails": ["pyatigorsk@aneva.ru"],
+      "coordinates": {
+        "latitude": 44.039802,
+        "longitude": 43.070643
+      }
+    }
+  ],
+  "Р": [
+    {
+      "name": "Ростов-на-Дону",
+      "address": "",
+      "phones": ["+7 (928) 771-85-58"],
+      "emails": ["rostov@aneva.ru"],
+      "coordinates": {
+        "latitude": 47.222109,
+        "longitude": 39.718813
+      }
+    },
+    {
+      "name": "Рубцовск",
+      "address": "",
+      "phones": ["+7 (962) 817-09-70"],
+      "emails": [],
+      "coordinates": {
+        "latitude": 51.527623,
+        "longitude": 81.217673
+      }
+    },
+    {
+      "name": "Рыбинск",
+      "address": "",
+      "phones": ["+7 (920) 147-93-04", "+7 (920) 655-13-88"],
+      "emails": ["ribinsk@aneva.ru"],
+      "coordinates": {
+        "latitude": 58.04864,
+        "longitude": 38.855711
+      }
+    },
+    {
+      "name": "Рязань",
+      "address": "",
+      "phones": ["+7 (4912) 24-77-59"],
+      "emails": ["ryazan@ryazan.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.629221,
+        "longitude": 39.737111
+      }
+    },
+    {
+      "name": "Раменское",
+      "address": "ул. Красноармейская, 101Б, каб.N7",
+      "phones": [],
+      "emails": [],
+      "coordinates": {
+        "latitude": 55.575918,
+        "longitude": 38.207595
+      }
+    }
+  ],
+  "С": [
+    {
+      "name": "Самара",
+      "address": "",
+      "phones": ["+7 (846) 250-07-90"],
+      "emails": ["samara@samara.sbat.ru"],
+      "coordinates": null
+    },
+    {
+      "name": "Санкт-Петербург",
+      "address": "",
+      "phones": ["+7 (812) 748-12-50"],
+      "emails": ["energomix@aneva.ru"],
+      "coordinates": {
+        "latitude": 59.938676,
+        "longitude": 30.314494
+      }
+    },
+    {
+      "name": "Санкт-Петербург Восток",
+      "address": "ул. Кржижановского, д. 15, корпус 2, литера \"А\"",
+      "phones": ["+7 (812) 645-40-00", "+7 (911) 941-77-71"],
+      "emails": [],
+      "coordinates": {
+        "latitude": 59.915332,
+        "longitude": 30.448765
+      }
+    },
+    {
+      "name": "Санкт-Петербург ЮГ",
+      "address": "",
+      "phones": ["+7 (812) 45-45-143", "+7 (931) 577-99-81"],
+      "emails": ["spb@spb.sbat.ru"],
+      "coordinates": {
+        "latitude": 59.769334,
+        "longitude": 29.915678
+      }
+    },
+    {
+      "name": "Саранск",
+      "address": "",
+      "phones": ["+7 (953) 029-83-75"],
+      "emails": ["saransk@saransk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.187433,
+        "longitude": 45.183938
+      }
+    },
+    {
+      "name": "Саратов",
+      "address": "",
+      "phones": ["+7 (8452) 39-94-44"],
+      "emails": ["saratov@saratov.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.533562,
+        "longitude": 46.034266
+      }
+    },
+    {
+      "name": "Симферополь",
+      "address": "",
+      "phones": ["+7 (978) 707-26-58", "+7 (978) 781-19-83"],
+      "emails": ["krim@aneva.ru"],
+      "coordinates": {
+        "latitude": 44.948237,
+        "longitude": 34.100327
+      }
+    },
+    {
+      "name": "Смоленск",
+      "address": "",
+      "phones": ["+7 (915) 652-77-90"],
+      "emails": ["smolensk@smolensk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.78263,
+        "longitude": 32.045098
+      }
+    },
+    {
+      "name": "Сочи",
+      "address": "",
+      "phones": ["+7 (928) 425-45-39"],
+      "emails": ["sochi@aneva.ru"],
+      "coordinates": {
+        "latitude": 43.534511,
+        "longitude": 39.844433
+      }
+    },
+    {
+      "name": "Ставрополь",
+      "address": "",
+      "phones": ["+7(961) 498-55-00"],
+      "emails": ["stavropol@aneva.ru"],
+      "coordinates": {
+        "latitude": 45.043317,
+        "longitude": 41.96911
+      }
+    },
+    {
+      "name": "Стерлитамак",
+      "address": "",
+      "phones": ["+7 (3473) 30-23-20", "+7 (987) 482-59-92"],
+      "emails": ["sterlitamak@sterlitamak.sbat.ru"],
+      "coordinates": {
+        "latitude": 53.630403,
+        "longitude": 55.930825
+      }
+    },
+    {
+      "name": "Сургут",
+      "address": "",
+      "phones": ["+7 (3462) 51-78-51"],
+      "emails": ["surgut@surgut.sbat.ru"],
+      "coordinates": {
+        "latitude": 61.241778,
+        "longitude": 73.393032
+      }
+    },
+    {
+      "name": "Сыктывкар",
+      "address": "",
+      "phones": ["+7 (8212) 51-72-14"],
+      "emails": ["syktyvkar@aneva.ru"],
+      "coordinates": {
+        "latitude": 61.668797,
+        "longitude": 50.836497
+      }
+    }
+  ],
+  "Т": [
+    {
+      "name": "Тамбов",
+      "address": "",
+      "phones": ["+7 (920) 234-67-67"],
+      "emails": ["tambov@tambov.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.721295,
+        "longitude": 41.45275
+      }
+    },
+    {
+      "name": "Тверь",
+      "address": "",
+      "phones": ["+7 (4822) 39-63-18"],
+      "emails": ["tver@tver.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.858745,
+        "longitude": 35.917421
+      }
+    },
+    {
+      "name": "Томск",
+      "address": "",
+      "phones": ["+7 (3822) 90-02-76"],
+      "emails": ["tomsk@tomsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.60319,
+        "longitude": 84.880913
+      }
+    },
+    {
+      "name": "Тула",
+      "address": "",
+      "phones": ["+7 (4872) 70-11-75"],
+      "emails": ["tula@tula.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.162858,
+        "longitude": 37.555768
+      }
+    },
+    {
+      "name": "Тюмень",
+      "address": "",
+      "phones": [
+        "8-800-222-18-63 (звонок бесплатный)",
+        "+7 (3452) 69-68-48",
+        "+7 (3452) 69-68-58"
+      ],
+      "emails": ["tumen@tumen.sbat.ru"],
+      "coordinates": {
+        "latitude": 57.152985,
+        "longitude": 65.541227
+      }
+    }
+  ],
+  "У": [
+    {
+      "name": "Улан-Удэ",
+      "address": "",
+      "phones": ["+7 (3012) 46-89-53", "+7 (902) 169-04-00"],
+      "emails": ["ulan-ude@irk.sbat.ru"],
+      "coordinates": {
+        "latitude": 51.834809,
+        "longitude": 107.584547
+      }
+    },
+    {
+      "name": "Ульяновск",
+      "address": "",
+      "phones": ["+7 (906) 142-06-06"],
+      "emails": ["ulianovsk@ulianovsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.314192,
+        "longitude": 48.403132
+      }
+    },
+    {
+      "name": "Ульяновск",
+      "address": "",
+      "phones": ["+7 (917) 600-51-61"],
+      "emails": ["simbirsk@ulianovsk.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.314192,
+        "longitude": 48.403132
+      }
+    },
+    {
+      "name": "Уфа",
+      "address": "",
+      "phones": ["+7 (347) 286-16-03"],
+      "emails": ["ufa@ufa.sbat.ru"],
+      "coordinates": {
+        "latitude": 54.735152,
+        "longitude": 55.958736
+      }
+    }
+  ],
+  "Ч": [
+    {
+      "name": "Чебоксары",
+      "address": "",
+      "phones": ["+7 (8352) 22-20-11"],
+      "emails": ["cheboxary@cheboxary.sbat.ru"],
+      "coordinates": {
+        "latitude": 56.139918,
+        "longitude": 47.247728
+      }
+    },
+    {
+      "name": "Челябинск",
+      "address": "",
+      "phones": ["+7 (922) 725-81-09", "+7 (922) 750-30-09"],
+      "emails": ["chel@chel.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.159902,
+        "longitude": 61.402554
+      }
+    },
+    {
+      "name": "Череповец",
+      "address": "",
+      "phones": ["+7 (8202) 30-18-10"],
+      "emails": ["che@aneva.ru"],
+      "coordinates": {
+        "latitude": 59.122672,
+        "longitude": 37.903443
+      }
+    },
+    {
+      "name": "Чехов",
+      "address": "",
+      "phones": ["+7 (916) 093-39-93", "+7 (929) 658-18-89"],
+      "emails": ["chehov@moscow.sbat.ru"],
+      "coordinates": {
+        "latitude": 55.14235,
+        "longitude": 37.454357
+      }
+    },
+    {
+      "name": "Чита",
+      "address": "",
+      "phones": ["+7 (914) 469-10-64"],
+      "emails": ["chita@irk.sbat.ru"],
+      "coordinates": {
+        "latitude": 52.033635,
+        "longitude": 113.501049
+      }
+    }
+  ],
+  "Я": [
+    {
+      "name": "Ярославль",
+      "address": "",
+      "phones": ["+7 (4852) 20-82-02"],
+      "emails": ["yaroslavl@yaroslavl.sbat.ru"],
+      "coordinates": {
+        "latitude": 57.626559,
+        "longitude": 39.893813
+      }
+    }
+  ]
+}

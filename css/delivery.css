@@ -374,14 +374,6 @@ h1 i:hover {
   background-color: #f3f3f3;
 }
 
-/* Градация уменьшения шрифта */
-@media (max-width: 1700px) {
-  .iksweb th,
-  .iksweb td {
-    font-size: 12px;
-  }
-}
-
 @media (max-width: 1400px) {
   .iksweb th,
   .iksweb td {

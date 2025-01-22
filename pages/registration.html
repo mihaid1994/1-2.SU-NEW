@@ -15,6 +15,8 @@
       <!-- Этап 1: Вход или Создание Профиля -->
       <div id="step-1" class="step">
         <h1 class="registration-title">Войти или создать профиль</h1>
+
+        <!-- Секция ввода телефона -->
         <div class="input-group">
           <div class="phone-input">
             <i class="ri-phone-line flag-icon"></i>
@@ -29,29 +31,60 @@
             />
           </div>
           <button id="get-code-button" class="get-code-button">
-            Получить код
+            Получить код в Telegram <i class="ri-send-plane-fill"></i>
           </button>
         </div>
-        <div class="terms">
-          <span class="terms-label">
-            Соглашаюсь с
-            <span class="clickable-text">
-              правилами пользования торговой площадкой
-            </span>
-          </span>
 
-          <span class="custom-checkbox unchecked" id="terms-checkbox"></span>
+        <!-- Секция сторонних сервисов -->
+        <div class="third-party-login">
+          <span class="third-party-label">
+            Войти, используя сторонние сервисы:
+          </span>
+          <div class="third-party-icons">
+            <img
+              src="/images/png/vk.png"
+              alt="ВКонтакте"
+              class="third-party-icon"
+              id="vk-login"
+            />
+            <img
+              src="/images/png/yand.png"
+              alt="Яндекс"
+              class="third-party-icon"
+              id="yandex-login"
+            />
+          </div>
         </div>
-        <span class="clickable-text2"> Войти, используя логин и пароль </span>
-        <div class="checkbox-message hidden" id="terms-message">
-          Требуется согласие с условиями использования.
+
+        <!-- Кнопка для альтернативного входа -->
+        <button id="toggle-alternative-login" class="alternative-login-button">
+          Войти по логину и паролю
+        </button>
+
+        <!-- Альтернативная форма входа -->
+        <div id="alternative-login" class="alternative-login hidden">
+          <div class="input-group alternative-input-group">
+            <input
+              type="text"
+              id="username"
+              placeholder="Логин"
+              class="alternative-input"
+            />
+            <input
+              type="password"
+              id="password"
+              placeholder="Пароль"
+              class="alternative-input"
+            />
+            <button id="login-button" class="login-button">Войти</button>
+          </div>
         </div>
       </div>
 
       <!-- Этап 2: Ввод кода подтверждения -->
       <div id="step-2" class="step hidden">
         <h2 class="step-title">
-          Отправлено SMS на номер <span id="display-phone"></span>
+          Код отправлен в Telegram по номеру <span id="display-phone"></span>
         </h2>
         <div class="verification-code-wrapper">
           <input
@@ -66,7 +99,7 @@
         </div>
         <div class="timer-container">
           <button id="resend-code-button" class="resend-code-button" disabled>
-            Запросить новый код через <span id="timer">00:46</span>
+            Запросить новый код через <span id="timer">00:30</span>
           </button>
         </div>
         <div class="checkbox-message hidden" id="code-message">
@@ -137,6 +170,19 @@
               <span
                 class="custom-checkbox unchecked"
                 id="client-personal-data"
+              ></span>
+            </div>
+            <div class="terms">
+              <span class="terms-label">
+                Соглашаюсь с
+                <span class="clickable-text">
+                  правилами пользования торговой площадкой
+                </span>
+              </span>
+
+              <span
+                class="custom-checkbox unchecked"
+                id="terms-checkbox"
               ></span>
             </div>
             <div class="checkbox-message hidden" id="client-data-message">
@@ -299,6 +345,19 @@
               </span>
               <span class="custom-checkbox unchecked" id="personal-data"></span>
             </div>
+            <div class="terms">
+              <span class="terms-label">
+                Соглашаюсь с
+                <span class="clickable-text">
+                  правилами пользования торговой площадкой
+                </span>
+              </span>
+
+              <span
+                class="custom-checkbox unchecked"
+                id="terms-checkbox"
+              ></span>
+            </div>
             <div class="checkbox-message hidden" id="company-data-message">
               Требуется согласие на обработку персональных данных.
             </div>
@@ -309,5 +368,7 @@
         </div>
       </div>
     </div>
+
+    <script src="/js/registration.js"></script>
   </body>
 </html>

@@ -4,14 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>1-2.SU NEW</title>
+    <!-- Стили -->
     <link rel="stylesheet" href="/css/test.css" />
     <link rel="stylesheet" href="/css/search_nav_style.css" />
     <link rel="stylesheet" href="/css/categories.css" />
+    <!-- Подключаем Remix Icon для иконок -->
     <link
       href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
       rel="stylesheet"
     />
+    <!-- Подключение Yandex Maps API -->
+    <script
+      src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=ВАШ_НОВЫЙ_API_КЛЮЧ_ЯНДЕКС_КАРТ"
+      type="text/javascript"
+      defer
+    ></script>
   </head>
+
   <body>
     <!-- Область для навигации -->
     <div id="navigation-area" class="navigation-area">
@@ -50,83 +59,112 @@
             </button>
           </div>
 
-          <!-- Бонусы, Лимит, Корзина, Личный кабинет -->
-          <div class="menu">
-            <div class="info-buttons">
-              <button
-                id="bonus-amount"
-                class="info-button"
-                data-tooltip="Ваши накопленные бонусы"
-              >
-                <span class="label">Бонусы:</span>
-                <span class="value">45 000 ₽</span>
-              </button>
-              <button
-                id="limit-amount"
-                class="info-button"
-                data-tooltip="Ваш текущий лимит покупок"
-              >
-                <span class="label">Доступный лимит:</span>
-                <span class="value">740 000 ₽</span>
-              </button>
-              <button
-                id="turnover"
-                class="info-button"
-                data-tooltip="Ваш текущий оборот за год"
-              >
-                <span class="label">Оборот за год:</span>
-                <span class="value">25 000 000,00 ₽</span>
-              </button>
-            </div>
+          <!-- Кнопка «Журнал заказов» -->
+          <span class="orders-button">
+            <i
+              class="ri-file-list-3-line"
+              id="orders-button"
+              data-tooltip="Журнал заказов"
+            ></i>
+          </span>
 
-            <li class="account">
-              <a
-                href="supplier-account.html"
-                data-tooltip="Управление вашим аккаунтом"
-              >
-                Войти
-              </a>
-              <ul class="dropdown">
-                <li>
-                  <button
-                    data-tooltip="Ваш рабочий стол"
-                    class="Cabinet-button"
-                  >
-                    Личный кабинет
-                  </button>
-                </li>
-                <li>
-                  <button data-tooltip="Журнал заказов" class="orders-button">
-                    Заказы
-                  </button>
-                </li>
-                <li>
-                  <button
-                    data-tooltip="Связаться с поддержкой"
-                    class="chat-button"
-                  >
-                    Чат
-                  </button>
-                </li>
-                <li>
-                  <button
-                    data-tooltip="Адреса и Контакты ГК Энергомикс"
-                    class="contacts-button"
-                  >
-                    Контакты
-                  </button>
-                </li>
-              </ul>
-            </li>
-            <a>
-              <i class="ri-door-open-fill" id="logout-icon"></i>
-              <span class="icon-group">
-                <i class="ri-group-3-line"></i>
-                <i class="ri-toggle-line"></i>
-              </span>
+          <!-- Бонусы, Лимит, Корзина, Личный кабинет -->
+          <div class="account" id="accountButton">
+            <a
+              id="logButton"
+              href="#"
+              data-tooltip="Управление вашим аккаунтом"
+            >
+              <i id="UserButton" class="ri-account-circle-line"></i>
+              <i id="ArrowButton" class="ri-arrow-down-s-line"></i>
             </a>
+            <div class="dropdown" id="accountDropdown">
+              <div class="link-buttons">
+                <button class="orders-button2">Журнал заказов</button>
+                <button class="waitlist-button">Лист ожидания</button>
+                <button data-tooltip="Ваш рабочий стол" class="Cabinet-button">
+                  Личный кабинет
+                </button>
+                <button
+                  data-tooltip="Связаться с поддержкой"
+                  class="chat-button"
+                >
+                  Чат
+                </button>
+                <button
+                  data-tooltip="Адреса и Контакты ГК Энергомикс"
+                  class="contacts-button"
+                >
+                  Контакты
+                </button>
+                <button
+                  data-tooltip="Настройте 1-2.SU под себя"
+                  class="settings-ac-button"
+                  data-section="profileSettings"
+                >
+                  Настройки аккаунта
+                </button>
+              </div>
+              <div class="info-buttons">
+                <span class="name">Шуравин М.А. </span>
+                <hr class="custom-divider" />
+                <button
+                  id="bonus-amount"
+                  class="info-button"
+                  data-tooltip="Ваши накопленные бонусы"
+                >
+                  <span class="label">Бонусы:</span>
+                  <span class="value">45 000 ₽</span>
+                </button>
+                <button
+                  id="limit-amount"
+                  class="info-button"
+                  data-tooltip="Ваш текущий лимит покупок"
+                >
+                  <span class="label">Доступный лимит:</span>
+                  <span class="value">740 000 ₽</span>
+                </button>
+                <button
+                  id="turnover"
+                  class="info-button"
+                  data-tooltip="Ваш текущий оборот за год"
+                >
+                  <span class="label">Оборот за год:</span>
+                  <span class="value">25 000 000,00 ₽</span>
+                </button>
+                <hr class="custom-divider" />
+
+                <span id="workTogether" class="icon-group">
+                  Совместная работа
+                  <i class="ri-toggle-line"></i>
+                </span>
+                <span id="hintMode" class="icon-group">
+                  Режим подсказок
+                  <i class="ri-questionnaire-line"></i>
+                </span>
+                <span id="logout" class="icon-group">
+                  Выйти из аккаунта
+                  <i class="ri-door-open-fill" id="logout-icon"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Контейнер для выбора города (фиксированный в верхнем правом углу) -->
+          <div class="city-selection-wrapper">
+            <button
+              id="selectedCity"
+              class="selected-city-button no-city-chosen"
+            >
+              <span id="currentCity">
+                <i class="ri-alert-circle-line exclamation-mark"></i>
+                <span> Выберите представительство </span>
+              </span>
+              <i class="ri-arrow-down-s-line"></i>
+            </button>
           </div>
         </div>
+
         <!-- Вторая строка с кнопками -->
         <div class="secondary-row">
           <button
@@ -198,28 +236,157 @@
       </div>
     </div>
 
-    <!-- Оверлей -->
+    <!-- Один-единственный оверлей (используется и для категорий, и для города) -->
     <div id="overlay" class="overlay"></div>
 
+    <!-- Шторка с выбором города -->
+    <div id="cityDrawer" class="city-drawer">
+      <div class="city-drawer-content">
+        <!-- Строка поиска с иконкой вместо кнопки -->
+        <div class="search-line">
+          <input
+            type="text"
+            id="citySearchInput"
+            placeholder="Поиск представительства..."
+          />
+          <i class="ri-search-line" id="citySearchIcon"></i>
+        </div>
+
+        <!-- Контейнер для текста и кнопки переключения в одной строке -->
+        <div class="choose-nearby-container">
+          <p class="choose-nearby">
+            Выберите ближайшее к Вам торговое представительство
+          </p>
+          <button id="toggleSelectionMode" class="toggle-selection-button">
+            Выбрать на карте
+          </button>
+        </div>
+
+        <!-- Контейнер для списка и карты -->
+        <div class="selection-mode-container">
+          <!-- Контейнер для списка городов -->
+          <div id="cityListContainer" class="contacts">
+            <!-- Сюда динамически подгрузим города из JSON -->
+          </div>
+
+          <!-- Контейнер для карты, изначально скрыт -->
+          <div id="mapSelectionContainer" class="map-selection-container">
+            <!-- Контейнер для карты -->
+            <div id="mapSelection" style="width: 100%; height: 500px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="registrationModal" class="modal hidden" style="display: none">
+      <div class="modal-content">
+        <span id="closeModal" class="close-button">&times;</span>
+        <!-- Контейнер для регистрации -->
+        <div id="registrationFormContainer">
+          <!-- Этап 1: Получение кода -->
+          <div id="step-1">
+            <h2>Шаг 1: Получение кода</h2>
+            <input
+              type="text"
+              id="phone-number"
+              placeholder="Введите номер телефона"
+            />
+            <div class="custom-checkbox" id="terms-checkbox">
+              Согласен с условиями использования
+            </div>
+            <div id="terms-message" class="hidden"></div>
+            <button id="get-code-button">Получить код</button>
+          </div>
+          <!-- Этап 2: Верификация кода -->
+          <div id="step-2" class="hidden">
+            <h2>Шаг 2: Верификация кода</h2>
+            <span id="display-phone"></span>
+            <input
+              type="text"
+              id="verification-code"
+              placeholder="Введите код"
+            />
+            <span id="timer">00:30</span>
+            <button id="resend-code-button">Отправить повторно</button>
+            <div id="code-message" class="hidden"></div>
+          </div>
+          <!-- Этап 3: Регистрация -->
+          <div id="step-3" class="hidden">
+            <h2>Шаг 3: Регистрация</h2>
+            <div class="tabs">
+              <button class="tab-button" data-value="yes">Да</button>
+              <button class="tab-button" data-value="no">Нет</button>
+            </div>
+            <form id="client-registration-form">
+              <h3>Регистрация для клиента</h3>
+              <input
+                type="text"
+                id="client-phone"
+                placeholder="Ваш номер телефона"
+              />
+              <div class="custom-checkbox" id="client-personal-data">
+                Согласен на обработку персональных данных
+              </div>
+              <div id="client-data-message" class="hidden"></div>
+              <button type="submit">Зарегистрироваться</button>
+            </form>
+            <form id="registration-form" class="hidden">
+              <h3>Регистрация для юридического лица</h3>
+              <input
+                type="text"
+                id="company-phone"
+                placeholder="Номер телефона компании"
+              />
+              <div class="custom-checkbox" id="personal-data">
+                Согласен на обработку персональных данных
+              </div>
+              <div id="company-data-message" class="hidden"></div>
+              <button type="submit">Зарегистрироваться</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Добавляем скрытый loginButton для регистрации -->
+    <a id="loginButton" href="#" style="display: none"></a>
+
     <!-- Подключение глобального скрипта коммуникации между страницами проекта -->
-    <script src="/js/globalcomm.js"></script>
+    <script src="/js/globalcomm.js" defer></script>
 
     <!-- Логика перетаскивания вкладок -->
-    <script src="/js/tabs-drag.js"></script>
+    <script src="/js/tabs-drag.js" defer></script>
 
-    <!-- Открытие шторки с категориями -->
-    <script src="/js/categories.js"></script>
+    <!-- Удалили отдельные scripts /js/categories.js и /js/city.js,
+         вместо них подключаем наш объединённый -->
+    <script src="/js/combined.js" defer></script>
 
     <!-- Имитация ввода текста в поиск -->
-    <script src="/js/inputimit.js"></script>
+    <script src="/js/inputimit.js" defer></script>
 
     <!-- Подключение библиотек для формирования документов -->
-    <script src="/js/excel_pdf.js"></script>
+    <script src="/js/excel_pdf.js" defer></script>
     <!-- SheetJS для Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+      defer
+    ></script>
 
     <!-- jsPDF и html2canvas для PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+      defer
+    ></script>
+
+    <!-- Скрипт регистрации -->
+    <script src="/js/registration.js" defer></script>
+
+    <!-- Скрипт для управления выпадающим меню аккаунта -->
+    <script src="/js/account.js" defer></script>
   </body>
 </html>

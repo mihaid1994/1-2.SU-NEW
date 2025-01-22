@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================================================
-  // Логика поиска + клон-шапка при скролле (часть из script.js)
+  // Логика поиска + клон-шапка при скролле (общая)
   // ========================================================
   const searchBar = document.querySelector(".search-bar");
   const searchInput = document.getElementById("searchInput");
@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clonedCatBtn.id = "cloned-open-categories";
     clonedCatBtn.classList.add("clone-category-button");
     clonedCatBtn.textContent = isCategoryOpen ? "✕" : "☰"; // изначальное состояние
-    clonedCategoryButton = clonedCatBtn; // Запомним, чтобы обновлять текст
+    clonedCategoryButton = clonedCatBtn; // Запоминаем, чтобы обновлять текст
 
     // 2) Кнопка прокрутки вверх
     const scrollTopBtn = document.createElement("button");
@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================================================
-  // Логика загрузки и отображения категорий (categories.js)
+  // Логика загрузки и отображения категорий (ранее categories.js)
   // ========================================================
   const sidebar = document.querySelector("#category-module .sidebar");
   const subcategoriesContainer = document.querySelector(
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================================================
-  // Логика выбора города (city.js)
+  // Логика выбора города (ранее city.js)
   // ========================================================
   const currentCity = document.getElementById("currentCity");
   const cityListContainer = document.getElementById("cityListContainer");
@@ -687,24 +687,24 @@ document.addEventListener("DOMContentLoaded", () => {
             [lat, lng],
             {
               balloonContent: `
-                <strong>${office.name}</strong><br>
-                ${office.address ? `Адрес: ${office.address}<br>` : ""}
-                ${
-                  office.phones && office.phones.length
-                    ? `Телефоны: ${office.phones.join(", ")}<br>`
-                    : ""
-                }
-                ${
-                  office.emails && office.emails.length
-                    ? `Email: ${office.emails.join(", ")}<br>`
-                    : ""
-                }
-                <button class="choose-office-button" onclick="selectOffice('${
-                  office.name
-                }')">
-                  Выбрать представительство
-                </button>
-              `,
+                  <strong>${office.name}</strong><br>
+                  ${office.address ? `Адрес: ${office.address}<br>` : ""}
+                  ${
+                    office.phones && office.phones.length
+                      ? `Телефоны: ${office.phones.join(", ")}<br>`
+                      : ""
+                  }
+                  ${
+                    office.emails && office.emails.length
+                      ? `Email: ${office.emails.join(", ")}<br>`
+                      : ""
+                  }
+                  <button class="choose-office-button" onclick="selectOffice('${
+                    office.name
+                  }')">
+                    Выбрать представительство
+                  </button>
+                `,
             },
             { preset: "islands#blueIcon" }
           );

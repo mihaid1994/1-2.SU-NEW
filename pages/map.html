@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Торговые Представительства</title>
+    <script
+      src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=ВАШ_НОВЫЙ_API_КЛЮЧ_ЯНДЕКС_КАРТ"
+      type="text/javascript"
+    ></script>
+    <style>
+      #map {
+        width: 100%;
+        height: 800px;
+        padding: 0;
+        margin: 0;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      /* Дополнительные стили для списка представительств в балуне */
+      .office-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .office-list li {
+        margin-bottom: 10px;
+      }
+      .office-list li a {
+        text-decoration: none;
+        color: #1a73e8;
+        cursor: pointer;
+      }
+      .office-details {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      ymaps.ready(init);
+      async function init() {
+        // Инициализация карты
+        const map = new ymaps.Map("map", {
+          center: [55.76, 37.64], // Начальная позиция карты (Москва)
+          zoom: 4,
+        });
+
+        try {
+          // Загрузка обновлённого JSON файла с координатами
+          const response = await fetch("/data/contacts_with_coordinates.json");
+          if (!response.ok) {
+            throw new Error(`Ошибка загрузки JSON: ${response.status}`);
+          }
+          const contacts = await response.json();
+
+          // Группировка представительств по координатам
+          const groupedContacts = {};
+          for (const cities of Object.values(contacts)) {
+            for (const city of cities) {
+              if (city.coordinates) {
+                const key = `${city.coordinates.latitude},${city.coordinates.longitude}`;
+                if (!groupedContacts[key]) {
+                  groupedContacts[key] = [];
+                }
+                groupedContacts[key].push(city);
+              }
+            }
+          }
+
+          const geoObjects = [];
+
+          for (const [coords, offices] of Object.entries(groupedContacts)) {
+            const [latitude, longitude] = coords.split(",").map(Number);
+
+            if (offices.length === 1) {
+              // Если координат только одно представительство, создаём обычную метку
+              const office = offices[0];
+              const placemark = new ymaps.Placemark(
+                [office.coordinates.latitude, office.coordinates.longitude],
+                {
+                  balloonContent: `
+                    <strong>${office.name}</strong><br>
+                    ${office.address ? `Адрес: ${office.address}<br>` : ""}
+                    ${
+                      office.phones && office.phones.length > 0
+                        ? `Телефоны: ${office.phones.join(", ")}<br>`
+                        : ""
+                    }
+                    ${
+                      office.emails && office.emails.length > 0
+                        ? `Emails: ${office.emails.join(", ")}`
+                        : ""
+                    }
+                  `,
+                },
+                {
+                  preset: "islands#blueIcon",
+                }
+              );
+              geoObjects.push(placemark);
+            } else {
+              // Если координат несколько представительств, создаём одну метку с списком
+              const placemark = new ymaps.Placemark(
+                [latitude, longitude],
+                {
+                  balloonContent: `
+                    <strong>Множественные представительства</strong><br>
+                    <ul class="office-list">
+                      ${offices
+                        .map(
+                          (office, index) => `
+                        <li>
+                          <a href="#" onclick="showOfficeDetails(${latitude}, ${longitude}, ${index}); return false;">${office.name}</a>
+                        </li>
+                      `
+                        )
+                        .join("")}
+                    </ul>
+                    <div class="office-details" id="office-details-${latitude}-${longitude}">
+                      <!-- Детали выбранного представительства будут отображены здесь -->
+                    </div>
+                  `,
+                },
+                {
+                  preset: "islands#blueIcon",
+                }
+              );
+              geoObjects.push(placemark);
+            }
+          }
+
+          // Добавление геообъектов в кластеризатор
+          const clusterer = new ymaps.Clusterer({
+            preset: "islands#invertedVioletClusterIcons",
+            groupByCoordinates: false,
+            clusterDisableClickZoom: false,
+            clusterHideIconOnBalloonOpen: false,
+            geoObjectHideIconOnBalloonOpen: false,
+          });
+
+          clusterer.add(geoObjects);
+          map.geoObjects.add(clusterer);
+
+          // Масштабирование карты под все метки
+          if (geoObjects.length > 0) {
+            map.setBounds(clusterer.getBounds(), { checkZoomRange: true });
+          }
+
+          // Функция для отображения деталей представительства
+          window.showOfficeDetails = function (latitude, longitude, index) {
+            const key = `${latitude},${longitude}`;
+            const office = groupedContacts[key][index];
+            const detailsDiv = document.getElementById(
+              `office-details-${latitude}-${longitude}`
+            );
+            if (detailsDiv) {
+              detailsDiv.innerHTML = `
+                <strong>${office.name}</strong><br>
+                ${office.address ? `Адрес: ${office.address}<br>` : ""}
+                ${
+                  office.phones && office.phones.length > 0
+                    ? `Телефоны: ${office.phones.join(", ")}<br>`
+                    : ""
+                }
+                ${
+                  office.emails && office.emails.length > 0
+                    ? `Emails: ${office.emails.join(", ")}`
+                    : ""
+                }
+              `;
+              detailsDiv.style.display = "block";
+            }
+          };
+        } catch (error) {
+          console.error("Ошибка при инициализации карты:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

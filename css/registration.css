@@ -91,7 +91,10 @@ body {
 .phone-number::placeholder,
 .verification-code::placeholder,
 #company-phone::placeholder,
-#client-phone::placeholder {
+#client-phone::placeholder,
+.alternative-input::placeholder,
+#username::placeholder,
+#password::placeholder {
   color: #a9a9a9; /* Более светлый серый */
 }
 
@@ -142,7 +145,6 @@ body {
   width: 100%; /* Контейнер занимает всю доступную ширину */
 }
 
-.get-code-button,
 .submit-button,
 .tab-button {
   padding: 10px 20px;
@@ -157,6 +159,21 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   transition: background-color 0.3s;
+}
+
+.login-button {
+  padding: 10px 20px;
+  background-color: #ffa500; /* Оранжевый цвет */
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #e69500;
 }
 
 .resend-code-button {
@@ -179,7 +196,29 @@ body {
   background-color: #e69500;
 }
 
-.get-code-button:hover,
+.get-code-button {
+  background-color: #5a83a8; /* Синий фон кнопки */
+  color: white; /* Белый цвет текста */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Отступ между текстом и иконкой */
+  margin-left: 10px;
+}
+
+.get-code-button i {
+  color: white; /* Белый цвет иконки */
+  font-size: 18px; /* Размер иконки */
+}
+
+.get-code-button:hover {
+  background-color: #3182ce; /* Цвет кнопки при наведении */
+}
+
 .tab-button:hover {
   background-color: #b0b0b0;
 }
@@ -319,7 +358,8 @@ body {
 
 .form-group input,
 .form-group select,
-.form-group textarea {
+.form-group textarea,
+.alternative-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #cccccc;
@@ -353,6 +393,80 @@ body {
   pointer-events: none;
 }
 
+/* Стили для сторонних сервисов входа */
+.third-party-login {
+  margin-top: 30px; /* Добавлен отступ сверху */
+  text-align: center;
+}
+
+.third-party-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.third-party-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.third-party-icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.third-party-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Стили для альтернативной формы входа */
+.alternative-login {
+  margin-top: 20px;
+}
+
+.alternative-login-button {
+  width: 35%; /* Ширина кнопки относительно родителя */
+  background-color: #ffffff;
+  color: #979797;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s;
+  display: block; /* Делает кнопку блочной */
+  margin-left: auto; /* Отодвигает кнопку вправо */
+  margin-top: 50px;
+  text-align: center; /* Центрирует текст внутри кнопки */
+  font-weight: 600;
+}
+
+.alternative-login-button:hover {
+  color: #135c58;
+}
+
+.alternative-login {
+  margin-top: 10px;
+}
+
+.alternative-input-group {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.alternative-input-group .alternative-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.alternative-input-group .alternative-input:last-child {
+  margin-right: 0;
+}
+
 @media (max-width: 600px) {
   .input-group {
     flex-direction: column;
@@ -362,6 +476,24 @@ body {
   .get-code-button {
     margin-left: 0;
     margin-top: 10px;
+  }
+
+  .alternative-input-group {
+    flex-direction: column;
+  }
+
+  .alternative-input-group .alternative-input {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .login-button {
+    width: 100%;
+  }
+
+  .third-party-icons {
+    gap: 10px;
   }
 }
 
