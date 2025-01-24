@@ -610,9 +610,6 @@ window.initCardView = async function ({
       ) {
         return;
       }
-      // Логика перехода к деталям товара
-      console.log(`Клик на товар: ${item["Наименование"]}`);
-      // Пример: window.location.href = `/product/${item["Артикул"]}`;
     });
 
     return card;

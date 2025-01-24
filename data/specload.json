@@ -52,5 +52,9 @@
   "/pages/Contacts.html": {
     "scripts": ["/js/contacts.js"],
     "initFunctions": ["initContactsopenFunction"]
+  },
+  "/pages/productcard.html": {
+    "scripts": ["/js/productcard.js"],
+    "initFunctions": ["initProductcardTest"]
   }
 }

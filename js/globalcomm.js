@@ -188,6 +188,16 @@
         });
       }
 
+      const ProductCardKlatz = document.getElementById("productcardbutton");
+      if (ProductCardKlatz) {
+        ProductCardKlatz.addEventListener("click", async (e) => {
+          e.preventDefault(); // Предотвращаем переход по ссылке
+          const title = "Фотореле EKF PS-5";
+          const url = "/pages/productcard.html";
+          await this.openPageAsTab(title, url);
+        });
+      }
+
       const openwaitlistButton = document.querySelector(".waitlist-button");
       if (openwaitlistButton) {
         openwaitlistButton.addEventListener("click", async (e) => {
