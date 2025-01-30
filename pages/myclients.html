@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Мои клиенты</title>
+
+    <!-- Подключение нашего CSS -->
+    <link rel="stylesheet" href="/css/myclient.css" />
+  </head>
+  <body>
+    <!-- Шапка сайта -->
+    <header class="main-header">
+      <h1>Мои клиенты</h1>
+      <!-- Поисковая строка -->
+      <div class="search-container">
+        <i class="ri-search-line search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Поиск клиентов..." />
+      </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main>
+      <div class="accordion">
+        <!-- Клиент 1 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ООО ГАЗТЕХСБЫТ</div>
+              <div class="client-contact">
+                Иванов Иван Иванович<br />
+                +7 (495) 123-45-67
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 1,000,000 руб;<br />
+                Задолженность: 200,000 руб;<br />
+                Оборот за год: 3,000,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 05.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №1001 - Доставка электротехники</span
+                >
+                <span class="order-sum">150,000 руб</span>
+                <span class="order-date">05.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №1002 - Поставка оборудования</span
+                >
+                <span class="order-sum">75,000 руб</span>
+                <span class="order-date">15.03.2025</span>
+                <span class="order-status status-transferred"
+                  >Передается в доставку</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №1003 - Установка электрооборудования</span
+                >
+                <span class="order-sum">50,000 руб</span>
+                <span class="order-date">20.03.2025</span>
+                <span class="order-status status-awaiting-pickup"
+                  >Ожидает в пункте выдачи</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-1"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 2 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ИП Герсаимов СД</div>
+              <div class="client-contact">
+                Петров Петр Петрович<br />
+                +7 (812) 234-56-78
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 500,000 руб;<br />
+                Задолженность: 50,000 руб;<br />
+                Оборот за год: 1,500,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 12.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №2001 - Поставка кабельной продукции</span
+                >
+                <span class="order-sum">100,000 руб</span>
+                <span class="order-date">12.03.2025</span>
+                <span class="order-status status-printed"
+                  >Распечатано на складе</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №2002 - Поставка электротехнического оборудования</span
+                >
+                <span class="order-sum">50,000 руб</span>
+                <span class="order-date">20.03.2025</span>
+                <span class="order-status status-transferred"
+                  >Передается в доставку</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-2"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 3 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ЗАО Инжиниринг</div>
+              <div class="client-contact">
+                Сидоров Сергей Сергеевич<br />
+                +7 (495) 345-67-89
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 2,000,000 руб;<br />
+                Задолженность: 300,000 руб;<br />
+                Оборот за год: 4,500,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 20.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №3001 - Поставка электроустановочных изделий</span
+                >
+                <span class="order-sum">200,000 руб</span>
+                <span class="order-date">20.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №3002 - Поставка электротехнического оборудования</span
+                >
+                <span class="order-sum">150,000 руб</span>
+                <span class="order-date">25.03.2025</span>
+                <span class="order-status status-delivered">Доставлено</span>
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-3"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 4 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ООО Техносила</div>
+              <div class="client-contact">
+                Кузнецов Алексей Алексеевич<br />
+                +7 (343) 456-78-90
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 750,000 руб;<br />
+                Задолженность: 75,000 руб;<br />
+                Оборот за год: 2,250,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 07.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №4001 - Поставка электротехнических приборов</span
+                >
+                <span class="order-sum">120,000 руб</span>
+                <span class="order-date">07.03.2025</span>
+                <span class="order-status status-printed"
+                  >Распечатано на складе</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №4002 - Поставка электрооборудования</span
+                >
+                <span class="order-sum">80,000 руб</span>
+                <span class="order-date">15.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №4003 - Поставка электропроводки</span
+                >
+                <span class="order-sum">50,000 руб</span>
+                <span class="order-date">22.03.2025</span>
+                <span class="order-status status-awaiting-pickup"
+                  >Ожидает в пункте выдачи</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-4"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 5 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">АО ЭнергоСистемы</div>
+              <div class="client-contact">
+                Лебедева Мария Владимировна<br />
+                +7 (495) 567-89-01
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 3,000,000 руб;<br />
+                Задолженность: 500,000 руб;<br />
+                Оборот за год: 6,000,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 25.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №5001 - Поставка электропроводки</span
+                >
+                <span class="order-sum">300,000 руб</span>
+                <span class="order-date">25.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №5002 - Поставка электрооборудования</span
+                >
+                <span class="order-sum">200,000 руб</span>
+                <span class="order-date">28.03.2025</span>
+                <span class="order-status status-delivered">Доставлено</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №5003 - Поставка электропроводки</span
+                >
+                <span class="order-sum">150,000 руб</span>
+                <span class="order-date">18.03.2025</span>
+                <span class="order-status status-awaiting-pickup"
+                  >Ожидает в пункте выдачи</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-5"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 6 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ООО СтройИнвест</div>
+              <div class="client-contact">
+                Смирнов Дмитрий Николаевич<br />
+                +7 (383) 678-90-12
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 1,500,000 руб;<br />
+                Задолженность: 150,000 руб;<br />
+                Оборот за год: 3,000,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 15.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №6001 - Поставка электротехнического оборудования</span
+                >
+                <span class="order-sum">500,000 руб</span>
+                <span class="order-date">15.03.2025</span>
+                <span class="order-status status-printed"
+                  >Распечатано на складе</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №6002 - Поставка электропроводки</span
+                >
+                <span class="order-sum">250,000 руб</span>
+                <span class="order-date">20.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-6"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 7 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ЗАО МедТех</div>
+              <div class="client-contact">
+                Козлова Анна Сергеевна<br />
+                +7 (812) 789-01-23
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 2,500,000 руб;<br />
+                Задолженность: 250,000 руб;<br />
+                Оборот за год: 5,000,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 30.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №7001 - Поставка медицинского оборудования</span
+                >
+                <span class="order-sum">400,000 руб</span>
+                <span class="order-date">30.03.2025</span>
+                <span class="order-status status-transferred"
+                  >Передается в доставку</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №7002 - Поставка электрооборудования</span
+                >
+                <span class="order-sum">200,000 руб</span>
+                <span class="order-date">05.03.2025</span>
+                <span class="order-status status-delivered">Доставлено</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №7003 - Поставка электропроводки</span
+                >
+                <span class="order-sum">100,000 руб</span>
+                <span class="order-date">18.03.2025</span>
+                <span class="order-status status-awaiting-pickup"
+                  >Ожидает в пункте выдачи</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-7"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 8 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ООО АгроПром</div>
+              <div class="client-contact">
+                Соколова Наталья Викторовна<br />
+                +7 (495) 890-12-34
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 1,200,000 руб;<br />
+                Задолженность: 120,000 руб;<br />
+                Оборот за год: 2,400,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 10.03.2025</span>
+            </h3>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-8"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 9 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ИП Новиков ЛЛ</div>
+              <div class="client-contact">
+                Новиков Леонид Львович<br />
+                +7 (343) 901-23-45
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 600,000 руб;<br />
+                Задолженность: 60,000 руб;<br />
+                Оборот за год: 1,800,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 18.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №9001 - Поставка электротехники</span
+                >
+                <span class="order-sum">100,000 руб</span>
+                <span class="order-date">18.03.2025</span>
+                <span class="order-status status-transferred"
+                  >Передается в доставку</span
+                >
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №9002 - Поставка электрооборудования</span
+                >
+                <span class="order-sum">80,000 руб</span>
+                <span class="order-date">25.03.2025</span>
+                <span class="order-status status-delivered">Доставлено</span>
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-9"></canvas>
+          </div>
+        </div>
+
+        <!-- Клиент 10 -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <div class="client-info">
+              <div class="client-name">ООО ЛогистикПлюс</div>
+              <div class="client-contact">
+                Федорова Елена Александровна<br />
+                +7 (495) 012-34-56
+              </div>
+              <div class="client-financials">
+                Кредитный лимит: 2,200,000 руб;<br />
+                Задолженность: 220,000 руб;<br />
+                Оборот за год: 4,400,000 руб
+              </div>
+              <div class="client-actions">
+                <button class="btn btn-orders" title="Активные заказы">
+                  <i class="ri-file-list-line"></i>
+                </button>
+                <button class="btn btn-analytics" title="Аналитика">
+                  <i class="ri-bar-chart-line"></i>
+                </button>
+                <button class="btn btn-chat" title="Чат">
+                  <i class="ri-chat-1-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-content orders-content">
+            <h3>
+              <span>Активные заказы:</span>
+              <span>Дата крайнего заказа: 28.03.2025</span>
+            </h3>
+            <ul class="orders-list">
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №10001 - Поставка электропроводки</span
+                >
+                <span class="order-sum">250,000 руб</span>
+                <span class="order-date">28.03.2025</span>
+                <span class="order-status status-in-transit">В пути</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №10002 - Поставка электрооборудования</span
+                >
+                <span class="order-sum">200,000 руб</span>
+                <span class="order-date">10.03.2025</span>
+                <span class="order-status status-delivered">Доставлено</span>
+              </li>
+              <li class="order-item">
+                <span class="order-name"
+                  >Заказ №10003 - Поставка электропроводки</span
+                >
+                <span class="order-sum">150,000 руб</span>
+                <span class="order-date">18.03.2025</span>
+                <span class="order-status status-awaiting-pickup"
+                  >Ожидает в пункте выдачи</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="accordion-content analytics-content">
+            <h3>Аналитика</h3>
+            <canvas id="chart-client-10"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="scrollTopBtn" class="scroll-top-btn" title="Наверх">
+      <i class="ri-arrow-up-s-line"></i>
+    </button>
+  </body>
+</html>

@@ -178,6 +178,8 @@ body {
   margin-top: 10px;
 }
 
+#exportReportsBtn,
+#generateKpisBtn,
 #downloadStatements,
 #redeemBonuses,
 #viewDiscounts,
@@ -227,6 +229,17 @@ body {
   transform: translateY(-1px);
 }
 
+.full-width-banner {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.full-width-banner img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
 .edit-address,
 .delete-address,
 .set-default {
@@ -241,6 +254,8 @@ body {
   margin-bottom: 5px; /* Добавляет отступ между кнопками */
 }
 
+#exportReportsBtn:hover,
+#generateKpisBtn:hover,
 #downloadStatements:hover,
 #redeemBonuses:hover,
 #viewDiscounts:hover,
