@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Калькулятор транспортных расходов</title>
+    <!-- Подключаем Remix Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Сброс базовых стилей */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f0f0f0; /* Светло-серый фон */
+        color: #333;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 10px;
+      }
+      .calculator {
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+      }
+      .calculator h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fff;
+        color: #333;
+        font-size: 1rem;
+        transition: border 0.3s;
+      }
+      .input-group input:focus,
+      .input-group select:focus {
+        outline: none;
+        border-color: #007aff;
+      }
+      .input-group .help-text {
+        font-size: 0.8rem;
+        color: #777;
+        margin-top: 5px;
+      }
+      .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(145deg, #e0e0e0, #ffffff);
+        color: #333;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+      .btn:hover {
+        background: linear-gradient(145deg, #ffffff, #e0e0e0);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #fafafa;
+        border: 1px solid #ddd;
+      }
+      .result p {
+        margin-bottom: 10px;
+        font-size: 1rem;
+      }
+      .info {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: #555;
+        line-height: 1.4;
+      }
+      .icon {
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <h1>
+        <i class="ri-calculator-line icon"></i>Калькулятор транспортных расходов
+      </h1>
+
+      <!-- Ввод себестоимости грунта P -->
+      <div class="input-group">
+        <label for="costP"
+          ><i class="ri-coin-line icon"></i>Себестоимость паллеты грунта
+          (P)</label
+        >
+        <input type="number" id="costP" placeholder="Например, 10000" />
+        <div class="help-text">
+          Введите себестоимость одной паллеты грунта в рублях (например,
+          10000–15000).
+        </div>
+      </div>
+
+      <!-- Ввод стоимости доставки T -->
+      <div class="input-group">
+        <label for="deliveryT"
+          ><i class="ri-truck-line icon"></i>Стоимость доставки (T)</label
+        >
+        <input type="number" id="deliveryT" placeholder="Например, 2500" />
+        <div class="help-text">
+          Введите фактическую стоимость доставки одной паллеты (в рублях).
+          Примеры: 800–1300 (до 200 км), 1900–2500 (400–500 км) и т.д.
+        </div>
+      </div>
+
+      <!-- Выбор целевого процента R -->
+      <div class="input-group">
+        <label for="percentR"
+          ><i class="ri-percent-line icon"></i>Целевой процент транспортных
+          расходов (R)</label
+        >
+        <select id="percentR">
+          <option value="0.015">1.5% (0.015)</option>
+          <option value="0.02" selected>2% (0.02)</option>
+        </select>
+        <div class="help-text">
+          Выберите допустимый процент транспортных расходов от общей суммы
+          заказа.
+        </div>
+      </div>
+
+      <button class="btn" id="calculateBtn">
+        <i class="ri-refresh-line icon"></i>Рассчитать
+      </button>
+
+      <!-- Блок для вывода результата -->
+      <div class="result" id="result" style="display: none">
+        <p id="resultS"></p>
+        <p id="resultX"></p>
+      </div>
+
+      <!-- Дополнительные рекомендации -->
+      <div class="info">
+        <p>
+          <i class="ri-information-line icon"></i
+          ><strong>Примечание:</strong> Для комбинированного заказа действует
+          формула: <br />
+          X ≥ (T / R) – P, где S = P + X.
+        </p>
+        <p>
+          При прямой поставке допустимо, чтобы транспортные расходы составляли
+          7–10% от P (T ≤ 0.10 × P).
+        </p>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("calculateBtn")
+        .addEventListener("click", function () {
+          // Получаем введённые значения
+          var P = parseFloat(document.getElementById("costP").value);
+          var T = parseFloat(document.getElementById("deliveryT").value);
+          var R = parseFloat(document.getElementById("percentR").value);
+
+          // Проверка корректности введённых данных
+          if (isNaN(P) || isNaN(T) || isNaN(R) || P <= 0 || T <= 0) {
+            alert("Пожалуйста, заполните все поля корректными значениями.");
+            return;
+          }
+
+          // Вычисляем S и X по формуле:
+          // S >= T / R  и X = S – P
+          var S = T / R;
+          var X = S - P;
+
+          // Выводим результаты
+          document.getElementById("resultS").textContent =
+            "Общая сумма заказа S должна быть не менее: " +
+            S.toFixed(2) +
+            " руб.";
+          document.getElementById("resultX").textContent =
+            "Дополнительный объём (X) не менее: " + X.toFixed(2) + " руб.";
+          document.getElementById("result").style.display = "block";
+        });
+    </script>
+  </body>
+</html>
