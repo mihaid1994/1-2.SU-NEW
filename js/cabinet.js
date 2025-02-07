@@ -308,6 +308,9 @@ function initializeDashboard(root) {
       const ordersBtn = item.querySelector(".btn-orders");
       const analyticsBtn = item.querySelector(".btn-analytics");
       const chatBtn = item.querySelector(".btn-chat");
+      // Изменён селектор для кнопки настроек: теперь ищем по классу .btn-set
+      const settingsBtn = item.querySelector(".btn-set");
+      const settingsContent = item.querySelector(".settings-content");
       const ordersContent = item.querySelector(".orders-content");
       const analyticsContent = item.querySelector(".analytics-content");
       const chartCanvas = item.querySelector("canvas");
@@ -592,8 +595,26 @@ function initializeDashboard(root) {
       chatBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         // Здесь может быть логика для чата, пока заглушка
-        alert("Чат будет доступен в ближайшее время.");
+        alert("Откроется чат с клиентом.");
       });
+
+      // Функция переключения секции настроек (теперь только открывает аккордеон настроек)
+      function toggleSettings() {
+        if (!settingsContent.classList.contains("open")) {
+          closeAllAccordions();
+          settingsContent.classList.add("open");
+          settingsContent.style.maxHeight = settingsContent.scrollHeight + "px";
+          item.style.height = "auto"; // Разворачиваем весь элемент
+        }
+      }
+
+      // Назначаем обработчик события на кнопку настроек
+      if (settingsBtn) {
+        settingsBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleSettings();
+        });
+      }
 
       // Клик по "заказам" внутри списка
       orderNames.forEach((order) => {
