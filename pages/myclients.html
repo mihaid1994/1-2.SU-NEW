@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Мои клиенты</title>
 
-    <!-- Подключение нашего CSS -->
+    <!-- Подключение наших стилей -->
     <link rel="stylesheet" href="/css/myclient.css" />
+    <!-- Подключение библиотеки иконок (Remix Icon) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Дополнительные стили для кнопки стоп-листа */
+      .resource-btn.stop-list-btn.red {
+        background-color: #ffcdd2;
+        color: #c62828;
+      }
+      .resource-btn.stop-list-btn.green {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+      }
+    </style>
   </head>
   <body>
     <!-- Шапка сайта -->
@@ -49,41 +65,43 @@
               </div>
             </div>
           </div>
+          <!-- Область раскрытия (контейнер не меняем!) -->
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 05.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №1001 - Доставка электротехники</span
-                >
-                <span class="order-sum">150,000 руб</span>
-                <span class="order-date">05.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №1002 - Поставка оборудования</span
-                >
-                <span class="order-sum">75,000 руб</span>
-                <span class="order-date">15.03.2025</span>
-                <span class="order-status status-transferred"
-                  >Передается в доставку</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №1003 - Установка электрооборудования</span
-                >
-                <span class="order-sum">50,000 руб</span>
-                <span class="order-date">20.03.2025</span>
-                <span class="order-status status-awaiting-pickup"
-                  >Ожидает в пункте выдачи</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Красный стоп-лист с текстом внутри кнопки -->
+              <button
+                class="resource-btn stop-list-btn red"
+                title="Стоп лист: израсходован кредитный лимит"
+              >
+                <i class="ri-close-circle-line"></i>
+                <span>Стоп лист (израсходован кредитный лимит)</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -120,31 +138,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 12.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №2001 - Поставка кабельной продукции</span
-                >
-                <span class="order-sum">100,000 руб</span>
-                <span class="order-date">12.03.2025</span>
-                <span class="order-status status-printed"
-                  >Распечатано на складе</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №2002 - Поставка электротехнического оборудования</span
-                >
-                <span class="order-sum">50,000 руб</span>
-                <span class="order-date">20.03.2025</span>
-                <span class="order-status status-transferred"
-                  >Передается в доставку</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Зеленый стоп-лист (без дополнительного текста) -->
+              <button
+                class="resource-btn stop-list-btn green"
+                title="Стоп лист: не запущен"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Стоп лист</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -181,27 +208,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 20.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №3001 - Поставка электроустановочных изделий</span
-                >
-                <span class="order-sum">200,000 руб</span>
-                <span class="order-date">20.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №3002 - Поставка электротехнического оборудования</span
-                >
-                <span class="order-sum">150,000 руб</span>
-                <span class="order-date">25.03.2025</span>
-                <span class="order-status status-delivered">Доставлено</span>
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Красный стоп-лист с текстом внутри кнопки -->
+              <button
+                class="resource-btn stop-list-btn red"
+                title="Стоп лист: превышен срок оплаты задолженности"
+              >
+                <i class="ri-close-circle-line"></i>
+                <span>Стоп лист (превышен срок оплаты задолженности)</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -238,39 +278,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 07.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №4001 - Поставка электротехнических приборов</span
-                >
-                <span class="order-sum">120,000 руб</span>
-                <span class="order-date">07.03.2025</span>
-                <span class="order-status status-printed"
-                  >Распечатано на складе</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №4002 - Поставка электрооборудования</span
-                >
-                <span class="order-sum">80,000 руб</span>
-                <span class="order-date">15.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №4003 - Поставка электропроводки</span
-                >
-                <span class="order-sum">50,000 руб</span>
-                <span class="order-date">22.03.2025</span>
-                <span class="order-status status-awaiting-pickup"
-                  >Ожидает в пункте выдачи</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Зеленый стоп-лист (без дополнительного текста) -->
+              <button
+                class="resource-btn stop-list-btn green"
+                title="Стоп лист: не запущен"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Стоп лист</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -307,37 +348,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 25.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №5001 - Поставка электропроводки</span
-                >
-                <span class="order-sum">300,000 руб</span>
-                <span class="order-date">25.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №5002 - Поставка электрооборудования</span
-                >
-                <span class="order-sum">200,000 руб</span>
-                <span class="order-date">28.03.2025</span>
-                <span class="order-status status-delivered">Доставлено</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №5003 - Поставка электропроводки</span
-                >
-                <span class="order-sum">150,000 руб</span>
-                <span class="order-date">18.03.2025</span>
-                <span class="order-status status-awaiting-pickup"
-                  >Ожидает в пункте выдачи</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Красный стоп-лист с текстом внутри кнопки -->
+              <button
+                class="resource-btn stop-list-btn red"
+                title="Стоп лист: израсходован кредитный лимит"
+              >
+                <i class="ri-close-circle-line"></i>
+                <span>Стоп лист (израсходован кредитный лимит)</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -374,29 +418,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 15.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №6001 - Поставка электротехнического оборудования</span
-                >
-                <span class="order-sum">500,000 руб</span>
-                <span class="order-date">15.03.2025</span>
-                <span class="order-status status-printed"
-                  >Распечатано на складе</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №6002 - Поставка электропроводки</span
-                >
-                <span class="order-sum">250,000 руб</span>
-                <span class="order-date">20.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Зеленый стоп-лист (без дополнительного текста) -->
+              <button
+                class="resource-btn stop-list-btn green"
+                title="Стоп лист: не запущен"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Стоп лист</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -433,39 +488,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 30.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №7001 - Поставка медицинского оборудования</span
-                >
-                <span class="order-sum">400,000 руб</span>
-                <span class="order-date">30.03.2025</span>
-                <span class="order-status status-transferred"
-                  >Передается в доставку</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №7002 - Поставка электрооборудования</span
-                >
-                <span class="order-sum">200,000 руб</span>
-                <span class="order-date">05.03.2025</span>
-                <span class="order-status status-delivered">Доставлено</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №7003 - Поставка электропроводки</span
-                >
-                <span class="order-sum">100,000 руб</span>
-                <span class="order-date">18.03.2025</span>
-                <span class="order-status status-awaiting-pickup"
-                  >Ожидает в пункте выдачи</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Красный стоп-лист с текстом внутри кнопки -->
+              <button
+                class="resource-btn stop-list-btn red"
+                title="Стоп лист: израсходован кредитный лимит"
+              >
+                <i class="ri-close-circle-line"></i>
+                <span>Стоп лист (израсходован кредитный лимит)</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -502,9 +558,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 10.03.2025</span>
             </h3>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Зеленый стоп-лист (без дополнительного текста) -->
+              <button
+                class="resource-btn stop-list-btn green"
+                title="Стоп лист: не запущен"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Стоп лист</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -541,29 +628,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 18.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №9001 - Поставка электротехники</span
-                >
-                <span class="order-sum">100,000 руб</span>
-                <span class="order-date">18.03.2025</span>
-                <span class="order-status status-transferred"
-                  >Передается в доставку</span
-                >
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №9002 - Поставка электрооборудования</span
-                >
-                <span class="order-sum">80,000 руб</span>
-                <span class="order-date">25.03.2025</span>
-                <span class="order-status status-delivered">Доставлено</span>
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Красный стоп-лист с текстом внутри кнопки -->
+              <button
+                class="resource-btn stop-list-btn red"
+                title="Стоп лист: израсходован кредитный лимит"
+              >
+                <i class="ri-close-circle-line"></i>
+                <span>Стоп лист (израсходован кредитный лимит)</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>
@@ -600,37 +698,40 @@
           </div>
           <div class="accordion-content orders-content">
             <h3>
-              <span>Активные заказы:</span>
+              <span>Список ресурсов по клиенту</span>
               <span>Дата крайнего заказа: 28.03.2025</span>
             </h3>
-            <ul class="orders-list">
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №10001 - Поставка электропроводки</span
-                >
-                <span class="order-sum">250,000 руб</span>
-                <span class="order-date">28.03.2025</span>
-                <span class="order-status status-in-transit">В пути</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №10002 - Поставка электрооборудования</span
-                >
-                <span class="order-sum">200,000 руб</span>
-                <span class="order-date">10.03.2025</span>
-                <span class="order-status status-delivered">Доставлено</span>
-              </li>
-              <li class="order-item">
-                <span class="order-name"
-                  >Заказ №10003 - Поставка электропроводки</span
-                >
-                <span class="order-sum">150,000 руб</span>
-                <span class="order-date">18.03.2025</span>
-                <span class="order-status status-awaiting-pickup"
-                  >Ожидает в пункте выдачи</span
-                >
-              </li>
-            </ul>
+            <div class="resources-buttons">
+              <button class="resource-btn" title="Акции">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Акции</span>
+              </button>
+              <button class="resource-btn" title="CRM">
+                <i class="ri-customer-service-2-line"></i>
+                <span>CRM</span>
+              </button>
+              <button class="resource-btn" title="Заказы по клиенту">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Заказы по клиенту</span>
+              </button>
+              <button class="resource-btn" title="Индикации">
+                <i class="ri-bar-chart-2-line"></i>
+                <span>Индикации</span>
+              </button>
+              <!-- Кнопка Прайсы -->
+              <button class="resource-btn" title="Прайсы">
+                <i class="ri-currency-ruble-line"></i>
+                <span>Прайсы</span>
+              </button>
+              <!-- Зеленый стоп-лист (без дополнительного текста) -->
+              <button
+                class="resource-btn stop-list-btn green"
+                title="Стоп лист: не запущен"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Стоп лист</span>
+              </button>
+            </div>
           </div>
           <div class="accordion-content analytics-content">
             <h3>Аналитика</h3>

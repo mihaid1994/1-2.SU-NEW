@@ -247,9 +247,14 @@
                       <span class="PriceValue" itemprop="price" content="850"
                         >850 ₽</span
                       >
+                      <!-- Зачёркнутая цена -->
+                      <span class="OldPrice">1270 ₽</span>
                       <meta itemprop="priceCurrency" content="RUB" />
                     </div>
                   </div>
+
+                  <!-- Блок кратности -->
+                  <div class="Multiplicity">Кратность: от 5 шт.</div>
 
                   <div class="BuySection">
                     <div class="NumsToBuy">
@@ -288,10 +293,99 @@
                     </span>
                   </div>
 
-                  <!-- Здесь меняем "Оплата" на "Документация" -->
+                  <!-- "Документация" вместо "Оплата" -->
                   <div class="FastLinks">
                     <span class="delivery-link">Доставка</span>
                     <span class="documentation-link">Документация</span>
+                  </div>
+
+                  <!-- Блок аналогов -->
+                  <!-- Блок аналогов -->
+                  <div class="AnalogsContainer">
+                    <h4>
+                      Аналоги <span class="AnalogCount">(10 шт.)</span>
+                      <span class="ShowAllAnalogs">Показать все</span>
+                    </h4>
+                    <div class="AnalogsScroller">
+                      <div class="AnalogItem" data-index="0">
+                        <img
+                          src="/images/jpg/product/datchik_dvizheniya_era_md_015_e27_60vt_360grad._6m_ip20_501600_belyy_b0043792_2378613_1.jpg"
+                          alt="EKF PS-5 15А 3300Вт IP66 PROxima"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="1">
+                        <img
+                          src="/images/jpg/product/fotorele_ekf_ps_1_fr_6a_1400vt_ip44_fr_ps_1_6_2036945_1.jpg"
+                          alt="TDM DDS-01 10А 220В IP44"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="2">
+                        <img
+                          src="/images/jpg/product/tdm_electric_dds_01_1100vt_5_480s_2_12m_5_lk_180gr._ip44_1833317_1.jpg"
+                          alt="IEK ФР-601 6А 1400Вт IP44"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="3">
+                        <img
+                          src="/images/jpg/product/ik_datchik_dvizheniya_nast._1200vt_180gr._do_12m_ip44_ms_16c_ekf_proxima_1576628_1.jpg"
+                          alt="Schneider Electric Acti9 iPRF 16А"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="4">
+                        <img
+                          src="/images/jpg/product/125345_222.jpg"
+                          alt="Legrand 49100 10А IP55"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="5">
+                        <img
+                          src="/images/jpg/product/345345_222.jpg"
+                          alt="ABB NightWatcher NW-230"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="6">
+                        <img
+                          src="/images/jpg/product/1030000.jpg"
+                          alt="DEKraft FR-101 10А 220В"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="7">
+                        <img
+                          src="/images/jpg/product/1472250x0.jpg"
+                          alt="SmartLight SL-PH-12 12А 250В"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="8">
+                        <img
+                          src="/images/jpg/product/34532245_222.jpg"
+                          alt="IEK ФР-602 12А 2500Вт IP65"
+                        />
+                      </div>
+                      <div class="AnalogItem" data-index="9">
+                        <img
+                          src="/images/jpg/product/376791900.jpg"
+                          alt="Navigator NPF-20 20А 4000Вт IP67"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Модальное окно с подробностями аналога -->
+                  <div class="AnalogModalOverlay" id="analogModalOverlay">
+                    <div class="AnalogModalContent" id="analogModalContent">
+                      <span class="AnalogModalClose" id="analogModalClose"
+                        >&times;</span
+                      >
+                      <h3 id="modalProductName">Название продукта</h3>
+                      <div class="AnalogModalDetails">
+                        <p>Новая цена: <span id="modalNewPrice"></span></p>
+                        <p>Старая цена: <span id="modalOldPrice"></span></p>
+                        <p id="modalExtraInfo"></p>
+                      </div>
+                      <button class="AddToCartButton">
+                        Добавить в корзину
+                      </button>
+                    </div>
                   </div>
                 </div>
 

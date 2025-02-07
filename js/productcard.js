@@ -1,5 +1,3 @@
-// script.js
-
 // Новая утилита для ожидания загрузки всех изображений в указанном элементе
 function waitForImagesInElement(element) {
   if (!element) return Promise.resolve();
@@ -21,7 +19,7 @@ function waitForImagesInElement(element) {
 window.initProductcardTest = async function (shadowRoot) {
   console.log("initProductcardTest вызвана с shadowRoot:", shadowRoot);
 
-  // Добавляем CSS для удаления outline при фокусе на хосте и устанавливаем scroll-margin-top
+  // 1. Добавляем CSS (для каруселей, плавного перехода вкладок и т.п.)
   const style = document.createElement("style");
   style.textContent = `
     :host(:focus) {
@@ -30,49 +28,35 @@ window.initProductcardTest = async function (shadowRoot) {
     .TabPanel {
       scroll-margin-top: 100px; /* Устанавливаем отступ 100px */
     }
-    /* Стили для контейнера карусели */
     .carousel-container {
       position: relative;
       display: flex;
       align-items: center;
       overflow: hidden; /* Скрываем переполнение */
     }
-
-    /* Стили для трека карусели */
     .carousel-track {
       display: flex;
       transition: transform 0.5s ease;
     }
-
-    /* Стили для карточек товаров внутри карусели */
     .MiniHorizontalTiles > .SaleTileItem {
       flex: 0 0 auto;
     }
-
     .prev-button {
-      left: 10px; /* Расположение кнопки слева с отступом */
+      left: 10px;
     }
-
     .next-button {
-      right: 10px; /* Расположение кнопки справа с отступом */
+      right: 10px;
     }
-
-    /* Скрываем стандартные стрелки браузера в MiniHorizontalTiles */
     .MiniHorizontalTiles::-webkit-scrollbar {
       display: none;
     }
-
     .MiniHorizontalTiles {
       -ms-overflow-style: none;  /* IE и Edge */
       scrollbar-width: none;  /* Firefox */
     }
-
-    /* Обеспечиваем, чтобы карточки не переносились на новую строку */
     .MiniHorizontalTiles > .SaleTileItem {
       flex: 0 0 auto;
     }
-
-    /* Плавный переход для изменения размеров .TabsContainer */
     .TabsContainer {
       transition: height 0.3s ease;
       height: auto;
@@ -80,47 +64,38 @@ window.initProductcardTest = async function (shadowRoot) {
   `;
   shadowRoot.appendChild(style);
 
-  // 1. Переключение вкладок
+  // 2. Логика переключения вкладок
   const tabNavItems = shadowRoot.querySelectorAll(".TabsNav .TabItemNav");
   const tabPanels = shadowRoot.querySelectorAll(".TabsContainer .TabPanel");
 
-  // Функция обновления высоты TabsContainer
   async function updateTabsContainerHeight() {
     const tabsContainer = shadowRoot.querySelector(".TabsContainer");
     const activePanel = shadowRoot.querySelector(".TabPanel.activePanel");
     if (tabsContainer && activePanel) {
-      await waitForImagesInElement(activePanel); // Ждём загрузки изображений
+      await waitForImagesInElement(activePanel);
       const panelHeight = activePanel.scrollHeight;
-      tabsContainer.style.height = `${panelHeight + 55}px`; // Добавляем 55px
+      tabsContainer.style.height = `${panelHeight + 55}px`;
     }
   }
 
-  // Устанавливаем слушатели на вкладки
   tabNavItems.forEach((tab, index) => {
     tab.addEventListener("click", async () => {
-      // Снимаем активные классы
       tabNavItems.forEach((t) => t.classList.remove("activeTab"));
       tabPanels.forEach((p) => p.classList.remove("activePanel"));
-
-      // Назначаем активную вкладку и панель
       tab.classList.add("activeTab");
       tabPanels[index].classList.add("activePanel");
-
-      // Обновляем высоту контейнера
       await updateTabsContainerHeight();
     });
   });
 
-  // Активируем первую вкладку по умолчанию (Описание) при загрузке
   if (tabNavItems.length > 0) {
     tabNavItems[0].classList.add("activeTab");
     tabPanels[0].classList.add("activePanel");
   }
 
-  // 2. +/- количество
+  // 3. +/- количество
   const minusBtns = shadowRoot.querySelectorAll(".NumMinus");
   const plusBtns = shadowRoot.querySelectorAll(".NumPlus");
-
   minusBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -130,7 +105,6 @@ window.initProductcardTest = async function (shadowRoot) {
       input.value = val;
     });
   });
-
   plusBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -141,11 +115,9 @@ window.initProductcardTest = async function (shadowRoot) {
     });
   });
 
-  // 3. Установка больших изображений при наведении миниатюр
+  // 4. Изображения (основное + оверлей)
   const thumbLinks = shadowRoot.querySelectorAll(".ThumbLink");
   const bigImage = shadowRoot.getElementById("BigImageID");
-
-  // Список всех больших изображений (для оверлея)
   const imageSources = [];
   thumbLinks.forEach((link) => {
     const imgSrc = link.getAttribute("data-bigimg");
@@ -153,7 +125,6 @@ window.initProductcardTest = async function (shadowRoot) {
   });
 
   let currentImageIndex = 0;
-
   thumbLinks.forEach((link, index) => {
     link.addEventListener("mouseover", () => {
       const newSrc = link.getAttribute("data-bigimg");
@@ -168,12 +139,11 @@ window.initProductcardTest = async function (shadowRoot) {
     });
   });
 
-  // 4. Полноэкранный просмотр
+  // Оверлей
   const overlay = shadowRoot.getElementById("ImageOverlay");
   const overlayBg = shadowRoot.getElementById("ImageOverlayBg");
   const overlayPic = shadowRoot.getElementById("ImageOverlayPic");
   const overlayThumbsContainer = shadowRoot.querySelector(".OverlayThumbs");
-
   if (bigImage) {
     bigImage.addEventListener("click", () => {
       currentImageIndex = imageSources.indexOf(bigImage.src);
@@ -181,9 +151,55 @@ window.initProductcardTest = async function (shadowRoot) {
       openOverlay(bigImage.src);
     });
   }
-
   const navLeft = shadowRoot.querySelector(".OverlayNavLeft");
   const navRight = shadowRoot.querySelector(".OverlayNavRight");
+
+  function switchToPreviousImage() {
+    currentImageIndex--;
+    if (currentImageIndex < 0) currentImageIndex = imageSources.length - 1;
+    if (overlayPic) {
+      overlayPic.src = imageSources[currentImageIndex];
+    }
+    highlightSelectedThumb();
+  }
+  function switchToNextImage() {
+    currentImageIndex++;
+    if (currentImageIndex >= imageSources.length) currentImageIndex = 0;
+    if (overlayPic) {
+      overlayPic.src = imageSources[currentImageIndex];
+    }
+    highlightSelectedThumb();
+  }
+  function openOverlay(src) {
+    if (!overlayPic) return;
+    overlayPic.src = src;
+    overlay.classList.remove("OverlayHidden");
+    overlay.classList.add("OverlayVisible");
+    populateOverlayThumbs();
+    highlightSelectedThumb();
+    const host = shadowRoot.host;
+    host.setAttribute("tabindex", "-1");
+    host.focus();
+  }
+  function closeOverlay() {
+    overlay.classList.remove("OverlayVisible");
+    overlay.classList.add("OverlayHidden");
+    if (overlayPic) overlayPic.src = "";
+    removeOverlayThumbsHighlight();
+    const host = shadowRoot.host;
+    host.blur();
+  }
+  function handleKeyDown(e) {
+    if (!overlay.classList.contains("OverlayVisible")) return;
+    if (e.key === "Escape") {
+      closeOverlay();
+    } else if (e.key === "ArrowLeft") {
+      switchToPreviousImage();
+    } else if (e.key === "ArrowRight") {
+      switchToNextImage();
+    }
+  }
+  document.addEventListener("keydown", handleKeyDown);
 
   if (navLeft) {
     navLeft.addEventListener("click", (e) => {
@@ -197,67 +213,49 @@ window.initProductcardTest = async function (shadowRoot) {
       switchToNextImage();
     });
   }
-
-  function handleKeyDown(e) {
-    if (!overlay.classList.contains("OverlayVisible")) return;
-    if (e.key === "Escape") {
-      closeOverlay();
-    } else if (e.key === "ArrowLeft") {
-      switchToPreviousImage();
-    } else if (e.key === "ArrowRight") {
-      switchToNextImage();
-    }
-  }
-  document.addEventListener("keydown", handleKeyDown);
-
-  function switchToPreviousImage() {
-    currentImageIndex--;
-    if (currentImageIndex < 0) {
-      currentImageIndex = imageSources.length - 1;
-    }
-    if (overlayPic) {
-      overlayPic.src = imageSources[currentImageIndex];
-    }
-    highlightSelectedThumb();
-  }
-
-  function switchToNextImage() {
-    currentImageIndex++;
-    if (currentImageIndex >= imageSources.length) {
-      currentImageIndex = 0;
-    }
-    if (overlayPic) {
-      overlayPic.src = imageSources[currentImageIndex];
-    }
-    highlightSelectedThumb();
-  }
-
-  function openOverlay(src) {
-    if (!overlayPic) return;
-    overlayPic.src = src;
-    overlay.classList.remove("OverlayHidden");
-    overlay.classList.add("OverlayVisible");
-    populateOverlayThumbs();
-    highlightSelectedThumb();
-    const host = shadowRoot.host;
-    host.setAttribute("tabindex", "-1");
-    host.focus();
-  }
-
-  function closeOverlay() {
-    overlay.classList.remove("OverlayVisible");
-    overlay.classList.add("OverlayHidden");
-    if (overlayPic) {
-      overlayPic.src = "";
-    }
-    removeOverlayThumbsHighlight();
-    const host = shadowRoot.host;
-    host.blur();
-  }
-
   if (overlayBg && overlayPic) {
     overlayBg.addEventListener("click", closeOverlay);
     overlayPic.addEventListener("click", closeOverlay);
+  }
+
+  function populateOverlayThumbs() {
+    if (!overlayThumbsContainer) return;
+    overlayThumbsContainer.innerHTML = "";
+    imageSources.forEach((src, index) => {
+      const thumbDiv = document.createElement("div");
+      thumbDiv.classList.add("OverlayThumb");
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = `Изображение ${index + 1}`;
+      img.addEventListener("click", () => {
+        if (overlayPic) {
+          overlayPic.src = src;
+        }
+        currentImageIndex = index;
+        highlightSelectedThumb();
+      });
+      thumbDiv.appendChild(img);
+      overlayThumbsContainer.appendChild(thumbDiv);
+    });
+    highlightSelectedThumb();
+  }
+  function highlightSelectedThumb() {
+    if (!overlayThumbsContainer) return;
+    const thumbs = overlayThumbsContainer.querySelectorAll(".OverlayThumb");
+    thumbs.forEach((thumb, i) => {
+      if (i === currentImageIndex) {
+        thumb.classList.add("selected");
+      } else {
+        thumb.classList.remove("selected");
+      }
+    });
+  }
+  function removeOverlayThumbsHighlight() {
+    if (!overlayThumbsContainer) return;
+    const thumbs = overlayThumbsContainer.querySelectorAll(".OverlayThumb");
+    thumbs.forEach((thumb) => {
+      thumb.classList.remove("selected");
+    });
   }
 
   // 5. Копирование кода
@@ -284,19 +282,16 @@ window.initProductcardTest = async function (shadowRoot) {
   if (goToFullDescBtn) {
     goToFullDescBtn.addEventListener("click", async () => {
       if (tabNavItems.length > 0) {
-        // Активируем первую вкладку (Описание)
         tabNavItems.forEach((t) => t.classList.remove("activeTab"));
         tabPanels.forEach((p) => p.classList.remove("activePanel"));
         tabNavItems[0].classList.add("activeTab");
         tabPanels[0].classList.add("activePanel");
-
         await updateTabsContainerHeight();
         scrollToElementWithOffset(tabPanels[0], 50);
       }
     });
   }
 
-  // 7. Клик по "Описание"
   const delLink = shadowRoot.querySelector(".delivery-link");
   if (delLink) {
     delLink.addEventListener("click", async () => {
@@ -305,14 +300,12 @@ window.initProductcardTest = async function (shadowRoot) {
         tabPanels.forEach((p) => p.classList.remove("activePanel"));
         tabNavItems[1].classList.add("activeTab");
         tabPanels[1].classList.add("activePanel");
-
         await updateTabsContainerHeight();
         scrollToElementWithOffset(tabPanels[1], 50);
       }
     });
   }
 
-  // 7. Клик по "Документация"
   const docLink = shadowRoot.querySelector(".documentation-link");
   if (docLink) {
     docLink.addEventListener("click", async () => {
@@ -321,81 +314,12 @@ window.initProductcardTest = async function (shadowRoot) {
         tabPanels.forEach((p) => p.classList.remove("activePanel"));
         tabNavItems[2].classList.add("activeTab");
         tabPanels[2].classList.add("activePanel");
-
         await updateTabsContainerHeight();
         scrollToElementWithOffset(tabPanels[2], 50);
       }
     });
   }
 
-  // 8. Заполнение миниатюр в оверлее
-  function populateOverlayThumbs() {
-    if (!overlayThumbsContainer) return;
-    overlayThumbsContainer.innerHTML = "";
-    imageSources.forEach((src, index) => {
-      const thumbDiv = document.createElement("div");
-      thumbDiv.classList.add("OverlayThumb");
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = `Изображение ${index + 1}`;
-      img.addEventListener("click", () => {
-        if (overlayPic) {
-          overlayPic.src = src;
-        }
-        currentImageIndex = index;
-        highlightSelectedThumb();
-      });
-      thumbDiv.appendChild(img);
-      overlayThumbsContainer.appendChild(thumbDiv);
-    });
-    highlightSelectedThumb();
-  }
-
-  // 9. Выделение выбранной миниатюры
-  function highlightSelectedThumb() {
-    if (!overlayThumbsContainer) return;
-    const thumbs = overlayThumbsContainer.querySelectorAll(".OverlayThumb");
-    thumbs.forEach((thumb, index) => {
-      if (index === currentImageIndex) {
-        thumb.classList.add("selected");
-      } else {
-        thumb.classList.remove("selected");
-      }
-    });
-  }
-
-  function removeOverlayThumbsHighlight() {
-    if (!overlayThumbsContainer) return;
-    const thumbs = overlayThumbsContainer.querySelectorAll(".OverlayThumb");
-    thumbs.forEach((thumb) => {
-      thumb.classList.remove("selected");
-    });
-  }
-
-  // 10. Уведомления
-  const notificationContainer = shadowRoot.getElementById(
-    "NotificationContainer"
-  );
-  function showNotification(message, type = "info") {
-    if (!notificationContainer) return;
-    const notification = document.createElement("div");
-    notification.classList.add("notification", type);
-    notification.textContent = message;
-    notificationContainer.appendChild(notification);
-
-    setTimeout(() => {
-      notification.classList.add("show");
-    }, 10);
-
-    setTimeout(() => {
-      notification.classList.remove("show");
-      notification.addEventListener("transitionend", () => {
-        notification.remove();
-      });
-    }, 2000);
-  }
-
-  // 11. Прокрутка с учётом отступа (50px)
   function scrollToElementWithOffset(element, offset = 50) {
     element.scrollIntoView({
       behavior: "smooth",
@@ -416,7 +340,7 @@ window.initProductcardTest = async function (shadowRoot) {
     });
   });
 
-  // 12. Инициализация каруселей
+  // 7. Инициализация каруселей (данные из /data/carusel.json)
   await initializeCarousels(shadowRoot);
 
   // Следим за изменениями внутри вкладок и обновляем высоту
@@ -427,22 +351,230 @@ window.initProductcardTest = async function (shadowRoot) {
     observer.observe(panel, { childList: true, subtree: true });
   });
 
-  // !!! Принудительно повторно инициализируем первую вкладку после полной загрузки !!!
-  // Это "обманный" трюк, чтобы заставить вкладку снова подогнать размер.
-  // Сначала снимем "активность", а потом кликнем по ней ещё раз:
+  // Принудительно активируем первую вкладку
   if (tabNavItems.length > 0) {
-    // Даём небольшой таймаут, чтобы контент точно прогрузился (просто 0 или 50мс).
     setTimeout(() => {
       tabNavItems[0].classList.remove("activeTab");
       tabPanels[0].classList.remove("activePanel");
-
-      // "Кликаем" по первой вкладке, активируя её принудительно.
       tabNavItems[0].click();
     }, 50);
   }
+
+  // 8. Массив аналогов - с реальными ссылками на изображения
+  // (Те же ссылки, что у вас в AnalogsScroller -> .AnalogItem)
+  const analogData = [
+    {
+      name: "EKF PS-5 15А 3300Вт IP66 PROxima",
+      newPrice: "850 ₽",
+      oldPrice: "1270 ₽",
+      extra: "Гарантия: 7 лет",
+      image:
+        "/images/jpg/product/datchik_dvizheniya_era_md_015_e27_60vt_360grad._6m_ip20_501600_belyy_b0043792_2378613_1.jpg",
+    },
+    {
+      name: "TDM DDS-01 10А 220В IP44",
+      newPrice: "750 ₽",
+      oldPrice: "1100 ₽",
+      extra: "Гарантия: 5 лет",
+      image:
+        "/images/jpg/product/fotorele_ekf_ps_1_fr_6a_1400vt_ip44_fr_ps_1_6_2036945_1.jpg",
+    },
+    {
+      name: "IEK ФР-601 6А 1400Вт IP44",
+      newPrice: "650 ₽",
+      oldPrice: "900 ₽",
+      extra: "Гарантия: 3 года",
+      image:
+        "/images/jpg/product/tdm_electric_dds_01_1100vt_5_480s_2_12m_5_lk_180gr._ip44_1833317_1.jpg",
+    },
+    {
+      name: "Schneider Electric Acti9 iPRF 16А",
+      newPrice: "950 ₽",
+      oldPrice: "1300 ₽",
+      extra: "Гарантия: 10 лет",
+      image:
+        "/images/jpg/product/ik_datchik_dvizheniya_nast._1200vt_180gr._do_12m_ip44_ms_16c_ekf_proxima_1576628_1.jpg",
+    },
+    {
+      name: "Legrand 49100 10А IP55",
+      newPrice: "820 ₽",
+      oldPrice: "1050 ₽",
+      extra: "Гарантия: 8 лет",
+      image: "/images/jpg/product/125345_222.jpg",
+    },
+    {
+      name: "ABB NightWatcher NW-230",
+      newPrice: "890 ₽",
+      oldPrice: "1150 ₽",
+      extra: "Гарантия: 6 лет",
+      image: "/images/jpg/product/345345_222.jpg",
+    },
+    {
+      name: "DEKraft FR-101 10А 220В",
+      newPrice: "770 ₽",
+      oldPrice: "980 ₽",
+      extra: "Гарантия: 4 года",
+      image: "/images/jpg/product/1030000.jpg",
+    },
+    {
+      name: "SmartLight SL-PH-12 12А 250В",
+      newPrice: "810 ₽",
+      oldPrice: "1040 ₽",
+      extra: "Гарантия: 5 лет",
+      image: "/images/jpg/product/1472250x0.jpg",
+    },
+    {
+      name: "IEK ФР-602 12А 2500Вт IP65",
+      newPrice: "920 ₽",
+      oldPrice: "1250 ₽",
+      extra: "Гарантия: 9 лет",
+      image: "/images/jpg/product/34532245_222.jpg",
+    },
+    {
+      name: "Navigator NPF-20 20А 4000Вт IP67",
+      newPrice: "980 ₽",
+      oldPrice: "1400 ₽",
+      extra: "Гарантия: 12 лет",
+      image: "/images/jpg/product/376791900.jpg",
+    },
+  ];
+
+  // Модальное окно для одного аналога
+  const modalOverlay = shadowRoot.querySelector("#analogModalOverlay");
+  const modalContent = shadowRoot.querySelector("#analogModalContent");
+  const modalClose = shadowRoot.querySelector("#analogModalClose");
+  const modalProductName = shadowRoot.querySelector("#modalProductName");
+  const modalNewPrice = shadowRoot.querySelector("#modalNewPrice");
+  const modalOldPrice = shadowRoot.querySelector("#modalOldPrice");
+  const modalExtraInfo = shadowRoot.querySelector("#modalExtraInfo");
+
+  function openAnalogModal(index) {
+    const data = analogData[index];
+    modalProductName.textContent = data.name;
+    modalNewPrice.textContent = data.newPrice;
+    modalOldPrice.textContent = data.oldPrice;
+    modalExtraInfo.textContent = data.extra;
+    modalOverlay.style.display = "block";
+  }
+  function closeAnalogModal() {
+    modalOverlay.style.display = "none";
+    // Убираем класс "широкого" окна (если был добавлен)
+    modalContent.classList.remove("AnalogModalContentAll");
+  }
+
+  // При клике по одному из скроллящихся аналогов
+  const analogItems = document.querySelectorAll(".AnalogItem");
+  analogItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const index = item.getAttribute("data-index");
+      openAnalogModal(index);
+    });
+  });
+  modalClose.addEventListener("click", closeAnalogModal);
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+      closeAnalogModal();
+    }
+  });
+
+  // Клик по "Показать все" -> открываем большую таблицу
+  const showAllLink = shadowRoot.querySelector(".ShowAllAnalogs");
+  if (showAllLink) {
+    showAllLink.addEventListener("click", () => {
+      openAllAnalogsModal();
+    });
+  }
+
+  // Функция, которая покажет таблицу во всю ширину (70%)
+  function openAllAnalogsModal() {
+    modalContent.innerHTML = "";
+    modalContent.classList.add("AnalogModalContentAll");
+
+    // Кнопка закрытия
+    const closeBtn = document.createElement("span");
+    closeBtn.classList.add("AnalogModalClose");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", closeAnalogModal);
+    modalContent.appendChild(closeBtn);
+
+    // Заголовок с полным названием товара
+    const heading = document.createElement("h3");
+    heading.textContent =
+      "Аналоги для Фотореле EKF PS-5 15А 3300Вт IP66 PROxima, fr-ps-5-15";
+    modalContent.appendChild(heading);
+
+    // Создаем таблицу
+    const table = document.createElement("table");
+    table.style.width = "100%";
+
+    // Заголовки таблицы
+    const thead = document.createElement("thead");
+    thead.innerHTML = `
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  `;
+    table.appendChild(thead);
+
+    // Тело таблицы
+    const tbody = document.createElement("tbody");
+
+    analogData.forEach((item, index) => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+      <td style="text-align:center;">
+        <img src="${item.image}" alt="${item.name}" class="analog-img" data-index="${index}" style="width:60px;"/>
+      </td>
+      <td class="name" data-index="${index}">${item.name}</td>
+      <td>${item.newPrice}</td>
+      <td class="old-price">${item.oldPrice}</td>
+      <td><button class="AddToCartButton">В корзину</button></td>
+    `;
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    modalContent.appendChild(table);
+    modalOverlay.style.display = "block";
+
+    // Добавляем кликабельность на изображение и наименование (открытие деталей аналога)
+    modalContent.querySelectorAll(".analog-img, .name").forEach((element) => {
+      element.addEventListener("click", (event) => {
+        const index = event.target.getAttribute("data-index");
+        openAnalogModal(index);
+      });
+    });
+  }
+
+  // Уведомления
+  const notificationContainer = shadowRoot.getElementById(
+    "NotificationContainer"
+  );
+  function showNotification(message, type = "info") {
+    if (!notificationContainer) return;
+    const notification = document.createElement("div");
+    notification.classList.add("notification", type);
+    notification.textContent = message;
+    notificationContainer.appendChild(notification);
+    setTimeout(() => {
+      notification.classList.add("show");
+    }, 10);
+    setTimeout(() => {
+      notification.classList.remove("show");
+      notification.addEventListener("transitionend", () => {
+        notification.remove();
+      });
+    }, 2000);
+  }
 };
 
-// Функция для инициализации каруселей (код не меняем)
+// Инициализация каруселей (код не меняем)
 async function initializeCarousels(shadowRoot) {
   try {
     if (!window.fetch) {
@@ -454,12 +586,10 @@ async function initializeCarousels(shadowRoot) {
       throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
     }
     const caruselData = await response.json();
-
     const cache = {
       AlsoLeftWidth: caruselData.AlsoLeftWidth || [],
       RecentViewsBlock: caruselData.RecentViewsBlock || [],
     };
-
     ["AlsoLeftWidth", "RecentViewsBlock"].forEach((block) => {
       const container = shadowRoot.querySelector(`.${block} .carousel-track`);
       if (container && cache[block].length > 0) {
@@ -467,6 +597,7 @@ async function initializeCarousels(shadowRoot) {
           const card = createProductCard(product);
           container.appendChild(card);
         });
+        // Дублируем для "бесконечной" карусели
         cache[block].forEach((product) => {
           const card = createProductCard(product);
           container.appendChild(card);
@@ -479,11 +610,10 @@ async function initializeCarousels(shadowRoot) {
   }
 }
 
-// Функция для создания карточки товара
+// Создание карточки для карусели
 function createProductCard(product) {
   const card = document.createElement("div");
   card.classList.add("SaleTileItem");
-
   const topButtons = document.createElement("span");
   topButtons.classList.add("topbuttons");
   const compareIcon = document.createElement("i");
@@ -495,14 +625,12 @@ function createProductCard(product) {
   card.appendChild(topButtons);
 
   const imageLink = document.createElement("a");
-  imageLink.href = product.link;
+  imageLink.href = product.link || "#";
   imageLink.classList.add("SaleImageLink");
-
   const img = document.createElement("img");
   img.src = product.image;
   img.alt = product.name;
   imageLink.appendChild(img);
-
   card.appendChild(imageLink);
 
   const name = document.createElement("div");
@@ -515,20 +643,19 @@ function createProductCard(product) {
 
   const price = document.createElement("div");
   price.classList.add("SalePrice");
-  price.textContent = product.price;
+  price.textContent = product.price || "";
   dataDiv.appendChild(price);
 
   const buyButton = document.createElement("button");
   buyButton.classList.add("SaleBuyButton");
   buyButton.textContent = "В корзину";
   dataDiv.appendChild(buyButton);
-
   card.appendChild(dataDiv);
 
   return card;
 }
 
-// Функция для настройки карусели
+// Настройка карусели (бесконечной)
 function setupCarousel(shadowRoot, block, originalLength) {
   const carouselContainer = shadowRoot.querySelector(
     `.${block} .carousel-container`
@@ -550,15 +677,13 @@ function setupCarousel(shadowRoot, block, originalLength) {
     cardWidth = firstCard.getBoundingClientRect().width;
     gap = marginRight;
   }
-
   function waitForImages() {
     const images = track.querySelectorAll("img");
     const promises = Array.from(images).map(
       (img) =>
         new Promise((resolve) => {
-          if (img.complete) {
-            resolve();
-          } else {
+          if (img.complete) resolve();
+          else {
             img.onload = resolve;
             img.onerror = resolve;
           }
@@ -566,7 +691,6 @@ function setupCarousel(shadowRoot, block, originalLength) {
     );
     return Promise.all(promises);
   }
-
   function jumpWithoutTransition(toIndex) {
     track.style.transition = "none";
     track.style.transform = `translateX(-${toIndex * (cardWidth + gap)}px)`;
@@ -587,7 +711,6 @@ function setupCarousel(shadowRoot, block, originalLength) {
         currentIndex * (cardWidth + gap)
       }px)`;
     });
-
     prevButton.addEventListener("click", () => {
       if (isTransitioning) return;
       isTransitioning = true;
@@ -596,7 +719,6 @@ function setupCarousel(shadowRoot, block, originalLength) {
         currentIndex * (cardWidth + gap)
       }px)`;
     });
-
     track.addEventListener("transitionend", () => {
       isTransitioning = false;
       if (currentIndex === 0) {
@@ -607,7 +729,6 @@ function setupCarousel(shadowRoot, block, originalLength) {
         jumpWithoutTransition(currentIndex);
       }
     });
-
     window.addEventListener("resize", () => {
       const savedIndex = currentIndex;
       calculateDimensions();
@@ -616,13 +737,11 @@ function setupCarousel(shadowRoot, block, originalLength) {
   });
 
   carouselContainer.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      prevButton.click();
-    } else if (e.key === "ArrowRight") {
-      nextButton.click();
-    }
+    if (e.key === "ArrowLeft") prevButton.click();
+    if (e.key === "ArrowRight") nextButton.click();
   });
 
+  // Клонируем первый и последний слайд для "бесконечной" карусели
   const firstClone = cards[0].cloneNode(true);
   const lastClone = cards[cards.length - 1].cloneNode(true);
   track.appendChild(firstClone);
