@@ -352,10 +352,7 @@ body {
   margin-bottom: 20px;
   border-radius: 8px;
 }
-.AlsoLeftWidth h2 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 .MiniHorizontalTiles {
   display: flex;
   gap: 15px;
@@ -452,10 +449,35 @@ body {
 .OldContent {
   margin-bottom: 10px;
 }
-.DescriptionText h2 {
-  font-size: 1.4rem;
-  margin-bottom: 30px;
+
+.AnalogsContainer h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+h2 {
+  font-size: 1.4rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between; /* Раздвигает элементы внутри заголовка */
+  align-items: center; /* Выравнивает элементы по вертикали */
+  width: 100%; /* Растягиваем заголовок на всю ширину */
+}
+
+.ShowAllAnalogs {
+  font-size: 14px;
+  color: #2d7596;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: normal;
+  margin-left: auto; /* Отправляет элемент вправо */
+}
+
 .DescriptionText p {
   padding-bottom: 30px;
   margin: 0 auto;
@@ -563,9 +585,7 @@ body {
   border-radius: 10px;
   margin-bottom: 15px;
 }
-.RecentViewsBlock h2 {
-  margin-bottom: 10px;
-}
+
 .RecentGoodsList {
   display: flex;
   gap: 15px;
@@ -961,30 +981,10 @@ body {
 
 /* ==================== Стили для аналогов ==================== */
 
-/* Заголовок блока аналогов */
-.AnalogsContainer h4 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 /* Отображение количества аналогов и ссылки "Показать все" */
 .AnalogCount {
   font-size: 14px;
   color: #666;
-}
-
-.ShowAllAnalogs {
-  font-size: 14px;
-  color: #2d7596;
-  cursor: pointer;
-  text-decoration: underline;
-  /* Не делаем шрифт толстым */
-  font-weight: normal;
-  margin-left: auto;
 }
 
 /* Горизонтальный скролл */

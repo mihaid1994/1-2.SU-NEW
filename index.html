@@ -68,7 +68,16 @@
             ></i>
           </span>
 
-          <!-- Бонусы, Лимит, Корзина, Личный кабинет -->
+          <!-- Кнопка «Журнал заказов» -->
+          <span class="cart-button">
+            <i
+              class="ri-shopping-cart-2-line"
+              id="cart-button"
+              data-tooltip="Перейти в активную корзину"
+            ></i>
+          </span>
+
+          <!--  Лимит, Корзина, Личный кабинет -->
           <div class="account" id="accountButton">
             <a
               id="logButton"
@@ -109,14 +118,6 @@
                 <span class="name">Шуравин М.А. </span>
                 <hr class="custom-divider" />
                 <button
-                  id="bonus-amount"
-                  class="info-button"
-                  data-tooltip="Ваши накопленные бонусы"
-                >
-                  <span class="label">Бонусы:</span>
-                  <span class="value">45 000 ₽</span>
-                </button>
-                <button
                   id="limit-amount"
                   class="info-button"
                   data-tooltip="Ваш текущий лимит покупок"
@@ -133,6 +134,24 @@
                   <span class="value">25 000 000,00 ₽</span>
                 </button>
                 <hr class="custom-divider" />
+                <button id="bonus-amount" class="info-button" data-tooltip="">
+                  <span class="label">Использованный лимит:</span>
+                  <span class="value">160 000 ₽</span>
+                </button>
+                <button id="bonus-amount" class="info-button" data-tooltip="">
+                  <span class="label">Срок оплаты кредита:</span>
+                  <span class="value">14.07.2025</span>
+                </button>
+                <hr class="custom-divider" />
+
+                <button
+                  id="bonus-amount"
+                  class="info-button bonus-btn"
+                  data-tooltip=""
+                >
+                  <span class="label">Дней до стоп-листа:</span>
+                  <span class="value">72</span>
+                </button>
 
                 <span id="workTogether" class="icon-group">
                   Совместная работа

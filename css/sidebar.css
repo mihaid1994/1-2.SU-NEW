@@ -11,7 +11,7 @@
   padding: 12px;
   transition: transform 0.3s ease-in-out;
   overflow-y: hidden; /* Прокрутка по вертикали */
-  z-index: 1000;
+  z-index: 500;
   border-bottom-left-radius: 12px;
   border-top-left-radius: 12px;
 }
@@ -57,7 +57,7 @@ input[type="text"] {
 /* Кнопка оформления заказа */
 .proceed-button {
   display: block; /* Устанавливаем блочное отображение */
-  background-color: #3c6f75;
+  background-color: #ff8420;
   color: white;
   border: none;
   padding: 12px 16px;
@@ -66,15 +66,15 @@ input[type="text"] {
   text-align: center;
   border-radius: 8px;
   cursor: pointer;
-  width: 60%;
+  width: 63%;
   margin: 15px auto 5px auto; /* Добавляем отступы сверху 10px и снизу 5px */
-  transition: background-color 0.3s, width 0.3s;
+  transition: box-shadow 0.3s, font-size 0.3s;
   width: 0.3s;
 }
 
 .proceed-button:hover {
-  background-color: #529097;
-  width: 62%;
+  font-size: 16.3px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.192);
 }
 
 /* Скрытый сайдбар */
@@ -99,7 +99,7 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
-  z-index: 1100;
+  z-index: 550;
 }
 
 .show-right-sidebar.show {
@@ -127,7 +127,7 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
-  z-index: 1100;
+  z-index: 550;
 }
 
 .hide-right-sidebar:hover {

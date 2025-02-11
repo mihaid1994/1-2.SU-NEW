@@ -497,7 +497,10 @@
 
           <!-- Блок "С этим товаром покупают" -->
           <div class="AlsoLeftWidth">
-            <h2>С этим товаром покупают:</h2>
+            <h2>
+              Сопутствующие товары <span class="AnalogCount"></span>
+              <span class="ShowAllAnalogs">Показать все</span>
+            </h2>
             <div class="carousel-container">
               <button class="carousel-button prev-button">&lt;</button>
               <div class="MiniHorizontalTiles carousel-track">
@@ -507,6 +510,24 @@
             </div>
           </div>
           <!-- /AlsoLeftWidth -->
+
+          <!-- Недавно просмотренные товары -->
+          <div class="RecentViewsBlock">
+            <div>
+              <h2>
+                Аналоги <span class="AnalogCount"></span>
+                <span class="ShowAllAnalogs">Подбор аналогов</span>
+              </h2>
+            </div>
+            <div class="carousel-container">
+              <button class="carousel-button prev-button">&lt;</button>
+              <div class="MiniHorizontalTiles carousel-track">
+                <!-- Товары будут добавлены динамически через JS -->
+              </div>
+              <button class="carousel-button next-button">&gt;</button>
+            </div>
+          </div>
+          <!-- /RecentViewsBlock -->
 
           <!-- Табы -->
           <div class="TabsContainer">
@@ -756,21 +777,6 @@
           <div class="Clear"></div>
         </div>
         <!-- /ProductPage -->
-
-        <!-- Недавно просмотренные товары -->
-        <div class="RecentViewsBlock">
-          <div>
-            <h2>Недавно просмотренные товары:</h2>
-          </div>
-          <div class="carousel-container">
-            <button class="carousel-button prev-button">&lt;</button>
-            <div class="MiniHorizontalTiles carousel-track">
-              <!-- Товары будут добавлены динамически через JS -->
-            </div>
-            <button class="carousel-button next-button">&gt;</button>
-          </div>
-        </div>
-        <!-- /RecentViewsBlock -->
 
         <!-- Баннер -->
         <div class="BannerWrapper">

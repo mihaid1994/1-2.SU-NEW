@@ -53,9 +53,9 @@
           "Создать новую корзину"
         );
         this.createCartButton.innerHTML = `
-          <i class="ri-add-fill" style="margin-right: 5px; pointer-events: none;"></i>
-          <i class="ri-shopping-cart-2-line" style="pointer-events: none;"></i>
-        `;
+
+        <span style="pointer-events: none;">Создать новую корзину</span>
+      `;
 
         // Кнопка «Чат»
         this.createChatButton = document.createElement("button");
@@ -63,9 +63,9 @@
         this.createChatButton.classList.add("create-chat-button");
         this.createChatButton.setAttribute("data-tooltip", "Написать в чат");
         this.createChatButton.innerHTML = `
-          <i class="ri-chat-check-fill" style="margin-right: 5px; pointer-events: none;"></i>
-        `;
-
+        
+        <span style="pointer-events: none;">Написать в чат</span>
+      `;
         // Добавляем кнопки в общий контейнер
         this.buttonsContainer.appendChild(this.createChatButton);
         this.buttonsContainer.appendChild(this.createCartButton);
@@ -107,6 +107,39 @@
 
       // Флаг для отслеживания процесса создания корзины
       this.isCreatingCart = false;
+
+      // Вместо второго document.addEventListener("DOMContentLoaded", ...),
+      // ДОБАВЛЯЕМ обработчик «cartButton» рядом с остальными кнопками, внутри init().
+
+      const cartButton = document.getElementById("cart-button");
+      if (cartButton) {
+        cartButton.addEventListener("click", async () => {
+          // Сразу работаем с GComm_TabManager (у вас он присвоен window.GComm_TabManager)
+          const tabManager = window.GComm_TabManager;
+          if (!tabManager) {
+            console.error("Tab Manager не найден.");
+            return;
+          }
+
+          // Ищем уже открытую вкладку «Корзина 1»
+          const existingTab = Array.from(tabManager.tabs.children).find(
+            (child) =>
+              child !== tabManager.buttonsContainer &&
+              child.dataset.name === "Корзина 1"
+          );
+
+          // Если нашли - активируем, если нет - создаём
+          if (existingTab) {
+            tabManager.activateTab(existingTab.dataset.tab);
+          } else {
+            await tabManager.createTab(
+              "Корзина 1",
+              "/pages/delivery.html",
+              true
+            );
+          }
+        });
+      }
 
       // Обработчики кнопок
       this.createCartButton.addEventListener("click", async () => {

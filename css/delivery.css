@@ -75,20 +75,17 @@ html {
   gap: 3px; /* Расстояние между текстом и иконкой */
   font-size: 16px;
   color: #333;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease, font-weight 0.3s ease;
 }
 
 /* Иконки внутри кнопок */
 .toggle-button i {
   font-size: 20px;
-  transition: transform 0.3s ease;
 }
 
 .toggle-button:hover,
 .toggle-alternate:hover {
-  font-weight: bold;
+  color: #ff9100;
 }
 
 /* Текст в кнопках */
@@ -201,6 +198,7 @@ h1 i:hover {
 
 /* Секция доставки */
 .delivery-section {
+  margin-top: 5px;
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -297,8 +295,6 @@ h1 i:hover {
 
 /* Стили для заголовков таблицы */
 .iksweb th {
-  background-color: #9e9e9e;
-  color: white;
   text-align: left;
   padding: 5px;
   font-size: 14px;
@@ -1045,7 +1041,7 @@ th {
   appearance: none; /* Убираем стандартный стиль чекбокса */
   width: 20px; /* Ширина чекбокса */
   height: 20px; /* Высота чекбокса */
-  border: 3px solid #fff; /* Толстая белая рамка */
+  border: 3px solid #4e4e4e; /* Толстая белая рамка */
   border-radius: 4px; /* Скругленные углы */
   background-color: transparent; /* Прозрачный фон */
   cursor: pointer; /* Указатель мыши */
@@ -1055,7 +1051,7 @@ th {
 
 .select-all-checkbox:checked {
   background-color: transparent; /* Прозрачный фон в выбранном состоянии */
-  border-color: #fff; /* Белая рамка сохраняется */
+  border-color: #4e4e4e; /* Белая рамка сохраняется */
 }
 
 .select-all-checkbox:checked::after {
@@ -1066,7 +1062,7 @@ th {
   transform: translate(-50%, -50%) rotate(45deg);
   width: 4px; /* Ширина галочки */
   height: 7px; /* Высота галочки */
-  border: solid white;
+  border: solid #4e4e4e;
   border-width: 0 3px 3px 0; /* Толщина линий галочки */
   pointer-events: none; /* Галочка не кликабельна */
 }
