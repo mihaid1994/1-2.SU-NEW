@@ -2,7 +2,7 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <title>Калькулятор транспортных расходов</title>
+    <title>Расширенный калькулятор транспортных расходов</title>
     <!-- Подключаем Remix Icons -->
     <link
       href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
@@ -23,7 +23,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100vh;
+        min-height: 100vh;
         padding: 10px;
       }
       .calculator {
@@ -32,12 +32,12 @@
         border-radius: 15px;
         padding: 30px;
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
       }
       .calculator h1 {
         text-align: center;
         margin-bottom: 20px;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 600;
       }
       .input-group {
@@ -65,7 +65,7 @@
         outline: none;
         border-color: #007aff;
       }
-      .input-group .help-text {
+      .help-text {
         font-size: 0.8rem;
         color: #777;
         margin-top: 5px;
@@ -102,24 +102,37 @@
         color: #555;
         line-height: 1.4;
       }
-      .icon {
-        margin-right: 5px;
-        vertical-align: middle;
+      .section-title {
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .calculation-method {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .calculation-method label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .hidden {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="calculator">
       <h1>
-        <i class="ri-calculator-line icon"></i>Калькулятор транспортных расходов
+        <i class="ri-calculator-line icon"></i>Расширенный калькулятор
+        транспортных расходов
       </h1>
 
       <!-- Ввод себестоимости грунта P -->
       <div class="input-group">
-        <label for="costP"
-          ><i class="ri-coin-line icon"></i>Себестоимость паллеты грунта
-          (P)</label
-        >
+        <label for="costP">
+          <i class="ri-coin-line icon"></i>Себестоимость паллеты грунта (P)
+        </label>
         <input type="number" id="costP" placeholder="Например, 10000" />
         <div class="help-text">
           Введите себестоимость одной паллеты грунта в рублях (например,
@@ -127,11 +140,26 @@
         </div>
       </div>
 
-      <!-- Ввод стоимости доставки T -->
+      <!-- Выбор метода ввода стоимости доставки -->
       <div class="input-group">
-        <label for="deliveryT"
-          ><i class="ri-truck-line icon"></i>Стоимость доставки (T)</label
-        >
+        <div class="section-title">Способ учета стоимости доставки (T):</div>
+        <div class="calculation-method">
+          <label>
+            <input type="radio" name="deliveryMethod" value="manual" checked />
+            Ввести вручную
+          </label>
+          <label>
+            <input type="radio" name="deliveryMethod" value="auto" />
+            С учетом транспортных параметров
+          </label>
+        </div>
+      </div>
+
+      <!-- Ввод стоимости доставки вручную -->
+      <div class="input-group" id="manualDelivery">
+        <label for="deliveryT">
+          <i class="ri-truck-line icon"></i>Стоимость доставки (T)
+        </label>
         <input type="number" id="deliveryT" placeholder="Например, 2500" />
         <div class="help-text">
           Введите фактическую стоимость доставки одной паллеты (в рублях).
@@ -139,12 +167,113 @@
         </div>
       </div>
 
-      <!-- Выбор целевого процента R -->
+      <!-- Автоматический расчёт стоимости доставки -->
+      <div id="autoDelivery" class="hidden">
+        <div class="input-group">
+          <label for="calcMethod">
+            <i class="ri-settings-line icon"></i>Метод расчёта стоимости
+            доставки
+          </label>
+          <select id="calcMethod">
+            <option value="weight" selected>По весу</option>
+            <option value="volume">По объёму</option>
+          </select>
+          <div class="help-text">
+            Выберите: если товар весит больше 250 кг – рассчитываем по весу,
+            если легкий, но габаритный – по объёму.
+          </div>
+        </div>
+
+        <!-- Блок для расчёта по весу -->
+        <div id="calcWeight">
+          <div class="input-group">
+            <label for="vehicleCostWeight">
+              <i class="ri-money-dollar-circle-line icon"></i>Общая стоимость
+              автомобиля за рейс
+            </label>
+            <input
+              type="number"
+              id="vehicleCostWeight"
+              placeholder="Например, 27680"
+            />
+            <div class="help-text">
+              Введите стоимость автомобиля за рейс (руб.).
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="vehicleCapacity">
+              <i class="ri-steering-2-line icon"></i>Грузоподъемность автомобиля
+              (тонн)
+            </label>
+            <input
+              type="number"
+              id="vehicleCapacity"
+              placeholder="Например, 5"
+            />
+            <div class="help-text">
+              Введите максимальную грузоподъемность автомобиля в тоннах.
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="palletWeight">
+              <i class="ri-dashboard-line icon"></i>Вес паллеты (тонн)
+            </label>
+            <input type="number" id="palletWeight" placeholder="Например, 1" />
+            <div class="help-text">
+              Введите вес одной паллеты груза в тоннах.
+            </div>
+          </div>
+        </div>
+
+        <!-- Блок для расчёта по объёму -->
+        <div id="calcVolume" class="hidden">
+          <div class="input-group">
+            <label for="vehicleCostVolume">
+              <i class="ri-money-dollar-circle-line icon"></i>Общая стоимость
+              автомобиля за рейс
+            </label>
+            <input
+              type="number"
+              id="vehicleCostVolume"
+              placeholder="Например, 27680"
+            />
+            <div class="help-text">
+              Введите стоимость автомобиля за рейс (руб.).
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="vehicleVolumeCapacity">
+              <i class="ri-fullscreen-line icon"></i>Объём грузового отсека
+              (куб.м)
+            </label>
+            <input
+              type="number"
+              id="vehicleVolumeCapacity"
+              placeholder="Например, 30"
+            />
+            <div class="help-text">
+              Введите общий объём грузового отсека автомобиля в кубических
+              метрах.
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="palletVolume">
+              <i class="ri-cube-line icon"></i>Объём паллеты (куб.м)
+            </label>
+            <input type="number" id="palletVolume" placeholder="Например, 1" />
+            <div class="help-text">
+              Введите объём одной паллеты груза в кубических метрах.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Выбор целевого процента транспортных расходов (R) -->
       <div class="input-group">
-        <label for="percentR"
-          ><i class="ri-percent-line icon"></i>Целевой процент транспортных
-          расходов (R)</label
-        >
+        <label for="percentR">
+          <i class="ri-percent-line icon"></i>Целевой процент транспортных
+          расходов (R)
+        </label>
         <select id="percentR">
           <option value="0.015">1.5% (0.015)</option>
           <option value="0.02" selected>2% (0.02)</option>
@@ -163,13 +292,14 @@
       <div class="result" id="result" style="display: none">
         <p id="resultS"></p>
         <p id="resultX"></p>
+        <p id="resultT"></p>
       </div>
 
       <!-- Дополнительные рекомендации -->
       <div class="info">
         <p>
-          <i class="ri-information-line icon"></i
-          ><strong>Примечание:</strong> Для комбинированного заказа действует
+          <i class="ri-information-line icon"></i>
+          <strong>Примечание:</strong> Для комбинированного заказа действует
           формула: <br />
           X ≥ (T / R) – P, где S = P + X.
         </p>
@@ -181,22 +311,134 @@
     </div>
 
     <script>
+      // Функция для отображения/скрытия блоков в зависимости от выбранного способа ввода доставки
+      function toggleDeliveryMethod() {
+        const method = document.querySelector(
+          'input[name="deliveryMethod"]:checked'
+        ).value;
+        const manualBlock = document.getElementById("manualDelivery");
+        const autoBlock = document.getElementById("autoDelivery");
+        if (method === "manual") {
+          manualBlock.classList.remove("hidden");
+          autoBlock.classList.add("hidden");
+        } else {
+          manualBlock.classList.add("hidden");
+          autoBlock.classList.remove("hidden");
+          toggleCalcMethod();
+        }
+      }
+
+      // Функция для переключения между расчетом по весу и по объёму
+      function toggleCalcMethod() {
+        const calcMethod = document.getElementById("calcMethod").value;
+        const weightBlock = document.getElementById("calcWeight");
+        const volumeBlock = document.getElementById("calcVolume");
+        if (calcMethod === "weight") {
+          weightBlock.classList.remove("hidden");
+          volumeBlock.classList.add("hidden");
+        } else {
+          volumeBlock.classList.remove("hidden");
+          weightBlock.classList.add("hidden");
+        }
+      }
+
+      // Назначаем обработчики переключения способа ввода доставки
+      document
+        .querySelectorAll('input[name="deliveryMethod"]')
+        .forEach((elem) => {
+          elem.addEventListener("change", toggleDeliveryMethod);
+        });
+      document
+        .getElementById("calcMethod")
+        .addEventListener("change", toggleCalcMethod);
+
       document
         .getElementById("calculateBtn")
         .addEventListener("click", function () {
-          // Получаем введённые значения
+          // Получаем значение себестоимости
           var P = parseFloat(document.getElementById("costP").value);
-          var T = parseFloat(document.getElementById("deliveryT").value);
           var R = parseFloat(document.getElementById("percentR").value);
+          var T;
 
-          // Проверка корректности введённых данных
-          if (isNaN(P) || isNaN(T) || isNaN(R) || P <= 0 || T <= 0) {
-            alert("Пожалуйста, заполните все поля корректными значениями.");
+          // Проверка корректности себестоимости и R
+          if (isNaN(P) || P <= 0 || isNaN(R) || R <= 0) {
+            alert(
+              "Пожалуйста, заполните поля 'Себестоимость' и 'Целевой процент' корректными значениями."
+            );
             return;
           }
 
-          // Вычисляем S и X по формуле:
-          // S >= T / R  и X = S – P
+          // Определяем способ задания стоимости доставки
+          var deliveryMethod = document.querySelector(
+            'input[name="deliveryMethod"]:checked'
+          ).value;
+          if (deliveryMethod === "manual") {
+            T = parseFloat(document.getElementById("deliveryT").value);
+            if (isNaN(T) || T <= 0) {
+              alert(
+                "Пожалуйста, заполните поле 'Стоимость доставки' корректным значением."
+              );
+              return;
+            }
+          } else {
+            // Расчёт стоимости доставки автоматически
+            var calcMethod = document.getElementById("calcMethod").value;
+            if (calcMethod === "weight") {
+              var vehicleCost = parseFloat(
+                document.getElementById("vehicleCostWeight").value
+              );
+              var vehicleCapacity = parseFloat(
+                document.getElementById("vehicleCapacity").value
+              );
+              var palletWeight = parseFloat(
+                document.getElementById("palletWeight").value
+              );
+              if (
+                isNaN(vehicleCost) ||
+                vehicleCost <= 0 ||
+                isNaN(vehicleCapacity) ||
+                vehicleCapacity <= 0 ||
+                isNaN(palletWeight) ||
+                palletWeight <= 0
+              ) {
+                alert(
+                  "Пожалуйста, заполните все поля для расчёта по весу корректными значениями."
+                );
+                return;
+              }
+              // Стоимость за тонну груза
+              var costPerTon = vehicleCost / vehicleCapacity;
+              T = costPerTon * palletWeight;
+            } else if (calcMethod === "volume") {
+              var vehicleCost = parseFloat(
+                document.getElementById("vehicleCostVolume").value
+              );
+              var vehicleVolumeCapacity = parseFloat(
+                document.getElementById("vehicleVolumeCapacity").value
+              );
+              var palletVolume = parseFloat(
+                document.getElementById("palletVolume").value
+              );
+              if (
+                isNaN(vehicleCost) ||
+                vehicleCost <= 0 ||
+                isNaN(vehicleVolumeCapacity) ||
+                vehicleVolumeCapacity <= 0 ||
+                isNaN(palletVolume) ||
+                palletVolume <= 0
+              ) {
+                alert(
+                  "Пожалуйста, заполните все поля для расчёта по объёму корректными значениями."
+                );
+                return;
+              }
+              // Стоимость за кубический метр груза
+              var costPerCubic = vehicleCost / vehicleVolumeCapacity;
+              T = costPerCubic * palletVolume;
+            }
+          }
+
+          // Вычисляем общую сумму заказа S и дополнительный заказ X
           var S = T / R;
           var X = S - P;
 
@@ -209,8 +451,13 @@
             "Дополнительный заказ X на сумму не менее: " +
             X.toFixed(2) +
             " руб.";
+          document.getElementById("resultT").textContent =
+            "Использованная стоимость доставки (T): " + T.toFixed(2) + " руб.";
           document.getElementById("result").style.display = "block";
         });
+
+      // Инициализация отображения
+      toggleDeliveryMethod();
     </script>
   </body>
 </html>
