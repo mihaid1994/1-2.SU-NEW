@@ -12,7 +12,9 @@
     <link
       href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
       rel="stylesheet"
+      defer
     />
+
     <!-- Подключение Yandex Maps API -->
     <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=ВАШ_НОВЫЙ_API_КЛЮЧ_ЯНДЕКС_КАРТ"
@@ -186,6 +188,14 @@
 
         <!-- Вторая строка с кнопками -->
         <div class="secondary-row">
+          <button
+            class="secondary-button"
+            data-tab-url="/pages/versus.html"
+            data-open-tab="true"
+            data-tab-title="Подбор аналогов"
+          >
+            Подбор аналогов
+          </button>
           <button id="productcardbutton" class="secondary-button">
             Макет карточки товара
           </button>
@@ -394,6 +404,9 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
       defer
     ></script>
+
+    <!-- noUiSlider JS скрипт красивого слайдера цен-->
+    <script src="/js/nouislider.min.js" defer></script>
 
     <!-- jsPDF и html2canvas для PDF -->
     <script

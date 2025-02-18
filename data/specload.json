@@ -56,5 +56,9 @@
   "/pages/productcard.html": {
     "scripts": ["/js/productcard.js"],
     "initFunctions": ["initProductcardTest"]
+  },
+  "/pages/versus.html": {
+    "scripts": ["/js/versus.js"],
+    "initFunctions": ["initversusFunction"]
   }
 }

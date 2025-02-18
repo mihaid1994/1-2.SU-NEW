@@ -1,0 +1,394 @@
+/* Сброс стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background: #efeff4;
+  color: #333;
+}
+
+/* Основной контейнер */
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 86vh; /* Высота на весь экран */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Сайдбар */
+.filters-panel {
+  width: 20%;
+  min-width: 220px;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.filters-panel.collapsed {
+  width: 0;
+  min-width: 0;
+}
+
+/* Шапка сайдбара */
+.filters-header {
+  flex-shrink: 0;
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.filters-header h2 {
+  font-size: 18px;
+}
+
+/* Обёртка для скролла фильтров */
+.filters-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Скроллбары для фильтров */
+.filters-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.filters-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.filters-scroll::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+
+/* Контент фильтров */
+.filters-content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Группы фильтров */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-group label {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Поля цены */
+.price-inputs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.price-inputs input[type="number"] {
+  width: 50%;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Изменение цвета заполненной части слайдера на оранжевый */
+.noUi-connect {
+  background: #ffa600; /* Оранжевый цвет */
+}
+
+/* Удаление обводки у значений */
+.price-values {
+  display: none;
+}
+
+/* Изменение цвета заполненной части слайдера на оранжевый */
+.noUi-tooltip {
+  border: none;
+}
+
+/* dual-range (noUiSlider) */
+.dual-range {
+  margin: 20px;
+}
+
+/* Стилизация чекбоксов - базовая рамка серая, отмеченные оранжевые */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  margin-right: 5px;
+}
+input[type="checkbox"]:checked {
+  background-color: rgb(255, 166, 0);
+  border: 2px solid rgb(255, 166, 0);
+}
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Кнопки фильтров */
+.filter-buttons {
+  flex-shrink: 0;
+  padding: 10px 15px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 10px;
+  background: #fff;
+}
+
+/* Hover-эффект для кнопок в сайдбаре */
+.filter-buttons .btn:hover {
+  background: #888;
+}
+
+.btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: #aaa;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Кнопка сворачивания */
+#toggleFilters {
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s ease, top 0.3s ease;
+}
+
+.filters-panel:not(.collapsed) ~ #toggleFilters {
+  transform: translateX(240px);
+  top: 15px;
+}
+
+/* Основной контент (ТАБЛИЦА) */
+.comparison-area {
+  width: 83.34%;
+  transition: width 0.3s ease;
+  overflow-y: auto;
+  background: #fff;
+  border-left: 1px solid #e0e0e0;
+}
+
+.filters-panel.collapsed ~ #toggleFilters ~ .comparison-area {
+  width: 100%;
+}
+
+.table-view table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0;
+}
+
+.table-view th,
+.table-view td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table-view th {
+  background: #f0f0f0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table-view th.no-sort {
+  cursor: default;
+}
+
+.table-view img {
+  max-width: 80px;
+  max-height: 80px;
+  cursor: pointer;
+}
+
+/* Стили для всплывающего клона изображения */
+.img-popup {
+  pointer-events: none; /* Чтобы не мешало работе мыши */
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  border-radius: 10px; /* Скругленные края */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Тень */
+  padding: 5px; /* Отступы вокруг изображения */
+  background: white; /* Фон для лучшего контраста */
+}
+
+/* Скроллбары для таблицы */
+.filters-panel::-webkit-scrollbar,
+.comparison-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.filters-panel::-webkit-scrollbar-track,
+.comparison-area::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.filters-panel::-webkit-scrollbar-thumb,
+.comparison-area::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 768px) {
+  .filters-panel {
+    display: none;
+  }
+  #toggleFilters {
+    transform: none;
+    left: 15px;
+  }
+  .comparison-area {
+    width: 100%;
+  }
+  .table-view table,
+  .table-view thead,
+  .table-view tbody,
+  .table-view th,
+  .table-view td,
+  .table-view tr {
+    display: block;
+  }
+  .table-view th {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .table-view tr {
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  .table-view td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+  }
+  .table-view td:before {
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    white-space: nowrap;
+  }
+}
+
+/* Фиксированная ширина для ячеек */
+.table-view td:nth-child(1) {
+  width: 70px;
+}
+.table-view td:nth-child(2) {
+  width: 270px;
+}
+
+.table-view td:nth-child(3) {
+  width: 40px;
+}
+
+.name-container {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Контейнер управления заказом */
+/* Левая часть – кратность, правая – контролы (количество и корзина) */
+.order-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-multiplicity {
+  font-size: 12px;
+  color: #555;
+}
+
+.order-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.cart-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.cart-btn:hover {
+  color: orange;
+}
+
+.qty-input {
+  width: 100px;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.multiplicity-label {
+  font-size: 12px;
+  color: #555;
+}
+
+/* Кнопка для удаления позиции (иконка крестика) */
+.remove-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  transition: color 0.2s;
+  margin-left: 5px;
+}
+.remove-btn:hover {
+  color: red;
+}

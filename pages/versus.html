@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Подбор аналогов</title>
+    <!-- Remix Icon -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- noUiSlider CSS красивый ползунок цен-->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css"
+      rel="stylesheet"
+      defer
+    />
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="/css/versus.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Сайдбар -->
+      <aside class="filters-panel">
+        <div class="filters-header">
+          <h2>Подбор аналогов</h2>
+        </div>
+        <!-- Обёртка для скролла фильтров -->
+        <div class="filters-scroll">
+          <div class="filters-content">
+            <!-- Диапазон цены -->
+            <div class="filter-group">
+              <label>Цена:</label>
+              <div class="price-inputs">
+                <input
+                  type="number"
+                  id="priceInputFrom"
+                  placeholder="От"
+                  min="0"
+                />
+                <input
+                  type="number"
+                  id="priceInputTo"
+                  placeholder="До"
+                  min="0"
+                />
+              </div>
+              <!-- Элемент для noUiSlider -->
+              <div id="priceSlider" class="dual-range"></div>
+              <div class="price-values">
+                <span id="priceMinVal">0 ₽</span> —
+                <span id="priceMaxVal">0 ₽</span>
+              </div>
+            </div>
+            <!-- Бренды -->
+            <div class="filter-group">
+              <label>Бренды:</label>
+              <div class="brand-filter">
+                <label>
+                  <input type="checkbox" name="brand" value="Bosch" />
+                  Bosch
+                </label>
+                <label>
+                  <input type="checkbox" name="brand" value="DeWalt" />
+                  DeWalt
+                </label>
+                <label>
+                  <input type="checkbox" name="brand" value="Makita" />
+                  Makita
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="brand"
+                    value="Black &amp; Decker"
+                  />
+                  Black &amp; Decker
+                </label>
+                <label>
+                  <input type="checkbox" name="brand" value="Craftsman" />
+                  Craftsman
+                </label>
+              </div>
+            </div>
+            <!-- Характеристики сравнения -->
+            <div class="filter-group" id="characteristics-filters">
+              <label>Характеристики сравнения:</label>
+              <!-- Чекбоксы добавляются скриптом -->
+            </div>
+          </div>
+        </div>
+        <!-- Кнопки действий -->
+        <div class="filter-buttons">
+          <button id="resetFilters" class="btn">Сброс</button>
+          <button id="applyFilters" class="btn">Применить</button>
+        </div>
+      </aside>
+      <!-- Кнопка сворачивания -->
+      <button id="toggleFilters" aria-label="Свернуть фильтры">
+        <i class="ri-arrow-left-s-line"></i>
+      </button>
+      <!-- Основной контент (ТАБЛИЦА) -->
+      <section class="comparison-area">
+        <div class="table-view"></div>
+      </section>
+    </div>
+  </body>
+</html>

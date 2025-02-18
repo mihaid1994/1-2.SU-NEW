@@ -53,7 +53,7 @@
       ]
     },
     {
-      "title": "Электро и Светотехника",
+      "title": "Электротехника и Светотехника",
       "slug": "electro-lighting",
       "icon": "ri-lightbulb-line",
       "subcategories": [
@@ -1085,7 +1085,7 @@
       ]
     },
     {
-      "title": "Авто и Электроника",
+      "title": "Автотовары",
       "slug": "auto-electronics",
       "icon": "ri-car-line",
       "subcategories": [
@@ -1127,6 +1127,18 @@
         },
         {
           "title": "Кузовные материалы",
+          "subitems": []
+        },
+        {
+          "title": "Химия для автомобилистов",
+          "subitems": []
+        },
+        {
+          "title": "Автомобильный инструмент",
+          "subitems": []
+        },
+        {
+          "title": "Автомобильные освещение",
           "subitems": []
         }
       ]
