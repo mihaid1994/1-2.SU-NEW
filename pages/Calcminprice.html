@@ -16,7 +16,7 @@
         box-sizing: border-box;
       }
       body {
-        background: #f0f0f0; /* Светло-серый фон */
+        background: #f0f0f0;
         color: #333;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Helvetica, Arial, sans-serif;
@@ -124,18 +124,47 @@
   <body>
     <div class="calculator">
       <h1>
-        <i class="ri-calculator-line icon"></i>Расширенный калькулятор
+        <i class="ri-calculator-line icon"></i> Расширенный калькулятор
         транспортных расходов
       </h1>
 
-      <!-- Ввод себестоимости  -->
+      <!-- Ввод себестоимости паллеты -->
       <div class="input-group">
         <label for="costP">
-          <i class="ri-coin-line icon"></i>Себестоимость паллеты (P)
+          <i class="ri-coin-line icon"></i> Себестоимость паллеты (P)
         </label>
         <input type="number" id="costP" placeholder="Например, 10000" />
         <div class="help-text">
           Введите себестоимость одной паллеты в рублях (например, 10000–15000).
+        </div>
+      </div>
+
+      <!-- Выбор типа наценки -->
+      <div class="input-group">
+        <label for="markupType">Способ учёта наценки</label>
+        <select id="markupType">
+          <option value="percent">Наценка в %</option>
+          <option value="fixed">Наценка в рублях</option>
+        </select>
+        <div class="help-text">
+          Например, выберите "Наценка в %" и введите 20 для наценки 20%.
+        </div>
+      </div>
+
+      <!-- Блок для наценки -->
+      <div class="input-group">
+        <label for="markupValue">
+          <i class="ri-money-dollar-circle-line icon"></i> Наценка / Прибавочная
+          стоимость
+        </label>
+        <input
+          type="number"
+          id="markupValue"
+          placeholder="Например, 20 (если %), или 1000 (если руб.)"
+        />
+        <div class="help-text">
+          Укажите размер наценки. Если вводите процент, выберите соответствующий
+          тип ниже.
         </div>
       </div>
 
@@ -157,12 +186,11 @@
       <!-- Ввод стоимости доставки вручную -->
       <div class="input-group" id="manualDelivery">
         <label for="deliveryT">
-          <i class="ri-truck-line icon"></i>Стоимость доставки (T)
+          <i class="ri-truck-line icon"></i> Стоимость доставки (T)
         </label>
         <input type="number" id="deliveryT" placeholder="Например, 2500" />
         <div class="help-text">
           Введите фактическую стоимость доставки одной паллеты (в рублях).
-          Примеры: 800–1300 (до 200 км), 1900–2500 (400–500 км) и т.д.
         </div>
       </div>
 
@@ -170,7 +198,7 @@
       <div id="autoDelivery" class="hidden">
         <div class="input-group">
           <label for="calcMethod">
-            <i class="ri-settings-line icon"></i>Метод расчёта стоимости
+            <i class="ri-settings-line icon"></i> Метод расчёта стоимости
             доставки
           </label>
           <select id="calcMethod">
@@ -187,7 +215,7 @@
         <div id="calcWeight">
           <div class="input-group">
             <label for="vehicleCostWeight">
-              <i class="ri-money-dollar-circle-line icon"></i>Общая стоимость
+              <i class="ri-money-dollar-circle-line icon"></i> Общая стоимость
               автомобиля за рейс
             </label>
             <input
@@ -201,8 +229,8 @@
           </div>
           <div class="input-group">
             <label for="vehicleCapacity">
-              <i class="ri-steering-2-line icon"></i>Грузоподъемность автомобиля
-              (тонн)
+              <i class="ri-steering-2-line icon"></i> Грузоподъемность
+              автомобиля (тонн)
             </label>
             <input
               type="number"
@@ -215,7 +243,7 @@
           </div>
           <div class="input-group">
             <label for="palletWeight">
-              <i class="ri-dashboard-line icon"></i>Вес паллеты (тонн)
+              <i class="ri-dashboard-line icon"></i> Вес паллеты (тонн)
             </label>
             <input type="number" id="palletWeight" placeholder="Например, 1" />
             <div class="help-text">
@@ -228,7 +256,7 @@
         <div id="calcVolume" class="hidden">
           <div class="input-group">
             <label for="vehicleCostVolume">
-              <i class="ri-money-dollar-circle-line icon"></i>Общая стоимость
+              <i class="ri-money-dollar-circle-line icon"></i> Общая стоимость
               автомобиля за рейс
             </label>
             <input
@@ -242,7 +270,7 @@
           </div>
           <div class="input-group">
             <label for="vehicleVolumeCapacity">
-              <i class="ri-fullscreen-line icon"></i>Объём грузового отсека
+              <i class="ri-fullscreen-line icon"></i> Объём грузового отсека
               (куб.м)
             </label>
             <input
@@ -257,7 +285,7 @@
           </div>
           <div class="input-group">
             <label for="palletVolume">
-              <i class="ri-cube-line icon"></i>Объём паллеты (куб.м)
+              <i class="ri-cube-line icon"></i> Объём паллеты (куб.м)
             </label>
             <input type="number" id="palletVolume" placeholder="Например, 1" />
             <div class="help-text">
@@ -270,7 +298,7 @@
       <!-- Выбор целевого процента транспортных расходов (R) -->
       <div class="input-group">
         <label for="percentR">
-          <i class="ri-percent-line icon"></i>Целевой процент транспортных
+          <i class="ri-percent-line icon"></i> Целевой процент транспортных
           расходов (R)
         </label>
         <select id="percentR">
@@ -284,7 +312,7 @@
       </div>
 
       <button class="btn" id="calculateBtn">
-        <i class="ri-refresh-line icon"></i>Рассчитать
+        <i class="ri-refresh-line icon"></i> Рассчитать
       </button>
 
       <!-- Блок для вывода результата -->
@@ -300,7 +328,7 @@
           <i class="ri-information-line icon"></i>
           <strong>Примечание:</strong> Для комбинированного заказа действует
           формула: <br />
-          X ≥ (T / R) – P, где S = P + X.
+          X ≥ (T / R) – P<sub>sell</sub>, где S = P<sub>sell</sub> + X.
         </p>
         <p>
           При прямой поставке допустимо, чтобы транспортные расходы составляли
@@ -327,7 +355,7 @@
         }
       }
 
-      // Функция для переключения между расчетом по весу и по объёму
+      // Функция для переключения между расчётом по весу и по объёму
       function toggleCalcMethod() {
         const calcMethod = document.getElementById("calcMethod").value;
         const weightBlock = document.getElementById("calcWeight");
@@ -356,17 +384,40 @@
         .addEventListener("click", function () {
           // Получаем значение себестоимости
           var P = parseFloat(document.getElementById("costP").value);
-          var R = parseFloat(document.getElementById("percentR").value);
-          var T;
-
-          // Проверка корректности себестоимости и R
-          if (isNaN(P) || P <= 0 || isNaN(R) || R <= 0) {
+          if (isNaN(P) || P <= 0) {
             alert(
-              "Пожалуйста, заполните поля 'Себестоимость' и 'Целевой процент' корректными значениями."
+              "Пожалуйста, заполните поле 'Себестоимость паллеты' корректным значением."
             );
             return;
           }
 
+          // Считываем наценку
+          var markupValue = parseFloat(
+            document.getElementById("markupValue").value
+          );
+          var markupType = document.getElementById("markupType").value;
+          if (isNaN(markupValue) || markupValue < 0) {
+            markupValue = 0;
+          }
+
+          // Рассчитываем продажную стоимость (P_sell)
+          var P_sell;
+          if (markupType === "percent") {
+            P_sell = P + P * (markupValue / 100);
+          } else {
+            P_sell = P + markupValue;
+          }
+
+          // Получаем целевой процент транспортных расходов
+          var R = parseFloat(document.getElementById("percentR").value);
+          if (isNaN(R) || R <= 0) {
+            alert(
+              "Пожалуйста, заполните поле 'Целевой процент транспортных расходов' корректным значением."
+            );
+            return;
+          }
+
+          var T;
           // Определяем способ задания стоимости доставки
           var deliveryMethod = document.querySelector(
             'input[name="deliveryMethod"]:checked'
@@ -439,7 +490,7 @@
 
           // Вычисляем общую сумму заказа S и дополнительный заказ X
           var S = T / R;
-          var X = S - P;
+          var X = S - P_sell;
 
           // Выводим результаты
           document.getElementById("resultS").textContent =
@@ -449,7 +500,7 @@
           document.getElementById("resultX").textContent =
             "Дополнительный заказ X на сумму не менее: " +
             X.toFixed(2) +
-            " руб.";
+            " руб. (с учётом наценки)";
           document.getElementById("resultT").textContent =
             "Стоимость доставки одной паллеты (T): " + T.toFixed(2) + " руб.";
           document.getElementById("result").style.display = "block";
