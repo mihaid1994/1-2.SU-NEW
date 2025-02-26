@@ -139,34 +139,7 @@
         </div>
       </div>
 
-      <!-- Выбор типа наценки -->
-      <div class="input-group">
-        <label for="markupType">Способ учёта наценки</label>
-        <select id="markupType">
-          <option value="percent">Наценка в %</option>
-          <option value="fixed">Наценка в рублях</option>
-        </select>
-        <div class="help-text">
-          Например, выберите "Наценка в %" и введите 20 для наценки 20%.
-        </div>
-      </div>
-
-      <!-- Блок для наценки -->
-      <div class="input-group">
-        <label for="markupValue">
-          <i class="ri-money-dollar-circle-line icon"></i> Наценка / Прибавочная
-          стоимость
-        </label>
-        <input
-          type="number"
-          id="markupValue"
-          placeholder="Например, 20 (если %), или 1000 (если руб.)"
-        />
-        <div class="help-text">
-          Укажите размер наценки. Если вводите процент, выберите соответствующий
-          тип.
-        </div>
-      </div>
+      <!-- Информируем, что маржа фиксирована и составляет 3,2% от суммы заказа -->
 
       <!-- Выбор метода ввода стоимости доставки -->
       <div class="input-group">
@@ -320,7 +293,7 @@
         <p id="resultS"></p>
         <p id="resultX"></p>
         <p id="resultT"></p>
-        <p id="resultMarkup"></p>
+        <p id="resultMargin"></p>
       </div>
 
       <!-- Расширенные инструкции и пояснения -->
@@ -333,25 +306,23 @@
           R – целевой процент транспортных расходов.
         </p>
         <p>
-          При наличии наценки (прибавочной стоимости) себестоимость паллеты P
-          пересчитывается в продажную стоимость P<sub>sell</sub> по формуле:
+          В данном приложении вместо наценки используется маржа – доля прибыли в
+          общей сумме заказа. Применяется норма маржи 3,2% от суммы заказа, что
+          означает, что продажная стоимость определяется по формуле:
           <br />
-          • Если наценка указана в процентах: P<sub>sell</sub> = P + P ×
-          (наценка / 100),
-          <br />
-          • Если наценка указана в рублях: P<sub>sell</sub> = P + наценка.
+          <em>P<sub>sell</sub> = P + S × 0.032</em>
         </p>
         <p>
           Далее дополнительный заказ X рассчитывается как:
-          <br /><em>X = S - P<sub>sell</sub></em
-          >. Это гарантирует, что транспортные расходы не превысят выбранный
+          <br /><em>X = S - P<sub>sell</sub></em>
+          Это гарантирует, что транспортные расходы не превысят выбранный
           процент R от общей суммы заказа.
         </p>
         <p>
           Результаты вычислений выводятся в блоке выше:
-          <br />– Общая сумма заказа S, <br />– Дополнительный заказ X (с учетом
-          наценки), <br />– Стоимость доставки одной паллеты T, <br />–
-          Прибавочная стоимость (разница между P<sub>sell</sub> и P).
+          <br />– Общая сумма заказа S, <br />– Дополнительный заказ X (с учётом
+          маржи), <br />– Стоимость доставки одной паллеты T, <br />– Маржа
+          (прибыль в рублях).
         </p>
       </div>
     </div>
@@ -408,23 +379,6 @@
               "Пожалуйста, заполните поле 'Себестоимость паллеты' корректным значением."
             );
             return;
-          }
-
-          // Считываем наценку
-          var markupValue = parseFloat(
-            document.getElementById("markupValue").value
-          );
-          var markupType = document.getElementById("markupType").value;
-          if (isNaN(markupValue) || markupValue < 0) {
-            markupValue = 0;
-          }
-
-          // Рассчитываем продажную стоимость (P_sell)
-          var P_sell;
-          if (markupType === "percent") {
-            P_sell = P + P * (markupValue / 100);
-          } else {
-            P_sell = P + markupValue;
           }
 
           // Получаем целевой процент транспортных расходов
@@ -507,11 +461,17 @@
             }
           }
 
-          // Вычисляем общую сумму заказа S и дополнительный заказ X
+          // Вычисляем общую сумму заказа S
           var S = T / R;
+
+          // Рассчитываем маржу (прибыль) как 3.2% от S
+          var marginProfit = S * 0.032;
+
+          // Рассчитываем продажную стоимость P_sell
+          var P_sell = P + marginProfit;
+
+          // Вычисляем дополнительный заказ X
           var X = S - P_sell;
-          // Вычисляем величину прибавочной стоимости
-          var markupAmount = P_sell - P;
 
           // Выводим результаты
           document.getElementById("resultS").textContent =
@@ -521,13 +481,11 @@
           document.getElementById("resultX").textContent =
             "Дополнительный заказ X на сумму не менее: " +
             X.toFixed(2) +
-            " руб. (с учётом наценки)";
+            " руб. (с учётом маржи)";
           document.getElementById("resultT").textContent =
             "Стоимость доставки одной паллеты (T): " + T.toFixed(2) + " руб.";
-          document.getElementById("resultMarkup").textContent =
-            "Прибавочная стоимость составляет: " +
-            markupAmount.toFixed(2) +
-            " руб.";
+          document.getElementById("resultMargin").textContent =
+            "Маржа составляет: " + marginProfit.toFixed(2) + " руб.";
           document.getElementById("result").style.display = "block";
         });
 
