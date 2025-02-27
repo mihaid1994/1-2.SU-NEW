@@ -28,6 +28,50 @@
         <div class="filters-scroll" data-simplebar>
           <!-- Секция: Категории -->
           <div class="filter-section">
+            <div class="results-info">Найдено: более 10000</div>
+            <div class="input-group">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Искать"
+                data-tooltip="Введите ключевые слова для поиска"
+              />
+            </div>
+            <div class="input-group">
+              <select
+                id="stock-select"
+                data-tooltip="Выберите склад для поиска товаров"
+              >
+                <option value="all">Склад</option>
+                <!-- Дополнительные опции -->
+              </select>
+            </div>
+            <div class="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  checked
+                  data-tooltip="Показывать только товары, которые есть в наличии"
+                />
+                В наличии
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Показывать товары, которые находятся в пути"
+                />
+                В пути
+              </label>
+            </div>
+            <div class="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Показывать товары, которые продавались"
+                />
+                Продавался
+              </label>
+            </div>
             <div class="filter-group">
               <label>Цена:</label>
               <div class="price-inputs">
@@ -366,62 +410,59 @@
                 >Трехфазные</a
               >
             </h2>
-            <div class="results-info">Найдено: более 10000</div>
-            <div class="input-group">
-              <input
-                type="text"
-                id="search-input"
-                placeholder="Искать"
-                data-tooltip="Введите ключевые слова для поиска"
-              />
-            </div>
-            <div class="input-group">
-              <select
-                id="stock-select"
-                data-tooltip="Выберите склад для поиска товаров"
-              >
-                <option value="all">Склад</option>
-                <!-- Дополнительные опции -->
-              </select>
-            </div>
-            <div class="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  checked
-                  data-tooltip="Показывать только товары, которые есть в наличии"
-                />
-                В наличии
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  data-tooltip="Показывать товары, которые находятся в пути"
-                />
-                В пути
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  data-tooltip="Показывать товары, которые продавались"
-                />
-                Продавался
-              </label>
-            </div>
-            <button
-              id="toggleViewButton"
-              data-tooltip="Переключить между видом таблицы и карточек"
-            >
-              <img
-                src="/images/svg/Icon/table.svg"
-                alt="Переключить вид"
-                class="toggle-button-image"
-              />
-            </button>
+            <span>пустая строка</span>
           </div>
         </div>
         <!-- Прокручиваемая область основного контента (SimpleBar) -->
         <div class="content-area" data-simplebar>
+          <div class="pagination-container">
+            <div class="pagination">
+              <span data-tooltip="Текущая страница 1">1</span>
+              <a href="#" data-tooltip="Перейти на страницу 2">2</a>
+              <a href="#" data-tooltip="Перейти на страницу 3">3</a>
+              <a href="#" data-tooltip="Перейти на страницу 4">4</a>
+              <a href="#" data-tooltip="Перейти на страницу 5">5</a>
+              <span>...</span>
+              <a href="#" data-tooltip="Перейти на страницу 331">331</a>
+              <button
+                class="go-to"
+                data-tooltip="Перейти на введённую страницу"
+              >
+                Перейти на
+              </button>
+              <input
+                type="number"
+                min="1"
+                max="331"
+                data-tooltip="Введите номер страницы для перехода"
+              />
+            </div>
+            <div class="display-option">
+              <span
+                data-tooltip="Выберите количество товаров для отображения на странице"
+              >
+                Выводить по
+              </span>
+              <select
+                data-tooltip="Выберите количество товаров для отображения на странице"
+              >
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <button
+                id="toggleViewButton"
+                data-tooltip="Переключить между видом таблицы и карточек"
+              >
+                <img
+                  src="/images/svg/Icon/table.svg"
+                  alt="Переключить вид"
+                  class="toggle-button-image"
+                />
+              </button>
+            </div>
+          </div>
           <main>
             <div id="productContainer" class="product-grid"></div>
           </main>

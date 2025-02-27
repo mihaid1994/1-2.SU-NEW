@@ -1005,11 +1005,11 @@ window.initTableCardView = function (root = document) {
       display: "none",
       position: "absolute",
       zIndex: "1000",
-      borderRadius: "15px",
-      width: "200px",
-      height: "200px",
+      borderRadius: "10px",
+      width: "220px",
+      height: "220px",
       border: "1px solid #ddd",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.16)",
     });
     popupImage.setAttribute("data-tooltip", "Увеличенное изображение товара");
     root.appendChild(popupImage);

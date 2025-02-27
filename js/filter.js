@@ -55,8 +55,6 @@ window.initFilterMenu = function (root = document) {
 
       // Убираем из заголовка старое число (если оно есть)
       const baseTitle = header.textContent.replace(/\s*\(\d+\)/, "");
-
-      // Записываем новый заголовок с количеством выбранных элементов
       header.textContent = `${baseTitle} (${checkedCount})`;
 
       // Восстанавливаем стрелочку: если секция развернута – показываем ▲, иначе ▼
@@ -68,12 +66,81 @@ window.initFilterMenu = function (root = document) {
     });
   }
 
-  // Обработчики изменения чекбоксов
+  // Создаём контейнер для бейджей применённых фильтров
+  // Используем существующий элемент, где сейчас написана "пустая строка"
+  const badgesContainer = root.querySelector(".search-menu-content span");
+  if (badgesContainer) {
+    badgesContainer.classList.add("applied-filters-container");
+    badgesContainer.innerHTML = ""; // очищаем текст
+  }
+
+  // Функция для обработки изменений чекбоксов — создание/удаление бейджа фильтра
+  function handleFilterChange(event) {
+    const checkbox = event.target;
+    // Определяем текст фильтра из родительского label
+    let labelText = "";
+    if (
+      checkbox.parentElement &&
+      checkbox.parentElement.tagName.toLowerCase() === "label"
+    ) {
+      labelText = checkbox.parentElement.textContent.trim();
+    }
+    // Ограничиваем до 20 символов с троеточием при превышении
+    let displayText = labelText;
+    if (labelText.length > 20) {
+      displayText = labelText.slice(0, 20) + "...";
+    }
+
+    // Присваиваем уникальный идентификатор, если его ещё нет
+    if (!checkbox.dataset.filterId) {
+      checkbox.dataset.filterId =
+        "filter_" + Math.random().toString(36).substr(2, 9);
+    }
+    // Ищем уже созданный бейдж для этого фильтра
+    let badge = badgesContainer.querySelector(
+      `[data-filter-id="${checkbox.dataset.filterId}"]`
+    );
+
+    if (checkbox.checked) {
+      if (!badge) {
+        badge = document.createElement("div");
+        badge.className = "filter-badge";
+        badge.setAttribute("data-filter-id", checkbox.dataset.filterId);
+
+        // Текст бейджа
+        const badgeText = document.createElement("span");
+        badgeText.textContent = displayText;
+        badge.appendChild(badgeText);
+
+        // Кнопка-крестик для удаления
+        const cross = document.createElement("span");
+        cross.textContent = "✕";
+        cross.className = "filter-badge-cross";
+        badge.appendChild(cross);
+
+        // Обработчик клика по кресту: удаляем бейдж и снимаем галочку
+        cross.addEventListener("click", function (e) {
+          checkbox.checked = false;
+          badge.remove();
+          updateGroupheaders();
+        });
+
+        badgesContainer.appendChild(badge);
+      }
+    } else {
+      if (badge) {
+        badge.remove();
+      }
+    }
+  }
+
+  // Обработчики изменения чекбоксов: обновляем заголовки и бейджи
   root
     .querySelectorAll(".filter-section-content input[type='checkbox']")
     .forEach((checkbox) => {
-      checkbox.addEventListener("change", function () {
+      checkbox.addEventListener("change", function (event) {
         updateGroupheaders();
+        handleFilterChange(event);
       });
     });
 
@@ -90,13 +157,18 @@ window.initFilterMenu = function (root = document) {
       });
       updateGroupheaders();
 
+      // Очищаем контейнер бейджей
+      if (badgesContainer) {
+        badgesContainer.innerHTML = "";
+      }
+
       // Сбрасываем слайдер в диапазон [50, 30000]
       const sliderElement = root.getElementById("priceSlider");
       if (sliderElement && sliderElement.noUiSlider) {
         sliderElement.noUiSlider.set([50, 30000]);
       }
 
-      // Обнулим также поля ввода "От" / "До", если нужно:
+      // Обнуляем также поля ввода "От" / "До", если нужно:
       const priceInputFrom = root.getElementById("priceInputFrom");
       const priceInputTo = root.getElementById("priceInputTo");
       if (priceInputFrom) priceInputFrom.value = "";

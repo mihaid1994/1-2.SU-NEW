@@ -170,7 +170,7 @@ body {
   overflow-y: auto;
   position: relative;
   transition: all 0.3s ease;
-  height: 86%;
+  height: 89%;
 }
 
 /* Кастомные скроллбары для основной области */
@@ -191,7 +191,6 @@ body {
 /* Меню поиска */
 .search-menu {
   background: #fff;
-  padding: 15px;
 }
 
 .search-menu-content {
@@ -206,8 +205,8 @@ body {
   font-size: 24px;
   font-weight: bold;
   color: #888;
-  margin-bottom: 10px;
-  margin-left: 20px;
+  margin-left: 40px;
+  margin-top: 5px;
 }
 
 .catalog-link {
@@ -236,11 +235,13 @@ body {
 
 .input-group input,
 .input-group select {
-  width: 150px;
+  width: 100%;
   padding: 5px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .checkbox-group {
@@ -253,6 +254,7 @@ body {
   font-size: 14px;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .checkbox-group input {
@@ -373,12 +375,12 @@ body {
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .popular-brands .brands {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
 }
 
 .popular-brands .brands a {
@@ -388,6 +390,7 @@ body {
   text-decoration: none;
   color: #333;
   font-size: 14px;
+  margin-left: 10px;
 }
 
 .popular-brands .brands a:hover {
@@ -438,14 +441,14 @@ body {
 }
 
 .filters-panel:not(.collapsed) ~ #toggleFilters {
-  transform: translateX(240px);
+  transform: translateX(275px);
 }
 
 /* Поля цены */
 .price-inputs {
   display: flex;
   gap: 8px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .price-inputs input[type="number"] {
@@ -474,4 +477,33 @@ body {
 /* dual-range (noUiSlider) */
 .dual-range {
   margin: 20px;
+}
+
+/* Контейнер для бейджей применённых фильтров */
+.applied-filters-container {
+  display: flex;
+  flex-wrap: nowrap; /* Не переносить элементы */
+  white-space: nowrap; /* Не переносить текст внутри элементов */
+  overflow-x: auto; /* Горизонтальный скролл при переполнении */
+  width: 100%;
+  height: 50px;
+  padding: 0.5rem 10px; /* Отступы по 10px с боков */
+  box-sizing: border-box;
+}
+
+/* Отдельный бейдж фильтра */
+.filter-badge {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Текст внутри бейджа не переносится */
+}
+
+/* Кнопка-крестик для удаления бейджа */
+.filter-badge-cross {
+  cursor: pointer;
+  margin-left: 5px;
 }
