@@ -1,20 +1,5 @@
-// --- Завёрнутый Скрипт: initFilterMenu ---
 window.initFilterMenu = function (root = document) {
-  // 1) ЛОГИКА «СВЕРНУТЬ/РАЗВЕРНУТЬ» В МЕНЮ ПОИСКА
-  const searchMenu = root.querySelector(".search-menu");
-  const toggleButton = root.querySelector(".toggle-button");
-
-  if (toggleButton && searchMenu) {
-    toggleButton.addEventListener("click", function () {
-      searchMenu.classList.toggle("collapsed");
-      const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
-      toggleButton.setAttribute("aria-expanded", !isExpanded);
-      toggleButton.innerHTML = isExpanded ? "&#9660;" : "&#9650;"; // ▼ или ▲
-    });
-  }
-
-  // 2) ЛОГИКА ДЛЯ ФИЛЬТРОВ
-  // Добавляем прокрутку при большом числе элементов
+  // Логика работы с секциями фильтров: если в секции больше 5 элементов, включаем вертикальную прокрутку
   const filterSectionContents = root.querySelectorAll(
     ".filter-section-content"
   );
@@ -38,17 +23,14 @@ window.initFilterMenu = function (root = document) {
     const content = section.querySelector(".filter-section-content");
     if (!header || !content) return;
 
-    // Проверяем изначальное состояние (свернуто/раскрыто)
     const isInitiallyExpanded =
       content.style.display === "block" || !content.style.display;
 
-    // Особое правило: «Столбцы» должны быть свернуты
+    // Особое правило: «Столбцы» всегда должны быть свернуты
     if (header.textContent.includes("Столбцы")) {
       content.style.display = "none";
-      // Устанавливаем стрелочку вниз
       header.innerHTML = header.innerHTML.replace(/▲|▼/g, "▼");
     } else {
-      // Для остальных секций
       if (isInitiallyExpanded) {
         content.style.display = "block";
         header.innerHTML = header.innerHTML.replace(/▲|▼/g, "▲");
@@ -59,7 +41,7 @@ window.initFilterMenu = function (root = document) {
     }
   });
 
-  // Функция для обновления количества выбранных чекбоксов в заголовках
+  // Функция обновления количества выбранных чекбоксов в заголовках секций
   function updateGroupheaders() {
     root.querySelectorAll(".filter-section").forEach((section) => {
       const header = section.querySelector("h3");
@@ -71,13 +53,13 @@ window.initFilterMenu = function (root = document) {
         "input[type='checkbox']:checked"
       ).length;
 
-      // Убираем из заголовка старые «(число)»
+      // Убираем из заголовка старое число (если оно есть)
       const baseTitle = header.textContent.replace(/\s*\(\d+\)/, "");
 
-      // Добавляем новое число
+      // Записываем новый заголовок с количеством выбранных элементов
       header.textContent = `${baseTitle} (${checkedCount})`;
 
-      // Возвращаем стрелочку
+      // Восстанавливаем стрелочку: если секция развернута – показываем ▲, иначе ▼
       if (content.style.display === "block") {
         header.innerHTML = header.innerHTML.replace(/▼/g, "▲");
       } else {
@@ -86,132 +68,46 @@ window.initFilterMenu = function (root = document) {
     });
   }
 
-  // Функция для правильного склонения слова «условие»
-  function getConditionText(count) {
-    const conditionDeclension = {
-      1: "условие",
-      2: "условия",
-      3: "условия",
-      4: "условия",
-      5: "условий",
-      default: "условий",
-    };
-
-    const remainder100 = count % 100;
-    if (remainder100 >= 11 && remainder100 <= 19) {
-      return `${count} ${conditionDeclension.default}`;
-    }
-    const remainder10 = count % 10;
-    if (remainder10 === 1) {
-      return `${count} ${conditionDeclension[1]}`;
-    } else if (remainder10 >= 2 && remainder10 <= 4) {
-      return `${count} ${conditionDeclension[2]}`;
-    } else {
-      return `${count} ${conditionDeclension.default}`;
-    }
-  }
-
-  // Функция для общего количества выбранных условий рядом с иконкой настроек
-  function updateSettingsCount() {
-    let totalSelected = 0;
-    root.querySelectorAll(".filter-section").forEach((section) => {
-      const header = section.querySelector("h3");
-      if (!header) return;
-      // Пропускаем секцию «Столбцы»
-      if (header.textContent.includes("Столбцы")) return;
-
-      const checkedCount = section.querySelectorAll(
-        ".filter-section-content input[type='checkbox']:checked"
-      ).length;
-      totalSelected += checkedCount;
-    });
-
-    const settingsCount = root.getElementById("settings-count");
-    if (settingsCount) {
-      settingsCount.textContent = `(${getConditionText(totalSelected)})`;
-      settingsCount.style.display = "inline";
-    }
-  }
-
-  // Сброс всех чекбоксов (кроме «Столбцы»)
-  function resetAllFilters() {
-    const filterSections = Array.from(
-      root.querySelectorAll(".filter-section")
-    ).filter(
-      (section) => !section.querySelector("h3")?.textContent.includes("Столбцы")
-    );
-
-    filterSections.forEach((section) => {
-      const checkboxes = section.querySelectorAll("input[type='checkbox']");
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-      });
-    });
-
-    updateGroupheaders();
-    updateSettingsCount();
-  }
-
-  // Вешаем обработчики на чекбоксы (динамическое обновление заголовков и счётчика)
+  // Обработчики изменения чекбоксов
   root
     .querySelectorAll(".filter-section-content input[type='checkbox']")
     .forEach((checkbox) => {
       checkbox.addEventListener("change", function () {
         updateGroupheaders();
-        updateSettingsCount();
       });
     });
 
-  // Привязка функции сброса к кнопке «Сбросить все»
+  // Обработчик для кнопки "Сбросить все"
   const resetButton = root.querySelector(".filter-actions .reset");
   if (resetButton) {
     resetButton.addEventListener("click", function () {
-      resetAllFilters();
+      const sections = root.querySelectorAll(".filter-section");
+      sections.forEach((section) => {
+        const checkboxes = section.querySelectorAll("input[type='checkbox']");
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+      });
+      updateGroupheaders();
+
+      // Сбрасываем слайдер в диапазон [50, 30000]
+      const sliderElement = root.getElementById("priceSlider");
+      if (sliderElement && sliderElement.noUiSlider) {
+        sliderElement.noUiSlider.set([50, 30000]);
+      }
+
+      // Обнулим также поля ввода "От" / "До", если нужно:
+      const priceInputFrom = root.getElementById("priceInputFrom");
+      const priceInputTo = root.getElementById("priceInputTo");
+      if (priceInputFrom) priceInputFrom.value = "";
+      if (priceInputTo) priceInputTo.value = "";
     });
   }
 
-  // Изначально сбрасываем все фильтры (кроме «Столбцы») и обновляем состояние
-  resetAllFilters();
-  updateSettingsCount();
-
-  // 3) ФУНКЦИЯ ДЛЯ ОТОБРАЖЕНИЯ/СКРЫТИЯ ФИЛЬТРА ПРИ НАЖАТИИ НА ИКОНКУ НАСТРОЕК
-  // (Если хотите оставить её глобальной, вынесите из функции)
-  function toggleFilterMenu(event) {
-    // Предотвращаем всплытие события клика
-    if (event) {
-      event.stopPropagation();
-    }
-
-    const filterContainer = root.getElementById("unique-filter-container");
-    const settingsIcon = root.querySelector(".settings-icon");
-    if (!filterContainer || !settingsIcon) return;
-
-    const isActive = filterContainer.classList.contains("active");
-    if (isActive) {
-      filterContainer.classList.remove("active");
-      filterContainer.style.display = "none";
-    } else {
-      const rect = settingsIcon.getBoundingClientRect();
-      filterContainer.style.top = `${rect.bottom + window.scrollY}px`;
-      filterContainer.style.left = `${rect.left + window.scrollX}px`;
-      filterContainer.style.display = "block";
-      filterContainer.classList.add("active");
-    }
-  }
-
-  // Привязка функции toggleFilterMenu к иконке настроек с передачей события и предотвращением всплытия
-  const settingsIcon = root.querySelector(".settings-icon");
-  if (settingsIcon) {
-    settingsIcon.addEventListener("click", function (event) {
-      toggleFilterMenu(event);
-    });
-  }
-
-  // 4) ФУНКЦИЯ ДЛЯ СВЕРНУТЬ/РАЗВЕРНУТЬ ОТДЕЛЬНЫЕ СЕКЦИИ
+  // Функция для переключения состояния отдельной секции
   function toggleSection(header) {
     const content = header.nextElementSibling;
     if (!content) return;
-
     const isExpanded = content.style.display === "block";
     content.style.display = isExpanded ? "none" : "block";
     header.innerHTML = header.innerHTML.replace(
@@ -220,68 +116,88 @@ window.initFilterMenu = function (root = document) {
     );
   }
 
-  // Новые добавления начинаются здесь
-
-  // 5) Добавление обработчиков событий на заголовки секций для сворачивания/разворачивания
+  // Навешиваем обработчики на заголовки секций
   const sectionHeaders = root.querySelectorAll(".filter-section h3");
   sectionHeaders.forEach((header) => {
-    header.style.cursor = "pointer"; // Изменяем курсор для лучшего UX
+    header.style.cursor = "pointer";
     header.addEventListener("click", function (event) {
-      // Предотвращаем всплытие события клика до глобального обработчика
       event.stopPropagation();
       toggleSection(header);
       updateGroupheaders();
-      updateSettingsCount();
     });
   });
 
-  // 6) Скрытие unique-filter-container при клике на кнопку .apply
-  const applyButton = root.querySelector(".filter-actions .apply");
-  if (applyButton) {
-    applyButton.addEventListener("click", function (event) {
-      // Предотвращаем всплытие события клика
-      event.stopPropagation();
-      const filterContainer = root.getElementById("unique-filter-container");
-      if (filterContainer) {
-        filterContainer.classList.remove("active");
-        filterContainer.style.display = "none";
+  // Логика для сворачивания/разворачивания всего сайдбара
+  const toggleFiltersBtn = root.getElementById("toggleFilters");
+  const filtersPanel = root.getElementById("filters-panel");
+  const contentArea = root.querySelector(".content-area");
+
+  if (toggleFiltersBtn && filtersPanel) {
+    toggleFiltersBtn.addEventListener("click", function () {
+      if (filtersPanel.classList.contains("collapsed")) {
+        filtersPanel.classList.remove("collapsed");
+        toggleFiltersBtn.innerHTML = '<i class="ri-arrow-left-s-line"></i>';
+        if (contentArea) {
+          contentArea.style.width = "";
+        }
+      } else {
+        filtersPanel.classList.add("collapsed");
+        toggleFiltersBtn.innerHTML = '<i class="ri-arrow-right-s-line"></i>';
+        if (contentArea) {
+          contentArea.style.width = "100%";
+        }
+      }
+      // Если активен карточный вид, обновляем его через событие resize
+      if (document.body.classList.contains("card-view")) {
+        window.dispatchEvent(new Event("resize"));
       }
     });
   }
 
-  // 7) Скрытие unique-filter-container при клике вне контейнера и иконки настроек
-  root.addEventListener("click", function (event) {
-    const filterContainer = root.getElementById("unique-filter-container");
-    const settingsIcon = root.querySelector(".settings-icon");
+  // *** noUiSlider: инициализация слайдера цены ***
+  const sliderElement = root.getElementById("priceSlider");
+  if (sliderElement && typeof noUiSlider !== "undefined") {
+    noUiSlider.create(sliderElement, {
+      start: [500, 10000], // Пример начального значения
+      connect: true,
+      step: 50, // шаг прокрутки
+      range: {
+        min: 50,
+        max: 30000,
+      },
+    });
 
-    if (
-      filterContainer &&
-      !filterContainer.contains(event.target) &&
-      settingsIcon &&
-      !settingsIcon.contains(event.target)
-    ) {
-      filterContainer.classList.remove("active");
-      filterContainer.style.display = "none";
+    // Поля ввода
+    const priceInputFrom = root.getElementById("priceInputFrom");
+    const priceInputTo = root.getElementById("priceInputTo");
+
+    // При движении ползунков — обновляем инпуты
+    sliderElement.noUiSlider.on("update", function (values, handle) {
+      const value = Math.round(values[handle]);
+      if (handle === 0 && priceInputFrom) {
+        priceInputFrom.value = value;
+      } else if (handle === 1 && priceInputTo) {
+        priceInputTo.value = value;
+      }
+    });
+
+    // При изменении инпутов — обновляем ползунки
+    if (priceInputFrom) {
+      priceInputFrom.addEventListener("change", function () {
+        sliderElement.noUiSlider.set([this.value, null]);
+      });
     }
-  });
-
-  // 8) Скрытие unique-filter-container при клике на кнопку .close-button
-  const closeButton = root.querySelector(".close-button");
-  if (closeButton) {
-    closeButton.addEventListener("click", function (event) {
-      // Предотвращаем всплытие события клика
-      event.stopPropagation();
-      const filterContainer = root.getElementById("unique-filter-container");
-      if (filterContainer) {
-        filterContainer.classList.remove("active");
-        filterContainer.style.display = "none";
-      }
-    });
+    if (priceInputTo) {
+      priceInputTo.addEventListener("change", function () {
+        sliderElement.noUiSlider.set([null, this.value]);
+      });
+    }
   }
+  // *** конец блока noUiSlider ***
 
-  // Конец новых добавлений
-
-  // Если вам нужно обращаться к toggleFilterMenu и toggleSection извне —
-  // можете вернуть их, например, как методы:
-  return { toggleFilterMenu, toggleSection };
+  return { toggleFilterMenu: undefined, toggleSection };
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+  window.initFilterMenu(document);
+});

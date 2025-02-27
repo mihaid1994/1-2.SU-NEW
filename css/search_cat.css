@@ -1,14 +1,404 @@
+/* Сброс стилей и базовые настройки */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
 body {
-  display: flex;
-  flex-direction: column;
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
+  color: #333;
+  height: 100%;
+}
+
+/* Ограничиваем высоту страницы */
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 86vh; /* высота 86vh */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Сайдбар с фильтрами */
+.filters-panel {
+  flex: 0 0 18%;
+  min-width: 250px;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.filters-panel.collapsed {
+  flex: 0 0 0;
+  min-width: 0;
+  transform: translateX(-100%);
+  opacity: 0; /* скрываем визуально */
+  pointer-events: none; /* отключаем клики, будто не существует */
+  overflow: hidden; /* обрезаем всё содержимое */
+}
+
+/* Заголовок сайдбара */
+.filters-header {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f4f4f4;
+}
+
+.filters-header h2 {
+  font-size: 18px;
+  color: #28383d;
+}
+
+/* Обёртка для скролла фильтров (скроллит только контент, а кнопки остаются фиксированными) */
+.filters-scroll {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+/* Кастомные скроллбары для фильтров */
+.filters-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.filters-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.filters-scroll::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+
+/* Секции фильтров */
+.filter-section {
+  margin-bottom: 16px;
+}
+
+.filter-section h3 {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.filter-section-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.filter-section-content::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.filter-section-content::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+
+.filter-section h3 .toggle-icon {
+  font-size: 14px;
+}
+
+.filter-section-content {
+  margin-top: 8px;
+  display: none;
+}
+
+.filter-section-content label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.filter-section-content input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Панель действий – фиксированная внизу сайдбара */
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 15px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Стили для кнопок в панели действий */
+.filter-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filter-actions .reset {
+  background: #ccc;
+  color: #000;
+}
+
+.filter-actions .reset:hover {
+  background: #bbb;
+}
+
+.filter-actions .apply {
+  background: #436884;
+  color: #fff;
+}
+
+.filter-actions .apply:hover {
+  background: #36526b;
+}
+
+/* Основная область контента */
+.content-area {
+  flex: 1;
+  background: #fff;
+  overflow-y: auto;
+  position: relative;
+  transition: all 0.3s ease;
+  height: 86%;
+}
+
+/* Кастомные скроллбары для основной области */
+.content-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+
+/* Меню поиска */
+.search-menu {
+  background: #fff;
+  padding: 15px;
+}
+
+.search-menu-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.search-menu-title {
+  flex-basis: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
+.catalog-link {
+  color: #888;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.catalog-link:hover {
+  color: #555;
+}
+
+.catalog-link:active {
+  color: #333;
+}
+
+.results-info {
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group input,
+.input-group select {
+  width: 150px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.checkbox-group label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group input {
+  margin-right: 5px;
+}
+
+#toggleViewButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+#toggleViewButton .toggle-button-image {
+  height: 30px;
+  transition: transform 0.2s ease;
+}
+
+#toggleViewButton .toggle-button-image:active {
+  transform: scale(0.95);
+}
+
+/* Сетка товаров */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background: #fff;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Пагинация */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination span,
+.pagination a,
+.pagination button,
+.pagination input {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pagination span {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.pagination a:hover {
+  background-color: #5e8491;
+  color: #fff;
+}
+
+.pagination .go-to {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.pagination input {
+  width: 50px;
+  text-align: center;
+}
+
+/* Опция отображения */
+.display-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.display-option span {
+  font-size: 14px;
+}
+
+.display-option select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Популярные бренды */
+.popular-brands {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.popular-brands h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.popular-brands .brands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.popular-brands .brands a {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.popular-brands .brands a:hover {
+  background-color: #5e8491;
+  color: #fff;
 }
 
 /* Футер */
 .footer {
   background-color: rgb(213, 213, 213);
-  color: white;
+  color: #28383d;
   padding: 12px 0;
   text-align: center;
   width: 100%;
@@ -29,409 +419,59 @@ body {
   text-decoration: underline;
 }
 
-/* Фильтр */
-.filter-container {
+/* Кнопка сворачивания */
+#toggleFilters {
   position: absolute;
+  top: 5px;
+  left: 5px;
   background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  z-index: 999;
-  display: none; /* Скрыт по умолчанию */
-  min-width: 300px;
-}
-
-.filter-container.active {
-  display: block;
-  transform: translateX(0);
-}
-
-.close-button {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  font-size: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.filter-header {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.filter-section {
-  margin-bottom: 16px;
-}
-
-.filter-section h3 {
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 0;
-  font-size: 16px;
+  justify-content: center;
   cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s ease, top 0.3s ease;
 }
 
-.filter-section-content {
-  margin-top: 8px;
+.filters-panel:not(.collapsed) ~ #toggleFilters {
+  transform: translateX(240px);
+}
+
+/* Поля цены */
+.price-inputs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.price-inputs input[type="number"] {
+  width: 50%;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Изменение цвета заполненной части слайдера на оранжевый */
+.noUi-connect {
+  background: #ffa600; /* Оранжевый цвет */
+}
+
+/* Удаление обводки у значений */
+.price-values {
   display: none;
 }
 
-.filter-section-content input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-.filter-actions {
-  display: flex;
-  justify-content: flex-end; /* Выравнивание кнопок справа */
-  gap: 8px; /* Расстояние между кнопками */
-  margin-top: 16px; /* Отступ сверху */
-}
-
-.filter-actions button {
-  padding: 8px 16px;
+/* Изменение цвета заполненной части слайдера на оранжевый */
+.noUi-tooltip {
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px; /* Единый размер текста */
-  position: relative;
 }
 
-.filter-actions .reset {
-  background: #ccc;
-  color: #000;
-  transition: background 0.3s, color 0.3s;
-}
-
-.filter-actions .reset:hover {
-  background: #bbb;
-}
-
-.filter-actions .apply {
-  background: #436884;
-  color: #fff;
-  transition: background 0.3s, color 0.3s;
-}
-
-.filter-actions .apply:hover {
-  background: #36526b;
-}
-
-/* Метки и чекбоксы */
-label {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer; /* Указатель курсора при наведении */
-  transition: color 0.3s; /* Плавный переход цвета */
-}
-
-label:hover {
-  color: #436884;
-}
-
-label > input[type="checkbox"] {
-  margin-right: 5px; /* Отступ между чекбоксом и текстом */
-}
-
-label span {
-  margin-right: 4px;
-}
-
-/* Меню поиска */
-.search-menu {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 15px;
-  position: relative;
-  transition: max-height 0.5s ease;
-  overflow: hidden;
-}
-
-.search-menu-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  align-items: center;
-}
-
-.search-menu-title {
-  flex-basis: 100%;
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold; /* Жирный шрифт для "Поиск по каталогу" */
-  color: #888; /* Серый текст */
-  margin-bottom: 10px;
-}
-
-.catalog-link {
-  color: #888; /* Серый цвет текста для ссылок */
-  text-decoration: none; /* Убираем подчеркивание */
-  transition: color 0.3s ease; /* Плавный переход при наведении */
-}
-
-.catalog-link:hover {
-  color: #555; /* Более темный серый при наведении */
-}
-
-.catalog-link:active {
-  color: #333; /* Еще темнее при клике */
-}
-
-/* Кнопка настроек */
-.settings-icon {
-  display: inline-flex; /* Выравнивание содержимого внутри кнопки */
-  align-items: center; /* Центровка содержимого по вертикали */
-  padding: 4px 8px; /* Внутренние отступы */
-  border: none; /* Убираем стандартную границу */
-  border-radius: 5px; /* Скругление углов */
-  background-color: #48707a; /* Цвет фона */
-  cursor: pointer; /* Указатель курсора при наведении */
-  transition: background-color 0.3s; /* Плавный переход при наведении */
-  font-size: 1.5em; /* Уменьшенный размер текста */
-  gap: 8px; /* Расстояние между иконкой и текстом */
-  white-space: nowrap; /* Запрет на перенос текста */
-  margin-right: 20px;
-}
-
-.settings-icon:hover {
-  background-color: #e0e0e0;
-}
-
-.settings-icon-img {
-  width: 30px; /* Размер иконки */
-  height: 30px;
-}
-
-.settings-text {
-  font-size: 0.7em; /* Уменьшенный размер текста */
-  color: #ffffff; /* Цвет текста */
-}
-
-.results-info {
-  font-size: 14px;
-  margin-right: 20px;
-}
-
-/* Группы форм */
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group label {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.input-group input,
-.input-group select {
-  width: 150px;
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.input-group:has(option[value="Склад"]) select,
-.input-group:has(option[value="Статус"]) select {
-  color: gray;
-}
-
-/* Чекбоксы */
-.checkbox-group {
-  display: flex;
-  gap: 15px;
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
-.checkbox-group label {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-group input {
-  margin-right: 5px;
-}
-
-/* Кнопки действий */
-.action-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.action-buttons button {
-  height: 30px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 7px;
-}
-
-/* Кнопка "Вы смотрели" */
-.viewed-button {
-  background-color: #bababa; /* Серая заливка */
-  border: none; /* Убираем рамку */
-  color: #fff; /* Белый текст */
-}
-
-.viewed-button:hover {
-  background-color: #898989; /* Чуть более тёмная заливка при наведении */
-}
-
-.viewed-button:active {
-  transform: scale(0.95); /* Эффект сжатия при нажатии */
-}
-
-/* Пагинация */
-.pagination-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 10px;
-}
-
-.pagination {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.pagination span,
-.pagination a {
-  display: inline-block;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  line-height: 1;
-  text-align: center;
-  min-width: 32px;
-  cursor: pointer;
-}
-
-.pagination span {
-  background-color: #f0f0f0;
-  font-weight: bold;
-}
-
-.pagination a:hover {
-  background-color: #5e8491;
-  color: #fff;
-}
-
-.pagination .go-to {
-  background-color: #f8f9fa;
-  border: 1px solid #ccc;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.pagination input {
-  width: 50px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Опции отображения */
-.display-option {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.display-option span {
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.display-option select {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-/* Популярные бренды */
-.popular-brands {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.popular-brands h3 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-}
-
-.popular-brands .brands {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.popular-brands .brands a {
-  display: inline-block;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 50px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.popular-brands .brands a:hover {
-  background-color: #5e8491;
-  color: #fff;
-}
-
-/* Кнопка переключения вида */
-#toggleViewButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  outline: none;
-}
-
-#toggleViewButton .toggle-button-image {
-  height: 30px; /* Настройте высоту по вашему усмотрению */
-  transition: transform 0.2s ease;
-}
-
-#toggleViewButton .toggle-button-image:active {
-  transform: scale(0.95); /* Эффект сжатия при нажатии */
-}
-
-.toggle-button-image.animate-toggle {
-  animation: toggleImageAnimation 0.2s ease;
-}
-
-/* Анимация для кнопки переключения вида */
-@keyframes toggleImageAnimation {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02); /* Увеличение на 2% */
-  }
-  100% {
-    transform: scale(1);
-  }
+/* dual-range (noUiSlider) */
+.dual-range {
+  margin: 20px;
 }

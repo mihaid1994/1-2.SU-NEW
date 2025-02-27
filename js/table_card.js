@@ -274,26 +274,33 @@ window.initTableCardView = function (root = document) {
     // Применение стилей inline для productContainer (product-grid)
     setStyles(productContainer, {
       display: "grid",
-      gridTemplateColumns: "repeat(6, 1fr)",
       gap: "10px",
       justifyContent: "center",
       padding: "10px",
     });
 
     const maxRows = 7;
-    let cardsPerRow = 6;
+    let cardsPerRow = 5; // базовое значение для больших экранов, когда сайдбар открыт
 
+    // Обновлённая функция для определения количества карточек в ряду с учётом состояния сайдбара
     function updateCardsPerRow() {
       const width = window.innerWidth;
+      let defaultCardsPerRow;
       if (width <= 900) {
-        cardsPerRow = 2; // Для небольших экранов — 2 карточки
+        defaultCardsPerRow = 2; // для небольших экранов — 2 карточки
       } else if (width <= 1200) {
-        cardsPerRow = 4; // Для средних экранов — 4 карточки
+        defaultCardsPerRow = 3; // для средних экранов — 3 карточки
       } else {
-        cardsPerRow = 6; // Для больших экранов — 6 карточек
+        defaultCardsPerRow = 5; // для больших экранов — 5 карточек (стандарт, когда сайдбар открыт)
       }
-
-      // Обновление grid-template-columns в зависимости от cardsPerRow
+      // Проверяем состояние сайдбара
+      const filtersPanel = root.getElementById("filters-panel");
+      if (filtersPanel && filtersPanel.classList.contains("collapsed")) {
+        cardsPerRow = defaultCardsPerRow + 1; // если сайдбар закрыт, добавляем одну карточку
+      } else {
+        cardsPerRow = defaultCardsPerRow;
+      }
+      // Обновляем количество колонок в сетке
       setStyles(productContainer, {
         gridTemplateColumns: `repeat(${cardsPerRow}, 1fr)`,
       });
@@ -822,7 +829,6 @@ window.initTableCardView = function (root = document) {
 
     const headers = [
       "",
-      "",
       "Код",
       "Наименование",
       "Прайс",
@@ -867,8 +873,7 @@ window.initTableCardView = function (root = document) {
       setStyles(th, {
         padding: "8px",
         border: "1px solid #ddd",
-        backgroundColor: "#9e9e9e",
-        color: "white",
+        backgroundColor: "#f0f0f0",
         whiteSpace: "nowrap",
         cursor: "pointer",
         position: "relative",
@@ -896,7 +901,6 @@ window.initTableCardView = function (root = document) {
         });
 
         tr.innerHTML = `
-          <td style="padding: 8px; border: 1px solid #ddd;">${index + 1}</td>
           <td style="padding: 8px; border: 1px solid #ddd;">${
             row["Изображение"]
               ? `<img src="${row["Изображение"]}" alt="image" class="product-image" 

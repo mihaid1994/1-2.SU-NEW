@@ -6,699 +6,522 @@
     <title>Таблица товаров</title>
     <link rel="stylesheet" href="/css/search_cat.css" />
 
+    <!-- Remix Icon -->
     <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
     />
 
-    <!-- Другие теги head -->
+    <!-- noUiSlider CSS красивый ползунок цен-->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css"
+      rel="stylesheet"
+      defer
+    />
   </head>
   <body>
-    <!-- Фильтр (скрытый элемент) -->
-    <div class="filter-container" id="unique-filter-container">
-      <button
-        class="close-button"
-        aria-label="Закрыть"
-        onclick="toggleFilterMenu()"
-        data-tooltip="Закрыть меню фильтрации"
-      >
-        ✖
-      </button>
-      <div class="filter-header">Фильтр</div>
-      <div class="filter-section">
-        <h3
-          onclick="toggleSection(this)"
-          data-tooltip="Нажмите для раскрытия или скрытия этой секции"
-        >
-          Категории ▼
-        </h3>
-        <div class="filter-section-content">
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по прожекторам LED"
-            />
-            Прожекторы LED</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по декоративной светотехнике"
-            />
-            Декоративная светотехника</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по датчикам системы управления освещением"
-            />
-            Датчики системы управления освещением</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по ЖКХ светильникам LED"
-            />
-            ЖКХ светильники LED</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по бытовым LED светильникам"
-            />
-            Бытовые LED светильники</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по уличным светильникам"
-            />
-            Уличные светильники</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по индустриальным светильникам"
-            />
-            Индустриальные светильники</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по садовым светильникам"
-            />
-            Садовые светильники</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по светодиодным лентам"
-            />
-            Светодиодные ленты</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по настольным лампам"
-            />
-            Настольные лампы</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по настенным бра"
-            />
-            Настенные бра</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по торшерам"
-            />
-            Торшеры</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по потолочным панелям"
-            />
-            Потолочные панели</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по системам аварийного освещения"
-            />
-            Системы аварийного освещения</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по лампам для растений"
-            />
-            Лампы для растений</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по архитектурной подсветке"
-            />
-            Архитектурная подсветка</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по светодиодным прожекторам"
-            />
-            Светодиодные прожекторы</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по освещению для бассейнов"
-            />
-            Освещение для бассейнов</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по умным светильникам"
-            />
-            Умные светильники</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Выберите эту опцию для фильтрации по магнитным трековым системам"
-            />
-            Магнитные трековые системы</label
-          ><br />
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="filter-section">
-        <h3
-          onclick="toggleSection(this)"
-          data-tooltip="Нажмите для раскрытия или скрытия этой секции"
-        >
-          Производители ▼
-        </h3>
-        <div class="filter-section-content">
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по производителю ABB"
-            />
-            ABB</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по производителю AWADA"
-            />
-            AWADA</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по производителю BPT"
-            />
-            BPT</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по производителю DigiCity"
-            />
-            DigiCity</label
-          >
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="filter-section">
-        <h3
-          onclick="toggleSection(this)"
-          data-tooltip="Нажмите для раскрытия или скрытия этой секции"
-        >
-          Тип изделия ▼
-        </h3>
-        <div class="filter-section-content">
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по типу изделия Аксессуар"
-            />
-            Аксессуар</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по типу изделия Выключатель"
-            />
-            Выключатель</label
-          ><br />
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по типу изделия Датчик"
-            />
-            Датчик</label
-          >
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="filter-section">
-        <h3
-          onclick="toggleSection(this)"
-          data-tooltip="Нажмите для раскрытия или скрытия этой секции"
-        >
-          Серия ▼
-        </h3>
-        <div class="filter-section-content">
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Фильтровать по серии ДДИ-101"
-            />
-            ДДИ-101</label
-          ><br />
-          <label
-            ><input type="checkbox" data-tooltip="Фильтровать по серии СЗВО" />
-            СЗВО</label
-          ><br />
-          <label
-            ><input type="checkbox" data-tooltip="Фильтровать по серии ALC" />
-            ALC</label
-          ><br />
-          <label
-            ><input type="checkbox" data-tooltip="Фильтровать по серии EBDHS" />
-            EBDHS</label
-          >
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="filter-section">
-        <h3
-          onclick="toggleSection(this)"
-          data-tooltip="Нажмите для раскрытия или скрытия этой секции"
-        >
-          Столбцы ▼ (<span id="columns-selected-count">0</span>)
-        </h3>
-        <div class="filter-section-content">
-          <label>
-            <span>Картинка</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с изображением товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Код</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с кодом товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Упаковка</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с информацией об упаковке"
-            /> </label
-          ><br />
-          <label>
-            <span>Мин. кол.</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с минимальным количеством"
-            /> </label
-          ><br />
-          <label>
-            <span>Артикул</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с артикулом товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Штрихкод</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец со штрихкодом товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Прайс</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с прайсом товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Статус</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец со статусом товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Посл. цена</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с последней ценой товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Посл. дата</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с последней датой обновления цены"
-            /> </label
-          ><br />
-          <label>
-            <span>Остаток</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с текущим остатком товара"
-            /> </label
-          ><br />
-          <label>
-            <span>В пути</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с информацией о товарах в пути"
-            /> </label
-          ><br />
-          <label>
-            <span>Мин. цена</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с минимальной ценой товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Вх. цена</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с входной ценой товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Инф. цена</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с информационной ценой товара"
-            /> </label
-          ><br />
-          <label>
-            <span>Наценка</span>
-            <input
-              type="checkbox"
-              class="toggle-switch"
-              checked
-              data-tooltip="Показывать столбец с наценкой товара"
-            /> </label
-          ><br />
-        </div>
-      </div>
-      <div class="filter-actions">
-        <button
-          class="reset"
-          data-tooltip="Сбросить все выбранные фильтры (кроме столбцов)"
-        >
-          Сбросить все
-        </button>
-        <button class="apply" data-tooltip="Применить выбранные фильтры">
-          Применить
-        </button>
-      </div>
-    </div>
-    <!-- Фильтр (скрытый элемент) -->
-
-    <!-- Начало кода меню поиска -->
-    <div class="search-menu">
-      <!-- Контейнер для элементов меню -->
-      <div class="search-menu-content">
-        <!-- Заголовок -->
-        <h2 class="search-menu-title">
-          Поиск по каталогу:
-          <a
-            href="#"
-            class="catalog-link"
-            data-tooltip="Перейти к разделу Электроника"
-            >Электроника</a
-          >
-          &rsaquo;
-          <a
-            href="#"
-            class="catalog-link"
-            data-tooltip="Перейти к разделу Счетчики электроэнергии"
-            >Счетчики электроэнергии</a
-          >
-          &rsaquo;
-          <a
-            href="#"
-            class="catalog-link"
-            data-tooltip="Перейти к разделу Трехфазные"
-            >Трехфазные</a
-          >
-        </h2>
-
-        <!-- Иконка настроек -->
-        <button
-          class="settings-icon"
-          aria-label="Настройки"
-          onclick="toggleFilterMenu()"
-          data-tooltip="Открыть настройки фильтра поиска"
-        >
-          <img
-            src="/images/svg/Icon/mob_filter.svg"
-            alt="Настройки"
-            class="settings-icon-img"
-          />
-          <span
-            id="settings-count"
-            class="settings-text"
-            style="display: none"
-          ></span>
-        </button>
-
-        <div class="results-info">Найдено: более 10000</div>
-
-        <!-- Поля ввода и селекты -->
-        <div class="input-group">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Искать"
-            data-tooltip="Введите ключевые слова для поиска"
-          />
-        </div>
-        <div class="input-group">
-          <select id="status-select" data-tooltip="Выберите статус товара">
-            <option value="all">Статус</option>
-            <option value="available">В наличии</option>
-            <option value="in-transit">В пути</option>
-            <option value="sold">Продавался</option>
-          </select>
-        </div>
-        <div class="input-group">
-          <select
-            id="stock-select"
-            data-tooltip="Выберите склад для поиска товаров"
-          >
-            <option value="all">Склад</option>
-            <option value="sk154">sk154 - 01 Ревда WMS</option>
-            <option value="sk38">sk38 - 05 Реклама WMS (Ревда)</option>
-            <option value="sk14">sk14 - 06 Электротовары</option>
-            <option value="sk753">sk753 - Отрез кабеля (Ревда)</option>
-            <option value="sk9">sk9 - 11 Бытовая химия II</option>
-            <option value="sk582">sk582 - ABERLICHT</option>
-            <option value="sk339">sk339 - Ambrella (Ревда)</option>
-            <option value="sk200">sk200 - APEYRON (Ревда)</option>
-            <option value="sk235">sk235 - ARTELAMP (Ревда)</option>
-            <option value="sk121">sk121 - ASD (Урал)</option>
-            <option value="sk676">sk676 - AZ (Ревда)</option>
-            <option value="sk552">sk552 - BIRONI (Ревда)</option>
-            <option value="sk65">sk65 - Camelion (Урал)</option>
-            <option value="sk638">
-              sk638 - Devida, Roegen, СТМ Стандарт (Урал)
-            </option>
-            <option value="sk59">sk59 - EKF (Ревда)</option>
-            <option value="sk529">sk529 - EKF (Ревда) (МСК)</option>
-            <option value="sk88">sk88 - ES (Урал)</option>
-            <option value="sk230">sk230 - ES Werkel (Ревда)</option>
-            <option value="sk172">sk172 - ES Евросвет (Ревда)</option>
-          </select>
-        </div>
-
-        <!-- Чекбоксы -->
-        <div class="checkbox-group">
-          <label
-            ><input
-              type="checkbox"
-              checked
-              data-tooltip="Показывать только товары, которые есть в наличии"
-            />
-            В наличии</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Показывать товары, которые находятся в пути"
-            />
-            В пути</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              data-tooltip="Показывать товары, которые продавались"
-            />
-            Продавался</label
-          >
-        </div>
-
-        <!-- Кнопки действий -->
-        <div class="action-buttons">
-          <button
-            type="button"
-            class="viewed-button"
-            data-tooltip="Просмотреть недавно просмотренные товары"
-          >
-            Вы смотрели
-          </button>
-
-          <!-- Обертка с data-tooltip -->
-          <div
-            class="input-group"
-            data-tooltip="Выберите корзину для добавления позиций"
-          >
-            <select id="stock-select">
-              <option value="" disabled selected>Выбор корзины</option>
-              <option value="create-cart">Создать корзину</option>
-            </select>
+    <!-- Основной контейнер с высотой 86vh -->
+    <div class="main-container">
+      <!-- Сайдбар с фильтрами -->
+      <aside class="filters-panel" id="filters-panel">
+        <!-- Обёртка для скролла фильтров (SimpleBar) -->
+        <div class="filters-scroll" data-simplebar>
+          <!-- Секция: Категории -->
+          <div class="filter-section">
+            <div class="filter-group">
+              <label>Цена:</label>
+              <div class="price-inputs">
+                <input
+                  type="number"
+                  id="priceInputFrom"
+                  placeholder="От"
+                  min="0"
+                />
+                <input
+                  type="number"
+                  id="priceInputTo"
+                  placeholder="До"
+                  min="0"
+                />
+              </div>
+              <!-- Элемент для noUiSlider -->
+              <div id="priceSlider" class="dual-range"></div>
+              <div class="price-values">
+                <span id="priceMinVal">0 ₽</span> —
+                <span id="priceMaxVal">0 ₽</span>
+              </div>
+            </div>
+            <h3 onclick="toggleSection(this)">
+              Категории <span class="toggle-icon">▼</span>
+            </h3>
+            <div class="filter-section-content">
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по прожекторам LED"
+                />
+                Прожекторы LED
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по декоративной светотехнике"
+                />
+                Декоративная светотехника
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по датчикам системы управления освещением"
+                />
+                Датчики системы управления освещением
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по ЖКХ светильникам LED"
+                />
+                ЖКХ светильники LED
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по бытовым LED светильникам"
+                />
+                Бытовые LED светильники
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по уличным светильникам"
+                />
+                Уличные светильники
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по индустриальным светильникам"
+                />
+                Индустриальные светильники
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по садовым светильникам"
+                />
+                Садовые светильники
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по светодиодным лентам"
+                />
+                Светодиодные ленты
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по настольным лампам"
+                />
+                Настольные лампы
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по настенным бра"
+                />
+                Настенные бра
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по торшерам"
+                />
+                Торшеры
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по потолочным панелям"
+                />
+                Потолочные панели
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по системам аварийного освещения"
+                />
+                Системы аварийного освещения
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по лампам для растений"
+                />
+                Лампы для растений
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по архитектурной подсветке"
+                />
+                Архитектурная подсветка
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по светодиодным прожекторам"
+                />
+                Светодиодные прожекторы
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по освещению для бассейнов"
+                />
+                Освещение для бассейнов
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по умным светильникам"
+                />
+                Умные светильники
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Выберите эту опцию для фильтрации по магнитным трековым системам"
+                />
+                Магнитные трековые системы
+              </label>
+            </div>
+          </div>
+          <hr class="divider" />
+          <!-- Секция: Производители -->
+          <div class="filter-section">
+            <h3 onclick="toggleSection(this)">
+              Производители <span class="toggle-icon">▼</span>
+            </h3>
+            <div class="filter-section-content">
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по производителю ABB"
+                />
+                ABB
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по производителю AWADA"
+                />
+                AWADA
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по производителю BPT"
+                />
+                BPT
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по производителю DigiCity"
+                />
+                DigiCity
+              </label>
+            </div>
+          </div>
+          <hr class="divider" />
+          <!-- Секция: Тип изделия -->
+          <div class="filter-section">
+            <h3 onclick="toggleSection(this)">
+              Тип изделия <span class="toggle-icon">▼</span>
+            </h3>
+            <div class="filter-section-content">
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по типу изделия Аксессуар"
+                />
+                Аксессуар
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по типу изделия Выключатель"
+                />
+                Выключатель
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по типу изделия Датчик"
+                />
+                Датчик
+              </label>
+            </div>
+          </div>
+          <hr class="divider" />
+          <!-- Секция: Серия -->
+          <div class="filter-section">
+            <h3 onclick="toggleSection(this)">
+              Серия <span class="toggle-icon">▼</span>
+            </h3>
+            <div class="filter-section-content">
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по серии ДДИ-101"
+                />
+                ДДИ-101
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по серии СЗВО"
+                />
+                СЗВО
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по серии ALC"
+                />
+                ALC
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Фильтровать по серии EBDHS"
+                />
+                EBDHS
+              </label>
+            </div>
+          </div>
+          <hr class="divider" />
+          <!-- Секция: Столбцы -->
+          <div class="filter-section">
+            <h3 onclick="toggleSection(this)">
+              Столбцы <span class="toggle-icon">▼</span> (<span
+                id="columns-selected-count"
+                >0</span
+              >)
+            </h3>
+            <div class="filter-section-content">
+              <label>
+                <span>Картинка</span>
+                <input
+                  type="checkbox"
+                  class="toggle-switch"
+                  checked
+                  data-tooltip="Показывать столбец с изображением товара"
+                />
+              </label>
+              <!-- Остальные чекбоксы -->
+            </div>
           </div>
         </div>
-
-        <button
-          id="toggleViewButton"
-          data-tooltip="Переключить между видом таблицы и карточек"
-        >
-          <img
-            src="/images/svg/Icon/table.svg"
-            alt="Переключить вид"
-            class="toggle-button-image"
-          />
-        </button>
-      </div>
-    </div>
-
-    <main>
-      <div id="productContainer" class="product-grid"></div>
-    </main>
-
-    <!-- Всплывающее сообщение -->
-    <div id="waiting-list-popup" style="display: none">
-      <span
-        id="close-popup"
-        style="cursor: pointer"
-        data-tooltip="Закрыть всплывающее окно"
-        >&times;</span
-      >
-      <p>
-        Добавить в лист ожидания?
-        <a
-          href="#"
-          id="add-to-waiting-list"
-          data-tooltip="Добавить этот товар в лист ожидания"
-          >Добавить в лист ожидания</a
-        >
-      </p>
-    </div>
-
-    <div class="pagination-container">
-      <div class="pagination">
-        <span data-tooltip="Текущая страница 1">1</span>
-        <a href="#" data-tooltip="Перейти на страницу 2">2</a>
-        <a href="#" data-tooltip="Перейти на страницу 3">3</a>
-        <a href="#" data-tooltip="Перейти на страницу 4">4</a>
-        <a href="#" data-tooltip="Перейти на страницу 5">5</a>
-        <span>...</span>
-        <a href="#" data-tooltip="Перейти на страницу 331">331</a>
-        <button class="go-to" data-tooltip="Перейти на введённую страницу">
-          Перейти на
-        </button>
-        <input
-          type="number"
-          min="1"
-          max="331"
-          data-tooltip="Введите номер страницы для перехода"
-        />
-      </div>
-      <div class="display-option">
-        <span
-          data-tooltip="Выберите количество товаров для отображения на странице"
-          >Выводить по</span
-        >
-        <select
-          data-tooltip="Выберите количество товаров для отображения на странице"
-        >
-          <option value="12">12</option>
-          <option value="24">24</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="popular-brands">
-      <h3>Популярные бренды</h3>
-      <div class="brands">
-        <a href="#" data-tooltip="Перейти к товарам бренда Samsung">Samsung</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда LG">LG</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Sony">Sony</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Panasonic"
-          >Panasonic</a
-        >
-        <a href="#" data-tooltip="Перейти к товарам бренда Philips">Philips</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Bosch">Bosch</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Siemens">Siemens</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Toshiba">Toshiba</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Sharp">Sharp</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Haier">Haier</a>
-        <a href="#" data-tooltip="Перейти к товарам бренда Whirlpool"
-          >Whirlpool</a
-        >
-        <a href="#" data-tooltip="Перейти к товарам бренда Electrolux"
-          >Electrolux</a
-        >
-      </div>
-    </div>
-
-    <!-- Футер -->
-    <footer class="footer">
-      <div class="footer-container">
-        <p>© 2024 1-2.SU NEW. Все права защищены.</p>
-        <p>
-          <a
-            href="http://energomix.ru"
-            target="_blank"
-            class="footer-link"
-            data-tooltip="Посетите energomix.ru для дополнительной информации"
-            >energomix.ru</a
+        <!-- Панель действий, фиксированная внизу сайдбара -->
+        <div class="filter-actions">
+          <button
+            class="reset"
+            data-tooltip="Сбросить все выбранные фильтры (кроме столбцов)"
           >
-        </p>
+            Сбросить все
+          </button>
+          <button class="apply" data-tooltip="Применить выбранные фильтры">
+            Применить
+          </button>
+        </div>
+      </aside>
+
+      <!-- Контейнер для контента -->
+      <div class="content-wrapper">
+        <!-- Шапка поиска (фиксированная) -->
+        <div class="search-menu">
+          <div class="search-menu-content">
+            <h2 class="search-menu-title">
+              Поиск по каталогу:
+              <a
+                href="#"
+                class="catalog-link"
+                data-tooltip="Перейти к разделу Электроника"
+                >Электроника</a
+              >
+              &rsaquo;
+              <a
+                href="#"
+                class="catalog-link"
+                data-tooltip="Перейти к разделу Счетчики электроэнергии"
+                >Счетчики электроэнергии</a
+              >
+              &rsaquo;
+              <a
+                href="#"
+                class="catalog-link"
+                data-tooltip="Перейти к разделу Трехфазные"
+                >Трехфазные</a
+              >
+            </h2>
+            <div class="results-info">Найдено: более 10000</div>
+            <div class="input-group">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Искать"
+                data-tooltip="Введите ключевые слова для поиска"
+              />
+            </div>
+            <div class="input-group">
+              <select
+                id="stock-select"
+                data-tooltip="Выберите склад для поиска товаров"
+              >
+                <option value="all">Склад</option>
+                <!-- Дополнительные опции -->
+              </select>
+            </div>
+            <div class="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  checked
+                  data-tooltip="Показывать только товары, которые есть в наличии"
+                />
+                В наличии
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Показывать товары, которые находятся в пути"
+                />
+                В пути
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tooltip="Показывать товары, которые продавались"
+                />
+                Продавался
+              </label>
+            </div>
+            <button
+              id="toggleViewButton"
+              data-tooltip="Переключить между видом таблицы и карточек"
+            >
+              <img
+                src="/images/svg/Icon/table.svg"
+                alt="Переключить вид"
+                class="toggle-button-image"
+              />
+            </button>
+          </div>
+        </div>
+        <!-- Прокручиваемая область основного контента (SimpleBar) -->
+        <div class="content-area" data-simplebar>
+          <main>
+            <div id="productContainer" class="product-grid"></div>
+          </main>
+          <div class="pagination-container">
+            <div class="pagination">
+              <span data-tooltip="Текущая страница 1">1</span>
+              <a href="#" data-tooltip="Перейти на страницу 2">2</a>
+              <a href="#" data-tooltip="Перейти на страницу 3">3</a>
+              <a href="#" data-tooltip="Перейти на страницу 4">4</a>
+              <a href="#" data-tooltip="Перейти на страницу 5">5</a>
+              <span>...</span>
+              <a href="#" data-tooltip="Перейти на страницу 331">331</a>
+              <button
+                class="go-to"
+                data-tooltip="Перейти на введённую страницу"
+              >
+                Перейти на
+              </button>
+              <input
+                type="number"
+                min="1"
+                max="331"
+                data-tooltip="Введите номер страницы для перехода"
+              />
+            </div>
+            <div class="display-option">
+              <span
+                data-tooltip="Выберите количество товаров для отображения на странице"
+              >
+                Выводить по
+              </span>
+              <select
+                data-tooltip="Выберите количество товаров для отображения на странице"
+              >
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+          <div class="popular-brands">
+            <h3>Популярные бренды</h3>
+            <div class="brands">
+              <a href="#" data-tooltip="Перейти к товарам бренда Samsung"
+                >Samsung</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда LG">LG</a>
+              <a href="#" data-tooltip="Перейти к товарам бренда Sony">Sony</a>
+              <a href="#" data-tooltip="Перейти к товарам бренда Panasonic"
+                >Panasonic</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Philips"
+                >Philips</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Bosch"
+                >Bosch</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Siemens"
+                >Siemens</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Toshiba"
+                >Toshiba</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Sharp"
+                >Sharp</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Haier"
+                >Haier</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Whirlpool"
+                >Whirlpool</a
+              >
+              <a href="#" data-tooltip="Перейти к товарам бренда Electrolux"
+                >Electrolux</a
+              >
+            </div>
+          </div>
+          <footer class="footer">
+            <div class="footer-container">
+              <p>© 2024 1-2.SU NEW. Все права защищены.</p>
+              <p>
+                <a
+                  href="http://energomix.ru"
+                  target="_blank"
+                  class="footer-link"
+                  data-tooltip="Посетите energomix.ru для дополнительной информации"
+                >
+                  energomix.ru
+                </a>
+              </p>
+            </div>
+          </footer>
+        </div>
       </div>
-    </footer>
+
+      <!-- Кнопка сворачивания сайдбара -->
+      <button id="toggleFilters" aria-label="Свернуть фильтры">
+        <i class="ri-arrow-left-s-line"></i>
+      </button>
+    </div>
   </body>
 </html>
