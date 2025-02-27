@@ -1028,6 +1028,7 @@ window.initTableCardView = function (root = document) {
         const imageWidth = 200;
         const imageHeight = 200;
         const padding = 20;
+        const cushion = 0.2 * window.innerHeight; // запас 20% от высоты окна
 
         let leftPosition = event.pageX + padding;
         let topPosition = event.pageY + padding;
@@ -1035,7 +1036,10 @@ window.initTableCardView = function (root = document) {
         if (leftPosition + imageWidth > window.innerWidth + window.scrollX) {
           leftPosition = event.pageX - imageWidth - padding;
         }
-        if (topPosition + imageHeight > window.innerHeight + window.scrollY) {
+        if (
+          topPosition + imageHeight >
+          window.innerHeight + window.scrollY - cushion
+        ) {
           topPosition = event.pageY - imageHeight - padding;
         }
 
