@@ -1,5 +1,4 @@
 /* Основные настройки для всего документа */
-
 body {
   display: flex;
   flex-direction: column;
@@ -10,25 +9,7 @@ body {
   box-sizing: border-box;
 }
 
-.unique-container {
-  margin: 15px auto; /* Отступы сверху и снизу по 15px, центрируем контейнер по горизонтали */
-  width: calc(100% - 160px); /* Ширина контейнера с учетом отступов */
-  background-size: cover; /* Изображение покрывает контейнер */
-  background-repeat: no-repeat; /* Избегаем повторения */
-  background-position: center; /* Центрируем изображение */
-  aspect-ratio: 19 / 8.2; /* Соотношение сторон, замените на нужное, если известно */
-  display: block; /* Обеспечиваем корректное отображение */
-  border-radius: 15px; /* Скругленные края */
-  overflow: hidden; /* Убираем выходящие за границы элементы */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
-  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
-}
-
-.unique-container:hover {
-  transform: scale(1.005); /* Лёгкое увеличение при наведении */
-}
-
-/* Сетка */
+/* Сетка, бренды, хиты и т.д. — оставляем как в исходном коде */
 .grid-wrapper {
   padding-left: 15px;
   padding-right: 15px;
@@ -47,11 +28,11 @@ body {
   background-color: #ededed;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .grid-item {
-  position: relative; /* Для абсолютного позиционирования текста */
+  position: relative;
   background-size: cover;
   background-position: center;
   width: 100%;
@@ -59,28 +40,25 @@ body {
   background-color: #ededed;
   border-radius: 10px;
   aspect-ratio: 1 / 1;
-  cursor: pointer; /* Указатель при наведении */
-  overflow: hidden; /* Обрезка содержимого, если необходимо */
-  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .grid-item:hover {
-  transform: scale(1.03); /* Лёгкое увеличение при наведении */
+  transform: scale(1.03);
 }
-
 .category-text {
   position: absolute;
   top: 5%;
   left: 5%;
-  background: rgba(255, 255, 255, 0.7); /* Полупрозрачный фон для читаемости */
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 5px;
-  font-size: 0.7em; /* Уменьшенный размер шрифта до 70% */
+  font-size: 0.7em;
   font-weight: bold;
   color: #414141;
   max-width: 90%;
   box-sizing: border-box;
-  /* Адаптивность шрифта */
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -95,117 +73,131 @@ body {
   padding: 10px;
   border-radius: 10px;
   background-color: #ededed;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .brand-title {
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.5em;
   text-align: left;
-  margin: 0 0 7px 13px; /* Отступ снизу для разделения с сеткой */
-  color: #555555; /* Тёмно-серый цвет */
+  margin: 0 0 7px 13px;
+  color: #555555;
 }
-
 .brand-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Всегда 6 колонок */
+  grid-template-columns: repeat(6, 1fr);
   gap: 15px;
 }
-
 .brand-item {
-  background-size: contain; /* Подгонка изображения по ширине */
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: white; /* Заполнение свободного места белым */
-  aspect-ratio: 2.85 / 2; /* Квадратные ячейки */
+  background-color: white;
+  aspect-ratio: 2.85 / 2;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень */
-  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
   cursor: pointer;
 }
-
 .brand-item:hover {
-  transform: scale(1.02); /* Лёгкое увеличение при наведении */
+  transform: scale(1.02);
 }
 
-/* Медиазапросы для адаптивности */
+/* Хиты продаж */
+.hits-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 27px 20px 27px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ededed;
+}
+.hits-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.5em;
+  text-align: left;
+  margin: 0 0 0px 13px;
+  color: #555555;
+}
+.hits-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.hits-item {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: white;
+  aspect-ratio: 1 / 1.98;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.hits-item:hover {
+  transform: scale(1.015);
+}
+
+/* Медиазапросы (без изменений) */
 @media (max-width: 1200px) {
   .grid-container {
     grid-template-columns: repeat(5, 1fr);
   }
-
   .brand-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 10px; /* Уменьшаем отступы */
+    gap: 10px;
   }
-
-  /* Добавлен новый медиазапрос */
   .hits-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 10px; /* Уменьшаем отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
   }
 }
-
 @media (max-width: 992px) {
   .grid-wrapper {
     padding-left: 20px;
     padding-right: 20px;
   }
-
   .brand-grid {
-    /* Уменьшаем размер ячеек без изменения количества колонок */
     gap: 10px;
   }
-
-  /* Добавлен новый медиазапрос */
   .hits-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 8px; /* Ещё меньше отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
   }
 }
-
 @media (max-width: 768px) {
   .grid-wrapper {
     padding-left: 10px;
     padding-right: 10px;
   }
-
   .brand-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 8px; /* Ещё меньше отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
   }
-
-  /* Добавлен новый медиазапрос */
   .hits-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 8px; /* Ещё меньше отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
   }
 }
-
 @media (max-width: 500px) {
   .grid-container {
     grid-template-columns: 1fr;
   }
-
   .brand-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 5px; /* Минимальные отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
   }
-
   .category-text {
-    font-size: 0.63em; /* 70% от 0.9em */
+    font-size: 0.63em;
   }
-
   .brand-title {
     font-size: 1.5em;
     margin-bottom: 15px;
   }
-
   .hits-grid {
-    grid-template-columns: repeat(6, 1fr); /* Сохраняем 6 колонок */
-    gap: 5px; /* Минимальные отступы */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
   }
-
   .hits-title {
     font-size: 1.5em;
     margin-bottom: 15px;
@@ -221,194 +213,117 @@ body {
   width: 100%;
   margin-top: auto;
 }
-
 .footer-container {
   max-width: 73%;
   margin: 0 auto;
 }
-
 .footer-link {
   color: #28383d;
   text-decoration: none;
 }
-
 .footer-link:hover {
   text-decoration: underline;
 }
 
-/* Фирменные стили для хитов продаж */
-.hits-container {
-  display: flex;
-  flex-direction: column;
-  margin: 0px 27px 20px 27px;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень для визуального улучшения */
-  background-color: #ededed; /* Дополнительная подложка, если необходимо */
+/* ------------------ Новые стили для динамической инфо-панели ------------------ */
+
+.info-panel a,
+.info-panel [data-tab-url],
+.info-panel [data-open-tab] {
+  color: #ff9d1d; /* Цвет текста */
+  text-decoration: none; /* Без подчеркивания по умолчанию */
+  cursor: pointer; /* При наведении появляется «рука» */
 }
 
-.hits-title {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 1.5em;
-  text-align: left;
-  margin: 0 0 0px 13px;
-  color: #555555; /* Тёмно-серый цвет */
+.info-panel a:hover,
+.info-panel [data-tab-url]:hover,
+.info-panel [data-open-tab]:hover {
+  text-decoration: underline; /* Подчёркиваем при наведении */
+  color: #ffbb00; /* Чуть более тёмный синий, например */
 }
 
-.hits-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Всегда 6 колонок */
-  gap: 10px;
-}
-
-.hits-item {
-  background-size: contain; /* Подгонка изображения по ширине */
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: white; /* Заполнение свободного места белым */
-  aspect-ratio: 1 / 1.98; /* Квадратные ячейки */
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Опциональная тень */
-  transition: transform 0.3s ease; /* Плавное увеличение при наведении */
-  cursor: pointer; /* Указатель при наведении */
-}
-
-.hits-item:hover {
-  transform: scale(1.015); /* Лёгкое увеличение при наведении */
-}
-
-/* Добавленные стили из info.html */
-
+/* Контейнер общего блока */
 .container-info {
-  width: calc(100% - 160px);
-  height: 260px;
+  width: calc(100% - 10rem); /* Аналогично исходному (минус 160px) */
+  margin: 15px auto;
   display: flex;
-  margin: 15px auto; /* Отступы сверху и снизу по 15px, центрируем контейнер по горизонтали */
-  transition: transform 0.4s ease, opacity 0.4s ease; /* Плавные переходы для масштабирования и прозрачности */
-  transform-origin: center top; /* Фиксируем точку масштабирования */
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.container {
+/*
+  Внутренний блок, в котором будут "плашки".
+  Ставим aspect-ratio, чтобы пропорции не менялись при масштабировании.
+*/
+.info-panel {
   position: relative;
-  left: 0;
-  height: 260px; /* Ограничиваем высоту видимой области */
-  overflow: hidden; /* Прячем элементы, выходящие за пределы */
-  border-radius: 15px; /* Скругленные края */
-  width: calc(100% - 40px);
-  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 19 / 3.65; /* Фиксируем соотношение (примерно как в исходном) */
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.banner {
+/* Каждый баннер (создаётся динамически) */
+.dynamic-banner {
   position: absolute;
-  width: 1400px;
-  height: 260px;
-  transition: transform 0.6s ease; /* Анимация для движения */
-  z-index: 1; /* Устанавливаем порядок отображения */
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  z-index: 1;
 }
-
-.banner img {
+/* Картинка внутри баннера */
+.dynamic-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  box-shadow: -4px 0px 6px rgba(0, 0, 0, 0.2); /* Тень слева */
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Добавляем стили для текстовых оверлеев и вертикальных заголовков */
-.text-overlay {
-  margin-top: 0.5em; /* Устанавливает отступ для всех дочерних элементов */
-  position: absolute;
-  top: 3%; /* Отступ сверху */
-  left: 8%; /* Фиксированный отступ слева */
-  right: 30%; /* Отступ справа */
-  color: white;
-  font-size: calc((1vw + 1vh) / 1.54);
-  line-height: 1.5;
-  z-index: 5;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.398);
-  overflow: hidden; /* Обрезка переполнения */
-  white-space: normal; /* Разрешаем перенос строк */
-  word-wrap: break-word; /* Перенос длинных слов */
-  text-align: left; /* Выравнивание текста по левому краю */
-  align-items: center; /* Выравнивание по вертикали */
-  height: 100vh; /* Если выравнивание внутри страницы */
-}
-
-.indented {
-  text-indent: 2em;
-}
-
-.text-overlay > * {
-  margin-bottom: 0.3em; /* Устанавливает отступ для всех дочерних элементов */
-  margin-top: 0.3em; /* Устанавливает отступ для всех дочерних элементов */
-}
-
-.clickable-area {
+/* Область с вертикальной надписью */
+.banner-clickable {
   position: absolute;
   top: 0;
   left: 0;
   width: 50px;
   height: 260px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  box-shadow: 30px 0 50px rgba(0, 0, 0, 0.168); /* Тень справа */
+  box-shadow: 30px 0 50px rgba(0, 0, 0, 0.168);
   cursor: pointer;
-  z-index: 10;
-  overflow: hidden;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
-
-.vertical-title {
+.banner-clickable .vertical-title {
   font-family: "Bebas Neue", sans-serif;
-  font-weight: bold; /* Жирный текст */
-  color: white;
-  font-size: 1.7vw;
+  font-size: 1.4vw;
+  font-weight: bold;
+  color: rgb(87, 87, 87);
+  transform: rotate(270deg);
   white-space: nowrap;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.235);
-  transform: rotate(90deg); /* Поворот текста для вертикального расположения */
 }
 
-/* Изначальное положение баннеров */
-.banner1 {
-  left: 0;
-  top: 0px;
-  z-index: 1;
-}
-
-.banner2 {
-  left: 60px;
-  top: 0px;
-  z-index: 2;
-}
-
-.banner3 {
-  left: 120px;
-  top: 0px;
+/* Блок с текстом */
+.banner-text {
+  position: absolute;
+  top: 3%;
+  left: 8%;
+  right: 30%;
+  font-size: calc((1vw + 1vh) / 1.54);
+  line-height: 1.5;
   z-index: 3;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: left;
+  margin-top: 0.5em;
+  overflow: hidden;
 }
-
-.banner4 {
-  left: 180px;
-  top: 0px;
-  z-index: 4;
+.banner-text .indented {
+  text-indent: 2em;
 }
-
-.banner5 {
-  left: 240px;
-  top: 0px;
-  z-index: 5;
-}
-
-/* Ключевые кадры анимации для hover */
-@keyframes hover-effect {
-  0% {
-    background: rgba(255, 255, 255, 0.037);
-  }
-  50% {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  100% {
-    background: rgba(255, 255, 255, 0.037);
-  }
+.banner-text > * {
+  margin-bottom: 0.3em;
+  margin-top: 0.3em;
 }

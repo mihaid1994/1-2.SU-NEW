@@ -1,64 +1,130 @@
-// Определяем глобальную функцию для инициализации баннеров
+/**
+ * Глобальная функция, которая создаёт «информационную панель» в заданном root
+ * (document или shadowRoot). Подтягивает данные из /data/info.json
+ * и динамически генерирует плашки (баннеры).
+ */
 window.initBanners = function (root = document) {
-  // Получаем каждый баннер индивидуально
-  const banner1 = root.querySelector(".banner1");
-  const banner2 = root.querySelector(".banner2");
-  const banner3 = root.querySelector(".banner3");
-  const banner4 = root.querySelector(".banner4");
-  const banner5 = root.querySelector(".banner5");
-
-  // --- ИНИЦИАЛИЗАЦИЯ ---
-  // Баннер 1 (самый нижний) остаётся без сдвига
-  banner1.style.transform = "translateX(0px)";
-  // Баннеры 2..5 изначально сдвигаются вправо
-  banner2.style.transform = "translateX(1070px)";
-  banner3.style.transform = "translateX(1070px)";
-  banner4.style.transform = "translateX(1070px)";
-  banner5.style.transform = "translateX(1070px)";
-
-  // --- ЛОГИКА КЛИКОВ ---
-  // Функция-утилита: активировать баннер N => все <= N без сдвига, остальные вправо
-  function activateBanner(N) {
-    if (N >= 1) {
-      banner1.style.transform = "translateX(0px)";
-    }
-    if (N >= 2) {
-      banner2.style.transform = "translateX(0px)";
-    } else {
-      banner2.style.transform = "translateX(1070px)";
-    }
-    if (N >= 3) {
-      banner3.style.transform = "translateX(0px)";
-    } else {
-      banner3.style.transform = "translateX(1070px)";
-    }
-    if (N >= 4) {
-      banner4.style.transform = "translateX(0px)";
-    } else {
-      banner4.style.transform = "translateX(1070px)";
-    }
-    if (N >= 5) {
-      banner5.style.transform = "translateX(0px)";
-    } else {
-      banner5.style.transform = "translateX(1070px)";
-    }
+  const infoPanel = root.querySelector("#infoPanel");
+  if (!infoPanel) {
+    console.warn("Не найден контейнер #infoPanel в переданном root!");
+    return;
   }
 
-  // Кликабельные области
-  const area1 = banner1.querySelector(".clickable-area");
-  const area2 = banner2.querySelector(".clickable-area");
-  const area3 = banner3.querySelector(".clickable-area");
-  const area4 = banner4.querySelector(".clickable-area");
-  const area5 = banner5.querySelector(".clickable-area");
+  fetch("/data/info.json")
+    .then((res) => res.json())
+    .then((data) => {
+      const banners = data.banners || [];
+      // Создаём плашки на основе массива banners
+      banners.forEach((bannerData, index) => {
+        const bannerDiv = document.createElement("div");
+        bannerDiv.classList.add("dynamic-banner");
 
-  // Клик по баннер1 => активен баннер1, выше (2..5) вправо
-  area1.addEventListener("click", () => activateBanner(1));
-  // Клик по баннер2 => активны баннеры 1..2, выше (3..5) вправо
-  area2.addEventListener("click", () => activateBanner(2));
-  // Клик по баннер3 => активны 1..3, выше 4..5 вправо
-  area3.addEventListener("click", () => activateBanner(3));
-  // Клик по баннер4 => активны 1..4, выше баннер5 вправо
-  area4.addEventListener("click", () => activateBanner(4));
-  // Клик по баннер5 => активны 1..5 (все на месте)
-  area5.addEventListener("click", () => activateBanner(5));
+        // "Лесенка" (каждый следующий баннер сдвинут чуть вправо)
+        // 60px = 3.75rem. Можно менять как нужно.
+        bannerDiv.style.left = `${60 * index}px`;
+        bannerDiv.style.zIndex = index + 1;
+
+        // Картинка
+        const img = document.createElement("img");
+        img.src = bannerData.imageUrl || "";
+
+        // Кликабельная зона (вертикальный текст)
+        const clickable = document.createElement("div");
+        clickable.classList.add("banner-clickable");
+
+        const vt = document.createElement("span");
+        vt.classList.add("vertical-title");
+        vt.textContent = bannerData.verticalTitle || "";
+        clickable.appendChild(vt);
+
+        // Текстовый блок
+        const textBlock = document.createElement("div");
+        textBlock.classList.add("banner-text");
+
+        // paragraphs
+        if (Array.isArray(bannerData.paragraphs)) {
+          bannerData.paragraphs.forEach((paragraph) => {
+            const p = document.createElement("p");
+            // Для отступа делаем класс .indented (как в исходном примере)
+            p.classList.add("indented");
+            p.innerHTML = paragraph;
+            textBlock.appendChild(p);
+          });
+        }
+
+        // listItems
+        if (
+          Array.isArray(bannerData.listItems) &&
+          bannerData.listItems.length
+        ) {
+          const ul = document.createElement("ul");
+          bannerData.listItems.forEach((liText) => {
+            const li = document.createElement("li");
+            li.innerHTML = liText;
+            ul.appendChild(li);
+          });
+          textBlock.appendChild(ul);
+        }
+
+        // closingParagraph
+        if (bannerData.closingParagraph) {
+          const cp = document.createElement("p");
+          cp.innerHTML = bannerData.closingParagraph;
+          textBlock.appendChild(cp);
+        }
+
+        // Добавляем всё внутрь .dynamic-banner
+        bannerDiv.appendChild(clickable);
+        bannerDiv.appendChild(img);
+        bannerDiv.appendChild(textBlock);
+
+        // Вставляем в #infoPanel
+        infoPanel.appendChild(bannerDiv);
+      });
+
+      // После генерации баннеров включаем логику перелистывания
+      setupBannerClickLogic(root);
+    })
+    .catch((error) => {
+      console.error("Ошибка при загрузке /data/info.json:", error);
+    });
 };
+
+/**
+ * Настраивает перелистывание плашек:
+ * - При клике на вертикальную надпись «выдвигает» текущий баннер и все предыдущие
+ * - Остальные «уезжают» вправо
+ */
+function setupBannerClickLogic(root) {
+  const banners = root.querySelectorAll(".dynamic-banner");
+
+  // Изначально показываем только первый баннер, остальные сдвигаем
+  banners.forEach((bnr, i) => {
+    if (i === 0) {
+      bnr.style.transform = "translateX(0rem)";
+    } else {
+      // ~1070px → 66.875rem
+      bnr.style.transform = "translateX(66.875rem)";
+    }
+  });
+
+  // При клике — показываем все до текущего включительно
+  banners.forEach((bnr, i) => {
+    const clickable = bnr.querySelector(".banner-clickable");
+    if (clickable) {
+      clickable.addEventListener("click", () => {
+        activateBannerIndex(banners, i);
+      });
+    }
+  });
+}
+
+function activateBannerIndex(banners, index) {
+  banners.forEach((bnr, i) => {
+    if (i <= index) {
+      bnr.style.transform = "translateX(0rem)";
+    } else {
+      bnr.style.transform = "translateX(66.875rem)";
+    }
+  });
+}
