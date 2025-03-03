@@ -223,14 +223,26 @@ document.addEventListener("DOMContentLoaded", () => {
     clonedCatBtn.textContent = isCategoryOpen ? "✕" : "☰"; // изначальное состояние
     clonedCategoryButton = clonedCatBtn; // Запоминаем, чтобы обновлять текст
 
-    // 2) Кнопка прокрутки вверх
+    // 2) Кнопка чата (только иконка, без текста)
+    const chatBtn = document.createElement("button");
+    chatBtn.id = "chat-button-clone";
+    // Добавляем два класса: один для специфики кнопки, другой для общего стиля
+    chatBtn.classList.add("chat-button", "clone-category-button");
+    // Добавляем необходимые data-атрибуты
+    chatBtn.setAttribute("data-open-tab", "true");
+    chatBtn.setAttribute("data-tab-title", "Чат");
+    chatBtn.setAttribute("data-tab-url", "/pages/chat.html");
+    chatBtn.innerHTML = '<i class="ri-chat-1-line"></i>';
+
+    // 3) Кнопка прокрутки вверх
     const scrollTopBtn = document.createElement("button");
     scrollTopBtn.id = "scroll-top-button";
     scrollTopBtn.classList.add("scroll-top-button");
     scrollTopBtn.innerHTML = '<i class="ri-arrow-up-double-line"></i>';
 
-    // Добавляем обе кнопки в контейнер
+    // Добавляем кнопки в контейнер: сначала кнопка категорий, затем кнопка чата и, наконец, кнопка прокрутки
     buttonsContainer.appendChild(clonedCatBtn);
+    buttonsContainer.appendChild(chatBtn);
     buttonsContainer.appendChild(scrollTopBtn);
 
     cloneBar.appendChild(buttonsContainer);
