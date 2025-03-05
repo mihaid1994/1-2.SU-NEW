@@ -25,10 +25,22 @@
           <div class="row-top">
             <div class="header-section">
               <div class="header-left">
-                <h1 class="header-title">
-                  Корзина
-                  <i class="ri-edit-2-line"></i>
-                  <i class="ri-save-3-line"></i>
+                <h1 class="header-title" data-cart-id="">
+                  <span class="header-text">Корзина</span>
+                  <span class="header-buttons">
+                    <!-- Кнопка активации корзины (по клику запускает событие cartActivated) -->
+                    <i
+                      class="ri-pushpin-line"
+                      title="Сделать активной корзину"
+                    ></i>
+                    <!-- Кнопка редактирования (запускает процесс редактирования заголовка) -->
+                    <i
+                      class="ri-edit-2-line"
+                      title="Редактировать название"
+                    ></i>
+                    <!-- Кнопка сохранения (не редактируется, служит лишь для визуала, можно оставить как есть) -->
+                    <i class="ri-save-3-line" title="Сохранить изменения"></i>
+                  </span>
                 </h1>
               </div>
             </div>
@@ -39,9 +51,9 @@
             <div class="toggle-section">
               <!-- Левый блок -->
               <div class="left-group">
-                <span class="last-change-text"
-                  >Последнее изменение: 25.10.2024 17:24:43</span
-                >
+                <span class="last-change-text">
+                  Последнее изменение: 25.10.2024 17:24:43
+                </span>
               </div>
               <!-- Правый блок -->
               <div class="right-group">
@@ -178,9 +190,9 @@
       <div class="footer-container">
         <p>© 2024 1-2.SU NEW. Все права защищены.</p>
         <p>
-          <a href="http://energomix.ru" target="_blank" class="footer-link"
-            >energomix.ru</a
-          >
+          <a href="http://energomix.ru" target="_blank" class="footer-link">
+            energomix.ru
+          </a>
         </p>
       </div>
     </footer>
