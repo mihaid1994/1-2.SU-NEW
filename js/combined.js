@@ -6,14 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Шторка категорий
   const categoryDrawer = document.getElementById("categoryDrawer");
-  const openCategoriesButton = document.getElementById("open-categories");
+  const openCategoriesButtons = document.querySelectorAll("#open-categories");
 
   // Шторка выбора города
   const cityDrawer = document.getElementById("cityDrawer");
-  const cityButton = document.getElementById("selectedCity");
+  const cityButtons = document.querySelectorAll("#selectedCity");
+
+  // Новая иконка поиска (мобильная версия)
+  const searchIconButton = document.getElementById("searchIcon");
 
   // Кнопка-клон категорий (появится при прокрутке вместе с поисковой строкой)
-  // Она создаётся динамически, поэтому объявим тут переменную, заполним позже.
   let clonedCategoryButton = null;
 
   // Флаги открытия/закрытия
@@ -32,13 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCategoryButtons() {
-    // При открытии шторки категорий — "Категории ✕", при закрытии — "Категории ☰"
-    if (isCategoryOpen) {
-      openCategoriesButton.textContent = "Категории ✕";
-      if (clonedCategoryButton) clonedCategoryButton.textContent = "✕";
-    } else {
-      openCategoriesButton.textContent = "Категории ☰";
-      if (clonedCategoryButton) clonedCategoryButton.textContent = "☰";
+    // Обновляем все кнопки "open-categories"
+    openCategoriesButtons.forEach((btn) => {
+      btn.textContent = isCategoryOpen ? "Категории ✕" : "Категории ☰";
+    });
+    if (clonedCategoryButton) {
+      clonedCategoryButton.textContent = isCategoryOpen ? "✕" : "☰";
     }
   }
 
@@ -114,13 +115,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Навешиваем обработчики на кнопки
-  if (openCategoriesButton) {
-    openCategoriesButton.addEventListener("click", toggleCategoryDrawer);
-  }
-  if (cityButton) {
-    cityButton.addEventListener("click", toggleCityDrawer);
-  }
+  // Навешиваем обработчики на все кнопки "Категории" и "Выбор представительства"
+  openCategoriesButtons.forEach((btn) => {
+    btn.addEventListener("click", toggleCategoryDrawer);
+  });
+  cityButtons.forEach((btn) => {
+    btn.addEventListener("click", toggleCityDrawer);
+  });
 
   // ========================================================
   // Логика поиска + клон-шапка при скролле (общая)
@@ -226,9 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2) Кнопка чата (только иконка, без текста)
     const chatBtn = document.createElement("button");
     chatBtn.id = "chat-button-clone";
-    // Добавляем два класса: один для специфики кнопки, другой для общего стиля
     chatBtn.classList.add("chat-button", "clone-category-button");
-    // Добавляем необходимые data-атрибуты
     chatBtn.setAttribute("data-open-tab", "true");
     chatBtn.setAttribute("data-tab-title", "Чат");
     chatBtn.setAttribute("data-tab-url", "/pages/chat.html");
@@ -240,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollTopBtn.classList.add("scroll-top-button");
     scrollTopBtn.innerHTML = '<i class="ri-arrow-up-double-line"></i>';
 
-    // Добавляем кнопки в контейнер: сначала кнопка категорий, затем кнопка чата и, наконец, кнопка прокрутки
+    // Добавляем кнопки в контейнер
     buttonsContainer.appendChild(clonedCatBtn);
     buttonsContainer.appendChild(chatBtn);
     buttonsContainer.appendChild(scrollTopBtn);
@@ -258,10 +257,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const cloneSearchInput = cloneBar.querySelector("#searchInputClone");
     if (cloneSearchInput) {
       cloneSearchInput.addEventListener("input", syncInputs);
-
       cloneSearchInput.addEventListener("focus", cloneFocus);
       cloneSearchInput.addEventListener("blur", cloneBlur);
-
       cloneSearchInput.addEventListener("input", () => {
         const textWidth = cloneSearchInput.scrollWidth;
         if (
@@ -370,16 +367,37 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================================================
+  // Дополнительная логика для мобильной версии поиска
+  // Новая иконка поиска должна переводить фокус в поле ввода,
+  // а при активном вводе скрывать выбор представительства и расширять поле на всю ширину.
+  // ========================================================
+  const mobileTopPanel = document.querySelector(".hide-desktop .top-panel");
+  const mobileSearchInput = document.querySelector(
+    ".hide-desktop .top-panel__left .search-bar input#searchInput"
+  );
+  if (searchIconButton && mobileSearchInput && mobileTopPanel) {
+    searchIconButton.addEventListener("click", () => {
+      mobileSearchInput.focus();
+    });
+    mobileSearchInput.addEventListener("focus", () => {
+      mobileTopPanel.classList.add("search-active");
+    });
+    mobileSearchInput.addEventListener("blur", () => {
+      mobileTopPanel.classList.remove("search-active");
+    });
+  }
+
+  // ========================================================
   // Логика загрузки и отображения категорий (ранее categories.js)
   // ========================================================
   const sidebar = document.querySelector("#category-module .sidebar");
   const subcategoriesContainer = document.querySelector(
     "#category-module .subcategories-container"
   );
-  let superActiveTitle = null; // Текущая super-active категория
+  let superActiveTitle = null; // Текущая супер-активная категория
   let categories = [];
 
-  // Показываем подкатегории
+  // Показываем подкатегории выбранной категории
   function showSubcategories(category) {
     subcategoriesContainer.innerHTML = "";
     subcategoriesContainer.classList.add("active");
@@ -407,7 +425,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const titleEl = document.createElement("div");
       titleEl.className = "subcategory-title";
       titleEl.textContent = subcat.title;
-
       block.appendChild(titleEl);
 
       // Если есть subitems
@@ -458,7 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
     subcategoriesContainer.appendChild(columnsContainer);
   }
 
-  // Устанавливаем super-active (закреплённую) категорию
+  // Устанавливаем супер-активную категорию по клику
   function setSuperActive(titleElement) {
     if (superActiveTitle) {
       superActiveTitle.classList.remove("super-active");
@@ -467,6 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
     superActiveTitle.classList.add("super-active");
   }
 
+  // Отображаем подкатегории супер-активной категории
   function showSuperActiveSubcategories() {
     if (superActiveTitle) {
       const slug = superActiveTitle.getAttribute("data-slug");
@@ -494,46 +512,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Рендерим категории в sidebar
       categories.forEach((cat) => {
-        const groupTitle = document.createElement("div");
-        groupTitle.className = "group-title";
-        groupTitle.setAttribute("data-slug", cat.slug);
+        let element;
 
-        // Иконка (если есть)
-        if (cat.icon) {
-          const icon = document.createElement("i");
-          icon.className = cat.icon;
-          groupTitle.appendChild(icon);
+        if (cat.isSeparator) {
+          // Создаём неинтерактивную полосу-разделитель
+          element = document.createElement("div");
+          element.className = "sidebar-separator";
+          if (cat.indent) {
+            element.style.marginLeft = cat.indent + "px";
+            element.style.marginRight = cat.indent + "px";
+          }
+          element.style.height = "1px";
+          element.style.backgroundColor = "#ccc";
+          element.style.pointerEvents = "none";
         } else {
-          // Стандартная иконка
-          const defaultIcon = document.createElement("i");
-          defaultIcon.className = "ri-folder-line";
-          groupTitle.appendChild(defaultIcon);
+          element = document.createElement("div");
+          element.className = "group-title";
+          element.setAttribute("data-slug", cat.slug);
+
+          if (cat.icon) {
+            const icon = document.createElement("i");
+            icon.className = cat.icon;
+            element.appendChild(icon);
+          } else {
+            const defaultIcon = document.createElement("i");
+            defaultIcon.className = "ri-folder-line";
+            element.appendChild(defaultIcon);
+          }
+
+          const text = document.createElement("span");
+          text.textContent = cat.title;
+          element.appendChild(text);
+
+          element.addEventListener("mouseenter", () => {
+            document
+              .querySelectorAll(".group-title.active")
+              .forEach((el) => el.classList.remove("active"));
+            element.classList.add("active");
+            showSubcategories(cat);
+          });
+
+          element.addEventListener("click", (e) => {
+            e.stopPropagation();
+            setSuperActive(element);
+            showSubcategories(cat);
+          });
         }
 
-        const text = document.createElement("span");
-        text.textContent = cat.title;
-        groupTitle.appendChild(text);
-
-        // Hover
-        groupTitle.addEventListener("mouseenter", () => {
-          groupTitle.classList.add("active");
-          showSubcategories(cat);
-        });
-        groupTitle.addEventListener("mouseleave", () => {
-          groupTitle.classList.remove("active");
-        });
-
-        // Клик -> делаем super-active
-        groupTitle.addEventListener("click", (e) => {
-          e.stopPropagation();
-          setSuperActive(groupTitle);
-          showSubcategories(cat);
-        });
-
-        sidebar.appendChild(groupTitle);
+        sidebar.appendChild(element);
       });
 
-      // По умолчанию супер-активная — первая категория
       const firstTitle = sidebar.querySelector(".group-title");
       if (firstTitle) {
         setSuperActive(firstTitle);
@@ -544,9 +572,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Ошибка при загрузке категорий:", err);
     });
 
-  // Если уходим с сайдбара курсором, показываем супер-активную
   if (sidebar) {
     sidebar.addEventListener("mouseleave", () => {
+      document
+        .querySelectorAll(".group-title.active")
+        .forEach((el) => el.classList.remove("active"));
       showSuperActiveSubcategories();
     });
   }
@@ -554,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================================================
   // Логика выбора города (ранее city.js)
   // ========================================================
-  const currentCity = document.getElementById("currentCity");
+  const currentCityElements = document.querySelectorAll("#currentCity");
   const cityListContainer = document.getElementById("cityListContainer");
   const citySearchInput = document.getElementById("citySearchInput");
   const citySearchIcon = document.getElementById("citySearchIcon");
@@ -569,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let contactsData = {};
   let mapInitialized = false;
 
-  // Фильтрация
+  // Фильтрация городов
   function filterCities(searchTerm) {
     if (!searchTerm.trim()) {
       renderCities(contactsData);
@@ -657,9 +687,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Выбор города
   function selectCity(name) {
-    currentCity.innerHTML = `<span>${name}</span>`;
-    cityButton.classList.remove("no-city-chosen");
-    closeCityDrawer(); // Закрыть
+    currentCityElements.forEach((el) => {
+      el.innerHTML = `<span>${name}</span>`;
+    });
+    cityButtons.forEach((btn) => {
+      btn.classList.remove("no-city-chosen");
+    });
+    closeCityDrawer();
     toggleButton.textContent = "Выбрать на карте";
   }
 
@@ -742,15 +776,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       mapSelection.geoObjects.add(clusterer);
 
-      // Масштабируем карту по всем меткам
       if (clusterer.getGeoObjects().length) {
         mapSelection.setBounds(clusterer.getBounds(), { checkZoomRange: true });
       }
 
-      // Глобальная функция (через window), чтобы вызывать из balloonContent
       window.selectOffice = function (name) {
-        currentCity.innerHTML = `<span>${name}</span>`;
-        cityButton.classList.remove("no-city-chosen");
+        currentCityElements.forEach((el) => {
+          el.innerHTML = `<span>${name}</span>`;
+        });
+        cityButtons.forEach((btn) => {
+          btn.classList.remove("no-city-chosen");
+        });
         closeCityDrawer();
         toggleButton.textContent = "Выбрать на карте";
       };
@@ -762,7 +798,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // События ввода / клика для поиска города
   citySearchInput.addEventListener("input", (e) => {
     filterCities(e.target.value);
   });
@@ -770,7 +805,6 @@ document.addEventListener("DOMContentLoaded", () => {
     filterCities(citySearchInput.value);
   });
 
-  // Переключение режима списка/карты
   toggleButton.addEventListener("click", () => {
     const isMapVisible = selectionModeContainer.classList.contains("map-mode");
 
@@ -788,7 +822,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Загрузка contacts.json
   fetch("/data/contacts.json")
     .then((response) => {
       if (!response.ok) {

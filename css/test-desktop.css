@@ -129,22 +129,6 @@ body {
   overflow: hidden;
 }
 
-/* Полноэкранное отображение iframe в контейнере */
-.iframe-content {
-  width: 100%;
-  height: 100%;
-  border: none;
-  overflow: hidden; /* Отключает прокрутку внутри iframe */
-}
-
-/* Стили для iframe */
-.tab-content iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
-
 .edit-tab {
   background: none;
   border: none;

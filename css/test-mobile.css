@@ -1,0 +1,169 @@
+/* Основные настройки для всего документа */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  position: relative; /* Для корректного позиционирования кнопок */
+}
+
+/* Контейнер кнопок вкладок */
+.tabs-buttons {
+  display: flex;
+  gap: 4px; /* Расстояние между кнопками */
+  margin-left: auto; /* Кнопки прижимаются вправо */
+}
+
+/* Стили для кнопок "Создать корзину", "Чат" и "Заказ" */
+.create-chat-button,
+.create-order-button,
+.create-cart-button {
+  background-color: #c4c4c4; /* Цвет, совпадающий с базовым цветом вкладок */
+  color: #fff;
+  padding: 5px 7px 0px 7px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, height 0.3s, margin-top 0.3s;
+  height: 30px; /* Соответствует высоте вкладок */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+  font-size: 20px;
+  padding-bottom: 5px;
+}
+
+.create-chat-button:hover,
+.create-order-button:hover,
+.create-cart-button:hover {
+  background-color: #aaaaaa;
+  height: 35px; /* Увеличенная высота для эффекта */
+  margin-top: 0; /* Убирается отступ сверху */
+  box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.create-chat-button:active,
+.create-order-button:active,
+.create-cart-button:active {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+}
+
+/* Стили для полосы вкладок */
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+  position: relative;
+  align-items: flex-end; /* Выравнивание вкладок по нижнему краю */
+  height: 35px; /* Фиксированная высота для одной строки */
+  transition: transform 0.5s ease, opacity 0.5s ease, margin-top 0.5s ease;
+  transform: translateY(0);
+}
+
+.tabs.collapsed {
+  transform: translateY(-100%);
+  opacity: 0;
+  margin-top: -35px;
+}
+
+.tabs.expanded {
+  transform: translateY(0);
+  opacity: 1;
+  margin-top: 0;
+}
+
+/* Стили для отдельной вкладки */
+.tab {
+  background-color: #48707a;
+  color: #fff;
+  padding: 5px 18px 0px 10px;
+  margin-top: 5px; /* Отступ для стандартных вкладок */
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, height 0.3s, margin-top 0.3s;
+  height: 30px;
+}
+
+.tab:hover {
+  background-color: #66999f;
+}
+
+.tab.active {
+  background-color: #ff8c00;
+  height: 35px;
+  margin-top: 0;
+  box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Кнопка закрытия вкладки */
+.tab .close-tab {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tab .close-tab:hover {
+  color: #ff4d4d;
+}
+
+/* Контейнер содержимого вкладок */
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Кнопка редактирования вкладки */
+.edit-tab {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.edit-tab:hover {
+  color: #ffcc00;
+}
+
+/* ===== Корректировки для мобильной версии ===== */
+@media screen and (max-width: 800px) {
+  /* Предположим, что мобильная шапка задаёт высоту через переменную */
+  :root {
+    --header-height: 50px; /* Значение, определяемое в другом файле */
+  }
+  /* Смещение всего содержимого, чтобы шапка не перекрывала вкладки */
+  body {
+    padding-top: var(--header-height);
+  }
+  /* Полоса вкладок начинается ниже шапки и занимает нужную высоту при переносе строк */
+  .tabs {
+    margin-top: var(--header-height);
+    height: auto;
+  }
+  .tab {
+    height: auto;
+    padding: 5px 18px 5px 10px;
+  }
+  .tab.active {
+    height: auto;
+  }
+}

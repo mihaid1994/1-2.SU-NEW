@@ -6,15 +6,43 @@
     <title>1-2.SU NEW</title>
     <!-- Стили -->
     <link rel="stylesheet" href="/css/test.css" />
-    <link rel="stylesheet" href="/css/search_nav_style.css" />
-    <link rel="stylesheet" href="/css/categories.css" />
+    <link
+      rel="stylesheet"
+      href="/css/test-desktop.css"
+      media="screen and (min-width: 801px)"
+    />
+    <!-- Мобильная версия тестовых стилей -->
+    <link
+      rel="stylesheet"
+      href="/css/test-mobile.css"
+      media="screen and (max-width: 800px)"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/desktop.css"
+      media="screen and (min-width: 801px)"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/mobile.css"
+      media="screen and (max-width: 800px)"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/categories-desktop.css"
+      media="screen and (min-width: 801px)"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/categories-mobile.css"
+      media="screen and (max-width: 800px)"
+    />
     <!-- Подключаем Remix Icon для иконок -->
     <link
       href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
       rel="stylesheet"
       defer
     />
-
     <!-- Подключение Yandex Maps API -->
     <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=ВАШ_НОВЫЙ_API_КЛЮЧ_ЯНДЕКС_КАРТ"
@@ -24,8 +52,8 @@
   </head>
 
   <body>
-    <!-- Область для навигации -->
-    <div id="navigation-area" class="navigation-area">
+    <!-- Исходная навигация для десктопа (мобильные блоки скрываются через класс hide-desktop) -->
+    <div id="navigation-area" class="navigation-area hide-mobile">
       <nav class="navigation">
         <div class="container">
           <!-- Обновленный логотип с изображением -->
@@ -79,7 +107,7 @@
             ></i>
           </span>
 
-          <!--  Лимит, Корзина, Личный кабинет -->
+          <!-- Лимит, Корзина, Личный кабинет (триггер для шторки аккаунта) -->
           <div class="account" id="accountButton">
             <a
               id="logButton"
@@ -89,89 +117,9 @@
               <i id="UserButton" class="ri-account-circle-line"></i>
               <i id="ArrowButton" class="ri-arrow-down-s-line"></i>
             </a>
-            <div class="dropdown" id="accountDropdown">
-              <div class="link-buttons">
-                <button class="orders-button2">Журнал заказов</button>
-                <button class="waitlist-button">Лист ожидания</button>
-                <button data-tooltip="Ваш рабочий стол" class="Cabinet-button">
-                  Личный кабинет
-                </button>
-                <button
-                  data-tooltip="Связаться с поддержкой"
-                  class="chat-button"
-                >
-                  Чат
-                </button>
-                <button
-                  data-tooltip="Адреса и Контакты ГК Энергомикс"
-                  class="contacts-button"
-                >
-                  Контакты
-                </button>
-                <button
-                  data-tooltip="Настройте 1-2.SU под себя"
-                  class="settings-ac-button"
-                  data-section="profileSettings"
-                >
-                  Настройки аккаунта
-                </button>
-              </div>
-              <div class="info-buttons">
-                <span class="name">Шуравин М.А. </span>
-                <hr class="custom-divider" />
-                <button
-                  id="limit-amount"
-                  class="info-button"
-                  data-tooltip="Ваш текущий лимит покупок"
-                >
-                  <span class="label">Доступный лимит:</span>
-                  <span class="value">740 000 ₽</span>
-                </button>
-                <button
-                  id="turnover"
-                  class="info-button"
-                  data-tooltip="Ваш текущий оборот за год"
-                >
-                  <span class="label">Оборот за год:</span>
-                  <span class="value">25 000 000,00 ₽</span>
-                </button>
-                <hr class="custom-divider" />
-                <button id="bonus-amount" class="info-button" data-tooltip="">
-                  <span class="label">Использованный лимит:</span>
-                  <span class="value">160 000 ₽</span>
-                </button>
-                <button id="bonus-amount" class="info-button" data-tooltip="">
-                  <span class="label">Срок оплаты кредита:</span>
-                  <span class="value">14.07.2025</span>
-                </button>
-                <hr class="custom-divider" />
-
-                <button
-                  id="bonus-amount"
-                  class="info-button bonus-btn"
-                  data-tooltip=""
-                >
-                  <span class="label">Дней до стоп-листа:</span>
-                  <span class="value">72</span>
-                </button>
-
-                <span id="workTogether" class="icon-group">
-                  Совместная работа
-                  <i class="ri-toggle-line"></i>
-                </span>
-                <span id="hintMode" class="icon-group">
-                  Режим подсказок
-                  <i class="ri-questionnaire-line"></i>
-                </span>
-                <span id="logout" class="icon-group">
-                  Выйти из аккаунта
-                  <i class="ri-door-open-fill" id="logout-icon"></i>
-                </span>
-              </div>
-            </div>
           </div>
 
-          <!-- Контейнер для выбора города (фиксированный в верхнем правом углу) -->
+          <!-- Контейнер для выбора города (для десктопа) -->
           <div class="city-selection-wrapper">
             <button
               id="selectedCity"
@@ -186,7 +134,7 @@
           </div>
         </div>
 
-        <!-- Вторая строка с кнопками -->
+        <!-- Вторая строка с кнопками (десктопная) -->
         <div class="secondary-row">
           <button
             class="secondary-button"
@@ -222,6 +170,176 @@
           </button>
         </div>
       </nav>
+    </div>
+
+    <!-- Мобильная версия (скрыта на десктопе) -->
+    <div class="hide-desktop">
+      <!-- Верхняя панель мобильной версии -->
+      <div class="top-panel">
+        <div class="container">
+          <!-- Логотип -->
+          <div class="logo-button" data-tooltip="На главную страницу">
+            <img
+              src="/images/svg/Logo/energomixlogo.svg"
+              alt="Energomix Logo"
+            />
+          </div>
+          <!-- Левая часть: Строка поиска (50% ширины) -->
+          <div class="top-panel__left">
+            <div class="search-bar">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="1-2.SU NEW"
+                class="search-input"
+                data-tooltip="Введите название товара для поиска"
+              />
+              <button
+                id="searchButton"
+                class="search-button"
+                data-tooltip="Нажмите для поиска товаров"
+              >
+                Поиск
+              </button>
+            </div>
+          </div>
+          <!-- Правая часть: Блок выбора представительства (50% ширины) -->
+          <div class="top-panel__right">
+            <div class="city-selection-wrapper">
+              <button
+                id="selectedCity"
+                class="selected-city-button no-city-chosen"
+              >
+                <span id="currentCity">
+                  <i class="ri-alert-circle-line exclamation-mark"></i>
+                  <span> Выберите представительство </span>
+                </span>
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Фиксированная нижняя панель мобильной версии -->
+      <div class="bottom-bar">
+        <div class="bottom-bar__container">
+          <button
+            id="open-categories"
+            class="open-categories-button"
+            data-tooltip="Открыть список категорий товаров"
+          >
+            Категории ☰
+          </button>
+          <button
+            id="searchIcon"
+            class="search-icon-button"
+            data-tooltip="Поиск"
+          >
+            <i class="ri-search-line"></i>
+          </button>
+          <span class="orders-button">
+            <i
+              class="ri-file-list-3-line"
+              id="orders-button"
+              data-tooltip="Журнал заказов"
+            ></i>
+          </span>
+          <span class="cart-button">
+            <i
+              class="ri-shopping-cart-2-line"
+              id="cart-button"
+              data-tooltip="Перейти в активную корзину"
+            ></i>
+          </span>
+          <div class="account" id="accountButton">
+            <a
+              id="logButton"
+              href="#"
+              data-tooltip="Управление вашим аккаунтом"
+            >
+              <i id="UserButton" class="ri-account-circle-line"></i>
+              <i id="ArrowButton" class="ri-arrow-down-s-line"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Единый блок шторки аккаунта (используется и для десктопа, и для мобильной версии) -->
+    <div
+      class="account-dropdown unified-account-dropdown"
+      id="accountDropdownUnified"
+    >
+      <div class="link-buttons">
+        <button class="orders-button2">Журнал заказов</button>
+        <button class="waitlist-button">Лист ожидания</button>
+        <button data-tooltip="Ваш рабочий стол" class="Cabinet-button">
+          Личный кабинет
+        </button>
+        <button data-tooltip="Связаться с поддержкой" class="chat-button">
+          Чат
+        </button>
+        <button
+          data-tooltip="Адреса и Контакты ГК Энергомикс"
+          class="contacts-button"
+        >
+          Контакты
+        </button>
+        <button
+          data-tooltip="Настройте 1-2.SU под себя"
+          class="settings-ac-button"
+          data-section="profileSettings"
+        >
+          Настройки аккаунта
+        </button>
+      </div>
+      <div class="info-buttons">
+        <span class="name">Шуравин М.А.</span>
+        <hr class="custom-divider" />
+        <button
+          id="limit-amount"
+          class="info-button"
+          data-tooltip="Ваш текущий лимит покупок"
+        >
+          <span class="label">Доступный лимит:</span>
+          <span class="value">740 000 ₽</span>
+        </button>
+        <button
+          id="turnover"
+          class="info-button"
+          data-tooltip="Ваш текущий оборот за год"
+        >
+          <span class="label">Оборот за год:</span>
+          <span class="value">25 000 000,00 ₽</span>
+        </button>
+        <hr class="custom-divider" />
+        <button id="bonus-amount" class="info-button" data-tooltip="">
+          <span class="label">Использованный лимит:</span>
+          <span class="value">160 000 ₽</span>
+        </button>
+        <button id="bonus-amount" class="info-button" data-tooltip="">
+          <span class="label">Срок оплаты кредита:</span>
+          <span class="value">14.07.2025</span>
+        </button>
+        <hr class="custom-divider" />
+        <button id="bonus-amount" class="info-button bonus-btn" data-tooltip="">
+          <span class="label">Дней до стоп-листа:</span>
+          <span class="value">72</span>
+        </button>
+        <span id="workTogether" class="icon-group">
+          Совместная работа
+          <i class="ri-toggle-line"></i>
+        </span>
+        <span id="hintMode" class="icon-group">
+          Режим подсказок
+          <i class="ri-questionnaire-line"></i>
+        </span>
+        <span id="logout" class="icon-group">
+          Выйти из аккаунта
+          <i class="ri-door-open-fill" id="logout-icon"></i>
+        </span>
+      </div>
     </div>
 
     <!-- Область для вкладок -->
@@ -386,17 +504,12 @@
 
     <!-- Подключение глобального скрипта коммуникации между страницами проекта -->
     <script src="/js/globalcomm.js" defer></script>
-
     <!-- Логика перетаскивания вкладок -->
     <script src="/js/tabs-drag.js" defer></script>
-
-    <!-- Удалили отдельные scripts /js/categories.js и /js/city.js,
-         вместо них подключаем наш объединённый -->
+    <!-- Объединенный скрипт (вместо отдельных /js/categories.js и /js/city.js) -->
     <script src="/js/combined.js" defer></script>
-
     <!-- Имитация ввода текста в поиск -->
     <script src="/js/inputimit.js" defer></script>
-
     <!-- Подключение библиотек для формирования документов -->
     <script src="/js/excel_pdf.js" defer></script>
     <!-- SheetJS для Excel -->
@@ -404,10 +517,8 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
       defer
     ></script>
-
     <!-- noUiSlider JS скрипт красивого слайдера цен-->
     <script src="/js/nouislider.min.js" defer></script>
-
     <!-- jsPDF и html2canvas для PDF -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
@@ -417,12 +528,9 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
       defer
     ></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- Скрипт регистрации -->
     <script src="/js/registration.js" defer></script>
-
     <!-- Скрипт для управления выпадающим меню аккаунта -->
     <script src="/js/account.js" defer></script>
   </body>

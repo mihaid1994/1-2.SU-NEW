@@ -1,3 +1,8 @@
+/* Скрываем элементы, предназначенные для мобильной версии */
+.hide-desktop {
+  display: none !important;
+}
+
 /* Общие настройки для всего документа */
 * {
   margin: 0;
@@ -324,12 +329,13 @@ body {
   padding-top: 5px;
   color: #494949;
 }
+
 .account.active a i {
   transform: rotate(180deg);
   padding-top: 3px;
 }
 
-/* Выпадающее меню аккаунта */
+/* Выпадающее меню аккаунта (для десктопа, в мобильной версии используется отдельная панель) */
 .account .dropdown {
   display: none;
   position: absolute;
@@ -347,7 +353,6 @@ body {
   transform: translateY(-10px);
 }
 
-/* Выравнивание элементов выпадающего меню по правой стороне, кроме финансового блока */
 .account .dropdown li {
   text-align: right;
   padding: 0 15px;
@@ -369,15 +374,15 @@ body {
   color: #ffad42;
 }
 
-/* Финансовый блок остаётся выровненным по левому краю */
+/* Финансовый блок */
 .account .info-buttons {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 10px 15px; /* Внутренние отступы */
-  border: 1px solid #ddd; /* Серый бордер толщиной 1px */
-  margin: 10px; /* Внешние отступы от других элементов */
-  border-radius: 8px; /* Скругление углов */
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  margin: 10px;
+  border-radius: 8px;
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
   background-color: #fafafa;
 }
@@ -388,7 +393,7 @@ body {
 
 .orders-button:hover,
 .cart-button:hover {
-  color: #ff9100; /* Оранжевый цвет при наведении */
+  color: #ff9100;
 }
 
 /* Стили для кнопок внутри .info-buttons */
@@ -402,15 +407,15 @@ body {
 }
 
 .account .dropdown .info-buttons .icon-group:hover {
-  color: #ff9100;
+  color: #ffad42;
 }
 
 .account .dropdown .info-buttons .icon-group:hover i {
-  color: #ff9100;
+  color: #ffad42;
 }
 
 .account .dropdown .info-buttons .icon-group.active i {
-  color: #ff9100;
+  color: #ffad42;
 }
 
 .ri-toggle-fill {
@@ -627,6 +632,7 @@ body {
   margin: 0;
   padding: 0;
   vertical-align: top;
+  cursor: pointer;
 }
 
 .icon-group {
@@ -655,8 +661,6 @@ body {
   }
 }
 
-/* Вкладки, контент вкладок — оставляем как есть, если нужно */
-
 /* Стили для .logregister */
 .logregister {
   cursor: pointer;
@@ -677,7 +681,6 @@ body {
   font-size: 20px;
 }
 
-/* Стили для оранжевого восклицательного знака */
 .exclamation-mark {
   color: orange;
   margin-left: 5px;
@@ -690,14 +693,11 @@ body {
 /* ========== Ниже добавляем стили выбора города ========== */
 /* ================================================ */
 
-/* ======= Стили для выпадающего выбора города ======= */
-
-/* Кнопка выбора города в шапке */
 .city-selection-wrapper {
-  position: absolute; /* Фиксированное позиционирование */
-  top: 15px; /* Отступ сверху */
-  right: 15px; /* Отступ справа */
-  z-index: 10000; /* Выше остальных элементов */
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10000;
 }
 
 .selected-city-button {
@@ -719,7 +719,6 @@ body {
   color: #ce7a0c;
 }
 
-/* Оверлей для категорий */
 #categoryOverlay {
   position: fixed;
   top: 0;
@@ -731,38 +730,36 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 950; /* Ниже category-drawer */
-  display: none; /* Скрыт по умолчанию */
+  z-index: 950;
+  display: none;
 }
 
 #categoryOverlay.active {
   opacity: 1;
   visibility: visible;
-  display: block; /* Отображается при активации */
+  display: block;
 }
 
-/* Оверлей для выбора города */
 #cityOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.2); /* Легкое затемнение */
+  background: rgba(0, 0, 0, 0.2);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 9998; /* Ниже city-drawer */
-  display: none; /* Скрыт по умолчанию */
+  z-index: 9998;
+  display: none;
 }
 
 #cityOverlay.active {
   opacity: 1;
   visibility: visible;
-  display: block; /* Отображается при активации */
+  display: block;
 }
 
-/* Шторка категорий */
 .category-drawer {
   position: fixed;
   top: 82px;
@@ -771,33 +768,31 @@ body {
   height: calc(100% - 150px);
   background-color: white;
   transition: right 0.3s ease;
-  z-index: 951; /* Выше categoryOverlay */
+  z-index: 951;
 }
 
 .category-drawer.open {
   right: 0;
 }
 
-/* Шторка выбора города */
 .city-drawer {
   position: fixed;
   top: 0;
   right: -100%;
   width: 80%;
-  max-width: 700px; /* Задайте свою ширину на вкус */
+  max-width: 700px;
   height: 100%;
   background: #f7f7f7;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   transition: right 0.3s ease;
-  z-index: 9999; /* Выше cityOverlay */
-  overflow-y: auto; /* Прокрутка при необходимости */
+  z-index: 9999;
+  overflow-y: auto;
 }
 
 .city-drawer.show {
   right: 0;
 }
 
-/* Контейнер внутри шторки */
 .city-drawer-content {
   padding: 20px;
   display: flex;
@@ -805,7 +800,6 @@ body {
   gap: 20px;
 }
 
-/* Строка поиска с иконкой */
 .search-line {
   position: relative;
   display: flex;
@@ -833,7 +827,6 @@ body {
   color: #333;
 }
 
-/* Контейнер для текста и кнопки переключения в одной строке */
 .choose-nearby-container {
   display: flex;
   justify-content: space-between;
@@ -850,28 +843,26 @@ body {
 .toggle-selection-button {
   background: none;
   border: none;
-  color: #888888; /* Светло-серый цвет */
+  color: #888888;
   font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
   padding: 0;
-  text-decoration: underline; /* Указание, что это ссылка */
+  text-decoration: underline;
 }
 
 .toggle-selection-button:hover {
-  color: #555555; /* Немного темнее при наведении */
+  color: #555555;
 }
 
-/* Контейнер для карты */
 .map-selection-container {
   width: 100%;
   height: 500px;
-  display: none; /* Скрыто по умолчанию */
+  display: none;
 }
 
-/* Стили для списка городов */
 .contacts {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -929,7 +920,7 @@ body {
 }
 
 .city.active .toggle {
-  color: #ff6600; /* При раскрытом состоянии */
+  color: #ff6600;
 }
 
 .details {
@@ -944,7 +935,7 @@ body {
 }
 
 .city.active .details {
-  max-height: 500px; /* Достаточное значение */
+  max-height: 500px;
   padding: 10px;
 }
 
@@ -955,7 +946,6 @@ body {
   line-height: 1.4;
 }
 
-/* Стили для кнопки "Выбрать представительство" */
 .choose-office-button {
   background-color: #ebebeb;
   color: #444444;
@@ -973,18 +963,35 @@ body {
   color: #ffffff;
 }
 
-/* Контейнер для карты и списка */
 .selection-mode-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Режим карты */
 .selection-mode-container.map-mode .contacts {
   display: none;
 }
 
 .selection-mode-container.map-mode .map-selection-container {
   display: block;
+}
+
+/* Unified account dropdown (desktop) */
+#accountDropdownUnified {
+  position: fixed; /* Фиксированное положение относительно окна */
+  top: 80px; /* Прикрепляем к верху */
+  right: -300px; /* Изначально спрятана за правой границей экрана */
+  width: 300px; /* Уменьшенная ширина */
+  height: 100vh; /* Полная высота окна (viewport height) */
+  background-color: #ffffff;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 930;
+  transition: right 0.3s ease-in-out; /* Плавное и быстрое выдвижение/скрытие */
+  padding: 30px;
+}
+
+/* Когда шторка открыта, сдвигаем её до края экрана */
+#accountDropdownUnified.show {
+  right: 0;
 }

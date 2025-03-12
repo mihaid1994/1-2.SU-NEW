@@ -1,0 +1,213 @@
+/* Общие стили для модуля категории */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#category-module {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%; /* Используем 100% высоты родителя */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* Верхний контейнер (80% высоты) */
+#category-module .top-container {
+  flex: 1 0 80%; /* Занимает 80% высоты */
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Левая панель (25% ширины) для категорий */
+#category-module .sidebar {
+  flex: 0 0 25%; /* Занимает 25% ширины */
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  padding: 1% 2%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Стили для заголовков категорий (первый уровень) */
+#category-module .sidebar .group-title {
+  display: flex;
+  align-items: center;
+  padding: 0.4em 0.4em;
+  margin: 0.2em 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  font-size: 1.1rem; /* Уменьшенный шрифт */
+  color: #555;
+}
+
+/* Состояние при наведении */
+#category-module .sidebar .group-title:hover {
+  color: #333;
+  background-color: #f0f0f0; /* Лёгкий фон при наведении */
+}
+
+/* Иконки категорий рядом с названием */
+#category-module .sidebar .group-title i {
+  align-items: center;
+  margin-right: 0.5em;
+  font-size: 1.3em;
+  color: #15a5aa;
+  transition: transform 0.2s ease;
+}
+
+/* Иконки при наведении и активном состоянии */
+#category-module .sidebar .group-title:hover i,
+#category-module .sidebar .group-title.active i,
+#category-module .sidebar .group-title.super-active i {
+  transform: scale(1.01);
+  /* Цвет иконки остаётся неизменным */
+}
+
+/* Состояние super-active (постоянный выбор) */
+#category-module .sidebar .group-title.super-active {
+  background-color: #e9e9e9; /* Чуть темнее серый */
+  color: #155a62; /* Темно-оранжевый шрифт */
+  font-weight: 500;
+}
+
+/* Иконки в состоянии super-active */
+#category-module .sidebar .group-title.super-active i {
+  color: #155a62; /* Сохраняем исходный цвет иконок */
+}
+
+/* Правая панель (75% ширины) для подкатегорий */
+#category-module .subcategories-container {
+  flex: 1; /* Занимает оставшуюся ширину */
+  padding: 1%;
+  box-sizing: border-box;
+  overflow: hidden; /* Убираем внутренний overflow */
+  display: none;
+}
+
+#category-module .subcategories-container.active {
+  display: block;
+}
+
+/* Контейнер для колонок подкатегорий */
+.columns-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto; /* Добавляем overflow только здесь */
+}
+
+/* Колонка подкатегорий */
+.subcategory-column {
+  flex: 1 1 calc(33.333% - 1%);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Блок подкатегории */
+.subcategory-block {
+  margin-bottom: 1em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5em;
+}
+
+/* Заголовок подкатегории */
+.subcategory-title {
+  font-weight: 600;
+  margin-bottom: 0.3em;
+  font-size: 1rem; /* Уменьшенный шрифт */
+  color: #444;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Список элементов подкатегории */
+.subcategory-items {
+  display: none;
+  padding-left: 1em;
+}
+
+.subcategory-items.active {
+  display: block;
+}
+
+/* Пункты subitems */
+.subcategory-item {
+  margin: 0.2em 0;
+  font-size: 0.9rem; /* Уменьшенный шрифт */
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.subcategory-item:hover {
+  color: #2e6666;
+  background-color: #f4f4f4; /* Чуть темнее серый */
+  border-radius: 4px;
+}
+
+/* Кнопка "Показать ещё" */
+.show-more {
+  margin-top: 0.5em;
+  font-size: 0.9rem;
+  color: #79928f;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.show-more:hover {
+  color: #3d9396;
+}
+
+/* Нижний блок для брендов (20% высоты) */
+#category-module .brands {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+#category-module .brands img {
+  height: 90px;
+  margin: 5px; /* Равномерный отступ со всех сторон */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+#category-module .brands img:hover {
+  transform: scale(1.05);
+}
+
+/* Скроллбары (опционально) */
+#category-module .sidebar::-webkit-scrollbar,
+#category-module .subcategories-container::-webkit-scrollbar,
+.columns-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#category-module .sidebar::-webkit-scrollbar-thumb,
+#category-module .subcategories-container::-webkit-scrollbar-thumb,
+.columns-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.sidebar-separator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid #ccc;
+}

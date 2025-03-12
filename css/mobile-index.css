@@ -1,0 +1,257 @@
+/* mobile.css */
+
+/* Основные настройки для всего документа */
+body {
+  display: flex;
+  flex-direction: column;
+  /* Вычитаем 30px для панели инструментов + добавляем отступ снизу */
+  min-height: calc(100vh - 30px);
+  padding-bottom: 30px;
+  font-family: Arial, sans-serif;
+  background-color: #e0e0e0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Общая обёртка */
+.grid-wrapper {
+  padding-left: 8px;
+  padding-right: 8px;
+  width: 95%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transition: margin-bottom 0.3s ease;
+}
+
+/* Карточки категорий – по 2 ячейки в ряд, размеры уменьшены в 2 раза */
+.grid-container {
+  display: grid;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 14px 10px 14px;
+  grid-template-columns: repeat(2, 1fr); /* теперь 2 колонки */
+  background-color: #ededed;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  background-color: #ededed;
+  border-radius: 5px;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.grid-item:hover {
+  transform: scale(1.03);
+}
+.category-text {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  font-size: 0.35em;
+  font-weight: bold;
+  color: #414141;
+  max-width: 90%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+/* Стили для брендов – по 3 в ряд, размеры уменьшены в 2 раза */
+.brand-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 14px 10px 14px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #ededed;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.brand-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.75em;
+  text-align: left;
+  margin: 0 0 4px 7px;
+  color: #555555;
+}
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.brand-item {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: white;
+  aspect-ratio: 2.85 / 2;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.brand-item:hover {
+  transform: scale(1.02);
+}
+
+/* Стили для товаров (хитов продаж) – по 2 в ряд, размеры уменьшены в 2 раза */
+.hits-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 14px 10px 14px;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ededed;
+}
+.hits-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.75em;
+  text-align: left;
+  margin: 0 0 0 7px;
+  color: #555555;
+}
+.hits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+.hits-item {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.hits-item:hover {
+  transform: scale(1.015);
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  color: white;
+  padding: 6px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+.footer-container {
+  max-width: 73%;
+  margin: 0 auto;
+}
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Стили для динамической инфо-панели (мобильные) */
+.info-panel a,
+.info-panel [data-tab-url],
+.info-panel [data-open-tab] {
+  color: #ff9d1d;
+  text-decoration: none;
+  cursor: pointer;
+}
+.info-panel a:hover,
+.info-panel [data-tab-url]:hover,
+.info-panel [data-open-tab]:hover {
+  text-decoration: underline;
+  color: #ffbb00;
+}
+
+.container-info {
+  width: calc(100% - 5rem);
+  margin: 15px auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.info-panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 19 / 3.65;
+  border-radius: 7.5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dynamic-banner {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  z-index: 1;
+}
+.dynamic-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-shadow: -2px 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.banner-clickable {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 130px;
+  box-shadow: 15px 0 25px rgba(0, 0, 0, 0.168);
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.banner-clickable .vertical-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.7vw;
+  font-weight: bold;
+  color: rgb(87, 87, 87);
+  transform: rotate(270deg);
+  white-space: nowrap;
+}
+
+.banner-text {
+  position: absolute;
+  top: 3%;
+  left: 8%;
+  right: 30%;
+  font-size: calc((1vw + 1vh) / 3.08);
+  line-height: 1.5;
+  z-index: 3;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: left;
+  margin-top: 0.25em;
+  overflow: hidden;
+}
+.banner-text .indented {
+  text-indent: 1em;
+}
+.banner-text > * {
+  margin-bottom: 0.15em;
+  margin-top: 0.15em;
+}

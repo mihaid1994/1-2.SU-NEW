@@ -1,16 +1,25 @@
 (function (global) {
   class GComm_TabManager {
     constructor() {
-      this.specLoad = {}; // Объект для хранения данных specload.json
-      this.tabShadowRoots = {}; // Объект для хранения Shadow Root по tabId
+      // Данные конфигурации и управления вкладками
+      this.specLoad = {}; // Данные из specload.json
+      this.tabShadowRoots = {}; // Shadow Root для каждой вкладки
+      this.tabStyleData = {}; // Данные по конструктивным стилям для каждой вкладки (с media)
 
       // ------------------- [BASKET EVENTS SECTION] -------------------
-      // Для отслеживания корзин (не активных вкладок!)
       this.activeCartNames = {}; // Ключ: tabId, значение: имя корзины (например, "Корзина 1")
-      this.cartNumbers = new Set(); // для генерации уникальных номеров корзин
+      this.cartNumbers = new Set(); // Для генерации уникальных номеров корзин
       this.carts = {}; // Дополнительное хранилище, если потребуется
       this.activeCartId = null; // Значение, устанавливаемое при нажатии кнопки активации (pin)
-      // -------------------------------------------------------------------
+      // ------------------------------------------------------------------
+
+      // Проверяем поддержку Constructable Stylesheets
+      this.useConstructableStylesheets =
+        "adoptedStyleSheets" in Document.prototype &&
+        typeof CSSStyleSheet !== "undefined" &&
+        CSSStyleSheet.prototype.replace;
+      // Кэш для загруженных стилей
+      this.constructableStylesheetCache = {};
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => {
@@ -86,7 +95,7 @@
           const tab = child.querySelector(".tab");
           if (tab) {
             this.tabNames.add(tab.dataset.name);
-            // Если название начинается с "Корзина", то добавляем номер в набор
+            // Если название начинается с "Корзина", добавляем номер в набор
             if (tab.dataset.name.startsWith("Корзина")) {
               const number = parseInt(tab.dataset.name.split(" ")[1]);
               if (!isNaN(number)) {
@@ -99,29 +108,31 @@
 
       this.isCreatingCart = false;
 
-      // Обработчик для кнопки "cart-button"
-      const cartButton = document.getElementById("cart-button");
-      if (cartButton) {
-        cartButton.addEventListener("click", async () => {
-          const tabManager = window.GComm_TabManager;
-          if (!tabManager) {
-            console.error("Tab Manager не найден.");
-            return;
-          }
-          const existingTab = Array.from(tabManager.tabs.children).find(
-            (child) =>
-              child !== tabManager.buttonsContainer &&
-              child.dataset.name === "Корзина 1"
-          );
-          if (existingTab) {
-            tabManager.activateTab(existingTab.dataset.tab);
-          } else {
-            await tabManager.createTab(
-              "Корзина 1",
-              "/pages/delivery.html",
-              true
+      // Обработчик для кнопок "cart-button"
+      const cartButtons = document.querySelectorAll("#cart-button");
+      if (cartButtons.length > 0) {
+        cartButtons.forEach((cartButton) => {
+          cartButton.addEventListener("click", async () => {
+            const tabManager = window.GComm_TabManager;
+            if (!tabManager) {
+              console.error("Tab Manager не найден.");
+              return;
+            }
+            const existingTab = Array.from(tabManager.tabs.children).find(
+              (child) =>
+                child !== tabManager.buttonsContainer &&
+                child.dataset.name === "Корзина 1"
             );
-          }
+            if (existingTab) {
+              tabManager.activateTab(existingTab.dataset.tab);
+            } else {
+              await tabManager.createTab(
+                "Корзина 1",
+                "/pages/delivery.html",
+                true
+              );
+            }
+          });
         });
       }
 
@@ -155,7 +166,8 @@
       menuLinks.forEach((link) => {
         link.addEventListener("click", async (e) => {
           e.preventDefault();
-          const title = link.textContent.trim();
+          const title =
+            link.getAttribute("data-tab-title") || link.textContent.trim();
           const url = link.getAttribute("data-page");
           if (url) {
             await this.openPageAsTab(title, url);
@@ -164,11 +176,13 @@
       });
 
       // Прочие обработчики (Журнал заказов, Контакты, Вход, и т.д.)
-      const ordersButton = document.querySelector(".orders-button");
-      if (ordersButton) {
-        ordersButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab("Журнал заказов", "/pages/zajavki.html");
+      const ordersButtons = document.querySelectorAll(".orders-button");
+      if (ordersButtons.length > 0) {
+        ordersButtons.forEach((ordersButton) => {
+          ordersButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab("Журнал заказов", "/pages/zajavki.html");
+          });
         });
       }
       const ordersButton2 = document.querySelector(".orders-button2");
@@ -178,42 +192,51 @@
           await this.openPageAsTab("Журнал заказов", "/pages/zajavki.html");
         });
       }
-      const contactsButton = document.querySelector(".contacts-button");
-      if (contactsButton) {
-        contactsButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab("Контакты", "/pages/Contacts.html");
+      const contactsButtons = document.querySelectorAll(".contacts-button");
+      if (contactsButtons.length > 0) {
+        contactsButtons.forEach((contactsButton) => {
+          contactsButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab("Контакты", "/pages/Contacts.html");
+          });
         });
       }
-      const registrationButton = document.getElementById("loginButton");
-      if (registrationButton) {
-        registrationButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab(
-            "Вход в аккаунт",
-            "/pages/registration.html"
-          );
+      const registrationButtons = document.querySelectorAll("#loginButton");
+      if (registrationButtons.length > 0) {
+        registrationButtons.forEach((registrationButton) => {
+          registrationButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab(
+              "Вход в аккаунт",
+              "/pages/registration.html"
+            );
+          });
         });
       }
-      const ProductCardKlatz = document.getElementById("productcardbutton");
-      if (ProductCardKlatz) {
-        ProductCardKlatz.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab(
-            "Фотореле EKF PS-5",
-            "/pages/productcard.html"
-          );
+      const productCardButtons =
+        document.querySelectorAll("#productcardbutton");
+      if (productCardButtons.length > 0) {
+        productCardButtons.forEach((ProductCardKlatz) => {
+          ProductCardKlatz.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab(
+              "Фотореле EKF PS-5",
+              "/pages/productcard.html"
+            );
+          });
         });
       }
-      const openwaitlistButton = document.querySelector(".waitlist-button");
-      if (openwaitlistButton) {
-        openwaitlistButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const title = "Личный кабинет";
-          const url = "/pages/cabinet_postavshika.html";
-          const parentTabId = await this.openPageAsTab(title, url);
-          const innerDataTab = "waitlist";
-          this.activateInnerTab(parentTabId, innerDataTab);
+      const openwaitlistButtons = document.querySelectorAll(".waitlist-button");
+      if (openwaitlistButtons.length > 0) {
+        openwaitlistButtons.forEach((openwaitlistButton) => {
+          openwaitlistButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const title = "Личный кабинет";
+            const url = "/pages/cabinet_postavshika.html";
+            const parentTabId = await this.openPageAsTab(title, url);
+            const innerDataTab = "waitlist";
+            this.activateInnerTab(parentTabId, innerDataTab);
+          });
         });
       }
       const openbalanceLoyalityElements = document.querySelectorAll(
@@ -229,55 +252,116 @@
           this.activateInnerTab(parentTabId, innerDataTab);
         });
       });
-      const openSettingsButton = document.querySelector(".settings-ac-button");
-      if (openSettingsButton) {
-        openSettingsButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const title = "Личный кабинет";
-          const url = "/pages/cabinet_postavshika.html";
-          const parentTabId = await this.openPageAsTab(title, url);
-          const innerDataTab = "templates";
-          this.activateInnerTab(parentTabId, innerDataTab);
+      const openSettingsButtons = document.querySelectorAll(
+        ".settings-ac-button"
+      );
+      if (openSettingsButtons.length > 0) {
+        openSettingsButtons.forEach((openSettingsButton) => {
+          openSettingsButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const title = "Личный кабинет";
+            const url = "/pages/cabinet_postavshika.html";
+            const parentTabId = await this.openPageAsTab(title, url);
+            const innerDataTab = "templates";
+            this.activateInnerTab(parentTabId, innerDataTab);
+          });
         });
       }
-      const chatButton = document.querySelector(".chat-button");
-      if (chatButton) {
-        chatButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab("Чат", "/pages/chat.html");
+      const chatButtons = document.querySelectorAll(".chat-button");
+      if (chatButtons.length > 0) {
+        chatButtons.forEach((chatButton) => {
+          chatButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab("Чат", "/pages/chat.html");
+          });
         });
       }
-      const logoButton = document.querySelector(".logo-button");
-      if (logoButton) {
-        logoButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          await this.openPageAsTab("Главная", "/pages/index.html");
+      const logoButtons = document.querySelectorAll(".logo-button");
+      if (logoButtons.length > 0) {
+        logoButtons.forEach((logoButton) => {
+          logoButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await this.openPageAsTab("Главная", "/pages/index.html");
+          });
         });
       }
 
-      // Обработчик кнопки поиска
-      this.initializeMainSearchHandler();
+      // Обработчик кнопок поиска
+      const searchBars = document.querySelectorAll(".search-bar");
+      if (searchBars.length > 0) {
+        searchBars.forEach((searchBar) => {
+          const searchButton = searchBar.querySelector("#searchButton");
+          const searchInput = searchBar.querySelector("#searchInput");
+          if (searchButton && searchInput) {
+            console.log("Search button and input found in a search-bar.");
+            searchButton.addEventListener("click", async (e) => {
+              e.preventDefault();
+              console.log("Кнопка поиска нажата.");
+              const query = searchInput.value.trim();
+              let title, contentURL;
+              if (query === "") {
+                title = "Поиск";
+                contentURL = "/pages/search_cat.html";
+              } else {
+                title = `Результаты: ${query}`;
+                contentURL = "/pages/search_cat.html";
+                window.currentSearchQuery = query;
+              }
+              console.log(
+                `Поиск: title="${title}", contentURL="${contentURL}"`
+              );
+              await this.openPageAsTab(title, contentURL);
+            });
+          } else {
+            if (!searchButton)
+              console.error(
+                "Основная кнопка поиска (#searchButton) не найдена в search-bar."
+              );
+            if (!searchInput)
+              console.error(
+                "Поле ввода поиска (#searchInput) не найдено в search-bar."
+              );
+          }
+        });
+      } else {
+        console.error("Элементы с классом .search-bar для поиска не найдены.");
+      }
+      const searchIcons = document.querySelectorAll("#searchIcon");
+      if (searchIcons.length > 0) {
+        searchIcons.forEach((searchIcon) => {
+          searchIcon.addEventListener("click", (e) => {
+            e.preventDefault();
+            const searchBar = e.target.closest(".search-bar");
+            if (searchBar) {
+              const input = searchBar.querySelector("#searchInput");
+              if (input) {
+                input.focus();
+              }
+            }
+          });
+        });
+      }
 
       // Изначально открываем "Главная"
       this.openPageAsTab("Главная", "/pages/index.html");
-
       this.updateCreateCartButtonVisibility();
 
-      // Обработчик события resize
+      // При изменении размеров окна обновляем высоту страницы и, если используется Constructable Stylesheets, обновляем списки adoptedStyleSheets
       window.addEventListener("resize", () => {
         this.updatePageHeight();
+        if (this.useConstructableStylesheets) {
+          this.updateAdoptedStylesheets();
+        }
       });
 
       // Обработчик кликов в основном документе
       this.initializeMainDocumentLinkHandler();
 
       // ------------------ [BASKET EVENTS LISTENERS] ------------------
-      // При событии cartActivated (нажата кнопка активации в активной вкладке)
       window.addEventListener("cartActivated", (e) => {
-        const cartId = e.detail.cartId; // Например, "Корзина 1"
+        const cartId = e.detail.cartId;
         this.setActiveCart(cartId);
       });
-      // При завершении редактирования заголовка корзины генерируется событие cartTitleChanged
       window.addEventListener("cartTitleChanged", (e) => {
         const cartId = e.detail.cartId;
         const newTitle = e.detail.newTitle;
@@ -286,12 +370,7 @@
       // ------------------------------------------------------------------
     }
 
-    // ------------------- [BASKET MANAGEMENT METHODS] -------------------
-    /**
-     * setActiveCart(cartId)
-     * Устанавливает вкладку, для которой нажата кнопка активации, как активную.
-     * Единственное, что обновляет значок pin – это нажатие соответствующей кнопки.
-     */
+    // --------------- [BASKET MANAGEMENT METHODS] ---------------
     setActiveCart(cartId) {
       if (!cartId) return;
       this.activeCartId = cartId;
@@ -299,27 +378,17 @@
       this.updateActiveCartIcons();
     }
 
-    /**
-     * renameCart(cartId, newTitle)
-     * Переименовывает вкладку: обновляет data-name и текст заголовка во вкладке.
-     *
-     * Обновляется только текстовый узел внутри элемента заголовка, чтобы сохранить вложенные элементы (например, pin).
-     */
     renameCart(cartId, newTitle) {
-      // Сначала пытаемся найти активную вкладку
       let tab = this.tabs.querySelector(".tab.active");
       if (!tab) {
-        // Если активной вкладки нет, ищем вкладку по старому названию (cartId)
         tab = Array.from(this.tabs.children).find(
           (el) => el.dataset && el.dataset.name === cartId
         );
       }
       if (tab) {
-        // Сохраняем, был ли установлен pin до переименования
         const hadPin = !!tab.querySelector(".tab-cart-activate-icon");
         const titleEl = tab.querySelector(".tab-title");
         if (titleEl) {
-          // Обновляем только текстовый узел внутри элемента заголовка
           let textUpdated = false;
           for (let i = 0; i < titleEl.childNodes.length; i++) {
             const node = titleEl.childNodes[i];
@@ -337,7 +406,6 @@
         const tabId = tab.getAttribute("data-tab");
         this.activeCartNames[tabId] = newTitle;
         console.log(`Вкладка "${cartId}" переименована в "${newTitle}".`);
-        // Если до переименования вкладка имела pin, оставляем его
         if (hadPin) {
           let iconEl = tab.querySelector(".tab-cart-activate-icon");
           if (!iconEl) {
@@ -355,11 +423,6 @@
       }
     }
 
-    /**
-     * updateActiveCartIcons()
-     * Обновление значка pin производится по нажатию кнопки активации (cartActivated).
-     * Теперь pin применяется к любой активной вкладке, независимо от её названия.
-     */
     updateActiveCartIcons() {
       const activeTab = this.tabs.querySelector(".tab.active");
       if (activeTab) {
@@ -376,7 +439,6 @@
         }
         iconEl.className = "tab-cart-activate-icon ri-pushpin-fill";
       }
-      // Для остальных вкладок убираем pin
       const otherTabs = Array.from(this.tabs.children).filter(
         (el) => el !== this.buttonsContainer && !el.classList.contains("active")
       );
@@ -387,7 +449,7 @@
         }
       });
     }
-    // --------------- [END OF BASKET MANAGEMENT METHODS] ---------------
+    // ------------- [END OF BASKET MANAGEMENT METHODS] -------------
 
     initializeMainDocumentLinkHandler() {
       document.body.addEventListener("click", async (e) => {
@@ -421,37 +483,6 @@
       });
     }
 
-    initializeMainSearchHandler() {
-      const searchButton = document.getElementById("searchButton");
-      const searchInput = document.getElementById("searchInput");
-      if (searchButton && searchInput) {
-        console.log("Search button and input found.");
-        searchButton.addEventListener("click", async (e) => {
-          e.preventDefault();
-          console.log("Кнопка поиска на основной странице нажата.");
-          const query = searchInput.value.trim();
-          let title, contentURL;
-          if (query === "") {
-            title = "Поиск";
-            contentURL = "/pages/search_cat.html";
-          } else {
-            title = `Результаты: ${query}`;
-            contentURL = "/pages/search_cat.html";
-            window.currentSearchQuery = query;
-          }
-          console.log(
-            `Основной поиск: title="${title}", contentURL="${contentURL}"`
-          );
-          await this.openPageAsTab(title, contentURL);
-        });
-      } else {
-        if (!searchButton)
-          console.error("Основная кнопка поиска (#searchButton) не найдена.");
-        if (!searchInput)
-          console.error("Поле ввода поиска (#searchInput) не найдено.");
-      }
-    }
-
     notifyCartUpdate() {
       const event = new CustomEvent("cartUpdate", {
         detail: { activeCartNames: this.activeCartNames },
@@ -467,121 +498,107 @@
       return `Корзина ${index}`;
     }
 
-    async createTab(title, contentURL, isCart = false) {
-      if (isCart) {
-        title = this.findNextCartName();
-        this.cartNumbers.add(parseInt(title.split(" ")[1]));
-      } else {
-        const existingTab = Array.from(this.tabs.children).find(
-          (child) =>
-            child !== this.buttonsContainer && child.dataset.name === title
-        );
-        if (existingTab) {
-          this.activateTab(existingTab.dataset.tab);
-          return existingTab.dataset.tab;
-        }
+    async loadConstructableStylesheet(url) {
+      if (this.constructableStylesheetCache[url]) {
+        return this.constructableStylesheetCache[url];
       }
-      this.tabCounter++;
-      const tabId = `tab-${this.tabCounter}`;
-      const tab = document.createElement("div");
-      tab.classList.add("tab");
-      tab.setAttribute("data-tab", tabId);
-      tab.setAttribute("data-name", title);
-      tab.innerHTML = `
-        <span class="tab-title">${title}</span>
-        <button class="close-tab" title="Закрыть вкладку">&times;</button>
-      `;
-      this.tabs.insertBefore(tab, this.buttonsContainer);
-      this.tabNames.add(title);
-      if (isCart) {
-        this.activeCartNames[tabId] = title;
-        this.notifyCartUpdate();
-      }
-      // Редактирование заголовка – только текст (сохраняется структура)
-      const titleElement = tab.querySelector(".tab-title");
-      if (isCart) {
-        titleElement.setAttribute("contenteditable", "true");
-        titleElement.addEventListener("blur", () => {
-          const newName = titleElement.textContent.trim();
-          if (newName) {
-            tab.dataset.name = newName;
-            this.activeCartNames[tabId] = newName;
-          } else {
-            titleElement.textContent = this.activeCartNames[tabId];
-          }
-          this.notifyCartUpdate();
-          this.updatePageHeight();
-        });
-      }
-      const contentDiv = document.createElement("div");
-      contentDiv.classList.add("content");
-      contentDiv.setAttribute("data-content", tabId);
-      contentDiv.style.display = "none";
-      const shadowRoot = contentDiv.attachShadow({ mode: "open" });
-      this.tabContent.appendChild(contentDiv);
-      tab.querySelector(".close-tab").addEventListener("click", (e) => {
-        e.stopPropagation();
-        this.closeTab(tabId);
-      });
-      tab.addEventListener("click", () => {
-        this.activateTab(tabId);
-      });
       try {
-        console.log(`Загружается содержимое из URL: ${contentURL}`);
-        const response = await fetch(contentURL);
+        const response = await fetch(url);
         if (!response.ok) {
-          throw new Error(
-            `Не удалось загрузить содержимое: ${contentURL} (${response.status})`
-          );
+          throw new Error(`Не удалось загрузить стиль: ${url}`);
         }
-        const html = await response.text();
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = html;
-        this.processStyles(tempDiv, shadowRoot);
-        this.processScripts(tempDiv, shadowRoot);
-        shadowRoot.append(...Array.from(tempDiv.childNodes));
-        this.initializeShadowLinkHandler(shadowRoot);
-        await this.initializePageSpecific(contentURL, shadowRoot);
-        this.tabShadowRoots[tabId] = shadowRoot;
-        const observer = new MutationObserver(() => {
-          this.updatePageHeight();
-        });
-        observer.observe(shadowRoot, { childList: true, subtree: true });
-      } catch (error) {
-        console.error(
-          `(TabManager) Ошибка при загрузке "${contentURL}":`,
-          error
-        );
-        shadowRoot.innerHTML = `<p>Не удалось загрузить ${contentURL}. ${error.message}</p>`;
+        const cssText = await response.text();
+        const sheet = new CSSStyleSheet();
+        await sheet.replace(cssText);
+        this.constructableStylesheetCache[url] = sheet;
+        return sheet;
+      } catch (err) {
+        console.error(err);
+        throw err;
       }
-      this.activateTab(tabId);
-      this.updateTabsVisibility();
-      this.updateCreateCartButtonVisibility();
-      this.updatePageHeight();
-      return tabId;
     }
 
-    activateInnerTab(parentTabId, innerTabDataTab) {
-      const shadowRoot = this.tabShadowRoots[parentTabId];
-      if (!shadowRoot) {
-        console.error(
-          `Shadow Root для вкладки с ID "${parentTabId}" не найден.`
-        );
-        return;
-      }
-      const innerTabLink = shadowRoot.querySelector(
-        `.tab-link[data-tab="${innerTabDataTab}"]`
-      );
-      if (innerTabLink) {
-        innerTabLink.click();
-        console.log(
-          `Внутренняя вкладка "${innerTabDataTab}" активирована внутри "${parentTabId}".`
-        );
+    async processStyles(tempDiv, shadowRoot, tabId) {
+      if (this.useConstructableStylesheets) {
+        let sheetData = [];
+        const styleTags = tempDiv.querySelectorAll("style");
+        for (const styleTag of styleTags) {
+          let sheet = new CSSStyleSheet();
+          try {
+            await sheet.replace(styleTag.textContent);
+          } catch (err) {
+            console.error("Ошибка обработки стиля:", err);
+          }
+          sheetData.push({ sheet, media: null });
+          styleTag.remove();
+        }
+        const linkTags = tempDiv.querySelectorAll("link[rel='stylesheet']");
+        for (const link of linkTags) {
+          const href = link.getAttribute("href");
+          let media = link.getAttribute("media") || null;
+          try {
+            const sheet = await this.loadConstructableStylesheet(href);
+            sheetData.push({ sheet, media });
+          } catch (err) {
+            console.error(err);
+          }
+          link.remove();
+        }
+        // Применяем adoptedStyleSheets в зависимости от media-запросов
+        const adopted = sheetData
+          .filter((item) => {
+            if (!item.media) return true;
+            return window.matchMedia(item.media).matches;
+          })
+          .map((item) => item.sheet);
+        shadowRoot.adoptedStyleSheets = adopted;
+        return sheetData;
       } else {
-        console.error(
-          `Внутренняя ссылка с data-tab="${innerTabDataTab}" не найдена внутри "${parentTabId}".`
+        // Фолбэк: копирование стилей в shadowRoot
+        const styleTags = tempDiv.querySelectorAll(
+          "style, link[rel='stylesheet']"
         );
+        styleTags.forEach((style) => {
+          if (style.tagName.toLowerCase() === "style") {
+            const newStyle = document.createElement("style");
+            newStyle.textContent = style.textContent;
+            shadowRoot.appendChild(newStyle);
+          } else if (style.tagName.toLowerCase() === "link") {
+            const href = style.getAttribute("href");
+            if (href) {
+              const newLink = document.createElement("link");
+              newLink.rel = "stylesheet";
+              newLink.href = href;
+              shadowRoot.appendChild(newLink);
+            }
+          }
+          style.remove();
+        });
+        return null;
       }
+    }
+
+    processScripts(tempDiv, shadowRoot) {
+      const scripts = tempDiv.querySelectorAll("script");
+      scripts.forEach((script) => {
+        const newScript = document.createElement("script");
+        const isGlobal = script.getAttribute("data-global") === "true";
+        Array.from(script.attributes).forEach((attr) => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+        if (isGlobal) {
+          document.head.appendChild(newScript);
+        } else {
+          if (script.src) {
+            newScript.src = script.src;
+            newScript.async = false;
+          } else {
+            newScript.textContent = `(function() { ${script.textContent} })();`;
+          }
+          shadowRoot.appendChild(newScript);
+        }
+        script.remove();
+      });
     }
 
     async initializePageSpecific(contentURL, shadowRoot) {
@@ -640,55 +657,141 @@
       }
     }
 
-    processScripts(tempDiv, shadowRoot) {
-      const scripts = tempDiv.querySelectorAll("script");
-      scripts.forEach((script) => {
-        const newScript = document.createElement("script");
-        const isGlobal = script.getAttribute("data-global") === "true";
-        if (isGlobal) {
-          Array.from(script.attributes).forEach((attr) => {
-            newScript.setAttribute(attr.name, attr.value);
-          });
-          document.head.appendChild(newScript);
-        } else {
-          Array.from(script.attributes).forEach((attr) => {
-            newScript.setAttribute(attr.name, attr.value);
-          });
-          if (script.src) {
-            newScript.src = script.src;
-            newScript.async = false;
+    async createTab(title, contentURL, isCart = false) {
+      if (isCart) {
+        title = this.findNextCartName();
+        this.cartNumbers.add(parseInt(title.split(" ")[1]));
+      } else {
+        const existingTab = Array.from(this.tabs.children).find(
+          (child) =>
+            child !== this.buttonsContainer && child.dataset.name === title
+        );
+        if (existingTab) {
+          this.activateTab(existingTab.dataset.tab);
+          return existingTab.dataset.tab;
+        }
+      }
+      this.tabCounter++;
+      const tabId = `tab-${this.tabCounter}`;
+      const tab = document.createElement("div");
+      tab.classList.add("tab");
+      tab.setAttribute("data-tab", tabId);
+      tab.setAttribute("data-name", title);
+      tab.innerHTML = `
+        <span class="tab-title">${title}</span>
+        <button class="close-tab" title="Закрыть вкладку">&times;</button>
+      `;
+      this.tabs.insertBefore(tab, this.buttonsContainer);
+      this.tabNames.add(title);
+      if (isCart) {
+        this.activeCartNames[tabId] = title;
+        this.notifyCartUpdate();
+      }
+      const titleElement = tab.querySelector(".tab-title");
+      if (isCart) {
+        titleElement.setAttribute("contenteditable", "true");
+        titleElement.addEventListener("blur", () => {
+          const newName = titleElement.textContent.trim();
+          if (newName) {
+            tab.dataset.name = newName;
+            this.activeCartNames[tabId] = newName;
           } else {
-            newScript.textContent = `(function() { ${script.textContent} })();`;
+            titleElement.textContent = this.activeCartNames[tabId];
           }
-          shadowRoot.appendChild(newScript);
-        }
-        script.remove();
+          this.notifyCartUpdate();
+          this.updatePageHeight();
+        });
+      }
+      const contentDiv = document.createElement("div");
+      contentDiv.classList.add("content");
+      contentDiv.setAttribute("data-content", tabId);
+      contentDiv.style.display = "none";
+      const shadowRoot = contentDiv.attachShadow({ mode: "open" });
+      this.tabContent.appendChild(contentDiv);
+      tab.querySelector(".close-tab").addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.closeTab(tabId);
       });
+      tab.addEventListener("click", () => {
+        this.activateTab(tabId);
+      });
+      try {
+        console.log(`Загружается содержимое из URL: ${contentURL}`);
+        const response = await fetch(contentURL);
+        if (!response.ok) {
+          throw new Error(
+            `Не удалось загрузить содержимое: ${contentURL} (${response.status})`
+          );
+        }
+        const html = await response.text();
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        const sheetData = await this.processStyles(tempDiv, shadowRoot, tabId);
+        if (sheetData) {
+          this.tabStyleData[tabId] = sheetData;
+        }
+        this.processScripts(tempDiv, shadowRoot);
+        shadowRoot.append(...Array.from(tempDiv.childNodes));
+        this.initializeShadowLinkHandler(shadowRoot);
+        await this.initializePageSpecific(contentURL, shadowRoot);
+        this.tabShadowRoots[tabId] = shadowRoot;
+        const observer = new MutationObserver(() => {
+          this.updatePageHeight();
+        });
+        observer.observe(shadowRoot, { childList: true, subtree: true });
+      } catch (error) {
+        console.error(
+          `(TabManager) Ошибка при загрузке "${contentURL}":`,
+          error
+        );
+        shadowRoot.innerHTML = `<p>Не удалось загрузить ${contentURL}. ${error.message}</p>`;
+      }
+      this.activateTab(tabId);
+      this.updateTabsVisibility();
+      this.updateCreateCartButtonVisibility();
+      this.updatePageHeight();
+      return tabId;
     }
 
-    processStyles(tempDiv, shadowRoot) {
-      const styleTags = tempDiv.querySelectorAll(
-        "style, link[rel='stylesheet']"
+    updateAdoptedStylesheets() {
+      for (const tabId in this.tabStyleData) {
+        const sheetData = this.tabStyleData[tabId];
+        const shadowRoot = this.tabShadowRoots[tabId];
+        if (shadowRoot) {
+          const adopted = sheetData
+            .filter((item) => {
+              if (!item.media) return true;
+              return window.matchMedia(item.media).matches;
+            })
+            .map((item) => item.sheet);
+          shadowRoot.adoptedStyleSheets = adopted;
+        }
+      }
+    }
+
+    activateInnerTab(parentTabId, innerTabDataTab) {
+      const shadowRoot = this.tabShadowRoots[parentTabId];
+      if (!shadowRoot) {
+        console.error(
+          `Shadow Root для вкладки с ID "${parentTabId}" не найден.`
+        );
+        return;
+      }
+      const innerTabLink = shadowRoot.querySelector(
+        `.tab-link[data-tab="${innerTabDataTab}"]`
       );
-      styleTags.forEach((style) => {
-        if (style.tagName.toLowerCase() === "style") {
-          const newStyle = document.createElement("style");
-          newStyle.textContent = style.textContent;
-          shadowRoot.appendChild(newStyle);
-        } else if (style.tagName.toLowerCase() === "link") {
-          const href = style.getAttribute("href");
-          if (href) {
-            const newLink = document.createElement("link");
-            newLink.rel = "stylesheet";
-            newLink.href = href;
-            shadowRoot.appendChild(newLink);
-          }
-        }
-        style.remove();
-      });
+      if (innerTabLink) {
+        innerTabLink.click();
+        console.log(
+          `Внутренняя вкладка "${innerTabDataTab}" активирована внутри "${parentTabId}".`
+        );
+      } else {
+        console.error(
+          `Внутренняя ссылка с data-tab="${innerTabDataTab}" не найдена внутри "${parentTabId}".`
+        );
+      }
     }
 
-    // Переключение активных вкладок НЕ обновляет значок pin (его устанавливает только setActiveCart)
     activateTab(tabId) {
       this.tabs.querySelectorAll(".tab").forEach((t) => {
         t.classList.remove("active");
@@ -720,7 +823,6 @@
       } else {
         console.warn(`Не удалось найти вкладку или содержимое с ID: ${tabId}`);
       }
-      // Здесь не обновляем значок pin, так как его устанавливает только setActiveCart.
     }
 
     closeTab(tabId) {
@@ -818,6 +920,6 @@
     }
   }
 
-  // Экспортируем глобальный таб-менеджер
+  // Экспорт глобального таб-менеджера
   global.GComm_TabManager = new GComm_TabManager();
 })(window);
