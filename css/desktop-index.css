@@ -65,6 +65,10 @@ body {
   word-break: break-word;
 }
 
+.category-title {
+  display: none;
+}
+
 /* Фирменные стили для брендов */
 .brand-container {
   display: flex;

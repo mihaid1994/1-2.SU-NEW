@@ -1,30 +1,32 @@
-// Обновлённая функция initCardView с поддержкой дополнительных параметров и параметром root
+// Единая универсальная функция initCardView
 window.initCardView = async function ({
   containerId = "hitsGrid",
   maxItems = 6,
   filter = () => true,
-  customStyles = {
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", // Стили для сетки
-    gap: "16px", // Расстояние между карточками
-  },
+  customStyles = {},
   randomize = true,
-  root = document, // Параметр root
+  root = document, // Параметр root для работы внутри Shadow DOM
 } = {}) {
+  // Определяем, мобильный ли экран (max-width: 800px)
+  const isMobile = window.matchMedia("(max-width: 800px)").matches;
+
+  // Определяем контейнер, куда будут складываться карточки
   const productContainer =
     root.getElementById(containerId) || root.querySelector(`#${containerId}`);
   if (!productContainer) {
-    console.warn(`Контейнер с ID #${containerId} не найден`);
+    console.warn(`Контейнер с ID "#${containerId}" не найден`);
     return;
   }
 
-  // Вспомогательная функция для установки нескольких стилей одновременно
+  // ================================
+  // Утилиты
+  // ================================
   function setStyles(element, styles) {
     for (let property in styles) {
       element.style[property] = styles[property];
     }
   }
 
-  // Функция перемешивания массива (алгоритм Фишера-Йейтса)
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -33,24 +35,25 @@ window.initCardView = async function ({
     return array;
   }
 
+  // ================================
   // Справочник брендов
+  // ================================
   const brandMapping = {
-    Энергомера: "/images/svg/brand/energomera.svg",
-    АГАТ: "/images/svg/brand/agat.svg",
-    ЭРА: "/images/svg/brand/era.svg",
-    "Bormioli Rocco": "/images/svg/brand/bormioli_rocco.svg",
-    "EKF PROxima": "/images/svg/brand/ekf_proxima.svg",
-    SmartBuy: "/images/svg/brand/smartbuy.svg",
-    ASD: "/images/svg/brand/asd.svg",
-    InHome: "/images/svg/brand/inhome.svg",
-    APEYRON: "/images/svg/brand/apeyron.svg",
-    ARTELAMP: "/images/svg/brand/artelamp.svg",
-    "1-2.SALE": "/images/svg/brand/1-2.sale.svg",
-    "Тест на правду": "/images/svg/brand/pravtest.svg",
-    "ВАШЕ СИЯТЕЛЬСТВО": "/images/svg/brand/sijatelstvo.svg",
+    Энергомера: "images/svg/brand/energomera.svg",
+    АГАТ: "images/svg/brand/agat.svg",
+    ЭРА: "images/svg/brand/era.svg",
+    "Bormioli Rocco": "images/svg/brand/bormioli_rocco.svg",
+    "EKF PROxima": "images/svg/brand/ekf_proxima.svg",
+    SmartBuy: "images/svg/brand/smartbuy.svg",
+    ASD: "images/svg/brand/asd.svg",
+    InHome: "images/svg/brand/inhome.svg",
+    APEYRON: "images/svg/brand/apeyron.svg",
+    ARTELAMP: "images/svg/brand/artelamp.svg",
+    "1-2.SALE": "images/svg/brand/1-2.sale.svg",
+    "Тест на правду": "images/svg/brand/pravtest.svg",
+    "ВАШЕ СИЯТЕЛЬСТВО": "images/svg/brand/sijatelstvo.svg",
   };
 
-  // Функция для определения бренда
   function getBrandInfo(productName) {
     for (let brand in brandMapping) {
       if (productName.includes(brand)) {
@@ -62,31 +65,33 @@ window.initCardView = async function ({
     }
     return {
       name: "Производитель не указан",
-      logo: "/images/svg/Icon/placeholder-logo.svg",
+      logo: "images/svg/Icon/placeholder-logo.svg",
     };
   }
 
-  // Функция для загрузки изображений с использованием fetch, чтобы избежать ошибок 404 в консоли
+  // ================================
+  // Загрузка изображений
+  // ================================
   async function loadImages(article, maxImages = 5) {
+    // Кэширование, чтобы не дёргать fetch повторно
     if (window.imageCache && window.imageCache[article]) {
       return window.imageCache[article];
     }
 
-    const imageNames = [];
+    const imagePaths = [];
     for (let i = 0; i < maxImages; i++) {
+      // Первый файл: article.jpg, остальные: article_i.jpg
       const imageName = i === 0 ? `${article}.jpg` : `${article}_${i}.jpg`;
-      const imagePath = `/images/jpg/Product/${imageName}`;
-      imageNames.push(imagePath);
+      const path = `images/jpg/Product/${imageName}`;
+      imagePaths.push(path);
     }
 
-    const loadPromises = imageNames.map(async (src) => {
+    // Проверяем доступность изображений
+    const loadPromises = imagePaths.map(async (src) => {
       try {
-        const response = await fetch(src, { method: "HEAD" });
-        if (response.ok) {
-          return src;
-        } else {
-          return null;
-        }
+        // Используем GET, чтобы не получать 404-ошибки в консоли
+        const response = await fetch(src, { method: "GET" });
+        return response.ok ? src : null;
       } catch (error) {
         return null;
       }
@@ -95,18 +100,20 @@ window.initCardView = async function ({
     const results = await Promise.all(loadPromises);
     const validImages = results.filter((src) => src !== null);
 
-    if (!window.imageCache) {
-      window.imageCache = {};
-    }
+    window.imageCache = window.imageCache || {};
     window.imageCache[article] = validImages;
     return validImages;
   }
 
-  // Функция для создания карточки товара
+  // ================================
+  // Создание одной карточки
+  // ================================
   async function createCard(item) {
+    // Бренд
     const brandInfo = getBrandInfo(item["Наименование"]);
 
-    const card = document.createElement("div"); // Изменено здесь
+    // Карточка
+    const card = document.createElement("div");
     card.classList.add("product-card");
     setStyles(card, {
       backgroundColor: "#fff",
@@ -119,30 +126,32 @@ window.initCardView = async function ({
       flexDirection: "column",
       position: "relative",
       cursor: "pointer",
-      aspectRatio: "1 / 2", // Добавлено фиксированное соотношение сторон
+      // И мобильная, и десктопная версии используют aspectRatio = "1 / 2"
+      aspectRatio: "1 / 2",
     });
 
     card.addEventListener("mouseover", () => {
-      setStyles(card, {
-        transform: "scale(1.01)", // Масштабирование при наведении
-      });
+      card.style.transform = "scale(1.01)";
     });
     card.addEventListener("mouseout", () => {
-      setStyles(card, {
-        transform: "scale(1)", // Возврат к исходному масштабу
-      });
+      card.style.transform = "scale(1)";
     });
 
-    // Блок с изображением
-    const imageDiv = document.createElement("div"); // Изменено здесь
+    // ================================
+    // ВЕРХНЯЯ ЧАСТЬ КАРТОЧКИ (изображение)
+    // ================================
+    const imageDiv = document.createElement("div");
     setStyles(imageDiv, {
       position: "relative",
       width: "100%",
-      height: "200px",
+      // Для мобильной версии можно делать "40% высоты",
+      // но обычно aspectRatio уже регулирует высоту.
+      // Если хотите жёстко ограничить высоту в десктопе, проверяйте isMobile:
+      height: isMobile ? "40%" : "200px",
       overflow: "hidden",
     });
 
-    const imagesContainer = document.createElement("div"); // Изменено здесь
+    const imagesContainer = document.createElement("div");
     setStyles(imagesContainer, {
       position: "relative",
       width: "100%",
@@ -151,7 +160,8 @@ window.initCardView = async function ({
     });
     imageDiv.appendChild(imagesContainer);
 
-    const indicatorsContainer = document.createElement("div"); // Изменено здесь
+    // Индикаторы
+    const indicatorsContainer = document.createElement("div");
     setStyles(indicatorsContainer, {
       position: "absolute",
       bottom: "10px",
@@ -166,7 +176,7 @@ window.initCardView = async function ({
     });
     imageDiv.appendChild(indicatorsContainer);
 
-    // Добавление событий для отображения индикаторов при наведении
+    // При наведении на изображение (десктоп) показываем индикаторы
     imageDiv.addEventListener("mouseover", () => {
       indicatorsContainer.style.opacity = "1";
       indicatorsContainer.style.pointerEvents = "auto";
@@ -176,12 +186,14 @@ window.initCardView = async function ({
       indicatorsContainer.style.pointerEvents = "none";
     });
 
+    // Загрузка изображений
     try {
-      // Загрузка и отображение изображений
       const images = await loadImages(item["Код"], 5);
+
       if (images.length > 0) {
+        // Генерируем <img> для каждого доступного изображения
         images.forEach((src, index) => {
-          const img = document.createElement("img"); // Изменено здесь
+          const img = document.createElement("img");
           img.src = src;
           img.loading = "lazy";
           img.classList.add("product-image");
@@ -197,13 +209,12 @@ window.initCardView = async function ({
             borderRadius: "14px",
             marginTop: "5px",
           });
-          img.setAttribute("data-fullsrc", src);
-          img.setAttribute("data-tooltip", "Просмотреть изображение товара");
           imagesContainer.appendChild(img);
         });
 
+        // Индикаторы
         images.forEach((_, index) => {
-          const indicator = document.createElement("div"); // Изменено здесь
+          const indicator = document.createElement("div");
           indicator.classList.add("indicator");
           setStyles(indicator, {
             width: "10px",
@@ -212,9 +223,8 @@ window.initCardView = async function ({
             backgroundColor: "#ffffff",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
             cursor: "pointer",
-            transition: "transform 0.3s ease, background-color 0.3s ease",
+            transition: "transform 0.3s ease, backgroundColor 0.3s ease",
           });
-
           if (index === 0) {
             indicator.classList.add("active");
             setStyles(indicator, {
@@ -222,93 +232,73 @@ window.initCardView = async function ({
               backgroundColor: "#fe9c00",
             });
           }
-
           indicatorsContainer.appendChild(indicator);
         });
 
-        // Обработчик клика по индикаторам
-        indicatorsContainer.addEventListener("click", function (event) {
-          if (event.target.classList.contains("indicator")) {
+        // Универсальная функция переключения изображения
+        function updateImage(idx) {
+          const imgs = imagesContainer.querySelectorAll(".product-image");
+          imgs.forEach((img, i) => {
+            img.style.display = i === idx ? "block" : "none";
+          });
+          const indicators = indicatorsContainer.querySelectorAll(".indicator");
+          indicators.forEach((ind, i) => {
+            if (i === idx) {
+              ind.classList.add("active");
+              setStyles(ind, {
+                transform: "scale(1.5)",
+                backgroundColor: "#fe9c00",
+              });
+            } else {
+              ind.classList.remove("active");
+              setStyles(ind, {
+                transform: "scale(1)",
+                backgroundColor: "#ffffff",
+              });
+            }
+          });
+        }
+
+        // Клик по индикаторам
+        indicatorsContainer.addEventListener("click", (e) => {
+          if (e.target.classList.contains("indicator")) {
             const indicators =
               indicatorsContainer.querySelectorAll(".indicator");
-            const imgs = imagesContainer.querySelectorAll(".product-image");
-            const idx = Array.from(indicators).indexOf(event.target);
+            const idx = Array.from(indicators).indexOf(e.target);
             if (idx !== -1) {
-              imgs.forEach((img) => (img.style.display = "none"));
-              imgs[idx].style.display = "block";
-
-              indicators.forEach((ind, index) => {
-                if (index === idx) {
-                  ind.classList.add("active");
-                  setStyles(ind, {
-                    transform: "scale(1.5)",
-                    backgroundColor: "#fe9c00",
-                  });
-                } else {
-                  ind.classList.remove("active");
-                  setStyles(ind, {
-                    transform: "scale(1)",
-                    backgroundColor: "#ffffff",
-                  });
-                }
-              });
+              updateImage(idx);
             }
           }
         });
 
-        // Обработчик движения мыши для изменения изображений
-        imagesContainer.addEventListener("mousemove", function (e) {
+        // Изменение изображений при движении мыши (десктоп)
+        imagesContainer.addEventListener("mousemove", (e) => {
           const rect = imagesContainer.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const segmentWidth = rect.width / images.length;
           const idx = Math.min(Math.floor(x / segmentWidth), images.length - 1);
-
-          const imgs = imagesContainer.querySelectorAll(".product-image");
-          imgs.forEach((img, index) => {
-            img.style.display = index === idx ? "block" : "none";
-          });
-
-          const indicators = indicatorsContainer.querySelectorAll(".indicator");
-          indicators.forEach((ind, index) => {
-            if (index === idx) {
-              ind.classList.add("active");
-              setStyles(ind, {
-                transform: "scale(1.5)",
-                backgroundColor: "#fe9c00",
-              });
-            } else {
-              ind.classList.remove("active");
-              setStyles(ind, {
-                transform: "scale(1)",
-                backgroundColor: "#ffffff",
-              });
-            }
-          });
+          updateImage(idx);
         });
 
-        // Обработчик ухода мыши для сброса на первое изображение
-        imagesContainer.addEventListener("mouseleave", () => {
-          const imgs = imagesContainer.querySelectorAll(".product-image");
-          imgs.forEach((img, index) => {
-            img.style.display = index === 0 ? "block" : "none";
-          });
-
-          const indicators = indicatorsContainer.querySelectorAll(".indicator");
-          indicators.forEach((ind, index) => {
-            if (index === 0) {
-              ind.classList.add("active");
-              setStyles(ind, {
-                transform: "scale(1.5)",
-                backgroundColor: "#fe9c00",
-              });
-            } else {
-              ind.classList.remove("active");
-              setStyles(ind, {
-                transform: "scale(1)",
-                backgroundColor: "#ffffff",
-              });
-            }
-          });
+        // Для мобильных устройств – тач-события (простейший вариант)
+        let touchStartX = null;
+        imagesContainer.addEventListener("touchstart", (e) => {
+          touchStartX = e.touches[0].clientX;
+        });
+        imagesContainer.addEventListener("touchmove", (e) => {
+          if (touchStartX === null) return;
+          const touchX = e.touches[0].clientX;
+          const rect = imagesContainer.getBoundingClientRect();
+          const relativeX = touchX - rect.left;
+          const segmentWidth = rect.width / images.length;
+          const idx = Math.min(
+            Math.floor(relativeX / segmentWidth),
+            images.length - 1
+          );
+          updateImage(idx);
+        });
+        imagesContainer.addEventListener("touchend", () => {
+          touchStartX = null;
         });
       }
     } catch (error) {
@@ -319,31 +309,36 @@ window.initCardView = async function ({
       indicatorsContainer.innerHTML = "";
     }
 
-    // Информация о продукте
-    const infoDiv = document.createElement("div"); // Изменено здесь
+    // ================================
+    // НИЖНЯЯ ЧАСТЬ КАРТОЧКИ (текст и кнопки)
+    // ================================
+    const infoDiv = document.createElement("div");
     setStyles(infoDiv, {
       display: "flex",
       flexDirection: "column",
       alignItems: "stretch",
-      padding: "12px",
+      // В мобильной версии padding обычно меньше, в десктопе больше
+      padding: isMobile ? "8px" : "12px",
       flexGrow: "1",
     });
 
-    // Бренд
-    const brandDiv = document.createElement("div"); // Изменено здесь
+    // Блок бренда
+    const brandDiv = document.createElement("div");
     setStyles(brandDiv, {
       display: "flex",
       alignItems: "center",
-      marginBottom: "8px",
+      // в мобильной меньше, в десктопе чуть больше
+      marginBottom: isMobile ? "4px" : "8px",
     });
 
-    const brandImg = document.createElement("img"); // Изменено здесь
+    const brandImg = document.createElement("img");
     brandImg.src = brandInfo.logo;
     brandImg.alt = brandInfo.name;
     setStyles(brandImg, {
-      width: "35px",
+      // в мобильной 30px, в десктопе 35px
+      width: isMobile ? "30px" : "35px",
       height: "auto",
-      marginRight: "8px",
+      marginRight: "6px",
       borderRadius: "5px",
       transition: "transform 0.3s ease",
       cursor: "pointer",
@@ -355,31 +350,32 @@ window.initCardView = async function ({
       brandImg.style.transform = "scale(1)";
     });
 
-    const brandSpan = document.createElement("span"); // Изменено здесь
+    const brandSpan = document.createElement("span");
     brandSpan.textContent = brandInfo.name;
     setStyles(brandSpan, {
       color: "#555",
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.8em" : "0.7em",
       fontWeight: "500",
     });
 
     brandDiv.appendChild(brandImg);
     brandDiv.appendChild(brandSpan);
 
-    // Название товара
-    const title = document.createElement("h3"); // Изменено здесь
+    // Название товара (title)
+    const title = document.createElement("h3");
     title.textContent = item["Наименование"];
     title.setAttribute(
       "data-tooltip",
       `Перейти к подробному описанию товара: ${item["Наименование"]}`
     );
     setStyles(title, {
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.65em" : "0.7em",
       fontWeight: "600",
       color: "#333",
-      margin: "0 0 8px 0",
+      margin: "0 0 4px 0",
       lineHeight: "1.2",
-      height: "3.6em",
+      // Высота в "строках" – подбирайте по вкусу
+      height: isMobile ? "3.5em" : "3.6em",
       overflow: "hidden",
       textOverflow: "ellipsis",
       display: "-webkit-box",
@@ -389,11 +385,11 @@ window.initCardView = async function ({
     });
 
     // Код товара
-    const codeP = document.createElement("p"); // Изменено здесь
+    const codeP = document.createElement("p");
     codeP.innerHTML = `Код товара: <span>${item["Код"]}</span>`;
     codeP.setAttribute("data-tooltip", `Код товара: ${item["Код"]}`);
     setStyles(codeP, {
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.65em" : "0.7em",
       color: "#666",
       margin: "0 0 4px 0",
     });
@@ -408,7 +404,7 @@ window.initCardView = async function ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: "8px",
+      marginBottom: isMobile ? "4px" : "8px",
     });
 
     // Текущая цена
@@ -419,7 +415,7 @@ window.initCardView = async function ({
       `Цена для вас: ${item["Цена"]} ₽`
     );
     setStyles(currentPriceDiv, {
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.65em" : "0.7em",
     });
     setStyles(currentPriceDiv.querySelector("span"), {
       color: "#999",
@@ -429,13 +425,13 @@ window.initCardView = async function ({
     setStyles(currentPriceStrong, {
       display: "block",
       color: "#333",
-      fontSize: "1.4em",
+      fontSize: isMobile ? "1.2em" : "1.4em",
       fontWeight: "700",
-      marginTop: "4px",
+      marginTop: "2px",
     });
 
-    // Розничная цена (1.3 от текущей цены)
-    const retailPrice = (item["Цена"] * 1.3).toFixed(2); // Рассчёт розничной цены
+    // Розничная цена (1.3 от текущей)
+    const retailPrice = (item["Цена"] * 1.3).toFixed(2);
     const retailPriceDiv = document.createElement("div");
     retailPriceDiv.innerHTML = `<span>Розн. цена</span><strong>${retailPrice} ₽</strong>`;
     retailPriceDiv.setAttribute(
@@ -443,7 +439,7 @@ window.initCardView = async function ({
       `Розничная цена: ${retailPrice} ₽`
     );
     setStyles(retailPriceDiv, {
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.65em" : "0.7em",
     });
     setStyles(retailPriceDiv.querySelector("span"), {
       color: "#999",
@@ -453,27 +449,26 @@ window.initCardView = async function ({
     setStyles(retailPriceStrong, {
       display: "block",
       color: "#bbb",
-      fontSize: "1em",
+      fontSize: isMobile ? "0.9em" : "1em",
       fontWeight: "500",
       textDecoration: "line-through",
-      marginTop: "4px",
+      marginTop: "2px",
     });
 
-    // Добавление элементов в контейнер
     priceDiv.appendChild(currentPriceDiv);
     priceDiv.appendChild(retailPriceDiv);
 
-    // Действия: количество и кнопка "В корзину"
-    const actionsDiv = document.createElement("div"); // Изменено здесь
+    // Блок действий: количество + кнопка
+    const actionsDiv = document.createElement("div");
     setStyles(actionsDiv, {
       display: "flex",
-      gap: "8px",
+      gap: "6px",
       width: "100%",
       alignItems: "center",
-      marginBottom: "12px",
+      marginBottom: isMobile ? "4px" : "12px",
     });
 
-    const quantityInput = document.createElement("input"); // Изменено здесь
+    const quantityInput = document.createElement("input");
     quantityInput.type = "number";
     quantityInput.value = "0";
     quantityInput.min = item["Мин. Кол."] || 1;
@@ -485,17 +480,17 @@ window.initCardView = async function ({
     );
     setStyles(quantityInput, {
       flex: "2",
-      padding: "8px",
+      minWidth: "50px",
+      maxWidth: isMobile ? "100px" : "120px",
+      padding: isMobile ? "6px" : "8px",
       border: "1px solid #ddd",
       borderRadius: "3px",
-      fontSize: "14px",
+      fontSize: isMobile ? "13px" : "14px",
       textAlign: "center",
-      width: "100px",
       transition: "border-color 0.2s, background-color 0.2s",
-      height: "10px",
     });
 
-    const addToCartButton = document.createElement("button"); // Изменено здесь
+    const addToCartButton = document.createElement("button");
     addToCartButton.textContent = "В корзину";
     addToCartButton.classList.add("add-to-cart-button");
     addToCartButton.setAttribute(
@@ -503,18 +498,17 @@ window.initCardView = async function ({
       "Добавить этот товар в корзину"
     );
     setStyles(addToCartButton, {
-      flex: "1",
+      flex: "none",
+      width: isMobile ? "50px" : "60px",
       padding: "2px",
       backgroundColor: "#4caf50",
       color: "white",
       border: "none",
       borderRadius: "3px",
-      fontSize: "10px",
+      fontSize: isMobile ? "11px" : "10px",
       cursor: "pointer",
       transition: "background-color 0.3s ease",
-      height: "25px",
     });
-
     addToCartButton.addEventListener("mouseover", () => {
       addToCartButton.style.backgroundColor = "#45a049";
     });
@@ -525,18 +519,18 @@ window.initCardView = async function ({
     actionsDiv.appendChild(quantityInput);
     actionsDiv.appendChild(addToCartButton);
 
-    // Информация о наличии
-    const availabilityDiv = document.createElement("div"); // Изменено здесь
+    // Блок наличия
+    const availabilityDiv = document.createElement("div");
     setStyles(availabilityDiv, {
       display: "flex",
       justifyContent: "space-between",
-      fontSize: "0.7em",
+      fontSize: isMobile ? "0.65em" : "0.7em",
       color: "#666",
       borderTop: "1px solid #e0e0e0",
-      paddingTop: "8px",
+      paddingTop: "4px",
     });
 
-    const availableTodayDiv = document.createElement("div"); // Изменено здесь
+    const availableTodayDiv = document.createElement("div");
     availableTodayDiv.innerHTML = `<span>В наличии</span><strong>${
       item["Наличие"] || "0"
     } шт.</strong>`;
@@ -550,17 +544,16 @@ window.initCardView = async function ({
     setStyles(availableTodayDiv.querySelector("span"), {
       display: "block",
       color: "#999",
-      fontSize: "0.9em",
-      marginBottom: "4px",
+      fontSize: "1em",
+      marginBottom: "2px",
     });
-    const availableTodayStrong = availableTodayDiv.querySelector("strong");
-    setStyles(availableTodayStrong, {
+    setStyles(availableTodayDiv.querySelector("strong"), {
       color: "#333",
       fontSize: "1em",
       fontWeight: "600",
     });
 
-    const availableFutureDiv = document.createElement("div"); // Изменено здесь
+    const availableFutureDiv = document.createElement("div");
     availableFutureDiv.innerHTML = `<span>${
       item["Дата поступления"] || "В пути"
     }</span><strong>${item["В пути"] || "0"} шт.</strong>`;
@@ -576,11 +569,10 @@ window.initCardView = async function ({
     setStyles(availableFutureDiv.querySelector("span"), {
       display: "block",
       color: "#999",
-      fontSize: "0.9em",
-      marginBottom: "4px",
+      fontSize: "1em",
+      marginBottom: "2px",
     });
-    const availableFutureStrong = availableFutureDiv.querySelector("strong");
-    setStyles(availableFutureStrong, {
+    setStyles(availableFutureDiv.querySelector("strong"), {
       color: "#333",
       fontSize: "1em",
       fontWeight: "600",
@@ -589,7 +581,7 @@ window.initCardView = async function ({
     availabilityDiv.appendChild(availableTodayDiv);
     availabilityDiv.appendChild(availableFutureDiv);
 
-    // Сборка информации о товаре
+    // Собираем все части
     infoDiv.appendChild(brandDiv);
     infoDiv.appendChild(title);
     infoDiv.appendChild(codeP);
@@ -597,37 +589,55 @@ window.initCardView = async function ({
     infoDiv.appendChild(actionsDiv);
     infoDiv.appendChild(availabilityDiv);
 
-    // Добавление информации к карточке
     card.appendChild(imageDiv);
     card.appendChild(infoDiv);
 
-    // Обработчик клика по карточке (можно добавить переход или модальное окно)
+    // Клик по карточке (но не по кнопкам/инпутам)
     card.addEventListener("click", (e) => {
-      // Предотвращаем срабатывание клика при нажатии на кнопки внутри карточки
       if (
         e.target.closest(".add-to-cart-button") ||
         e.target.closest(".product-quantity")
       ) {
         return;
       }
+      // Здесь можно открыть страницу товара или сделать что угодно
     });
 
     return card;
   }
 
-  // Функция для рендеринга карточного вида
+  // ================================
+  // Рендер карточек
+  // ================================
   async function renderCardView() {
-    // Применение стилей для контейнера карточек
+    // Если пользователь не передал customStyles — зададим умолчания
+    const defaultMobileStyles = {
+      gridTemplateColumns: "repeat(2, minmax(165px, 1fr))",
+      gap: "10px",
+      padding: "1px",
+    };
+    const defaultDesktopStyles = {
+      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+      gap: "16px",
+      padding: "16px",
+    };
+
+    // Подбираем стили для контейнера
+    const appliedStyles = {
+      ...(!isMobile ? defaultDesktopStyles : defaultMobileStyles),
+      ...customStyles, // пользовательские стили перекрывают наши
+    };
+
     setStyles(productContainer, {
       display: "grid",
-      gridTemplateColumns: customStyles.gridTemplateColumns,
-      gap: customStyles.gap,
+      gridTemplateColumns: appliedStyles.gridTemplateColumns,
+      gap: appliedStyles.gap,
       justifyContent: "center",
-      padding: customStyles.padding,
+      padding: appliedStyles.padding || "0",
       boxSizing: "border-box",
     });
 
-    // Загрузка данных
+    // Загружаем данные
     try {
       const response = await fetch("/data/data.json");
       if (!response.ok) {
@@ -635,29 +645,29 @@ window.initCardView = async function ({
       }
       let data = await response.json();
 
-      // Применение фильтрации
+      // Применяем фильтр
       data = data.filter(filter);
 
-      // Случайная выборка, если требуется
+      // Перемешиваем
       if (randomize) {
         shuffle(data);
       }
 
-      // Ограничение количества товаров
+      // Ограничиваем количество
       if (maxItems !== null) {
         data = data.slice(0, maxItems);
       }
 
-      // Создание карточек
-      const fragment = document.createDocumentFragment(); // Изменено здесь
-      for (let item of data) {
+      // Создаём карточки
+      const fragment = document.createDocumentFragment();
+      for (const item of data) {
         const card = await createCard(item);
         if (card) {
           fragment.appendChild(card);
         }
       }
 
-      // Очистка контейнера перед добавлением
+      // Очищаем контейнер и добавляем новые карточки
       productContainer.innerHTML = "";
       productContainer.appendChild(fragment);
     } catch (error) {
@@ -666,44 +676,37 @@ window.initCardView = async function ({
     }
   }
 
-  // Функция для очистки значений "0" в полях количества
+  // ================================
+  // Доп. функции: очистка инпутов и обработчики
+  // ================================
   function cleanQuantityInputs() {
     const inputs = root.querySelectorAll(".product-quantity");
     inputs.forEach((input) => {
-      if (input.value === "0") {
-        input.value = "";
-      }
+      if (input.value === "0") input.value = "";
       input.addEventListener("blur", function () {
-        if (this.value === "0") {
-          this.value = "";
-        }
+        if (this.value === "0") this.value = "";
       });
     });
   }
 
-  // Обработчики для инпутов количества и кнопок "В корзину"
   function setupActions() {
-    // Обработчики для полей ввода количества
+    // Поля с количеством
     const quantityInputs = root.querySelectorAll(".product-quantity");
     quantityInputs.forEach((input) => {
       input.addEventListener("change", function () {
         const minQty = parseInt(this.min, 10) || 1;
         const maxQty = parseInt(this.getAttribute("data-max-qty"), 10) || 0;
         let value = parseInt(this.value, 10) || 0;
-
-        if (value < minQty) {
-          value = minQty;
-        }
+        if (value < minQty) value = minQty;
         if (value > maxQty && maxQty !== 0) {
           value = maxQty;
-          // Уведомление пользователя о превышении доступного количества
           alert(`Максимальное доступное количество: ${maxQty}`);
         }
         this.value = value > 0 ? value : "";
       });
     });
 
-    // Обработчики для кнопок "В корзину"
+    // Кнопки "В корзину"
     const addToCartButtons = root.querySelectorAll(".add-to-cart-button");
     addToCartButtons.forEach((button) => {
       button.addEventListener("click", function () {
@@ -716,26 +719,22 @@ window.initCardView = async function ({
           : "Не указан";
         const quantityInput = card.querySelector(".product-quantity");
         const quantity = parseInt(quantityInput.value, 10) || 0;
-
         if (quantity > 0) {
-          // Логика добавления в корзину
           console.log(
             `Добавлено в корзину: Артикул ${article}, Количество ${quantity}`
           );
-          // Пример изменения текста кнопки
           this.textContent = "✔ В корзине";
-          setStyles(this, {
-            backgroundColor: "#45a049",
-          });
+          setStyles(this, { backgroundColor: "#45a049" });
         } else {
-          // Уведомление пользователя о необходимости ввода количества
           alert("Пожалуйста, введите количество для добавления в корзину.");
         }
       });
     });
   }
 
+  // ================================
   // Инициализация
+  // ================================
   async function initialize() {
     await renderCardView();
     cleanQuantityInputs();
@@ -745,23 +744,15 @@ window.initCardView = async function ({
   initialize();
 };
 
-/**
- * Обёрточная функция, которую вызовет GComm_TabManager.
- * Она просто пробрасывает shadowRoot и нужные вам настройки
- * внутрь уже существующей initCardView.
- */
+// Обёрточная функция для работы через Shadow DOM, если надо
 window.initCardViewShadow = async function (shadowRoot) {
-  // Здесь вы задаёте параметры для initCardView.
-  // Параметр root заменяем на shadowRoot.
   await window.initCardView({
     root: shadowRoot,
     containerId: "hitsGrid",
     maxItems: 6,
     filter: () => true,
-    customStyles: {
-      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-      gap: "10px",
-    },
+    // Здесь — любые ваши стили для контейнера
+    customStyles: {},
     randomize: true,
   });
 };

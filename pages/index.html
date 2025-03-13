@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Разметка сайта</title>
 
+    <!-- Desktop CSS: без изменений -->
     <link
       rel="stylesheet"
       href="/css/desktop-index.css"
       media="screen and (min-width: 801px)"
     />
+
+    <!-- Mobile CSS: для экранов до 800px -->
     <link
       rel="stylesheet"
       href="/css/mobile-index.css"
@@ -22,15 +25,14 @@
       rel="stylesheet"
     />
   </head>
-
   <body>
-    <!-- Новая "Информационная панель" -->
+    <!-- Контейнер информационной панели -->
     <div class="container-info" id="infoPanelContainer">
-      <!-- Внутри будет динамически вставлена верстка баннеров из JSON -->
+      <!-- Оригинальный infoPanel (для десктопа) скрыт в мобильной версии -->
       <div class="info-panel" id="infoPanel"></div>
     </div>
 
-    <!-- Наши Бренды (без изменений) -->
+    <!-- Бренды -->
     <div class="grid-wrapper">
       <div class="brand-container">
         <h2 class="brand-title">Наши Бренды</h2>
@@ -69,19 +71,41 @@
       </div>
     </div>
 
-    <!-- Хиты продаж (без изменений) -->
+    <!-- Хиты продаж (товары, 2 карточки в ряд) -->
     <div class="hits-wrapper grid-wrapper">
       <div class="hits-container grid-container" id="salesHitsContainer">
         <h2 class="hits-title">Хиты продаж</h2>
         <div class="hits-grid" id="hitsGrid">
-          <!-- Карточки будут подгружены динамически -->
+          <div
+            class="hits-item"
+            style="background-image: url('/images/jpg/Hits/hit1.jpg')"
+            title="Товар 1"
+          ></div>
+          <div
+            class="hits-item"
+            style="background-image: url('/images/jpg/Hits/hit2.jpg')"
+            title="Товар 2"
+          ></div>
+          <div
+            class="hits-item"
+            style="background-image: url('/images/jpg/Hits/hit3.jpg')"
+            title="Товар 3"
+          ></div>
+          <div
+            class="hits-item"
+            style="background-image: url('/images/jpg/Hits/hit4.jpg')"
+            title="Товар 4"
+          ></div>
         </div>
       </div>
     </div>
 
-    <!-- Сетка из 32 квадратов (без изменений) -->
+    <!-- Сетка категорий (32 карточки, 3 в ряд) -->
+
     <div class="grid-wrapper">
+      <h2 class="category-title">Основные разделы</h2>
       <div class="grid-container">
+        <!-- Полный список 32 карточек -->
         <div
           id="section-1"
           class="grid-item"
@@ -309,14 +333,14 @@
       </div>
     </div>
 
-    <!-- Футер (без изменений) -->
+    <!-- Футер -->
     <footer class="footer">
       <div class="footer-container">
         <p>© 2024 1-2.SU NEW. Все права защищены.</p>
         <p>
-          <a href="http://energomix.ru" target="_blank" class="footer-link"
-            >energomix.ru</a
-          >
+          <a href="http://energomix.ru" target="_blank" class="footer-link">
+            energomix.ru
+          </a>
         </p>
       </div>
     </footer>
