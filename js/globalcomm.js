@@ -216,8 +216,8 @@
       const productCardButtons =
         document.querySelectorAll("#productcardbutton");
       if (productCardButtons.length > 0) {
-        productCardButtons.forEach((ProductCardKlatz) => {
-          ProductCardKlatz.addEventListener("click", async (e) => {
+        productCardButtons.forEach((productCardButton) => {
+          productCardButton.addEventListener("click", async (e) => {
             e.preventDefault();
             await this.openPageAsTab(
               "Фотореле EKF PS-5",
@@ -879,27 +879,81 @@
       this.createCartButton.style.display = "block";
     }
 
+    // Изменённый метод updatePageHeight:
+    // Для мобильной версии (ширина <=800px) вычисляем доступную высоту, учитывая
+    // верхнюю панель (.top-panel) и нижнюю панель (bottom‑bar).
+    // Если вкладки видимы (не имеют класс collapsed), то их высота добавляется к верхней границе.
+    // При этом внешняя прокрутка отключается, а скроллирование осуществляется только внутри области контента.
     updatePageHeight() {
-      const activeContentDiv =
-        this.tabContent.querySelector(
-          `.content[data-content="${this.currentActiveTab}"]`
-        ) ||
-        Array.from(this.tabContent.children).find(
-          (div) => div.style.display === "block"
-        );
-      if (activeContentDiv) {
-        const shadowRoot = activeContentDiv.shadowRoot;
-        if (shadowRoot) {
-          const contentHeight = shadowRoot.scrollHeight;
-          const viewportHeight = window.innerHeight;
-          const newHeight = Math.max(contentHeight, viewportHeight);
-          document.body.style.height = `${newHeight}px`;
-          document.documentElement.style.height = `${newHeight}px`;
+      if (window.innerWidth <= 800) {
+        // Получаем элементы верхней / нижней панелей
+        const topPanel = document.querySelector(".top-panel");
+        const bottomBar = document.querySelector(".bottom-bar");
+        const topPanelHeight = topPanel ? topPanel.offsetHeight : 0;
+        const bottomBarHeight = bottomBar ? bottomBar.offsetHeight : 0;
+
+        // Если вкладки не "collapsed", их высота прибавляется к верхней границе
+        let tabsHeight = 0;
+        if (!this.tabs.classList.contains("collapsed")) {
+          tabsHeight = this.tabs.offsetHeight;
         }
+
+        // Ищем активный блок контента
+        const activeContentDiv =
+          this.tabContent.querySelector(
+            `.content[data-content="${this.currentActiveTab}"]`
+          ) ||
+          Array.from(this.tabContent.children).find(
+            (div) => div.style.display === "block"
+          );
+
+        if (activeContentDiv) {
+          // Суммарная высота «верхней части» (top-panel + вкладки)
+          const offsetTop = topPanelHeight + tabsHeight;
+
+          // Рассчитываем высоту контентного блока с учётом нижней панели
+          const availableHeight =
+            window.innerHeight - offsetTop - bottomBarHeight;
+
+          // Смещаем контент вниз на offsetTop, чтобы верхняя панель и вкладки не перекрывали
+          activeContentDiv.style.marginTop = offsetTop + "px";
+          // Задаём ему вычисленную высоту и включаем вертикальный скролл
+          activeContentDiv.style.height = availableHeight + "px";
+          activeContentDiv.style.overflowY = "auto";
+        }
+
+        // Отключаем внешнюю прокрутку
+        document.body.style.height = `${window.innerHeight}px`;
+        document.documentElement.style.height = `${window.innerHeight}px`;
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
       } else {
-        const viewportHeight = window.innerHeight;
-        document.body.style.height = `${viewportHeight}px`;
-        document.documentElement.style.height = `${viewportHeight}px`;
+        // Логика для десктопной версии остаётся прежней
+        const activeContentDiv =
+          this.tabContent.querySelector(
+            `.content[data-content="${this.currentActiveTab}"]`
+          ) ||
+          Array.from(this.tabContent.children).find(
+            (div) => div.style.display === "block"
+          );
+        if (activeContentDiv) {
+          const shadowRoot = activeContentDiv.shadowRoot;
+          if (shadowRoot) {
+            const contentHeight = shadowRoot.scrollHeight;
+            const viewportHeight = window.innerHeight;
+            const newHeight = Math.max(contentHeight, viewportHeight);
+            document.body.style.height = `${newHeight}px`;
+            document.documentElement.style.height = `${newHeight}px`;
+          }
+        } else {
+          const viewportHeight = window.innerHeight;
+          document.body.style.height = `${viewportHeight}px`;
+          document.documentElement.style.height = `${viewportHeight}px`;
+        }
+
+        // Включаем стандартную прокрутку
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
       }
     }
 

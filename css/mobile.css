@@ -562,7 +562,7 @@ body {
 
 /* Клонированная строка поиска */
 .search-bar-clone {
-  display: flex;
+  display: none;
   align-items: center;
   position: fixed;
   top: -100px;
@@ -1010,7 +1010,7 @@ body {
 #accountDropdownUnified {
   position: fixed; /* Фиксированное положение относительно окна */
   top: 40px; /* Прикрепляем к верху */
-  right: -400px; /* Изначально спрятана за правой границей экрана */
+  right: -500px; /* Изначально спрятана за правой границей экрана */
   width: 100%; /* Уменьшенная ширина для мобильных устройств */
   height: 100vh; /* Полная высота окна (viewport height) */
   background-color: #ffffff;
