@@ -357,6 +357,14 @@
       // Обработчик кликов в основном документе
       this.initializeMainDocumentLinkHandler();
 
+      // Наблюдатель за изменениями в контейнере вкладок (для мобильной версии)
+      if (window.innerWidth <= 800 && "ResizeObserver" in window) {
+        const tabsResizeObserver = new ResizeObserver(() => {
+          this.updatePageHeight();
+        });
+        tabsResizeObserver.observe(this.tabs);
+      }
+
       // ------------------ [BASKET EVENTS LISTENERS] ------------------
       window.addEventListener("cartActivated", (e) => {
         const cartId = e.detail.cartId;
@@ -732,8 +740,7 @@
         }
         this.processScripts(tempDiv, shadowRoot);
         shadowRoot.append(...Array.from(tempDiv.childNodes));
-        // Добавляем правило для отключения горизонтальной прокрутки в мобильной версии,
-        // но ограничиваем его только на уровне хоста, чтобы не сдвигать внутренние стили.
+        // Для мобильной версии отключаем горизонтальную прокрутку на уровне хоста shadow root.
         if (window.innerWidth <= 800) {
           const disableHorizScrollStyle = document.createElement("style");
           disableHorizScrollStyle.textContent = `:host { overflow-x: hidden !important; }`;
@@ -886,26 +893,23 @@
       this.createCartButton.style.display = "block";
     }
 
-    // Изменённый метод updatePageHeight:
-    // Для мобильной версии (ширина <=800px) вычисляем доступную высоту, учитывая
-    // верхнюю панель (.top-panel) и нижнюю панель (bottom‑bar).
-    // Если вкладки видимы (не имеют класс collapsed), то их высота прибавляется к верхней границе.
-    // При этом внешняя прокрутка отключается, а скроллирование осуществляется только внутри области контента.
+    // Обновлённый метод updatePageHeight для мобильной версии.
+    // Если вкладок нет (или они свернуты, т.е. класс "collapsed" установлен),
+    // отступ рассчитывается только на основе высоты верхней панели;
+    // если вкладки присутствуют, дополнительный отступ не добавляется.
     updatePageHeight() {
       if (window.innerWidth <= 800) {
-        // Получаем элементы верхней / нижней панелей
         const topPanel = document.querySelector(".top-panel");
         const bottomBar = document.querySelector(".bottom-bar");
         const topPanelHeight = topPanel ? topPanel.offsetHeight : 0;
         const bottomBarHeight = bottomBar ? bottomBar.offsetHeight : 0;
 
-        // Если вкладки не "collapsed", их высота прибавляется к верхней границе
-        let tabsHeight = 0;
-        if (!this.tabs.classList.contains("collapsed")) {
-          tabsHeight = this.tabs.offsetHeight;
-        }
+        // Если вкладки свернуты (например, когда есть только "Главная"), отступ равен высоте верхней панели.
+        // Иначе, когда вкладки присутствуют, отступ не добавляется.
+        const offsetTop = this.tabs.classList.contains("collapsed")
+          ? topPanelHeight
+          : 0;
 
-        // Ищем активный блок контента
         const activeContentDiv =
           this.tabContent.querySelector(
             `.content[data-content="${this.currentActiveTab}"]`
@@ -915,21 +919,13 @@
           );
 
         if (activeContentDiv) {
-          // Суммарная высота «верхней части» (top-panel + вкладки)
-          const offsetTop = topPanelHeight + tabsHeight;
-
-          // Рассчитываем высоту контентного блока с учётом нижней панели
+          activeContentDiv.style.marginTop = offsetTop + "px";
           const availableHeight =
             window.innerHeight - offsetTop - bottomBarHeight;
-
-          // Смещаем контент вниз на offsetTop, чтобы верхняя панель и вкладки не перекрывали
-          activeContentDiv.style.marginTop = offsetTop + "px";
-          // Задаём ему вычисленную высоту и включаем вертикальный скролл
           activeContentDiv.style.height = availableHeight + "px";
           activeContentDiv.style.overflowY = "auto";
         }
 
-        // Отключаем внешнюю прокрутку
         document.body.style.height = `${window.innerHeight}px`;
         document.documentElement.style.height = `${window.innerHeight}px`;
         document.body.style.overflow = "hidden";
@@ -957,8 +953,6 @@
           document.body.style.height = `${viewportHeight}px`;
           document.documentElement.style.height = `${viewportHeight}px`;
         }
-
-        // Включаем стандартную прокрутку
         document.body.style.overflow = "";
         document.documentElement.style.overflow = "";
       }
