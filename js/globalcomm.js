@@ -175,7 +175,7 @@
         });
       });
 
-      // Прочие обработчики (Журнал заказов, Контакты, Вход, и т.д.)
+      // Прочие обработчики (Журнал заказов, Контакты, Вход и т.д.)
       const ordersButtons = document.querySelectorAll(".orders-button");
       if (ordersButtons.length > 0) {
         ordersButtons.forEach((ordersButton) => {
@@ -832,7 +832,11 @@
         }
         this.currentActiveTab = tabId;
         this.tabShadowRoots[tabId] = activeContent.shadowRoot;
+        // Обновляем высоту активного содержимого и пересчитываем её после рендера
         this.updatePageHeight();
+        requestAnimationFrame(() => {
+          this.updatePageHeight();
+        });
         console.log(`Вкладка "${activeTab.dataset.name}" активирована.`);
       } else {
         console.warn(`Не удалось найти вкладку или содержимое с ID: ${tabId}`);
@@ -893,23 +897,16 @@
       this.createCartButton.style.display = "block";
     }
 
-    // Обновлённый метод updatePageHeight для мобильной версии.
-    // Если вкладок нет (или они свернуты, т.е. класс "collapsed" установлен),
-    // отступ рассчитывается только на основе высоты верхней панели;
-    // если вкладки присутствуют, дополнительный отступ не добавляется.
+    /* Новый метод updatePageHeight для мобильной версии.
+       Если вкладок нет (контейнер имеет класс "collapsed"), то отступ устанавливается равным высоте шапки.
+       Если вкладки присутствуют, margin обнуляется и доступная высота рассчитывается динамически
+       на основе позиции активного содержимого относительно окна. */
     updatePageHeight() {
       if (window.innerWidth <= 800) {
         const topPanel = document.querySelector(".top-panel");
         const bottomBar = document.querySelector(".bottom-bar");
         const topPanelHeight = topPanel ? topPanel.offsetHeight : 0;
         const bottomBarHeight = bottomBar ? bottomBar.offsetHeight : 0;
-
-        // Если вкладки свернуты (например, когда есть только "Главная"), отступ равен высоте верхней панели.
-        // Иначе, когда вкладки присутствуют, отступ не добавляется.
-        const offsetTop = this.tabs.classList.contains("collapsed")
-          ? topPanelHeight
-          : 0;
-
         const activeContentDiv =
           this.tabContent.querySelector(
             `.content[data-content="${this.currentActiveTab}"]`
@@ -917,15 +914,23 @@
           Array.from(this.tabContent.children).find(
             (div) => div.style.display === "block"
           );
-
         if (activeContentDiv) {
-          activeContentDiv.style.marginTop = offsetTop + "px";
-          const availableHeight =
-            window.innerHeight - offsetTop - bottomBarHeight;
-          activeContentDiv.style.height = availableHeight + "px";
+          if (this.tabs.classList.contains("collapsed")) {
+            // Если вкладок нет, устанавливаем marginTop равным высоте шапки.
+            activeContentDiv.style.marginTop = topPanelHeight + "px";
+            const availableHeight =
+              window.innerHeight - topPanelHeight - bottomBarHeight;
+            activeContentDiv.style.height = availableHeight + "px";
+          } else {
+            // Если вкладки присутствуют, обнуляем margin и рассчитываем высоту по реальной позиции.
+            activeContentDiv.style.marginTop = "0px";
+            const rect = activeContentDiv.getBoundingClientRect();
+            const availableHeight =
+              window.innerHeight - rect.top - bottomBarHeight;
+            activeContentDiv.style.height = availableHeight + "px";
+          }
           activeContentDiv.style.overflowY = "auto";
         }
-
         document.body.style.height = `${window.innerHeight}px`;
         document.documentElement.style.height = `${window.innerHeight}px`;
         document.body.style.overflow = "hidden";
