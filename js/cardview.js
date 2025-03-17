@@ -154,7 +154,7 @@ window.initCardView = async function ({
   // Создание одной карточки (со всей структурой)
   // ──────────────────────────────────────────────
   async function createCard(item) {
-    const { cardWidth, cardHeight } = calculateCardStyles();
+    const { cardWidth, cardHeight, gap } = calculateCardStyles();
     const s = (val) => scaleValue(val, cardWidth);
     const brandInfo = getBrandInfo(item["Наименование"]);
 
@@ -191,6 +191,7 @@ window.initCardView = async function ({
       width: "100%",
       height: imageDivHeight + "px",
       overflow: "hidden",
+      marginTop: "3px", // добавлен марджин сверху 3px
     });
 
     const imagesContainer = document.createElement("div");
@@ -210,7 +211,7 @@ window.initCardView = async function ({
       transform: "translateX(-50%)",
       display: "flex",
       gap: s(8) + "px",
-      zIndex: "2",
+      zIndex: "1", // z-index уменьшен, чтобы не перекрывать другие элементы
       transition: "opacity 0.3s ease",
       // По умолчанию скрыты – дальнейшая логика задаст нужное состояние
       opacity: "0",
@@ -484,15 +485,15 @@ window.initCardView = async function ({
     const actionsDiv = document.createElement("div");
     setStyles(actionsDiv, {
       display: "flex",
-      gap: s(4) + "px",
       width: "100%",
       alignItems: "center",
       marginBottom: s(6) + "px",
+      gap: s(4) + "px", // gap между элементами
     });
 
     const quantityInput = document.createElement("input");
     quantityInput.type = "number";
-    quantityInput.value = "0";
+    quantityInput.value = ""; // не показываем 0 при первичной загрузке
     quantityInput.min = item["Мин. Кол."] || 1;
     quantityInput.step = item["Мин. Кол."] || 1;
     quantityInput.classList.add("product-quantity");
@@ -500,10 +501,10 @@ window.initCardView = async function ({
       "data-tooltip",
       `Введите количество (Мин: ${item["Мин. Кол."] || 1})`
     );
+    // Задаём ширину инпута как оставшуюся часть карточки:
+    // Ширина инпута = calc(100% - (фиксированная ширина кнопки + gap))
     setStyles(quantityInput, {
-      flex: "2",
-      minWidth: s(40) + "px",
-      maxWidth: s(60) + "px",
+      width: `calc(100% - ${s(70) + s(4)}px)`,
       padding: s(6) + "px",
       border: "1px solid #ddd",
       borderRadius: s(3) + "px",
@@ -515,23 +516,28 @@ window.initCardView = async function ({
     addToCartButton.textContent = "В корзину";
     addToCartButton.classList.add("add-to-cart-button");
     addToCartButton.setAttribute("data-tooltip", "Добавить товар в корзину");
+    // Вычисляем минимальную высоту кнопки для двух строк текста
+    const buttonMinHeight = s(10) * 2 + s(4) * 2;
+    // Фиксированная ширина кнопки через s(60)
     setStyles(addToCartButton, {
-      flex: "none",
-      width: s(60) + "px",
-      padding: s(4) + "px",
-      backgroundColor: "#4caf50",
+      width: s(70) + "px",
+      padding: s(3) + "px",
+      backgroundColor: "#fe9c00",
       color: "white",
       border: "none",
       borderRadius: s(3) + "px",
       fontSize: s(10) + "px",
       cursor: "pointer",
       transition: "background-color 0.3s ease",
+      whiteSpace: "normal",
+      textAlign: "center",
+      minHeight: buttonMinHeight + "px",
     });
     addToCartButton.addEventListener("mouseover", () => {
-      addToCartButton.style.backgroundColor = "#45a049";
+      addToCartButton.style.backgroundColor = "#e08c00";
     });
     addToCartButton.addEventListener("mouseout", () => {
-      addToCartButton.style.backgroundColor = "#4caf50";
+      addToCartButton.style.backgroundColor = "#fe9c00";
     });
     actionsDiv.appendChild(quantityInput);
     actionsDiv.appendChild(addToCartButton);
@@ -621,7 +627,7 @@ window.initCardView = async function ({
       const quantity = parseInt(quantityInput.value, 10) || 0;
       if (quantity > 0) {
         addToCartButton.textContent = "✔ В корзине";
-        setStyles(addToCartButton, { backgroundColor: "#45a049" });
+        setStyles(addToCartButton, { backgroundColor: "#ff9218" });
         console.log(
           `Добавлен товар (код ${item["Код"]}), количество: ${quantity}`
         );

@@ -168,18 +168,19 @@ body {
 /* Мобильный оверлей – теперь с отступом от верха, равным сумме отступа (40px) и высоты тул бара (40px) */
 .mobile-expanded-panel {
   position: fixed;
-  top: 90px; /* 40px (отступ) + 40px (высота тул бара) */
+  top: 90px; /* 40px (отступ) + 40px (высота тул-бара) + 10px дополнительного отступа */
   left: 0;
   right: 0;
   bottom: 30px;
   background: #fff;
   overflow-y: auto;
-  z-index: 1;
+  z-index: 10; /* Увеличено, чтобы оверлей был выше индикаторов */
   padding: 1rem;
   box-sizing: border-box;
   transform: translateY(100%);
   transition: transform 0.3s ease;
 }
+
 .mobile-expanded-panel.expanded {
   transform: translateY(0);
 }

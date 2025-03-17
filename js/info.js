@@ -28,7 +28,7 @@ window.initBanners = function (root = document) {
           const bannerDiv = document.createElement("div");
           bannerDiv.classList.add("dynamic-banner");
           bannerDiv.style.left = `${60 * index}px`;
-          bannerDiv.style.zIndex = index + 1;
+          bannerDiv.style.zIndex = index + 3;
 
           // Картинка
           const img = document.createElement("img");

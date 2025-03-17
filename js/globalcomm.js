@@ -732,6 +732,13 @@
         }
         this.processScripts(tempDiv, shadowRoot);
         shadowRoot.append(...Array.from(tempDiv.childNodes));
+        // Добавляем правило для отключения горизонтальной прокрутки в мобильной версии,
+        // но ограничиваем его только на уровне хоста, чтобы не сдвигать внутренние стили.
+        if (window.innerWidth <= 800) {
+          const disableHorizScrollStyle = document.createElement("style");
+          disableHorizScrollStyle.textContent = `:host { overflow-x: hidden !important; }`;
+          shadowRoot.prepend(disableHorizScrollStyle);
+        }
         this.initializeShadowLinkHandler(shadowRoot);
         await this.initializePageSpecific(contentURL, shadowRoot);
         this.tabShadowRoots[tabId] = shadowRoot;
@@ -882,7 +889,7 @@
     // Изменённый метод updatePageHeight:
     // Для мобильной версии (ширина <=800px) вычисляем доступную высоту, учитывая
     // верхнюю панель (.top-panel) и нижнюю панель (bottom‑bar).
-    // Если вкладки видимы (не имеют класс collapsed), то их высота добавляется к верхней границе.
+    // Если вкладки видимы (не имеют класс collapsed), то их высота прибавляется к верхней границе.
     // При этом внешняя прокрутка отключается, а скроллирование осуществляется только внутри области контента.
     updatePageHeight() {
       if (window.innerWidth <= 800) {
