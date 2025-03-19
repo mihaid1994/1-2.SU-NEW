@@ -22,46 +22,47 @@ html {
 /* 2. Основная структура */
 .main-container {
   display: block;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
 }
 
 .content {
   width: 100%;
   margin: 0;
-  padding: 10px;
-}
-
-/* 3. Верхняя зона: шапка и панель переключателей */
-.zone-container {
-  padding: 5px;
 }
 
 .row-top {
   width: 100%;
-  text-align: center;
-  padding-bottom: 8px;
-}
-
-.header-section {
-  padding: 8px 0;
+  text-align: left;
 }
 
 .header-title {
   font-size: 24px; /* компактнее */
+  margin-top: 5px;
   font-weight: bold;
   /* Можно задать меньше отступов, если нужно */
 }
 
 .header-buttons i {
   font-size: 18px;
+  padding: 8px 10px; /* Добавляем внутренний отступ для удобства клика */
   margin-left: 6px;
   cursor: pointer;
   color: #777;
-  transition: color 0.2s ease;
+  background-color: #f8f9fa; /* Светлый фон для кнопки */
+  border-radius: 8px; /* Закругляем углы */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавляем тень */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  border: none;
 }
 
 .header-buttons i:hover {
   color: #333;
+  background-color: #e0e0e0; /* Изменяем фон при наведении */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3); /* Усиливаем тень */
 }
 
 /* Панель переключателей */
@@ -90,10 +91,25 @@ html {
   display: none !important;
 }
 
+#toggleText2,
+.mobile-func-left {
+  white-space: nowrap; /* Запрет переноса текста */
+  border-radius: 8px; /* Закругленные края */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Тень */
+  display: inline-flex; /* Чтобы элемент вел себя как кнопка */
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+#toggleIcon2 {
+  display: none;
+}
+
 /* 4. Контейнер для товаров */
 #delivery-sections {
-  margin-top: 10px;
-  padding: 5px;
+  padding: 0 5px 5px 5px;
   /* Если список товаров длинный, можно добавить прокрутку, например:
        max-height: 80vh; overflow-y: auto; */
 }

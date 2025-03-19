@@ -1481,8 +1481,7 @@ window.initDelivery = function (root = window) {
       mobileFuncRow.style.display = "flex";
       mobileFuncRow.style.justifyContent = "space-between";
       mobileFuncRow.style.alignItems = "center";
-      mobileFuncRow.style.padding = "10px";
-      mobileFuncRow.style.borderBottom = "1px solid #ccc";
+      mobileFuncRow.style.padding = "0 0 10px 0";
       deliveryContainer.insertBefore(
         mobileFuncRow,
         deliveryContainer.firstChild
@@ -1762,8 +1761,9 @@ window.initDelivery = function (root = window) {
     const selectAllLabel = document.createElement("span");
     selectAllLabel.textContent = "Выбрать все";
     selectAllLabel.className = "mobile-select-all-label";
+    selectAllLabel.style.cursor = "pointer";
+    selectAllLabel.addEventListener("click", () => selectAllCheckbox.click());
 
-    // Добавляем чекбокс и метку в левый блок
     leftGroup.appendChild(selectAllLabel);
     leftGroup.appendChild(selectAllCheckbox);
 
