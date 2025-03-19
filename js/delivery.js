@@ -711,7 +711,8 @@ window.initDelivery = function (root = window) {
   /**
    * showFullScreenSlider(images):
    * - Если images.length < 2 => не показываем стрелки и индикаторы
-   * - Иначе показываем, как раньше
+   * - Иначе показываем, как раньше, с доработкой для мобильного макета:
+   *   верхняя часть (2/3 высоты экрана) содержит слайдер, нижняя – информацию о товаре.
    */
   function showFullScreenSlider(images, article) {
     // Размер слайдера (квадратная область)
@@ -719,7 +720,7 @@ window.initDelivery = function (root = window) {
     // Отступ между слайдами
     const slideGap = 10;
 
-    // Основной overlay – на всю страницу
+    // Основной overlay – на всю страницу, с вертикальным делением
     const overlay = document.createElement("div");
     overlay.className = "fullscreen-slider-overlay";
     Object.assign(overlay.style, {
@@ -730,29 +731,52 @@ window.initDelivery = function (root = window) {
       height: "100vh",
       backgroundColor: "rgba(0,0,0,0.8)",
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
+      flexDirection: "column",
       zIndex: "9999",
+      overflowY: "auto",
+      overflowX: "hidden", // ограничиваем горизонтальную прокрутку
     });
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) overlay.remove();
     });
 
-    // Контейнер для слайдов
+    // Верхняя часть (2/3 высоты экрана) для слайдера
+    const upperContainer = document.createElement("div");
+    Object.assign(upperContainer.style, {
+      flex: "0 0 66.66vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    });
+    overlay.appendChild(upperContainer);
+
+    // Нижняя часть (информация о товаре) – высота по содержимому
+    const lowerContainer = document.createElement("div");
+    Object.assign(lowerContainer.style, {
+      width: "100%",
+      padding: "16px",
+      backgroundColor: "#fff",
+      color: "#000",
+      boxSizing: "border-box",
+    });
+    overlay.appendChild(lowerContainer);
+
+    // Контейнер для слайдов внутри верхней части
     const sliderWrapper = document.createElement("div");
     sliderWrapper.style.position = "relative";
     sliderWrapper.style.width = sliderWidth + "px";
     sliderWrapper.style.height = sliderWidth + "px";
     sliderWrapper.style.overflow = "visible";
-    overlay.appendChild(sliderWrapper);
+    upperContainer.appendChild(sliderWrapper);
 
-    // Контейнер самих слайдов (горизонт)
+    // Контейнер самих слайдов (горизонтально)
     const sliderContainer = document.createElement("div");
-    sliderContainer.style.display = "flex";
-    sliderContainer.style.height = sliderWidth + "px";
-    sliderContainer.style.width =
-      (sliderWidth + slideGap) * images.length - slideGap + "px";
-    sliderContainer.style.transition = "transform 0.3s ease-out";
+    Object.assign(sliderContainer.style, {
+      display: "flex",
+      height: sliderWidth + "px",
+      width: (sliderWidth + slideGap) * images.length - slideGap + "px",
+      transition: "transform 0.3s ease-out",
+    });
     sliderWrapper.appendChild(sliderContainer);
 
     // Создаем слайды
@@ -783,7 +807,7 @@ window.initDelivery = function (root = window) {
     closeBtn.textContent = "✕";
     Object.assign(closeBtn.style, {
       position: "absolute",
-      top: "-90px",
+      top: "-60px",
       right: "0",
       fontSize: "28px",
       fontWeight: "bold",
@@ -801,16 +825,120 @@ window.initDelivery = function (root = window) {
     });
     sliderWrapper.appendChild(closeBtn);
 
-    // Проверяем кол-во картинок
     let currentSlide = 0;
     if (images.length < 2) {
-      // Если только 1 изображение, просто показываем одну картинку,
-      // никаких кнопок и индикаторов не добавляем
+      // Если изображение одно – показываем описание без стрелок/индикаторов
+      lowerContainer.innerHTML = `
+        <div class="description-section" style="margin-bottom: 20px;">
+          <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
+          <p>
+            Фотореле PS-5 применяется для управления освещением или другой нагрузкой
+            в зависимости от уровня освещенности. Обычно фотореле применяется в системах
+            управления уличным освещением и включает/выключает нагрузку в момент захода/восхода солнца.
+            Допускается прямое подключение нагрузки с током не более 15А. Нагрузка большей мощности
+            может быть подключена при помощи контактора. Порог срабатывания по освещенности настраивается
+            в диапазоне 5-50 лк. Фотореле имеет степень защиты IP66, что позволяет устанавливать его
+            в условиях сильного воздействия пыли и влаги.
+          </p>
+        </div>
+        <div class="description-section" style="margin-bottom: 20px;">
+          <h3>Характеристики</h3>
+          <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+            <table>
+              <tr><td>Статус</td><td>Регулярная</td></tr>
+              <tr><td>Макс. ток коммутируем. резистивной нагрузки, А</td><td>15</td></tr>
+              <tr><td>Макс. коммутационная мощность (подключ. нагрузка), Вт</td><td>3 300</td></tr>
+              <tr><td>Установка сумеречного порога, лк</td><td>5...50</td></tr>
+              <tr><td>Подходит для степени защиты (IP)</td><td>IP66</td></tr>
+              <tr><td>Номин. напряжение, В</td><td>230</td></tr>
+              <tr><td>Задержка включения, с</td><td>5</td></tr>
+              <tr><td>Задержка отключения, с</td><td>540</td></tr>
+              <tr><td>Цвет по RAL</td><td>9 010</td></tr>
+              <tr><td>Освещённость, при которой происходит отключение, лк</td><td>5...50</td></tr>
+              <tr><td>Рабочая температура, °C</td><td>-25...40</td></tr>
+              <tr><td>Цвет</td><td>Белый</td></tr>
+              <tr><td>Гарантийный срок эксплуатации</td><td>7 лет</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="description-section" style="margin-bottom: 20px;">
+          <h3>Логистические параметры</h3>
+          <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+            <table>
+              <tr>
+                <th>Вид параметра</th>
+                <th>Индивидуальная</th>
+                <th>Групповая</th>
+                <th>Транспортная</th>
+              </tr>
+              <tr>
+                <td>Количество в упаковке</td>
+                <td>1</td>
+                <td>1</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Единица хранения</td>
+                <td>Штука</td>
+                <td>Штука</td>
+                <td>Коробка</td>
+              </tr>
+              <tr>
+                <td>Штрих-код</td>
+                <td>4690216240947</td>
+                <td>4690216240947</td>
+                <td>14690216240944</td>
+              </tr>
+              <tr>
+                <td>Вес брутто, кг</td>
+                <td>0.1390</td>
+                <td>0.1390</td>
+                <td>14.2000</td>
+              </tr>
+              <tr>
+                <td>Объем, м³</td>
+                <td>0.00090000</td>
+                <td>0.00090000</td>
+                <td>0.07792300</td>
+              </tr>
+              <tr>
+                <td>Длина, м</td>
+                <td>0.0900</td>
+                <td>0.0900</td>
+                <td>0.4500</td>
+              </tr>
+              <tr>
+                <td>Ширина, м</td>
+                <td>0.1190</td>
+                <td>0.1190</td>
+                <td>0.4630</td>
+              </tr>
+              <tr>
+                <td>Высота, м</td>
+                <td>0.0840</td>
+                <td>0.0840</td>
+                <td>0.3740</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="description-section" style="margin-bottom: 20px;">
+          <h3>Комплектация:</h3>
+          <ul>
+            <li>Фотореле</li>
+            <li>Паспорт</li>
+            <li>Крепежный уголок</li>
+            <li>Крепеж</li>
+            <li>Упаковка</li>
+          </ul>
+        </div>
+        <div style="height: 100px;"></div>
+      `;
       document.body.appendChild(overlay);
       return;
     }
 
-    // Иначе (2 и более) => показываем стрелки и индикаторы
+    // Если изображений 2 и более – добавляем навигационные элементы и индикаторы
     const indicatorsContainer = document.createElement("div");
     Object.assign(indicatorsContainer.style, {
       position: "absolute",
@@ -838,8 +966,8 @@ window.initDelivery = function (root = window) {
     prevBtn.title = "Предыдущее";
     Object.assign(prevBtn.style, {
       position: "absolute",
-      bottom: "-140px",
-      left: "calc(50% - 150px)",
+      bottom: "-70px",
+      left: "calc(50% - 190px)",
       fontSize: "24px",
       backgroundColor: "orange",
       border: "none",
@@ -856,8 +984,8 @@ window.initDelivery = function (root = window) {
     nextBtn.title = "Следующее";
     Object.assign(nextBtn.style, {
       position: "absolute",
-      bottom: "-140px",
-      left: "calc(50% + 90px)",
+      bottom: "-70px",
+      left: "calc(50% + 140px)",
       fontSize: "24px",
       backgroundColor: "orange",
       border: "none",
@@ -868,13 +996,13 @@ window.initDelivery = function (root = window) {
       fontWeight: "bold",
       zIndex: "10000",
     });
-
     sliderWrapper.appendChild(prevBtn);
     sliderWrapper.appendChild(nextBtn);
 
     function updateSlidePosition() {
-      const offset = -(sliderWidth + slideGap) * currentSlide;
-      sliderContainer.style.transform = `translateX(${offset}px)`;
+      prevTranslate = -((sliderWidth + slideGap) * currentSlide);
+      sliderContainer.style.transition = "transform 0.3s ease-out";
+      sliderContainer.style.transform = `translateX(${prevTranslate}px)`;
       updateIndicators();
     }
 
@@ -900,7 +1028,6 @@ window.initDelivery = function (root = window) {
       updateSlidePosition();
     });
 
-    // Свайп
     let isDragging = false;
     let startX = 0;
     let currentTranslate = 0;
@@ -915,14 +1042,12 @@ window.initDelivery = function (root = window) {
       startX = e.touches[0].clientX;
       sliderContainer.style.transition = "none";
     }
-
     function onTouchMove(e) {
       if (!isDragging) return;
       const deltaX = e.touches[0].clientX - startX;
       currentTranslate = prevTranslate + deltaX;
       sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
     }
-
     function onTouchEnd() {
       isDragging = false;
       const movedBy = currentTranslate - prevTranslate;
@@ -934,18 +1059,115 @@ window.initDelivery = function (root = window) {
       sliderContainer.style.transition = "transform 0.3s ease-out";
       updateSlidePosition();
     }
-
-    function updateSlidePosition() {
-      prevTranslate = -((sliderWidth + slideGap) * currentSlide);
-      sliderContainer.style.transition = "transform 0.3s ease-out";
-      sliderContainer.style.transform = `translateX(${prevTranslate}px)`;
-      updateIndicators();
-    }
-
-    // Начальное состояние
     updateSlidePosition();
 
-    // Добавляем в документ
+    // Заполнение описательной части с отступами между секциями, таблицами в обёртке с overflow‑x и пустым блоком в конце
+    lowerContainer.innerHTML = `
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
+        <p>
+          Фотореле PS-5 применяется для управления освещением или другой нагрузкой
+          в зависимости от уровня освещенности. Обычно фотореле применяется в системах
+          управления уличным освещением и включает/выключает нагрузку в момент захода/восхода солнца.
+          Допускается прямое подключение нагрузки с током не более 15А. Нагрузка большей мощности
+          может быть подключена при помощи контактора. Порог срабатывания по освещенности настраивается
+          в диапазоне 5-50 лк. Фотореле имеет степень защиты IP66, что позволяет устанавливать его
+          в условиях сильного воздействия пыли и влаги.
+        </p>
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Характеристики</h3>
+        <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+          <table>
+            <tr><td>Статус</td><td>Регулярная</td></tr>
+            <tr><td>Макс. ток коммутируем. резистивной нагрузки, А</td><td>15</td></tr>
+            <tr><td>Макс. коммутационная мощность (подключ. нагрузка), Вт</td><td>3 300</td></tr>
+            <tr><td>Установка сумеречного порога, лк</td><td>5...50</td></tr>
+            <tr><td>Подходит для степени защиты (IP)</td><td>IP66</td></tr>
+            <tr><td>Номин. напряжение, В</td><td>230</td></tr>
+            <tr><td>Задержка включения, с</td><td>5</td></tr>
+            <tr><td>Задержка отключения, с</td><td>540</td></tr>
+            <tr><td>Цвет по RAL</td><td>9 010</td></tr>
+            <tr><td>Освещённость, при которой происходит отключение, лк</td><td>5...50</td></tr>
+            <tr><td>Рабочая температура, °C</td><td>-25...40</td></tr>
+            <tr><td>Цвет</td><td>Белый</td></tr>
+            <tr><td>Гарантийный срок эксплуатации</td><td>7 лет</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Логистические параметры</h3>
+        <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+          <table>
+            <tr>
+              <th>Вид параметра</th>
+              <th>Индивидуальная</th>
+              <th>Групповая</th>
+              <th>Транспортная</th>
+            </tr>
+            <tr>
+              <td>Количество в упаковке</td>
+              <td>1</td>
+              <td>1</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>Единица хранения</td>
+              <td>Штука</td>
+              <td>Штука</td>
+              <td>Коробка</td>
+            </tr>
+            <tr>
+              <td>Штрих-код</td>
+              <td>4690216240947</td>
+              <td>4690216240947</td>
+              <td>14690216240944</td>
+            </tr>
+            <tr>
+              <td>Вес брутто, кг</td>
+              <td>0.1390</td>
+              <td>0.1390</td>
+              <td>14.2000</td>
+            </tr>
+            <tr>
+              <td>Объем, м³</td>
+              <td>0.00090000</td>
+              <td>0.00090000</td>
+              <td>0.07792300</td>
+            </tr>
+            <tr>
+              <td>Длина, м</td>
+              <td>0.0900</td>
+              <td>0.0900</td>
+              <td>0.4500</td>
+            </tr>
+            <tr>
+              <td>Ширина, м</td>
+              <td>0.1190</td>
+              <td>0.1190</td>
+              <td>0.4630</td>
+            </tr>
+            <tr>
+              <td>Высота, м</td>
+              <td>0.0840</td>
+              <td>0.0840</td>
+              <td>0.3740</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Комплектация:</h3>
+        <ul>
+          <li>Фотореле</li>
+          <li>Паспорт</li>
+          <li>Крепежный уголок</li>
+          <li>Крепеж</li>
+          <li>Упаковка</li>
+        </ul>
+      </div>
+      <div style="height: 100px;"></div>
+    `;
     document.body.appendChild(overlay);
   }
 
@@ -1282,8 +1504,8 @@ window.initDelivery = function (root = window) {
       mediaContainer.className = "media-container";
       mediaContainer.style.display = "flex";
       mediaContainer.style.flexDirection = "column";
-      mediaContainer.style.alignItems = "center";
-      mediaContainer.style.gap = "5px";
+      mediaContainer.style.alignItems = "left";
+      mediaContainer.style.gap = "10px";
 
       // Чекбокс
       const checkboxContainer = document.createElement("div");
@@ -1486,13 +1708,43 @@ window.initDelivery = function (root = window) {
         deliveryContainer.firstChild
       );
     }
+
+    // Очищаем содержимое перед обновлением
     mobileFuncRow.innerHTML = "";
-    // Левая группа: чекбокс "Выбрать все" и иконка сортировки
+
+    // Функция создания кнопки-иконки
+    function createIconButton(iconClass, color, title, onClick) {
+      const button = document.createElement("div");
+      button.className = "icon-button";
+      button.style.display = "flex";
+      button.style.alignItems = "center";
+      button.style.justifyContent = "center";
+      button.style.width = "40px";
+      button.style.height = "40px";
+      button.style.borderRadius = "8px"; // Скругленные углы
+      button.style.backgroundColor = "#F8F9FA"; // Светлый фон
+      button.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)"; // Тень
+      button.style.cursor = "pointer";
+
+      const icon = document.createElement("i");
+      icon.className = iconClass;
+      icon.style.fontSize = "24px";
+      icon.style.color = color;
+      icon.title = title;
+
+      button.appendChild(icon);
+      button.addEventListener("click", onClick);
+
+      return button;
+    }
+
+    // Левый блок: только чекбокс "Выбрать все"
     const leftGroup = document.createElement("div");
     leftGroup.className = "mobile-func-left";
     leftGroup.style.display = "flex";
     leftGroup.style.alignItems = "center";
     leftGroup.style.gap = "10px";
+
     const selectAllCheckbox = document.createElement("input");
     selectAllCheckbox.type = "checkbox";
     selectAllCheckbox.className = "mobile-select-all-checkbox";
@@ -1506,52 +1758,69 @@ window.initDelivery = function (root = window) {
       renderMobileCart();
       updateCartSummaryMobile();
     });
+
     const selectAllLabel = document.createElement("span");
     selectAllLabel.textContent = "Выбрать все";
     selectAllLabel.className = "mobile-select-all-label";
-    leftGroup.append(selectAllCheckbox, selectAllLabel);
-    const sortIcon = document.createElement("i");
-    sortIcon.className = "ri-arrow-up-down-line mobile-sort-icon";
-    sortIcon.style.fontSize = "28px";
-    sortIcon.title = "Сортировка";
-    sortIcon.addEventListener("click", () => {
-      showSortModal();
-    });
-    leftGroup.appendChild(sortIcon);
-    // Правая группа: Excel, PDF и удаление выбранных товаров
+
+    // Добавляем чекбокс и метку в левый блок
+    leftGroup.appendChild(selectAllLabel);
+    leftGroup.appendChild(selectAllCheckbox);
+
+    // Правый блок: сортировка, Excel, PDF и корзина
     const rightGroup = document.createElement("div");
     rightGroup.className = "mobile-func-right";
     rightGroup.style.display = "flex";
     rightGroup.style.alignItems = "center";
     rightGroup.style.gap = "10px";
-    const excelIcon = document.createElement("i");
-    excelIcon.className = "ri-file-excel-line mobile-excel-icon";
-    excelIcon.style.fontSize = "28px";
-    excelIcon.title = "Скачать Excel (выбранные товары)";
-    excelIcon.addEventListener("click", () => {
-      const selected = window.data.filter((item) => item.selected);
-      downloadExcel(selected.length ? selected : window.data);
-    });
-    const pdfIcon = document.createElement("i");
-    pdfIcon.className = "ri-file-pdf-line mobile-pdf-icon";
-    pdfIcon.style.fontSize = "28px";
-    pdfIcon.title = "Скачать PDF (выбранные товары)";
-    pdfIcon.addEventListener("click", () => {
-      const selected = window.data.filter((item) => item.selected);
-      downloadPDF(selected.length ? selected : window.data);
-    });
-    const deleteIcon = document.createElement("i");
-    deleteIcon.className = "ri-delete-bin-6-line mobile-delete-icon";
-    deleteIcon.style.fontSize = "28px";
-    deleteIcon.title = "Удалить выбранные товары";
-    deleteIcon.addEventListener("click", () => {
-      window.data = window.data.filter((item) => !item.selected);
-      renderMobileCart();
-      updateCartSummaryMobile();
-    });
-    rightGroup.append(excelIcon, pdfIcon, deleteIcon);
+
+    const sortButton = createIconButton(
+      "ri-arrow-up-down-line",
+      "#555555", // Темно-серый цвет
+      "Сортировка",
+      () => showSortModal()
+    );
+
+    const excelButton = createIconButton(
+      "ri-file-excel-line",
+      "#008000", // Зеленый значок Excel
+      "Скачать Excel (выбранные товары)",
+      () => {
+        const selected = window.data.filter((item) => item.selected);
+        downloadExcel(selected.length ? selected : window.data);
+      }
+    );
+
+    const pdfButton = createIconButton(
+      "ri-file-pdf-2-line",
+      "#D32F2F", // Насыщенный красный значок PDF
+      "Скачать PDF (выбранные товары)",
+      () => {
+        const selected = window.data.filter((item) => item.selected);
+        downloadPDF(selected.length ? selected : window.data);
+      }
+    );
+
+    const deleteButton = createIconButton(
+      "ri-delete-bin-6-line",
+      "#555555", // Темно-серый значок корзины
+      "Удалить выбранные товары",
+      () => {
+        window.data = window.data.filter((item) => !item.selected);
+        renderMobileCart();
+        updateCartSummaryMobile();
+      }
+    );
+
+    // Добавляем кнопки в правый блок в требуемом порядке
+    rightGroup.appendChild(sortButton);
+    rightGroup.appendChild(excelButton);
+    rightGroup.appendChild(pdfButton);
+    rightGroup.appendChild(deleteButton);
+
     mobileFuncRow.appendChild(leftGroup);
     mobileFuncRow.appendChild(rightGroup);
+
     updateMobileSelectAllCheckbox();
   }
 
