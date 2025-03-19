@@ -729,13 +729,15 @@ window.initDelivery = function (root = window) {
       left: "0",
       width: "100vw",
       height: "100vh",
-      backgroundColor: "rgba(0,0,0,0.8)",
+      backgroundColor: "rgba(0, 0, 0, 0.48)", // Менее тёмное затемнение
+      backdropFilter: "blur(2px)", // Гауссово размытие
       display: "flex",
       flexDirection: "column",
       zIndex: "9999",
       overflowY: "auto",
-      overflowX: "hidden", // ограничиваем горизонтальную прокрутку
+      overflowX: "hidden",
     });
+
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) overlay.remove();
     });
