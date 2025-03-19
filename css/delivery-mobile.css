@@ -1,0 +1,466 @@
+/* ======================================
+   delivery-mobile.css – Мобильная версия
+   для экранов с шириной до 800px
+======================================== */
+
+/* 1. Сброс стилей и глобальные настройки */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background: #f7f7f7;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* 2. Основная структура */
+.main-container {
+  display: block;
+  padding: 10px;
+}
+
+.content {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+}
+
+/* 3. Верхняя зона: шапка и панель переключателей */
+.zone-container {
+  padding: 5px;
+}
+
+.row-top {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.header-section {
+  padding: 8px 0;
+}
+
+.header-title {
+  font-size: 24px; /* компактнее */
+  font-weight: bold;
+  /* Можно задать меньше отступов, если нужно */
+}
+
+.header-buttons i {
+  font-size: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.2s ease;
+}
+
+.header-buttons i:hover {
+  color: #333;
+}
+
+/* Панель переключателей */
+.row-bottom {
+  width: 100%;
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-group {
+  font-size: 12px;
+  color: #888;
+}
+
+.right-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+
+/* Скрываем переключатель вида списка в мобильном режиме */
+.toggle-button {
+  display: none !important;
+}
+
+/* 4. Контейнер для товаров */
+#delivery-sections {
+  margin-top: 10px;
+  padding: 5px;
+  /* Если список товаров длинный, можно добавить прокрутку, например:
+       max-height: 80vh; overflow-y: auto; */
+}
+
+/* 4.1. Карточка товара */
+.mobile-cart-item {
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  flex-direction: row;
+}
+
+.mobile-cart-item .item-image-container {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.mobile-cart-item .item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mobile-cart-item .item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mobile-cart-item .item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-cart-item .item-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.mobile-cart-item .item-remove {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #ff3b30;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mobile-cart-item .item-remove:hover {
+  color: #d62c1a;
+}
+
+.mobile-cart-item .item-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.mobile-cart-item .item-price {
+  font-size: 15px;
+  font-weight: bold;
+  color: #007aff;
+}
+
+.mobile-cart-item .item-quantity {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-cart-item .qty-btn {
+  background: #e5e5ea;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #007aff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mobile-cart-item .qty-btn:hover {
+  background: #d1d1d6;
+}
+
+.mobile-cart-item .item-qty {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin: 0 6px;
+  font-size: 15px;
+  padding: 3px;
+  outline: none;
+}
+
+.mobile-cart-item .item-total {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 8px;
+  color: #333;
+}
+
+/* 5. Футер корзины */
+.cart-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summary-total {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.summary-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #007aff;
+}
+
+.checkout-btn {
+  width: 100%;
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkout-btn:hover {
+  background: #005bb5;
+}
+
+/* 6. Блок оформления заказа (order summary) */
+/* В мобильном режиме сайдбар становится обычным блоком, располагаясь после товаров */
+.order-summary {
+  position: static; /* Снимаем фиксированное позиционирование */
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #efefef;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+}
+
+.order-summary-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+.order-summary-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.order-summary-card p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #333;
+}
+
+.order-summary-card input[type="text"],
+.order-summary-card input[type="number"] {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.proceed-button {
+  display: block;
+  background-color: #ff8420;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin: 15px 0;
+  transition: box-shadow 0.3s, font-size 0.3s;
+}
+
+.proceed-button:hover {
+  font-size: 16.3px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.192);
+}
+
+/* 7. Дополнительные действия */
+.actions-card {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actions-card button {
+  background-color: #b0b0b0;
+  color: white;
+  padding: 6px;
+  margin-top: 4px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.actions-card button:hover {
+  background-color: #8d8d8d;
+}
+
+/* 8. Уведомления */
+.notification-card {
+  background-color: #d9994f;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.notification-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.notification-card .header-text {
+  font-size: 12px;
+}
+
+.notification-card .exclamation-circle {
+  width: 20px;
+  height: 20px;
+  background-color: #ffad42;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.notification-card button {
+  background-color: #a6763e;
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.notification-card button:hover {
+  background-color: #887864;
+}
+
+/* 9. Футер */
+.footer {
+  background-color: #cecece;
+  color: #fff;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer .footer-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.footer a.footer-link {
+  color: #353535;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer a.footer-link:hover {
+  color: #2e2e2e;
+}
+
+/* 10. Дополнительные мелкие правки */
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #517672;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+  line-height: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scroll-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+  background-color: #377271;
+}
+
+/* 11. Скрытие элементов управления сайдбаром */
+.hide-right-sidebar,
+.show-right-sidebar {
+  display: none !important;
+}
+
+/* ======================================
+       Конец файла delivery-mobile.css
+  ======================================== */
