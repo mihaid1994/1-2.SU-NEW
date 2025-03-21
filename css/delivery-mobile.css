@@ -107,6 +107,10 @@ html {
   display: none;
 }
 
+.actions-card {
+  display: none;
+}
+
 /* 4. Контейнер для товаров */
 #delivery-sections {
   padding: 0 5px 5px 5px;
@@ -132,6 +136,10 @@ html {
   border-radius: 10px;
   overflow: hidden;
   margin-right: 12px;
+}
+
+.add-to-waitlist-notif-button {
+  display: none;
 }
 
 .mobile-cart-item .item-image {
@@ -339,32 +347,6 @@ html {
 .proceed-button:hover {
   font-size: 16.3px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.192);
-}
-
-/* 7. Дополнительные действия */
-.actions-card {
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.actions-card button {
-  background-color: #b0b0b0;
-  color: white;
-  padding: 6px;
-  margin-top: 4px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease;
-}
-
-.actions-card button:hover {
-  background-color: #8d8d8d;
 }
 
 /* 8. Уведомления */
