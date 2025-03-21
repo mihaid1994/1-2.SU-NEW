@@ -728,9 +728,10 @@ window.initDelivery = function (root = window) {
   }
 
   /**
-   * showFullScreenSlider(images):
+   * showFullScreenSlider(images, article):
    * - Если images.length < 2 => не показываем стрелки и индикаторы
-   * - Иначе показываем, как раньше, с доработкой для мобильного макета
+   * - Иначе показываем, как раньше, с доработкой для мобильного макета:
+   *   верхняя часть (2/3 высоты экрана) содержит слайдер, нижняя – информацию о товаре.
    */
   function showFullScreenSlider(images, article) {
     const sliderWidth = Math.min(window.innerWidth * 0.9, 600);
@@ -754,6 +755,7 @@ window.initDelivery = function (root = window) {
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) overlay.remove();
     });
+
     const upperContainer = document.createElement("div");
     Object.assign(upperContainer.style, {
       flex: "0 0 66.66vh",
@@ -762,6 +764,7 @@ window.initDelivery = function (root = window) {
       alignItems: "center",
     });
     overlay.appendChild(upperContainer);
+
     const lowerContainer = document.createElement("div");
     Object.assign(lowerContainer.style, {
       width: "100%",
@@ -771,12 +774,14 @@ window.initDelivery = function (root = window) {
       boxSizing: "border-box",
     });
     overlay.appendChild(lowerContainer);
+
     const sliderWrapper = document.createElement("div");
     sliderWrapper.style.position = "relative";
     sliderWrapper.style.width = sliderWidth + "px";
     sliderWrapper.style.height = sliderWidth + "px";
     sliderWrapper.style.overflow = "visible";
     upperContainer.appendChild(sliderWrapper);
+
     const sliderContainer = document.createElement("div");
     Object.assign(sliderContainer.style, {
       display: "flex",
@@ -785,6 +790,7 @@ window.initDelivery = function (root = window) {
       transition: "transform 0.3s ease-out",
     });
     sliderWrapper.appendChild(sliderContainer);
+
     images.forEach((src, idx) => {
       const slide = document.createElement("div");
       slide.style.flex = "0 0 " + sliderWidth + "px";
@@ -796,15 +802,18 @@ window.initDelivery = function (root = window) {
       slide.style.display = "flex";
       slide.style.justifyContent = "center";
       slide.style.alignItems = "center";
+
       const img = document.createElement("img");
       img.src = src;
       img.style.width = "100%";
       img.style.height = "100%";
       img.style.objectFit = "contain";
       img.style.borderRadius = "8px";
+
       slide.appendChild(img);
       sliderContainer.appendChild(slide);
     });
+
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "✕";
     Object.assign(closeBtn.style, {
@@ -826,23 +835,122 @@ window.initDelivery = function (root = window) {
       overlay.remove();
     });
     sliderWrapper.appendChild(closeBtn);
+
     let currentSlide = 0;
+
+    // Если всего 1 изображение => не показываем стрелки и индикаторы, а низ заполняем расширенным описанием:
     if (images.length < 2) {
       lowerContainer.innerHTML = `
-        <div class="description-section" style="margin-bottom: 20px;">
-          <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
-          <p>
-            Фотореле PS-5 применяется для управления освещением или другой нагрузкой.
-            Допускается прямое подключение нагрузки с током не более 15А.
-          </p>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
+        <p>
+          Фотореле PS-5 применяется для управления освещением или другой нагрузкой
+          в зависимости от уровня освещенности. Обычно фотореле применяется в системах
+          управления уличным освещением и включает/выключает нагрузку в момент захода/восхода солнца.
+          Допускается прямое подключение нагрузки с током не более 15А. Нагрузка большей мощности
+          может быть подключена при помощи контактора. Порог срабатывания по освещенности настраивается
+          в диапазоне 5-50 лк. Фотореле имеет степень защиты IP66, что позволяет устанавливать его
+          в условиях сильного воздействия пыли и влаги.
+        </p>
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Характеристики</h3>
+        <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+          <table>
+            <tr><td>Статус</td><td>Регулярная</td></tr>
+            <tr><td>Макс. ток коммутируем. резистивной нагрузки, А</td><td>15</td></tr>
+            <tr><td>Макс. коммутационная мощность (подключ. нагрузка), Вт</td><td>3 300</td></tr>
+            <tr><td>Установка сумеречного порога, лк</td><td>5...50</td></tr>
+            <tr><td>Подходит для степени защиты (IP)</td><td>IP66</td></tr>
+            <tr><td>Номин. напряжение, В</td><td>230</td></tr>
+            <tr><td>Задержка включения, с</td><td>5</td></tr>
+            <tr><td>Задержка отключения, с</td><td>540</td></tr>
+            <tr><td>Цвет по RAL</td><td>9 010</td></tr>
+            <tr><td>Освещённость, при которой происходит отключение, лк</td><td>5...50</td></tr>
+            <tr><td>Рабочая температура, °C</td><td>-25...40</td></tr>
+            <tr><td>Цвет</td><td>Белый</td></tr>
+            <tr><td>Гарантийный срок эксплуатации</td><td>7 лет</td></tr>
+          </table>
         </div>
-        <!-- ... блок характеристик, логистики и т.д., всё как в вашем коде ... -->
-        <div style="height: 100px;"></div>
-      `;
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Логистические параметры</h3>
+        <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+          <table>
+            <tr>
+              <th>Вид параметра</th>
+              <th>Индивидуальная</th>
+              <th>Групповая</th>
+              <th>Транспортная</th>
+            </tr>
+            <tr>
+              <td>Количество в упаковке</td>
+              <td>1</td>
+              <td>1</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>Единица хранения</td>
+              <td>Штука</td>
+              <td>Штука</td>
+              <td>Коробка</td>
+            </tr>
+            <tr>
+              <td>Штрих-код</td>
+              <td>4690216240947</td>
+              <td>4690216240947</td>
+              <td>14690216240944</td>
+            </tr>
+            <tr>
+              <td>Вес брутто, кг</td>
+              <td>0.1390</td>
+              <td>0.1390</td>
+              <td>14.2000</td>
+            </tr>
+            <tr>
+              <td>Объем, м³</td>
+              <td>0.00090000</td>
+              <td>0.00090000</td>
+              <td>0.07792300</td>
+            </tr>
+            <tr>
+              <td>Длина, м</td>
+              <td>0.0900</td>
+              <td>0.0900</td>
+              <td>0.4500</td>
+            </tr>
+            <tr>
+              <td>Ширина, м</td>
+              <td>0.1190</td>
+              <td>0.1190</td>
+              <td>0.4630</td>
+            </tr>
+            <tr>
+              <td>Высота, м</td>
+              <td>0.0840</td>
+              <td>0.0840</td>
+              <td>0.3740</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="description-section" style="margin-bottom: 20px;">
+        <h3>Комплектация:</h3>
+        <ul>
+          <li>Фотореле</li>
+          <li>Паспорт</li>
+          <li>Крепежный уголок</li>
+          <li>Крепеж</li>
+          <li>Упаковка</li>
+        </ul>
+      </div>
+      <div style="height: 100px;"></div>
+    `;
       document.body.appendChild(overlay);
       return;
     }
 
+    // Если 2+ изображений => показываем индикаторы, стрелки и чуть более короткое описание
     const indicatorsContainer = document.createElement("div");
     Object.assign(indicatorsContainer.style, {
       position: "absolute",
@@ -965,17 +1073,107 @@ window.initDelivery = function (root = window) {
     }
     updateSlidePosition();
 
+    // Короткое описание (если нужно – правьте его под свои нужды):
     lowerContainer.innerHTML = `
-      <div class="description-section" style="margin-bottom: 20px;">
-        <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
-        <p>
-          Фотореле PS-5 применяется для управления освещением или другой нагрузкой.
-          Допускается прямое подключение нагрузки с током не более 15А.
-        </p>
+    <div class="description-section" style="margin-bottom: 20px;">
+      <h2>Фотореле EKF PS-5 15А 3300Вт IP66 PROxima</h2>
+      <p>
+        Фотореле PS-5 применяется для управления освещением или другой нагрузкой.
+        Допускается прямое подключение нагрузки с током не более 15А.
+      </p>
+    </div>
+    <div class="description-section" style="margin-bottom: 20px;">
+      <h3>Характеристики</h3>
+      <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+        <table>
+          <tr><td>Статус</td><td>Регулярная</td></tr>
+          <tr><td>Макс. ток резистивной нагрузки, А</td><td>15</td></tr>
+          <tr><td>Мощность, Вт</td><td>3 300</td></tr>
+          <tr><td>Порог, лк</td><td>5...50</td></tr>
+          <tr><td>Защита (IP)</td><td>IP66</td></tr>
+          <tr><td>Номин. напряжение, В</td><td>230</td></tr>
+          <tr><td>Задержка включения, с</td><td>5</td></tr>
+          <tr><td>Задержка отключения, с</td><td>540</td></tr>
+          <tr><td>Цвет по RAL</td><td>9 010</td></tr>
+          <tr><td>Рабочая температура, °C</td><td>-25...40</td></tr>
+          <tr><td>Цвет</td><td>Белый</td></tr>
+          <tr><td>Гарантия</td><td>7 лет</td></tr>
+        </table>
       </div>
-      <!-- ... и т.д., прочие характеристики, логистика, комплектация ... -->
-      <div style="height: 100px;"></div>
-    `;
+    </div>
+    <div class="description-section" style="margin-bottom: 20px;">
+      <h3>Логистические параметры</h3>
+      <div class="table-wrapper" style="overflow-x: auto; border: 1px solid #ccc;">
+        <table>
+          <tr>
+            <th>Параметр</th>
+            <th>Индивидуальная</th>
+            <th>Групповая</th>
+            <th>Транспортная</th>
+          </tr>
+          <tr>
+            <td>Кол-во в упаковке</td>
+            <td>1</td>
+            <td>1</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>Единица хранения</td>
+            <td>Штука</td>
+            <td>Штука</td>
+            <td>Коробка</td>
+          </tr>
+          <tr>
+            <td>Штрих-код</td>
+            <td>4690216240947</td>
+            <td>4690216240947</td>
+            <td>14690216240944</td>
+          </tr>
+          <tr>
+            <td>Вес, кг</td>
+            <td>0.1390</td>
+            <td>0.1390</td>
+            <td>14.2000</td>
+          </tr>
+          <tr>
+            <td>Объем, м³</td>
+            <td>0.00090000</td>
+            <td>0.00090000</td>
+            <td>0.07792300</td>
+          </tr>
+          <tr>
+            <td>Длина, м</td>
+            <td>0.0900</td>
+            <td>0.0900</td>
+            <td>0.4500</td>
+          </tr>
+          <tr>
+            <td>Ширина, м</td>
+            <td>0.1190</td>
+            <td>0.1190</td>
+            <td>0.4630</td>
+          </tr>
+          <tr>
+            <td>Высота, м</td>
+            <td>0.0840</td>
+            <td>0.0840</td>
+            <td>0.3740</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="description-section" style="margin-bottom: 20px;">
+      <h3>Комплектация:</h3>
+      <ul>
+        <li>Фотореле</li>
+        <li>Паспорт</li>
+        <li>Крепежный уголок</li>
+        <li>Крепеж</li>
+        <li>Упаковка</li>
+      </ul>
+    </div>
+    <div style="height: 100px;"></div>
+  `;
     document.body.appendChild(overlay);
   }
 
