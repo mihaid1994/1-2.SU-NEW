@@ -1505,16 +1505,30 @@ window.initDelivery = function (root = window) {
 
   /**
    * Функция для применения выбранных опций сортировки и группировки (мобильная версия).
-   * В конце вызывается либо renderMobileCart() (без группировки), либо
-   * новая renderMobileGroupedView() (если выбрана группировка "По дате доставки").
+   * В конце вызывается либо renderMobileCart(inStockItems, outOfStockItems),
+   * либо renderMobileGroupedView(inStockItems, outOfStockItems).
+   *
+   * Ключевая идея: мы не меняем window.data напрямую —
+   * а делим её на inStock / outOfStock, сортируем ТОЛЬКО inStock,
+   * и затем отрисовываем отдельно.
    */
   function applyMobileSortAndGroup() {
-    let sortedData = [...window.data];
-    // Применяем сортировку, если выбрана опция
+    // 1. Разделяем общий массив window.data на 2 части
+    const inStockItems = window.data.filter(
+      (item) => parseInt(item["Наличие"], 10) > 0
+    );
+    const outOfStockItems = window.data.filter(
+      (item) => parseInt(item["Наличие"], 10) === 0
+    );
+
+    // 2. Делаем копию inStockItems, чтобы сортировка не ломала исходный массив
+    let sortedInStock = [...inStockItems];
+
+    // 3. Применяем сортировку (если выбрана)
     if (window.selectedSortOptions.sort) {
       const sortOption = window.selectedSortOptions.sort;
       const sortOrder = window.selectedSortOptions.sortOrder || "asc";
-      sortedData.sort((a, b) => {
+      sortedInStock.sort((a, b) => {
         let aVal, bVal;
         switch (sortOption) {
           case "По дате добавления":
@@ -1559,27 +1573,29 @@ window.initDelivery = function (root = window) {
       });
     }
 
-    // Если выбрана группировка "По дате доставки" – сортируем по deliveryDate и рендерим группами
+    // 4. Если включена группировка "По дате доставки",
+    //    рендерим renderMobileGroupedView(inStockItems, outOfStockItems)
     if (window.selectedSortOptions.group === "По дате доставки") {
-      sortedData.sort(
+      // Можно ещё отсортировать inStockItems по deliveryDate (вы уже делали это),
+      // но сейчас уже sortedInStock и так можем отсортировать:
+      sortedInStock.sort(
         (a, b) => parseDate(a.deliveryDate) - parseDate(b.deliveryDate)
       );
-      window.data = sortedData;
-      renderMobileGroupedView(sortedData);
+      // Вызываем рендер группированного вида
+      renderMobileGroupedView(sortedInStock, outOfStockItems);
     } else {
-      // Иначе просто рендерим список карточек одной колонной
-      window.data = sortedData;
-      renderMobileCart();
+      // Иначе обычный (сплошной) список
+      renderMobileCart(sortedInStock, outOfStockItems);
     }
   }
 
   /**
-   * Стандартный рендер мобильных карточек в одну колонку (без группировки).
+   * Функция рендерит мобильные карточки одним списком (без группировки).
+   * inStockItems - массив товаров с остатком > 0 (уже отсортированные, если нужно)
+   * outOfStockItems - массив товаров без остатков
    */
-  async function renderMobileCart() {
-    // Генерируем три случайные даты для доставки, если у товаров даты ещё нет
-    const randomDates = getRandomDeliveryDates(3, 30);
-
+  function renderMobileCart(inStockItems, outOfStockItems) {
+    // Если функциональная строка (mobileFuncRow) ещё не создана – создаём её и вставляем в deliveryContainer
     if (!mobileFuncRow) {
       mobileFuncRow = document.createElement("div");
       mobileFuncRow.className = "mobile-functional-row";
@@ -1592,16 +1608,23 @@ window.initDelivery = function (root = window) {
         deliveryContainer.firstChild
       );
     }
+
+    // Очищаем контейнер, оставляя только mobileFuncRow
     Array.from(deliveryContainer.children).forEach((child) => {
       if (!child.classList.contains("mobile-functional-row")) {
         child.remove();
       }
     });
+
+    // Рендерим верхнюю строку (кнопки «выбрать все», удалить и т.п.)
     renderMobileFunctionalRow();
 
-    window.data.forEach((item, index) => {
-      // Назначаем дату доставки, если нет
+    // ================================
+    // 1) Рисуем inStockItems (остатки)
+    // ================================
+    inStockItems.forEach((item, index) => {
       if (!item.deliveryDate) {
+        const randomDates = getRandomDeliveryDates(3, 30);
         item.deliveryDate =
           randomDates[Math.floor(Math.random() * randomDates.length)];
       }
@@ -1609,8 +1632,12 @@ window.initDelivery = function (root = window) {
       const card = document.createElement("div");
       card.className = "mobile-cart-item";
       card.setAttribute("data-price", item["Цена"]);
+      card.style.marginTop = "10px";
+      card.style.border = "1px solid #ddd";
+      card.style.borderRadius = "8px";
+      card.style.padding = "10px";
 
-      // Контейнер для чекбокса и изображения
+      // Медиа-блок: чекбокс, изображение, код
       const mediaContainer = document.createElement("div");
       mediaContainer.className = "media-container";
       mediaContainer.style.display = "flex";
@@ -1627,7 +1654,7 @@ window.initDelivery = function (root = window) {
       checkbox.style.width = "24px";
       checkbox.style.height = "24px";
       checkbox.checked = !!item.selected;
-      checkbox.addEventListener("change", (e) => {
+      checkbox.addEventListener("change", () => {
         item.selected = checkbox.checked;
         updateCartSummaryMobile();
         updateMobileSelectAllCheckbox();
@@ -1635,7 +1662,7 @@ window.initDelivery = function (root = window) {
       checkboxContainer.appendChild(checkbox);
       mediaContainer.appendChild(checkboxContainer);
 
-      // Контейнер для изображения – квадратный
+      // Изображение
       const imgContainer = document.createElement("div");
       imgContainer.className = "item-image-container";
       imgContainer.style.position = "relative";
@@ -1662,69 +1689,108 @@ window.initDelivery = function (root = window) {
       });
       imgContainer.appendChild(img);
       mediaContainer.appendChild(imgContainer);
+
+      // Код товара с иконкой копирования
+      const codeContainer = document.createElement("div");
+      codeContainer.className = "item-code";
+      codeContainer.style.display = "flex";
+      codeContainer.style.alignItems = "center";
+      codeContainer.style.marginTop = "8px";
+      codeContainer.style.cursor = "pointer";
+
+      const codeText = document.createElement("span");
+      codeText.textContent = item["Код"];
+      codeText.style.fontSize = "12px";
+      codeText.style.color = "#585151";
+
+      const copyIcon = document.createElement("i");
+      copyIcon.className = "ri-file-copy-line";
+      copyIcon.style.cursor = "pointer";
+      copyIcon.style.marginLeft = "5px";
+      copyIcon.style.color = "#585151";
+
+      codeContainer.addEventListener("click", () => {
+        navigator.clipboard.writeText(item["Код"]).then(() => {
+          copyIcon.className = "ri-check-line";
+          copyIcon.style.color = "orange";
+          setTimeout(() => {
+            copyIcon.className = "ri-file-copy-line";
+            copyIcon.style.color = "#585151";
+          }, 2000);
+        });
+      });
+
+      codeContainer.appendChild(codeText);
+      codeContainer.appendChild(copyIcon);
+      mediaContainer.appendChild(codeContainer);
+
       card.appendChild(mediaContainer);
 
-      // Детали товара
+      // Детали товара: название, кнопки, цена, кол-во, дата, сумма
       const details = document.createElement("div");
       details.className = "item-details";
 
-      // Заголовок товара + кнопки
+      // Заголовок (имя + кнопки удаления/избранного)
       const header = document.createElement("div");
       header.className = "item-header";
       header.style.display = "flex";
       header.style.justifyContent = "space-between";
       header.style.alignItems = "flex-start";
 
-      // Наименование
       const nameSpan = document.createElement("span");
       nameSpan.className = "item-name";
       nameSpan.textContent = item["Наименование"];
       header.appendChild(nameSpan);
 
-      // Блок кнопок (вертикальный)
+      // Кнопки справа
       const actionButtonsContainer = document.createElement("div");
       actionButtonsContainer.style.display = "flex";
       actionButtonsContainer.style.flexDirection = "column";
       actionButtonsContainer.style.alignItems = "flex-end";
 
-      // Кнопка удалить
+      // Удаление
       const removeBtn = document.createElement("button");
       removeBtn.className = "item-remove";
       removeBtn.title = "Удалить товар";
       removeBtn.style.fontSize = "24px";
+      removeBtn.style.color = "#777";
       removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
       removeBtn.addEventListener("click", () => {
+        // Удаляем товар из window.data
         window.data = window.data.filter((prod) => prod["Код"] !== item["Код"]);
-        renderMobileCart();
+        // Перерисовываем
+        // Но уже вызываем applyMobileSortAndGroup(),
+        // чтобы возвращаться в то же состояние сортировки:
+        applyMobileSortAndGroup();
         updateCartSummaryMobile();
       });
       actionButtonsContainer.appendChild(removeBtn);
 
-      // Кнопка добавить в избранное
+      // Избранное
       const favBtn = document.createElement("button");
       favBtn.className = "item-fav";
       favBtn.title = "Добавить в избранное";
       favBtn.innerHTML = '<i class="ri-heart-line"></i>';
-      favBtn.style.color = "#777";
+      favBtn.style.color = "#e93535";
       favBtn.style.background = "transparent";
       favBtn.style.fontSize = "24px";
       favBtn.style.border = "none";
+      // Показываем всплывающее окно
       favBtn.addEventListener("click", () => {
-        console.log("Добавить товар в избранное", item["Код"]);
+        showMobilePopup(`Товар ${item["Код"]} добавлен в избранное`, 1500);
       });
       actionButtonsContainer.appendChild(favBtn);
 
       header.appendChild(actionButtonsContainer);
       details.appendChild(header);
 
-      // Блок с ценой за единицу и мин.кол. на одной строке
+      // Цена и управление количеством
       const info = document.createElement("div");
       info.className = "item-info";
 
       const priceDiv = document.createElement("div");
       priceDiv.className = "item-price";
-      const priceText = document.createTextNode(item["Цена"] + " ₽");
-      priceDiv.appendChild(priceText);
+      priceDiv.textContent = item["Цена"] + " ₽";
       const perUnitSpan = document.createElement("span");
       perUnitSpan.textContent = " за ед.";
       perUnitSpan.style.fontSize = "12px";
@@ -1737,7 +1803,6 @@ window.initDelivery = function (root = window) {
       minQtySpan.style.fontSize = "12px";
       minQtySpan.style.color = "#777";
       priceDiv.appendChild(minQtySpan);
-
       info.appendChild(priceDiv);
 
       // Управление количеством
@@ -1753,7 +1818,7 @@ window.initDelivery = function (root = window) {
       qtyInput.type = "number";
       qtyInput.className = "item-qty";
       qtyInput.min = item["Мин. Кол."] || 1;
-      qtyInput.value = item.quantity || 1;
+      qtyInput.value = item.quantity || item["Мин. Кол."] || 1;
       qtyInput.addEventListener("change", () => {
         let qty = parseInt(qtyInput.value) || 1;
         if (qty < (item["Мин. Кол."] || 1)) {
@@ -1795,7 +1860,7 @@ window.initDelivery = function (root = window) {
       info.appendChild(quantityDiv);
       details.appendChild(info);
 
-      // Дата доставки + итоговая сумма
+      // Дата доставки и сумма
       const deliveryInfoContainer = document.createElement("div");
       deliveryInfoContainer.style.display = "flex";
       deliveryInfoContainer.style.justifyContent = "space-between";
@@ -1809,8 +1874,8 @@ window.initDelivery = function (root = window) {
 
       const sumSpan = document.createElement("span");
       sumSpan.className = "item-sum";
-      sumSpan.textContent =
-        "сумма: " + (item["Цена"] * (item.quantity || 1)).toFixed(2) + " ₽";
+      const calcSum = item["Цена"] * (item.quantity || 1);
+      sumSpan.textContent = "сумма: " + calcSum.toFixed(2) + " ₽";
 
       deliveryInfoContainer.appendChild(deliveryDateSpan);
       deliveryInfoContainer.appendChild(sumSpan);
@@ -1820,16 +1885,302 @@ window.initDelivery = function (root = window) {
       deliveryContainer.appendChild(card);
     });
 
+    // ================================
+    // 2) Рисуем товары без остатков
+    // ================================
+    if (outOfStockItems.length > 0) {
+      const outOfStockSection = renderOutOfStockSection(outOfStockItems);
+      deliveryContainer.appendChild(outOfStockSection);
+    }
+
+    // Обновляем
     updateCartSummaryMobile();
   }
 
   /**
-   * Функция, рендерящая мобильные карточки, **разбитые на группы** по `deliveryDate`.
-   * Вызывается, если выбрана группировка "По дате доставки".
+   * Рендерит уведомляющий блок + карточки товаров без остатков (outOfStockItems).
+   * 1) Уведомляющая карточка остаётся как есть (массовое удаление, массовое "в избранное").
+   * 2) Каждая карточка также получает свои кнопки удаления / избранного, стилизованные (в сером).
    */
-  function renderMobileGroupedView(items) {
+  function renderOutOfStockSection(outOfStockItems) {
+    const section = document.createElement("div");
+    section.className = "out-of-stock-section";
+
+    // Уведомляющая карточка (массовое удаление, массовое добавление в избранное)
+    const notificationCard = document.createElement("div");
+    notificationCard.className = "notification-card";
+    notificationCard.style.padding = "10px";
+    notificationCard.style.backgroundColor = "#2f8dac";
+    notificationCard.style.borderRadius = "8px";
+    notificationCard.style.marginBottom = "10px";
+    notificationCard.style.display = "flex";
+    notificationCard.style.justifyContent = "space-between";
+    notificationCard.style.alignItems = "center";
+
+    const notifText = document.createElement("span");
+    notifText.textContent = "Есть позиции без остатков:";
+    notifText.style.fontSize = "20px";
+
+    // Кнопка массового удаления
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "notif-delete-button";
+    deleteBtn.style.background = "transparent";
+    deleteBtn.style.border = "none";
+    deleteBtn.style.cursor = "pointer";
+    deleteBtn.innerHTML =
+      '<i class="ri-delete-bin-line" style="font-size:33px; color:#ffffff;"></i>';
+    deleteBtn.addEventListener("click", () => {
+      // Удаляем все outOfStockItems из window.data
+      outOfStockItems.forEach((outItem) => {
+        window.data = window.data.filter(
+          (prod) => prod["Код"] !== outItem["Код"]
+        );
+      });
+      // Пересобираем мобильный список
+      applyMobileSortAndGroup();
+      updateCartSummaryMobile();
+    });
+
+    // Кнопка массового добавления в избранное
+    const favBtn = document.createElement("button");
+    favBtn.className = "notif-fav-button";
+    favBtn.style.background = "transparent";
+    favBtn.style.border = "none";
+    favBtn.style.cursor = "pointer";
+    favBtn.innerHTML =
+      '<i class="ri-heart-line" style="font-size:33px; color:#ffffff;"></i>';
+    favBtn.addEventListener("click", () => {
+      showMobilePopup("Товары без остатков добавлены в избранное", 1500);
+    });
+
+    const btnContainer = document.createElement("div");
+    btnContainer.style.display = "flex";
+    btnContainer.appendChild(favBtn);
+    btnContainer.appendChild(deleteBtn);
+
+    notificationCard.appendChild(notifText);
+    notificationCard.appendChild(btnContainer);
+    section.appendChild(notificationCard);
+
+    // Теперь отрисовываем каждую карточку без остатков
+    outOfStockItems.forEach((item, index) => {
+      // Если нет даты доставки – назначаем случайную (по вашему вкусу)
+      if (!item.deliveryDate) {
+        const randomDates = getRandomDeliveryDates(3, 30);
+        item.deliveryDate =
+          randomDates[Math.floor(Math.random() * randomDates.length)];
+      }
+
+      const card = document.createElement("div");
+      card.className = "mobile-cart-item out-of-stock";
+      card.setAttribute("data-price", item["Цена"]);
+      card.style.backgroundColor = "#ffffff";
+      card.style.marginTop = "10px";
+      card.style.border = "1px solid #ddd";
+      card.style.borderRadius = "8px";
+      card.style.padding = "10px";
+
+      // Медиа-блок (без чекбокса)
+      const mediaContainer = document.createElement("div");
+      mediaContainer.className = "media-container";
+      mediaContainer.style.display = "flex";
+      mediaContainer.style.flexDirection = "column";
+      mediaContainer.style.alignItems = "left";
+      mediaContainer.style.gap = "10px";
+
+      const imgContainer = document.createElement("div");
+      imgContainer.className = "item-image-container";
+      imgContainer.style.position = "relative";
+      imgContainer.style.backgroundColor = "#e0e0e0";
+      imgContainer.style.borderRadius = "8px";
+      imgContainer.style.overflow = "hidden";
+      imgContainer.style.aspectRatio = "1 / 1";
+
+      const img = document.createElement("img");
+      img.className = "item-image";
+      img.src = item["Изображение"];
+      img.alt = "Изображение товара (no-stock) " + index;
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "contain";
+      img.style.cursor = "pointer";
+      // Применяем серый фильтр
+      img.style.filter = "grayscale(100%)";
+      img.addEventListener("click", () => {
+        loadProductImages(item["Код"]).then((images) => {
+          if (!images || images.length === 0) {
+            images = [img.dataset.fullsrc || img.src];
+          }
+          showFullScreenSlider(images, item["Код"]);
+        });
+      });
+      imgContainer.appendChild(img);
+      mediaContainer.appendChild(imgContainer);
+
+      // Код товара (тоже без чекбокса)
+      const codeContainer = document.createElement("div");
+      codeContainer.className = "item-code";
+      codeContainer.style.display = "flex";
+      codeContainer.style.alignItems = "center";
+      codeContainer.style.marginTop = "8px";
+      codeContainer.style.cursor = "pointer";
+
+      const codeText = document.createElement("span");
+      codeText.textContent = item["Код"];
+      codeText.style.fontSize = "12px";
+      codeText.style.color = "#888";
+      const copyIcon = document.createElement("i");
+      copyIcon.className = "ri-file-copy-line";
+      copyIcon.style.cursor = "pointer";
+      copyIcon.style.marginLeft = "5px";
+      copyIcon.style.color = "#888";
+
+      codeContainer.addEventListener("click", () => {
+        navigator.clipboard.writeText(item["Код"]).then(() => {
+          copyIcon.className = "ri-check-line";
+          copyIcon.style.color = "orange";
+          setTimeout(() => {
+            copyIcon.className = "ri-file-copy-line";
+            copyIcon.style.color = "#888";
+          }, 2000);
+        });
+      });
+      codeContainer.appendChild(codeText);
+      codeContainer.appendChild(copyIcon);
+      mediaContainer.appendChild(codeContainer);
+
+      card.appendChild(mediaContainer);
+
+      // Блок деталей товара (только для чтения, кол-во = 0)
+      const details = document.createElement("div");
+      details.className = "item-details";
+
+      // === Заголовок (Название + КНОПКИ удаления/избранного для этой конкретной карточки) ===
+      const header = document.createElement("div");
+      header.className = "item-header";
+      header.style.display = "flex";
+      header.style.justifyContent = "space-between";
+      header.style.alignItems = "flex-start";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "item-name";
+      nameSpan.textContent = item["Наименование"];
+      nameSpan.style.color = "#888";
+      header.appendChild(nameSpan);
+
+      // Две кнопки справа: Удалить и Избранное
+      const actionButtonsContainer = document.createElement("div");
+      actionButtonsContainer.style.display = "flex";
+      actionButtonsContainer.style.flexDirection = "column";
+      actionButtonsContainer.style.alignItems = "flex-end";
+
+      // Кнопка удаления (конкретной карточки!)
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "item-remove out-of-stock-remove";
+      removeBtn.title = "Удалить этот товар";
+      removeBtn.style.fontSize = "24px";
+      removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
+      // Дополнительно стилизуем в сером:
+      removeBtn.style.color = "#888";
+      removeBtn.style.background = "transparent";
+      removeBtn.style.border = "none";
+      removeBtn.addEventListener("click", () => {
+        // Удаляем только этот out-of-stock товар:
+        window.data = window.data.filter((prod) => prod["Код"] !== item["Код"]);
+        applyMobileSortAndGroup();
+        updateCartSummaryMobile();
+      });
+      actionButtonsContainer.appendChild(removeBtn);
+
+      // Кнопка «в избранное» (конкретная карточка)
+      const favBtn = document.createElement("button");
+      favBtn.className = "item-fav out-of-stock-fav";
+      favBtn.title = "Добавить этот товар в избранное";
+      favBtn.innerHTML = '<i class="ri-heart-line"></i>';
+      // Тоже делаем серым:
+      favBtn.style.color = "#e93535";
+      favBtn.style.background = "transparent";
+      favBtn.style.fontSize = "24px";
+      favBtn.style.border = "none";
+      favBtn.addEventListener("click", () => {
+        showMobilePopup(`Товар ${item["Код"]} добавлен в избранное`, 1500);
+      });
+      actionButtonsContainer.appendChild(favBtn);
+
+      header.appendChild(actionButtonsContainer);
+      details.appendChild(header);
+      // === Конец заголовка ===
+
+      // Информация о цене
+      const info = document.createElement("div");
+      info.className = "item-info";
+
+      const priceDiv = document.createElement("div");
+      priceDiv.className = "item-price";
+      priceDiv.textContent = item["Цена"] + " ₽";
+      const perUnitSpan = document.createElement("span");
+      perUnitSpan.textContent = " за ед.";
+      perUnitSpan.style.fontSize = "12px";
+      priceDiv.style.color = "#888";
+      priceDiv.appendChild(perUnitSpan);
+
+      const minQtySpan = document.createElement("span");
+      minQtySpan.className = "min-qty-info";
+      minQtySpan.textContent = " мин: " + (item["Мин. Кол."] || 1);
+      minQtySpan.style.fontSize = "12px";
+      minQtySpan.style.color = "#888";
+      priceDiv.appendChild(minQtySpan);
+      info.appendChild(priceDiv);
+
+      // Количество – ноль (и поле отключено)
+      const quantityDiv = document.createElement("div");
+      quantityDiv.className = "item-quantity";
+      const qtyInput = document.createElement("input");
+      qtyInput.type = "number";
+      qtyInput.className = "item-qty";
+      qtyInput.min = item["Мин. Кол."] || 1;
+      qtyInput.value = 0;
+      qtyInput.disabled = true;
+      quantityDiv.appendChild(qtyInput);
+      info.appendChild(quantityDiv);
+
+      details.appendChild(info);
+
+      // Дата доставки и сумма = 0
+      const deliveryInfoContainer = document.createElement("div");
+      deliveryInfoContainer.style.display = "flex";
+      deliveryInfoContainer.style.justifyContent = "space-between";
+      deliveryInfoContainer.style.alignItems = "center";
+      deliveryInfoContainer.style.fontSize = "12px";
+      deliveryInfoContainer.style.color = "#888";
+
+      const deliveryDateSpan = document.createElement("span");
+      deliveryDateSpan.className = "delivery-date";
+      deliveryDateSpan.textContent = "Дата доставки: " + item.deliveryDate;
+
+      const sumSpan = document.createElement("span");
+      sumSpan.className = "item-sum";
+      sumSpan.textContent = "сумма: 0.00 ₽";
+
+      deliveryInfoContainer.appendChild(deliveryDateSpan);
+      deliveryInfoContainer.appendChild(sumSpan);
+      details.appendChild(deliveryInfoContainer);
+
+      card.appendChild(details);
+      section.appendChild(card);
+    });
+
+    return section;
+  }
+
+  /**
+   * Функция, рендерящая мобильные карточки, разбитые на группы по `deliveryDate`.
+   * inStockItems - товары с остатками (уже отсортированные), outOfStockItems - без остатков.
+   */
+  function renderMobileGroupedView(inStockItems, outOfStockItems) {
     // Очищаем контейнер
     deliveryContainer.innerHTML = "";
+
     // Переносим (или пересоздаём) mobileFuncRow
     if (!mobileFuncRow) {
       mobileFuncRow = document.createElement("div");
@@ -1842,8 +2193,8 @@ window.initDelivery = function (root = window) {
     deliveryContainer.appendChild(mobileFuncRow);
     renderMobileFunctionalRow();
 
-    // Группируем товары
-    const grouped = items.reduce((acc, item) => {
+    // Группируем товары (только inStock!)
+    const grouped = inStockItems.reduce((acc, item) => {
       const d = item.deliveryDate || "Неизвестная дата";
       if (!acc[d]) acc[d] = [];
       acc[d].push(item);
@@ -1856,16 +2207,13 @@ window.initDelivery = function (root = window) {
       groupBlock.className = "mobile-group-block";
       groupBlock.style.marginBottom = "20px";
 
-      // Заголовок группы
       const groupHeader = document.createElement("h3");
       groupHeader.textContent = "Доставка: " + date;
       groupHeader.style.backgroundColor = "#f2f2f2";
       groupHeader.style.padding = "8px";
       groupHeader.style.borderRadius = "4px";
-
       groupBlock.appendChild(groupHeader);
 
-      // Далее для каждого товара делаем карточку (как в renderMobileCart, но без повторного mobileFuncRow)
       grouped[date].forEach((item, index) => {
         const card = document.createElement("div");
         card.className = "mobile-cart-item";
@@ -1875,7 +2223,7 @@ window.initDelivery = function (root = window) {
         card.style.borderRadius = "8px";
         card.style.padding = "10px";
 
-        // Аналогично делаем mediaContainer, чекбокс, изображение, т.д.
+        // Чекбокс
         const mediaContainer = document.createElement("div");
         mediaContainer.className = "media-container";
         mediaContainer.style.display = "flex";
@@ -1883,7 +2231,6 @@ window.initDelivery = function (root = window) {
         mediaContainer.style.alignItems = "left";
         mediaContainer.style.gap = "10px";
 
-        // Чекбокс
         const checkboxContainer = document.createElement("div");
         checkboxContainer.className = "mobile-checkbox-above";
         const checkbox = document.createElement("input");
@@ -1892,7 +2239,7 @@ window.initDelivery = function (root = window) {
         checkbox.style.width = "24px";
         checkbox.style.height = "24px";
         checkbox.checked = !!item.selected;
-        checkbox.addEventListener("change", (e) => {
+        checkbox.addEventListener("change", () => {
           item.selected = checkbox.checked;
           updateCartSummaryMobile();
           updateMobileSelectAllCheckbox();
@@ -1929,7 +2276,7 @@ window.initDelivery = function (root = window) {
         mediaContainer.appendChild(imgContainer);
         card.appendChild(mediaContainer);
 
-        // Детали товара (название, кнопки, цена, кол-во, дата, сумма)
+        // Детали
         const details = document.createElement("div");
         details.className = "item-details";
 
@@ -1944,7 +2291,7 @@ window.initDelivery = function (root = window) {
         nameSpan.textContent = item["Наименование"];
         header.appendChild(nameSpan);
 
-        // Блок кнопок
+        // Кнопки справа
         const actionButtonsContainer = document.createElement("div");
         actionButtonsContainer.style.display = "flex";
         actionButtonsContainer.style.flexDirection = "column";
@@ -1956,14 +2303,17 @@ window.initDelivery = function (root = window) {
         removeBtn.style.fontSize = "24px";
         removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
         removeBtn.addEventListener("click", () => {
+          // Удаляем товар
           window.data = window.data.filter(
             (prod) => prod["Код"] !== item["Код"]
           );
-          applyMobileSortAndGroup(); // пересобираем список заново
+          // Перерисовываем с учётом сортировки/группировки
+          applyMobileSortAndGroup();
           updateCartSummaryMobile();
         });
         actionButtonsContainer.appendChild(removeBtn);
 
+        // Избранное
         const favBtn = document.createElement("button");
         favBtn.className = "item-fav";
         favBtn.title = "Добавить в избранное";
@@ -1973,21 +2323,20 @@ window.initDelivery = function (root = window) {
         favBtn.style.fontSize = "24px";
         favBtn.style.border = "none";
         favBtn.addEventListener("click", () => {
-          console.log("Добавить товар в избранное", item["Код"]);
+          showMobilePopup(`Товар ${item["Код"]} добавлен в избранное`, 1500);
         });
         actionButtonsContainer.appendChild(favBtn);
 
         header.appendChild(actionButtonsContainer);
         details.appendChild(header);
 
-        // Блок с ценой
+        // Цена + количество
         const info = document.createElement("div");
         info.className = "item-info";
 
         const priceDiv = document.createElement("div");
         priceDiv.className = "item-price";
-        const priceText = document.createTextNode(item["Цена"] + " ₽");
-        priceDiv.appendChild(priceText);
+        priceDiv.textContent = item["Цена"] + " ₽";
         const perUnitSpan = document.createElement("span");
         perUnitSpan.textContent = " за ед.";
         perUnitSpan.style.fontSize = "12px";
@@ -2000,10 +2349,8 @@ window.initDelivery = function (root = window) {
         minQtySpan.style.fontSize = "12px";
         minQtySpan.style.color = "#777";
         priceDiv.appendChild(minQtySpan);
-
         info.appendChild(priceDiv);
 
-        // Управление количеством
         const quantityDiv = document.createElement("div");
         quantityDiv.className = "item-quantity";
 
@@ -2086,6 +2433,12 @@ window.initDelivery = function (root = window) {
       deliveryContainer.appendChild(groupBlock);
     });
 
+    // В самом конце рисуем блок "без остатков"
+    if (outOfStockItems && outOfStockItems.length > 0) {
+      const outOfStockSection = renderOutOfStockSection(outOfStockItems);
+      deliveryContainer.appendChild(outOfStockSection);
+    }
+
     updateCartSummaryMobile();
   }
 
@@ -2100,24 +2453,27 @@ window.initDelivery = function (root = window) {
   function updateCartSummaryMobile() {
     let total = 0;
     let count = 0;
-    const anySelected = window.data.some((item) => item.selected);
+    // Суммируем только те товары, у которых item.selected === true
     window.data.forEach((item) => {
-      const qty = item.quantity || 1;
-      if (anySelected) {
-        if (item.selected) {
-          total += parseFloat(item["Цена"]) * qty;
-          count++;
-        }
-      } else {
+      if (item.selected) {
+        const qty = item.quantity || 1;
         total += parseFloat(item["Цена"]) * qty;
         count++;
       }
     });
-    const summaryValueElem = document.querySelector(".summary-value");
+    // Обновляем элементы внутри текущего shadow root:
+    const summaryValueElem = root.querySelector(".summary-value");
     if (summaryValueElem)
       summaryValueElem.textContent = total.toFixed(2) + " ₽";
-    const totalItemsElem = document.getElementById("total-items");
+    const totalItemsElem = root.getElementById("total-items");
     if (totalItemsElem) totalItemsElem.textContent = count;
+
+    const checkoutTotalElem = root.querySelector(".checkout-total-sum");
+    if (checkoutTotalElem) {
+      checkoutTotalElem.textContent =
+        "Сумма к оплате: " + total.toFixed(2) + " ₽";
+    }
+
     updateMobileSelectAllCheckbox();
   }
 
@@ -2665,27 +3021,155 @@ window.initDelivery = function (root = window) {
     document.body.appendChild(overlay);
   };
 
-  // Функция переключения рендера в зависимости от ширины экрана
   function initCartRendering() {
     if (window.matchMedia("(max-width: 800px)").matches) {
-      renderMobileCart();
+      // Вместо renderMobileCart();
+      // вызываем applyMobileSortAndGroup();
+      applyMobileSortAndGroup();
       moveSidebarToMobile();
     } else {
       renderDeliveryView();
     }
   }
 
-  // Мобильная доработка: перемещаем содержимое сайдбара
+  // Замените существующую функцию moveSidebarToMobile на следующую:
   function moveSidebarToMobile() {
     const sidebar = root.querySelector(".order-summary");
     if (sidebar) {
-      sidebar.style.position = "static";
-      sidebar.style.width = "100%";
+      // Скрываем блок с суммой заказа в мобильной версии
+      const orderSummaryCard = sidebar.querySelector(".order-summary-card");
+      if (orderSummaryCard) {
+        orderSummaryCard.style.display = "none";
+      }
+      // При необходимости скрываем и весь сайдбар
+      sidebar.style.display = "none";
     }
+    // Рендерим фиксированную строку оформления в нижней части экрана
+    renderMobileCheckoutBar();
   }
 
-  // Инициализируем рендер после загрузки данных
-  initCartRendering();
+  // Новая версия функции, которая отрисовывает строку оформления внутри текущего root (шадоу рут)
+  function renderMobileCheckoutBar() {
+    // Если такая строка уже существует внутри root – удаляем её
+    let existingBar = root.querySelector(".mobile-checkout-bar");
+    if (existingBar) existingBar.remove();
+
+    const checkoutBar = document.createElement("div");
+    checkoutBar.className = "mobile-checkout-bar";
+    Object.assign(checkoutBar.style, {
+      position: "fixed",
+      bottom: "45px",
+      left: "0",
+      width: "100%",
+      backgroundColor: "#fff",
+      boxShadow: "0 -2px 5px rgba(0,0,0,0.2)",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "10px",
+      zIndex: "2000",
+    });
+
+    // Элемент для отображения итоговой суммы
+    const totalSumElem = document.createElement("div");
+    totalSumElem.className = "checkout-total-sum";
+    // Ищем элемент с суммой внутри текущего root
+    const summaryValueElem = root.querySelector(".summary-value");
+    totalSumElem.textContent =
+      "Сумма к оплате: " +
+      (summaryValueElem ? summaryValueElem.textContent : "0 ₽");
+
+    // Кнопка оформления заказа
+    const checkoutButton = document.createElement("button");
+    checkoutButton.className = "checkout-button";
+    checkoutButton.textContent = "Оформить заказ";
+    Object.assign(checkoutButton.style, {
+      padding: "10px 20px",
+      backgroundColor: "orange",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    });
+
+    checkoutButton.addEventListener("click", () => {
+      // При клике на кнопку ищем внутри текущего root элемент .order-summary-card
+      const orderSummaryCard = root.querySelector(".order-summary-card");
+      if (orderSummaryCard) {
+        showOrderSummaryModal(orderSummaryCard);
+      }
+    });
+
+    checkoutBar.appendChild(totalSumElem);
+    checkoutBar.appendChild(checkoutButton);
+    // Вставляем строку в current shadow root
+    root.appendChild(checkoutBar);
+  }
+
+  // Модальное окно также вставляем в текущий root
+  function showOrderSummaryModal(orderSummaryCard) {
+    const modalOverlay = document.createElement("div");
+    Object.assign(modalOverlay.style, {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.3)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: "3000",
+    });
+
+    const modalContent = document.createElement("div");
+    Object.assign(modalContent.style, {
+      position: "relative",
+      background: "#fff",
+      padding: "20px",
+      borderRadius: "8px",
+      maxWidth: "90%",
+      maxHeight: "90%",
+      overflowY: "auto",
+    });
+
+    // Глубокое клонирование order-summary-card (с сохранением всех стилей)
+    const orderSummaryClone = orderSummaryCard.cloneNode(true);
+    orderSummaryClone.style.display = "block"; // гарантируем видимость
+    modalContent.appendChild(orderSummaryClone);
+
+    // Кнопка закрытия модального окна (крестик)
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "✕";
+    Object.assign(closeButton.style, {
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+      background: "transparent",
+      border: "none",
+      fontSize: "24px",
+      cursor: "pointer",
+    });
+    closeButton.addEventListener("click", () => {
+      modalOverlay.remove();
+    });
+    modalContent.appendChild(closeButton);
+
+    modalOverlay.appendChild(modalContent);
+
+    // Вставляем модальное окно внутрь текущего root, чтобы оно наследовало стили
+    root.appendChild(modalOverlay);
+
+    // Обновляем сумму внутри модального окна (если там есть элемент с id "total-to-pay")
+    updateModalTotal();
+  }
+
+  // Функция обновления элементов с id "total-to-pay" внутри текущего root
+  function updateModalTotal() {
+    root.querySelectorAll("#total-to-pay").forEach((elem) => {
+      elem.textContent = `${totalToPay.toLocaleString()} ₽`;
+    });
+  }
 
   /* =======================================
      ДЕСКТОП: ALT+Q = выбрать все
@@ -2697,14 +3181,20 @@ window.initDelivery = function (root = window) {
     }
   });
 
-  // Загрузка данных из JSON
+  // Загрузка данных из JSON (замените ваш существующий фрагмент)
   fetch("/data/data.json")
     .then((response) => response.json())
     .then((data) => {
-      selectRandomProducts(data);
-      initCartRendering();
-      recalculateSubtotalAndTotal();
-      updateValues();
+      // ГАРАНТИРОВАННО делаем 2 товара без остатков:
+      if (data.length >= 2) {
+        data[data.length - 1]["Наличие"] = 0;
+        data[data.length - 2]["Наличие"] = 0;
+      }
+      // Далее всё как раньше:
+      selectRandomProducts(data); // ваш код, который выбирает рандомное кол-во товаров
+      initCartRendering(); // функция переключения десктоп/моб. режима
+      recalculateSubtotalAndTotal(); // пересчёт итоговых сумм
+      updateValues(); // обновление DOM-элементов с суммами
     })
     .catch((error) => console.error("Ошибка загрузки данных:", error));
 
