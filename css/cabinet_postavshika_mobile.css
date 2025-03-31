@@ -1,0 +1,375 @@
+/* cabinet_postavshika_mobile.css - Mobile стили (max-width: 800px) */
+/* Сброс стандартных стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+body {
+  overflow-x: hidden;
+  padding: 10px;
+}
+/* Контейнер — вертикальное расположение */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* Сайдбар — мобильная версия использует общие правила из десктопа, но занимает всю ширину */
+.sidebar {
+  width: 100%;
+  /* Из десктопной версии: width: 20%;, но на мобильных устройствах используем 100% */
+  min-height: 715px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  background-color: #eeeeee;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+/* Убираем маркеры списков в сайдбаре */
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sidebar ul li {
+  margin: 15px 0;
+}
+/* Ссылки в сайдбаре — общие правила из десктопной версии */
+.sidebar ul li a.tab-link,
+.sidebar ul li a.tab-nolink {
+  color: #6a6a6a;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+.sidebar ul li a.tab-link i,
+.sidebar ul li a.tab-nolink i {
+  margin-right: 10px;
+  color: #3d6d91;
+}
+.sidebar ul li a.tab-link:hover,
+.sidebar ul li a.tab-link.active,
+.sidebar ul li a.tab-nolink:hover,
+.sidebar ul li a.tab-nolink.active {
+  color: #1abc9c;
+}
+.sidebar ul li a.tab-link.active i,
+.sidebar ul li a.tab-nolink.active i {
+  color: #1abc9c;
+}
+/* Подменю */
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+}
+.submenu li {
+  margin: 10px 0;
+}
+.submenu li a.tab-link {
+  color: #34495e;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+.submenu li a.tab-link i {
+  margin-right: 8px;
+  color: #3d6d91;
+}
+.submenu li a.tab-link:hover,
+.submenu li a.tab-link.active {
+  color: #1abc9c;
+}
+.submenu li a.tab-link.active i {
+  color: #1abc9c;
+}
+/* Разделитель */
+.separator {
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+/* Кнопка выхода */
+.logout {
+  text-align: center;
+  margin-top: 10px;
+}
+/* Общие правила для кнопок (из десктопной версии) */
+.white-button {
+  background-color: #bdbdbd;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+}
+.white-button:hover {
+  background-color: #ffa938;
+  color: #ffffff;
+}
+#exportReportsBtn,
+#generateKpisBtn,
+#downloadStatements,
+#redeemBonuses,
+#viewDiscounts,
+#addOrganizationBtn,
+#notifyMeBtn,
+#downloadStats,
+#addProductBtn,
+#exportInventoryBtn,
+#createPromotionBtn,
+#createClaimBtn,
+#addRoleBtn,
+#createReturnBtn,
+.edit-organization,
+.delete-organization,
+.remove-wait,
+.summary-button,
+.edit-role,
+.remove-role,
+.remove-integration,
+#addAddressBtn,
+#documentsBtn {
+  background-color: #1abc9c;
+  border: none;
+  color: #fff;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+#logoutBtn {
+  background-color: #c4c4c4;
+  border: none;
+  color: #fff;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-top: 30px;
+}
+#logoutBtn:hover {
+  background-color: #e69832;
+  transform: translateY(-1px);
+}
+/* Основной контент */
+.main-content {
+  display: none;
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: opacity 0.5s ease-in-out;
+}
+/* Прокрутка для основного контента */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #b3b3b3;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+.main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+.main-content h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.main-content h3 {
+  color: #34495e;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.main-content p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  color: #555555;
+}
+.main-content ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+.main-content ul li {
+  margin-bottom: 5px;
+}
+/* Формы */
+form {
+  display: flex;
+  flex-direction: column;
+}
+form label {
+  display: block; /* Новое правило: label занимает всю строку */
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #34495e;
+}
+.feedback-form {
+  margin-top: 140px;
+}
+form input[type="text"],
+form input[type="number"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="date"],
+form select,
+form textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+form input[type="password"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 5px;
+  width: 33%;
+}
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+form button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #1abc9c;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+form button:hover {
+  background-color: #16a085;
+}
+/* Таблицы */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+table th {
+  background-color: #f2f2f2;
+  color: #34495e;
+}
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+table tr:hover {
+  background-color: #f1f1f1;
+}
+table img {
+  max-width: 50px;
+  border-radius: 5px;
+}
+/* Кнопки действий в таблицах */
+table button {
+  padding: 8px 8px;
+  margin-top: 4px;
+  margin-right: 8px;
+  background-color: #1abc9c;
+  border: none;
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+table button:hover {
+  background-color: #16a085;
+}
+/* Модальные окна (общие правила из десктопной версии для полноэкранных окон) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  border-radius: 10px;
+  position: relative;
+}
+.modal-content h3 {
+  margin-bottom: 15px;
+}
+.modal-content .close {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal-content .close:hover,
+.modal-content .close:focus {
+  color: black;
+}
+/* Кнопки навигации и краткого резюме */
+nav ul li a.tab-link,
+nav ul li a.tab-nolink,
+.summary-button,
+.nav-button {
+  cursor: pointer;
+}
+/* Вкладки */
+.tab-content {
+  display: none;
+}
+.tab-content.show {
+  display: block;
+}
+
+#profileSettingsForm label {
+  display: block !important;
+  margin-top: 10px !important;
+  margin-bottom: 5px !important;
+  width: 100% !important;
+}

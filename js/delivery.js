@@ -6,11 +6,8 @@ window.initDelivery = function (root = window) {
   /***********************
    * ИНИЦИАЛИЗАЦИЯ ДАННЫХ
    ***********************/
-  // Если window.data ещё не определён, задаём его как пустой массив
-  window.data = window.data || [];
-  // Инициализируем объект для выбранных опций сортировки/группировки,
-  // чтобы избежать ошибок при обращении к window.selectedSortOptions.group или .sort
-  window.selectedSortOptions = window.selectedSortOptions || {};
+  root.data = root.data || [];
+  root.selectedSortOptions = root.selectedSortOptions || {};
 
   // Объект сортировки по умолчанию для мобильного модального окна
   const defaultSortOrder = {
@@ -201,7 +198,7 @@ window.initDelivery = function (root = window) {
 
   function renderDeliveryView() {
     deliveryContainer.innerHTML = "";
-    const groupedData = groupByDelivery(window.data);
+    const groupedData = groupByDelivery(root.data);
     renderDeliverySections(groupedData);
     initializeAfterRender();
   }
@@ -397,15 +394,15 @@ window.initDelivery = function (root = window) {
     downloadExcelButton.className = "download-excel";
     downloadExcelButton.textContent = "Excel";
     downloadExcelButton.addEventListener("click", () => {
-      const selected = window.data.filter((item) => item.selected);
-      downloadExcel(selected.length ? selected : window.data);
+      const selected = root.data.filter((item) => item.selected);
+      downloadExcel(selected.length ? selected : root.data);
     });
     const downloadPdfButton = document.createElement("button");
     downloadPdfButton.className = "download-pdf";
     downloadPdfButton.textContent = "PDF";
     downloadPdfButton.addEventListener("click", () => {
-      const selected = window.data.filter((item) => item.selected);
-      downloadPDF(selected.length ? selected : window.data);
+      const selected = root.data.filter((item) => item.selected);
+      downloadPDF(selected.length ? selected : root.data);
     });
     const orderButton = document.createElement("button");
     orderButton.className = "order-button";
@@ -457,7 +454,7 @@ window.initDelivery = function (root = window) {
 
   function renderListView() {
     deliveryContainer.innerHTML = "";
-    renderListSection(window.data);
+    renderListSection(root.data);
     initializeAfterRender();
   }
 
@@ -578,7 +575,7 @@ window.initDelivery = function (root = window) {
 
   function deleteProduct(row) {
     const productCode = row.querySelector("td:nth-child(3)").textContent.trim();
-    window.data = window.data.filter((item) => item["Код"] !== productCode);
+    root.data = root.data.filter((item) => item["Код"] !== productCode);
     if (currentViewMode === "deliveries") {
       renderDeliveryView();
     } else {
@@ -1256,14 +1253,14 @@ window.initDelivery = function (root = window) {
       const minQty = parseInt(item["Мин. Кол."], 10) || 1;
       item.quantity = randomQty >= minQty ? randomQty : minQty;
     });
-    window.data = selected;
+    root.data = selected;
   }
 
   function recalculateSubtotalAndTotal() {
     subtotal = 0;
     totalItems = 0;
-    window.data = window.data.filter((item) => item.quantity > 0);
-    window.data.forEach((item) => {
+    root.data = root.data.filter((item) => item.quantity > 0);
+    root.data.forEach((item) => {
       const price = parseFloat(item["Цена"]) || 0;
       const quantity = parseInt(item.quantity, 10) || 0;
       subtotal += price * quantity;
@@ -1466,7 +1463,7 @@ window.initDelivery = function (root = window) {
       );
       if (selectAllCheckbox) {
         const allSelected =
-          window.data.length > 0 && window.data.every((item) => item.selected);
+          root.data.length > 0 && root.data.every((item) => item.selected);
         selectAllCheckbox.checked = allSelected;
       }
     }
@@ -1489,6 +1486,20 @@ window.initDelivery = function (root = window) {
     return day + "." + month + "." + year;
   }
 
+  // Функция для генерации ровно 3 уникальных случайных дат в ближайшие maxDays дней
+  function getUniqueRandomDeliveryDates(maxDays) {
+    const uniqueDates = new Set();
+    const today = new Date();
+    while (uniqueDates.size < 3) {
+      const offset = Math.floor(Math.random() * maxDays) + 1; // от 1 до maxDays
+      const randomDate = new Date(
+        today.getTime() + offset * 24 * 60 * 60 * 1000
+      );
+      uniqueDates.add(formatDate(randomDate));
+    }
+    return Array.from(uniqueDates);
+  }
+
   // Функция для генерации count случайных дат в ближайшие maxDays дней
   function getRandomDeliveryDates(count, maxDays) {
     const dates = [];
@@ -1508,26 +1519,27 @@ window.initDelivery = function (root = window) {
    * В конце вызывается либо renderMobileCart(inStockItems, outOfStockItems),
    * либо renderMobileGroupedView(inStockItems, outOfStockItems).
    *
-   * Ключевая идея: мы не меняем window.data напрямую —
+   * Ключевая идея: мы не меняем root.data напрямую —
    * а делим её на inStock / outOfStock, сортируем ТОЛЬКО inStock,
    * и затем отрисовываем отдельно.
    */
   function applyMobileSortAndGroup() {
-    // 1. Разделяем общий массив window.data на 2 части
-    const inStockItems = window.data.filter(
+    // Используем локальные данные из текущего shadow root
+    const localData = root.data;
+    const selectedSortOptions = root.selectedSortOptions;
+
+    const inStockItems = localData.filter(
       (item) => parseInt(item["Наличие"], 10) > 0
     );
-    const outOfStockItems = window.data.filter(
+    const outOfStockItems = localData.filter(
       (item) => parseInt(item["Наличие"], 10) === 0
     );
 
-    // 2. Делаем копию inStockItems, чтобы сортировка не ломала исходный массив
     let sortedInStock = [...inStockItems];
 
-    // 3. Применяем сортировку (если выбрана)
-    if (window.selectedSortOptions.sort) {
-      const sortOption = window.selectedSortOptions.sort;
-      const sortOrder = window.selectedSortOptions.sortOrder || "asc";
+    if (selectedSortOptions.sort) {
+      const sortOption = selectedSortOptions.sort;
+      const sortOrder = selectedSortOptions.sortOrder || "asc";
       sortedInStock.sort((a, b) => {
         let aVal, bVal;
         switch (sortOption) {
@@ -1573,18 +1585,12 @@ window.initDelivery = function (root = window) {
       });
     }
 
-    // 4. Если включена группировка "По дате доставки",
-    //    рендерим renderMobileGroupedView(inStockItems, outOfStockItems)
-    if (window.selectedSortOptions.group === "По дате доставки") {
-      // Можно ещё отсортировать inStockItems по deliveryDate (вы уже делали это),
-      // но сейчас уже sortedInStock и так можем отсортировать:
+    if (selectedSortOptions.group === "По дате доставки") {
       sortedInStock.sort(
         (a, b) => parseDate(a.deliveryDate) - parseDate(b.deliveryDate)
       );
-      // Вызываем рендер группированного вида
       renderMobileGroupedView(sortedInStock, outOfStockItems);
     } else {
-      // Иначе обычный (сплошной) список
       renderMobileCart(sortedInStock, outOfStockItems);
     }
   }
@@ -1616,17 +1622,18 @@ window.initDelivery = function (root = window) {
       }
     });
 
-    // Рендерим верхнюю строку (кнопки «выбрать все», удалить и т.п.)
+    // Рендерим верхнюю строку (функциональную панель)
     renderMobileFunctionalRow();
 
-    // ================================
-    // 1) Рисуем inStockItems (остатки)
-    // ================================
+    // Генерируем 3 уникальные даты один раз для всех inStock товаров
+    const uniqueDates = getUniqueRandomDeliveryDates(30);
+
+    // Рисуем inStockItems (товары с остатками)
     inStockItems.forEach((item, index) => {
+      // Если у товара не установлена дата доставки, присваиваем одну из уникальных дат
       if (!item.deliveryDate) {
-        const randomDates = getRandomDeliveryDates(3, 30);
         item.deliveryDate =
-          randomDates[Math.floor(Math.random() * randomDates.length)];
+          uniqueDates[Math.floor(Math.random() * uniqueDates.length)];
       }
 
       const card = document.createElement("div");
@@ -1726,11 +1733,11 @@ window.initDelivery = function (root = window) {
 
       card.appendChild(mediaContainer);
 
-      // Детали товара: название, кнопки, цена, кол-во, дата, сумма
+      // Детали товара: название, кнопки, цена, количество, дата, сумма
       const details = document.createElement("div");
       details.className = "item-details";
 
-      // Заголовок (имя + кнопки удаления/избранного)
+      // Заголовок с названием и кнопками
       const header = document.createElement("div");
       header.className = "item-header";
       header.style.display = "flex";
@@ -1748,7 +1755,7 @@ window.initDelivery = function (root = window) {
       actionButtonsContainer.style.flexDirection = "column";
       actionButtonsContainer.style.alignItems = "flex-end";
 
-      // Удаление
+      // Кнопка удаления
       const removeBtn = document.createElement("button");
       removeBtn.className = "item-remove";
       removeBtn.title = "Удалить товар";
@@ -1756,17 +1763,14 @@ window.initDelivery = function (root = window) {
       removeBtn.style.color = "#777";
       removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
       removeBtn.addEventListener("click", () => {
-        // Удаляем товар из window.data
-        window.data = window.data.filter((prod) => prod["Код"] !== item["Код"]);
-        // Перерисовываем
-        // Но уже вызываем applyMobileSortAndGroup(),
-        // чтобы возвращаться в то же состояние сортировки:
+        // Удаляем товар из локальных данных (root.data)
+        root.data = root.data.filter((prod) => prod["Код"] !== item["Код"]);
         applyMobileSortAndGroup();
         updateCartSummaryMobile();
       });
       actionButtonsContainer.appendChild(removeBtn);
 
-      // Избранное
+      // Кнопка добавления в избранное
       const favBtn = document.createElement("button");
       favBtn.className = "item-fav";
       favBtn.title = "Добавить в избранное";
@@ -1775,7 +1779,6 @@ window.initDelivery = function (root = window) {
       favBtn.style.background = "transparent";
       favBtn.style.fontSize = "24px";
       favBtn.style.border = "none";
-      // Показываем всплывающее окно
       favBtn.addEventListener("click", () => {
         showMobilePopup(`Товар ${item["Код"]} добавлен в избранное`, 1500);
       });
@@ -1784,7 +1787,7 @@ window.initDelivery = function (root = window) {
       header.appendChild(actionButtonsContainer);
       details.appendChild(header);
 
-      // Цена и управление количеством
+      // Блок цены и управления количеством
       const info = document.createElement("div");
       info.className = "item-info";
 
@@ -1860,7 +1863,7 @@ window.initDelivery = function (root = window) {
       info.appendChild(quantityDiv);
       details.appendChild(info);
 
-      // Дата доставки и сумма
+      // Блок с датой доставки и суммой
       const deliveryInfoContainer = document.createElement("div");
       deliveryInfoContainer.style.display = "flex";
       deliveryInfoContainer.style.justifyContent = "space-between";
@@ -1885,15 +1888,12 @@ window.initDelivery = function (root = window) {
       deliveryContainer.appendChild(card);
     });
 
-    // ================================
-    // 2) Рисуем товары без остатков
-    // ================================
+    // Рисуем товары без остатков (если имеются)
     if (outOfStockItems.length > 0) {
       const outOfStockSection = renderOutOfStockSection(outOfStockItems);
       deliveryContainer.appendChild(outOfStockSection);
     }
 
-    // Обновляем
     updateCartSummaryMobile();
   }
 
@@ -1906,7 +1906,7 @@ window.initDelivery = function (root = window) {
     const section = document.createElement("div");
     section.className = "out-of-stock-section";
 
-    // Уведомляющая карточка (массовое удаление, массовое добавление в избранное)
+    // Уведомляющая карточка (массовое удаление и добавление в избранное)
     const notificationCard = document.createElement("div");
     notificationCard.className = "notification-card";
     notificationCard.style.padding = "10px";
@@ -1930,13 +1930,9 @@ window.initDelivery = function (root = window) {
     deleteBtn.innerHTML =
       '<i class="ri-delete-bin-line" style="font-size:33px; color:#ffffff;"></i>';
     deleteBtn.addEventListener("click", () => {
-      // Удаляем все outOfStockItems из window.data
       outOfStockItems.forEach((outItem) => {
-        window.data = window.data.filter(
-          (prod) => prod["Код"] !== outItem["Код"]
-        );
+        root.data = root.data.filter((prod) => prod["Код"] !== outItem["Код"]);
       });
-      // Пересобираем мобильный список
       applyMobileSortAndGroup();
       updateCartSummaryMobile();
     });
@@ -1962,14 +1958,10 @@ window.initDelivery = function (root = window) {
     notificationCard.appendChild(btnContainer);
     section.appendChild(notificationCard);
 
-    // Теперь отрисовываем каждую карточку без остатков
+    // Рендерим каждую карточку товара без остатков
     outOfStockItems.forEach((item, index) => {
-      // Если нет даты доставки – назначаем случайную (по вашему вкусу)
-      if (!item.deliveryDate) {
-        const randomDates = getRandomDeliveryDates(3, 30);
-        item.deliveryDate =
-          randomDates[Math.floor(Math.random() * randomDates.length)];
-      }
+      // Для товаров без остатков сбрасываем дату доставки
+      item.deliveryDate = "";
 
       const card = document.createElement("div");
       card.className = "mobile-cart-item out-of-stock";
@@ -2017,7 +2009,7 @@ window.initDelivery = function (root = window) {
       imgContainer.appendChild(img);
       mediaContainer.appendChild(imgContainer);
 
-      // Код товара (тоже без чекбокса)
+      // Код товара (без чекбокса)
       const codeContainer = document.createElement("div");
       codeContainer.className = "item-code";
       codeContainer.style.display = "flex";
@@ -2051,11 +2043,11 @@ window.initDelivery = function (root = window) {
 
       card.appendChild(mediaContainer);
 
-      // Блок деталей товара (только для чтения, кол-во = 0)
+      // Блок деталей (только для чтения, количество = 0)
       const details = document.createElement("div");
       details.className = "item-details";
 
-      // === Заголовок (Название + КНОПКИ удаления/избранного для этой конкретной карточки) ===
+      // Заголовок с названием и кнопками удаления/избранного для конкретной карточки
       const header = document.createElement("div");
       header.className = "item-header";
       header.style.display = "flex";
@@ -2068,36 +2060,32 @@ window.initDelivery = function (root = window) {
       nameSpan.style.color = "#888";
       header.appendChild(nameSpan);
 
-      // Две кнопки справа: Удалить и Избранное
       const actionButtonsContainer = document.createElement("div");
       actionButtonsContainer.style.display = "flex";
       actionButtonsContainer.style.flexDirection = "column";
       actionButtonsContainer.style.alignItems = "flex-end";
 
-      // Кнопка удаления (конкретной карточки!)
+      // Кнопка удаления для этой карточки
       const removeBtn = document.createElement("button");
       removeBtn.className = "item-remove out-of-stock-remove";
       removeBtn.title = "Удалить этот товар";
       removeBtn.style.fontSize = "24px";
       removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
-      // Дополнительно стилизуем в сером:
       removeBtn.style.color = "#888";
       removeBtn.style.background = "transparent";
       removeBtn.style.border = "none";
       removeBtn.addEventListener("click", () => {
-        // Удаляем только этот out-of-stock товар:
-        window.data = window.data.filter((prod) => prod["Код"] !== item["Код"]);
+        root.data = root.data.filter((prod) => prod["Код"] !== item["Код"]);
         applyMobileSortAndGroup();
         updateCartSummaryMobile();
       });
       actionButtonsContainer.appendChild(removeBtn);
 
-      // Кнопка «в избранное» (конкретная карточка)
+      // Кнопка "в избранное" для этой карточки
       const favBtn = document.createElement("button");
       favBtn.className = "item-fav out-of-stock-fav";
       favBtn.title = "Добавить этот товар в избранное";
       favBtn.innerHTML = '<i class="ri-heart-line"></i>';
-      // Тоже делаем серым:
       favBtn.style.color = "#e93535";
       favBtn.style.background = "transparent";
       favBtn.style.fontSize = "24px";
@@ -2109,9 +2097,8 @@ window.initDelivery = function (root = window) {
 
       header.appendChild(actionButtonsContainer);
       details.appendChild(header);
-      // === Конец заголовка ===
 
-      // Информация о цене
+      // Информация о цене (только для чтения, количество = 0)
       const info = document.createElement("div");
       info.className = "item-info";
 
@@ -2124,15 +2111,9 @@ window.initDelivery = function (root = window) {
       priceDiv.style.color = "#888";
       priceDiv.appendChild(perUnitSpan);
 
-      const minQtySpan = document.createElement("span");
-      minQtySpan.className = "min-qty-info";
-      minQtySpan.textContent = " мин: " + (item["Мин. Кол."] || 1);
-      minQtySpan.style.fontSize = "12px";
-      minQtySpan.style.color = "#888";
-      priceDiv.appendChild(minQtySpan);
       info.appendChild(priceDiv);
 
-      // Количество – ноль (и поле отключено)
+      // Контроль количества (отключён, значение 0)
       const quantityDiv = document.createElement("div");
       quantityDiv.className = "item-quantity";
       const qtyInput = document.createElement("input");
@@ -2143,10 +2124,9 @@ window.initDelivery = function (root = window) {
       qtyInput.disabled = true;
       quantityDiv.appendChild(qtyInput);
       info.appendChild(quantityDiv);
-
       details.appendChild(info);
 
-      // Дата доставки и сумма = 0
+      // Блок для вывода суммы (дата доставки не выводится для товаров без остатков)
       const deliveryInfoContainer = document.createElement("div");
       deliveryInfoContainer.style.display = "flex";
       deliveryInfoContainer.style.justifyContent = "space-between";
@@ -2154,9 +2134,10 @@ window.initDelivery = function (root = window) {
       deliveryInfoContainer.style.fontSize = "12px";
       deliveryInfoContainer.style.color = "#888";
 
+      // Не выводим дату доставки, оставляем пустой
       const deliveryDateSpan = document.createElement("span");
       deliveryDateSpan.className = "delivery-date";
-      deliveryDateSpan.textContent = "Дата доставки: " + item.deliveryDate;
+      deliveryDateSpan.textContent = "";
 
       const sumSpan = document.createElement("span");
       sumSpan.className = "item-sum";
@@ -2304,9 +2285,7 @@ window.initDelivery = function (root = window) {
         removeBtn.innerHTML = '<i class="ri-delete-bin-line"></i>';
         removeBtn.addEventListener("click", () => {
           // Удаляем товар
-          window.data = window.data.filter(
-            (prod) => prod["Код"] !== item["Код"]
-          );
+          root.data = root.data.filter((prod) => prod["Код"] !== item["Код"]);
           // Перерисовываем с учётом сортировки/группировки
           applyMobileSortAndGroup();
           updateCartSummaryMobile();
@@ -2454,7 +2433,7 @@ window.initDelivery = function (root = window) {
     let total = 0;
     let count = 0;
     // Суммируем только те товары, у которых item.selected === true
-    window.data.forEach((item) => {
+    root.data.forEach((item) => {
       if (item.selected) {
         const qty = item.quantity || 1;
         total += parseFloat(item["Цена"]) * qty;
@@ -2537,7 +2516,7 @@ window.initDelivery = function (root = window) {
     selectAllCheckbox.style.height = "24px";
     selectAllCheckbox.addEventListener("change", () => {
       const checked = selectAllCheckbox.checked;
-      window.data.forEach((item) => {
+      root.data.forEach((item) => {
         item.selected = checked;
       });
       // пересобираем UI
@@ -2575,8 +2554,8 @@ window.initDelivery = function (root = window) {
       "#008000",
       "Скачать Excel (выбранные товары)",
       () => {
-        const selected = window.data.filter((item) => item.selected);
-        downloadExcel(selected.length ? selected : window.data);
+        const selected = root.data.filter((item) => item.selected);
+        downloadExcel(selected.length ? selected : root.data);
       }
     );
 
@@ -2585,8 +2564,8 @@ window.initDelivery = function (root = window) {
       "#D32F2F",
       "Скачать PDF (выбранные товары)",
       () => {
-        const selected = window.data.filter((item) => item.selected);
-        downloadPDF(selected.length ? selected : window.data);
+        const selected = root.data.filter((item) => item.selected);
+        downloadPDF(selected.length ? selected : root.data);
       }
     );
 
@@ -2595,7 +2574,7 @@ window.initDelivery = function (root = window) {
       "#555555",
       "Перенести выбранные товары в другую корзину",
       () => {
-        const selected = window.data.filter((item) => item.selected);
+        const selected = root.data.filter((item) => item.selected);
         if (selected.length === 0) {
           showMobilePopup("Выберите товары для перемещения в другую корзину");
         } else {
@@ -2612,7 +2591,7 @@ window.initDelivery = function (root = window) {
       "#555555",
       "Добавить выбранные товары в избранное",
       () => {
-        const selected = window.data.filter((item) => item.selected);
+        const selected = root.data.filter((item) => item.selected);
         if (selected.length === 0) {
           showMobilePopup("Выберите товары для добавления в избранное");
         } else {
@@ -2626,11 +2605,11 @@ window.initDelivery = function (root = window) {
       "#555555",
       "Удалить выбранные товары",
       () => {
-        const selected = window.data.filter((item) => item.selected);
+        const selected = root.data.filter((item) => item.selected);
         if (selected.length === 0) {
           showMobilePopup("Выберите товары для удаления");
         } else {
-          window.data = window.data.filter((item) => !item.selected);
+          root.data = root.data.filter((item) => !item.selected);
           applyMobileSortAndGroup();
           updateCartSummaryMobile();
         }
@@ -2777,8 +2756,8 @@ window.initDelivery = function (root = window) {
       "#008000",
       "Скачать Excel (выбранные товары)",
       () => {
-        const selected = window.data.filter((item) => item.selected);
-        downloadExcel(selected.length ? selected : window.data);
+        const selected = root.data.filter((item) => item.selected);
+        downloadExcel(selected.length ? selected : root.data);
       }
     );
     const pdfButton = createIconButton(
@@ -2786,8 +2765,8 @@ window.initDelivery = function (root = window) {
       "#D32F2F",
       "Скачать PDF (выбранные товары)",
       () => {
-        const selected = window.data.filter((item) => item.selected);
-        downloadPDF(selected.length ? selected : window.data);
+        const selected = root.data.filter((item) => item.selected);
+        downloadPDF(selected.length ? selected : root.data);
       }
     );
 
@@ -2901,21 +2880,21 @@ window.initDelivery = function (root = window) {
       groupOptionElems.push({ option, text: optionText, checkIcon });
 
       if (
-        window.selectedSortOptions &&
-        window.selectedSortOptions.group === optionText
+        root.selectedSortOptions &&
+        root.selectedSortOptions.group === optionText
       ) {
         checkIcon.style.display = "inline";
       }
 
       option.addEventListener("click", () => {
-        if (window.selectedSortOptions.group === optionText) {
-          window.selectedSortOptions.group = null;
+        if (root.selectedSortOptions.group === optionText) {
+          root.selectedSortOptions.group = null;
           checkIcon.style.display = "none";
         } else {
           groupOptionElems.forEach(({ checkIcon }) => {
             checkIcon.style.display = "none";
           });
-          window.selectedSortOptions.group = optionText;
+          root.selectedSortOptions.group = optionText;
           checkIcon.style.display = "inline";
         }
       });
@@ -2980,34 +2959,34 @@ window.initDelivery = function (root = window) {
       sortOptionElems.push({ option, text: optionText, checkIcon, arrowIcon });
 
       if (
-        window.selectedSortOptions &&
-        window.selectedSortOptions.sort === optionText
+        root.selectedSortOptions &&
+        root.selectedSortOptions.sort === optionText
       ) {
         checkIcon.style.display = "inline";
         arrowIcon.style.display = "inline";
         arrowIcon.textContent =
-          window.selectedSortOptions.sortOrder === "desc" ? "▼" : "▲";
+          root.selectedSortOptions.sortOrder === "desc" ? "▼" : "▲";
       }
 
       option.addEventListener("click", () => {
-        if (window.selectedSortOptions.sort === optionText) {
-          window.selectedSortOptions.sortOrder =
-            window.selectedSortOptions.sortOrder === "desc" ? "asc" : "desc";
+        if (root.selectedSortOptions.sort === optionText) {
+          root.selectedSortOptions.sortOrder =
+            root.selectedSortOptions.sortOrder === "desc" ? "asc" : "desc";
         } else {
           sortOptionElems.forEach(({ checkIcon, arrowIcon }) => {
             checkIcon.style.display = "none";
             arrowIcon.style.display = "none";
           });
-          window.selectedSortOptions.sort = optionText;
-          window.selectedSortOptions.sortOrder =
+          root.selectedSortOptions.sort = optionText;
+          root.selectedSortOptions.sortOrder =
             defaultSortOrder[optionText] || "asc";
         }
         sortOptionElems.forEach(({ text, checkIcon, arrowIcon }) => {
-          if (text === window.selectedSortOptions.sort) {
+          if (text === root.selectedSortOptions.sort) {
             checkIcon.style.display = "inline";
             arrowIcon.style.display = "inline";
             arrowIcon.textContent =
-              window.selectedSortOptions.sortOrder === "desc" ? "▼" : "▲";
+              root.selectedSortOptions.sortOrder === "desc" ? "▼" : "▲";
           } else {
             checkIcon.style.display = "none";
             arrowIcon.style.display = "none";

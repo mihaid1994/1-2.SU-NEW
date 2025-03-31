@@ -10,8 +10,18 @@
       rel="stylesheet"
     />
 
-    <!-- Подключение вашего стиля -->
-    <link rel="stylesheet" href="/css/cabinet_postavshika.css" />
+    <!-- Стили desktop -->
+    <link
+      rel="stylesheet"
+      href="/css/cabinet_postavshika.css"
+      media="screen and (min-width: 801px)"
+    />
+    <!-- Mobile CSS: для экранов до 800px -->
+    <link
+      rel="stylesheet"
+      href="/css/cabinet_postavshika_mobile.css"
+      media="screen and (max-width: 800px)"
+    />
   </head>
   <body>
     <div class="container">
@@ -31,7 +41,7 @@
                   class="tab-link"
                   data-tab="balanceLoyalty"
                 >
-                  <i class="ri-wallet-3-line"></i> Баланс и система лояльности
+                  <i class="ri-wallet-3-line"></i> Рабочий стол / баланс
                 </a>
               </li>
 
@@ -379,7 +389,7 @@
             <section class="quick-summary">
               <div class="summary-cards">
                 <div class="card">
-                  <h4>Баланс и система лояльности</h4>
+                  <h4>Шуравин Михаил Александрович</h4>
                   <p>Управление финансами и бонусными программами.</p>
                   <button class="summary-button" data-tab="balanceLoyalty">
                     Перейти
@@ -436,7 +446,7 @@
 
         <!-- Вкладка: Баланс и система лояльности -->
         <div class="tab-content" id="balanceLoyalty">
-          <h2>Баланс и система лояльности</h2>
+          <h2>Шуравин Михаил Александрович</h2>
           <div class="balance-loyalty">
             <section class="current-balance">
               <h3>Текущий баланс</h3>
@@ -1796,10 +1806,5 @@
         </p>
       </div>
     </div>
-
-    <!-- Подключение библиотек -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Подключение основного скрипта -->
-    <script type="module" src="/js/main.js"></script>
   </body>
 </html>
