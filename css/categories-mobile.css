@@ -6,178 +6,128 @@ body {
   padding: 0;
 }
 
-#category-module {
-  display: flex;
-  /* Изменяем направление с column на row, чтобы два основных блока располагались рядом */
-  flex-direction: row;
-  width: 100%;
-  height: 97%; /* Используем 100% высоты родителя */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  color: #333;
-  box-sizing: border-box;
-}
-
-/* Верхний контейнер, где будут размещены слева категории и справа подкатегории */
-#category-module .top-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* Левая панель – категории первого уровня занимает 50% ширины */
+/* Mobile Accordion Styles */
 #category-module .sidebar {
-  flex: 0 0 50%;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  padding: 1% 2%;
-  overflow-y: auto;
-  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  background: #fff;
+  overflow-y: auto; /* Вертикальная прокрутка */
+  max-height: 89vh;
 }
 
-/* Стили для заголовков категорий (первый уровень) */
-#category-module .sidebar .group-title {
+.group-title {
   display: flex;
   align-items: center;
-  padding: 0.4em 0.4em;
-  margin: 0.2em 0;
+  padding: 18px 24px; /* остаётся */
+  margin: 0;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-#category-module .sidebar .group-title:hover {
-  color: #333;
-  background-color: #f0f0f0;
-}
-
-#category-module .sidebar .group-title i {
-  margin-right: 0.5em;
-  font-size: 1.3em;
-  color: #15a5aa;
-  transition: transform 0.2s ease;
-}
-
-#category-module .sidebar .group-title:hover i,
-#category-module .sidebar .group-title.active i,
-#category-module .sidebar .group-title.super-active i {
-  transform: scale(1.01);
-}
-
-#category-module .sidebar .group-title.super-active {
-  background-color: #e9e9e9;
-  color: #155a62;
-  font-weight: 500;
-}
-
-#category-module .sidebar .group-title.super-active i {
-  color: #155a62;
-}
-
-/* Правая панель – подкатегории занимает 50% ширины */
-#category-module .subcategories-container {
-  flex: 0 0 50%;
-  padding: 1%;
-  box-sizing: border-box;
-  overflow-y: auto;
-  /* Показываем подкатегории всегда в один столбец */
-  display: block;
-}
-
-/* Контейнер для подкатегорий можно сделать блочным, чтобы отменить ранее заданное flex-распределение */
-.columns-container {
-  display: block;
-  width: 100%;
-}
-
-/* Каждая "колонка" подкатегорий занимает 100% ширины */
-.subcategory-column {
-  width: 100%;
-  margin-bottom: 10px;
-  display: block;
-}
-
-/* Блок подкатегории */
-.subcategory-block {
-  margin-bottom: 1em;
   border-bottom: 1px solid #eee;
-  padding-bottom: 0.5em;
+  transition: all 0.2s ease;
+  font-size: 1.2rem; /* было 1rem, увеличено в 1,2 раза */
+  color: #333;
+  position: relative;
+  background: #fff;
+  font-weight: 400;
 }
 
-/* Заголовок подкатегории */
-.subcategory-title {
-  font-weight: 600;
-  margin-bottom: 0.3em;
-  font-size: 1rem;
+.group-title i {
+  margin-right: 15px;
+  font-size: 1.44em; /* было 1.2em, увеличено в 1,2 раза */
+  color: #15a5aa;
+}
+
+.group-title .accordion-arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  font-size: 1.08em; /* было 0.9em, увеличено в 1,2 раза */
+  color: #666;
+}
+
+.group-title.active {
+  background-color: #f5f5f5;
+  color: #155a62;
+}
+
+.group-title.active .accordion-arrow {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fff;
+}
+
+.accordion-subcat-title {
+  /* Отступ задаётся динамически через inline-стиль */
+  padding: 15px 24px;
+  font-weight: 500;
   color: #444;
   cursor: pointer;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-size: 1.14rem; /* было 0.95rem, увеличено в 1,2 раза */
 }
 
-/* Список элементов подкатегории */
-.subcategory-items {
-  display: none;
-  padding-left: 1em;
+.accordion-subcat-title:hover {
+  background-color: #f8f8f8;
 }
 
-.subcategory-items.active {
-  display: block;
+.accordion-subcat-title .accordion-arrow {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  font-size: 0.96em; /* было 0.8em, увеличено в 1,2 раза */
 }
 
-/* Пункты подкатегории */
-.subcategory-item {
-  margin: 0.2em 0;
-  font-size: 0.9rem;
-  color: #333;
+.accordion-subcat-title.expanded .accordion-arrow {
+  transform: rotate(180deg);
+}
+
+.accordion-subitems {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+  background: #fff;
+}
+
+.accordion-subitem {
+  /* Отступ задаётся динамически через inline-стиль */
+  padding: 12px 24px;
+  font-size: 1.08rem; /* было 0.9rem, увеличено в 1,2 раза */
+  color: #555;
   cursor: pointer;
-  transition: color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
 }
 
-.subcategory-item:hover {
-  color: #2e6666;
-  background-color: #f4f4f4;
-  border-radius: 4px;
+.accordion-subitem:last-child {
+  border-bottom: none;
 }
 
-/* Кнопка "Показать ещё" */
-.show-more {
-  margin-top: 0.5em;
-  font-size: 0.9rem;
-  color: #79928f;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.show-more:hover {
-  color: #3d9396;
-}
-
-/* Нижний блок для брендов – если его не нужно в этом режиме, можно скрыть */
-#category-module .brands {
-  display: none;
-}
-
-/* Скроллбары (опционально) */
-#category-module .sidebar::-webkit-scrollbar,
-#category-module .subcategories-container::-webkit-scrollbar,
-.columns-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-#category-module .sidebar::-webkit-scrollbar-thumb,
-#category-module .subcategories-container::-webkit-scrollbar-thumb,
-.columns-container::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
+.accordion-subitem:hover {
+  color: #15a5aa;
+  background-color: #f8f8f8;
 }
 
 .sidebar-separator {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-top: 1px solid #ccc;
+  height: 1px;
+  background-color: #ddd;
+  margin: 15px 0;
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .group-title {
+    padding: 21px 24px;
+    font-size: 1.32rem; /* немного больше чем 1.2rem */
+  }
+  .accordion-subcat-title {
+    padding: 18px 24px;
+  }
+  .accordion-subitem {
+    padding: 15px 24px;
+  }
 }

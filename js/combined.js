@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCategoryButtons() {
-    // Обновляем все кнопки "open-categories"
     openCategoriesButtons.forEach((btn) => {
       btn.textContent = isCategoryOpen ? "Категории ✕" : "Категории ☰";
     });
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Открыть категории
   function openCategoryDrawer() {
     categoryDrawer.classList.add("open");
     isCategoryOpen = true;
@@ -51,71 +49,50 @@ document.addEventListener("DOMContentLoaded", () => {
     showOverlay();
   }
 
-  // Закрыть категории
   function closeCategoryDrawer() {
     categoryDrawer.classList.remove("open");
     isCategoryOpen = false;
     updateCategoryButtons();
-    if (!isCityOpen) {
-      hideOverlay();
-    }
+    if (!isCityOpen) hideOverlay();
   }
 
-  // Переключение категорий
   function toggleCategoryDrawer(event) {
     event.preventDefault();
     if (isCategoryOpen) {
       closeCategoryDrawer();
     } else {
-      // Если город открыт, сперва закрываем
-      if (isCityOpen) {
-        closeCityDrawer();
-      }
+      if (isCityOpen) closeCityDrawer();
       openCategoryDrawer();
     }
   }
 
-  // Открыть город
   function openCityDrawer() {
     cityDrawer.classList.add("show");
     isCityOpen = true;
     showOverlay();
   }
 
-  // Закрыть город
   function closeCityDrawer() {
     cityDrawer.classList.remove("show");
     isCityOpen = false;
-    if (!isCategoryOpen) {
-      hideOverlay();
-    }
+    if (!isCategoryOpen) hideOverlay();
   }
 
-  // Переключение города
   function toggleCityDrawer(event) {
     event.preventDefault();
     if (isCityOpen) {
       closeCityDrawer();
     } else {
-      // Если категории открыты, сперва закрываем
-      if (isCategoryOpen) {
-        closeCategoryDrawer();
-      }
+      if (isCategoryOpen) closeCategoryDrawer();
       openCityDrawer();
     }
   }
 
-  // Клик по оверлею закрывает всё
   overlay.addEventListener("click", () => {
-    if (isCategoryOpen) {
-      closeCategoryDrawer();
-    }
-    if (isCityOpen) {
-      closeCityDrawer();
-    }
+    if (isCategoryOpen) closeCategoryDrawer();
+    if (isCityOpen) closeCityDrawer();
   });
 
-  // Навешиваем обработчики на все кнопки "Категории" и "Выбор представительства"
   openCategoriesButtons.forEach((btn) => {
     btn.addEventListener("click", toggleCategoryDrawer);
   });
@@ -135,41 +112,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let isFocused = false;
   let isSyncing = false;
 
-  // Функция синхронизации текста между оригинальным input и клоном
   function syncInputs(e) {
     if (isSyncing) return;
     isSyncing = true;
-
     if (cloneBar) {
       const cloneInput = cloneBar.querySelector("#searchInputClone");
       const originalInput = document.getElementById("searchInput");
       if (!cloneInput || !originalInput) return;
-
       if (e.target.id === "searchInput") {
         cloneInput.value = originalInput.value;
       } else if (e.target.id === "searchInputClone") {
         originalInput.value = cloneInput.value;
       }
     }
-
     isSyncing = false;
   }
 
-  // Удаляем клон при условии
   function removeClone() {
     if (!cloneBar) return;
-
     cloneBar.classList.remove("active");
     cloneBar.classList.add("inactive");
-
     setTimeout(() => {
       if (cloneBar) {
-        // Удаляем все обработчики
         const cloneInput = cloneBar.querySelector("#searchInputClone");
         const cloneBtn = cloneBar.querySelector("#searchButtonClone");
         const catBtn = cloneBar.querySelector("#cloned-open-categories");
         const scrollTopBtn = cloneBar.querySelector("#scroll-top-button");
-
         if (cloneInput) {
           cloneInput.removeEventListener("input", syncInputs);
           cloneInput.removeEventListener("focus", cloneFocus);
@@ -186,24 +154,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (scrollTopBtn) {
           scrollTopBtn.removeEventListener("click", scrollToTop);
         }
-
         cloneBar.remove();
         cloneBar = null;
       }
     }, 300);
   }
 
-  // Создать клон search-bar при скролле
   function createClone() {
     if (cloneBar) return;
-
     cloneBar = searchBar.cloneNode(true);
     cloneBar.classList.add("search-bar-clone");
-
-    // Меняем id на клоновых элементах
     const cloneInput = cloneBar.querySelector("#searchInput");
     const cloneBtn = cloneBar.querySelector("#searchButton");
-
     if (cloneInput) {
       cloneInput.id = "searchInputClone";
       cloneInput.value = searchInput.value;
@@ -212,19 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cloneBtn) {
       cloneBtn.id = "searchButtonClone";
     }
-
-    // Блок для кнопок в клоне
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("clone-buttons-container");
-
-    // 1) Кнопка категорий (клон)
     const clonedCatBtn = document.createElement("button");
     clonedCatBtn.id = "cloned-open-categories";
     clonedCatBtn.classList.add("clone-category-button");
-    clonedCatBtn.textContent = isCategoryOpen ? "✕" : "☰"; // изначальное состояние
-    clonedCategoryButton = clonedCatBtn; // Запоминаем, чтобы обновлять текст
-
-    // 2) Кнопка чата (только иконка, без текста)
+    clonedCatBtn.textContent = isCategoryOpen ? "✕" : "☰";
+    clonedCategoryButton = clonedCatBtn;
     const chatBtn = document.createElement("button");
     chatBtn.id = "chat-button-clone";
     chatBtn.classList.add("chat-button", "clone-category-button");
@@ -232,37 +188,28 @@ document.addEventListener("DOMContentLoaded", () => {
     chatBtn.setAttribute("data-tab-title", "Чат");
     chatBtn.setAttribute("data-tab-url", "/pages/chat.html");
     chatBtn.innerHTML = '<i class="ri-chat-1-line"></i>';
-
-    // 3) Кнопка прокрутки вверх
     const scrollTopBtn = document.createElement("button");
     scrollTopBtn.id = "scroll-top-button";
     scrollTopBtn.classList.add("scroll-top-button");
     scrollTopBtn.innerHTML = '<i class="ri-arrow-up-double-line"></i>';
-
-    // Добавляем кнопки в контейнер
     buttonsContainer.appendChild(clonedCatBtn);
     buttonsContainer.appendChild(chatBtn);
     buttonsContainer.appendChild(scrollTopBtn);
-
     cloneBar.appendChild(buttonsContainer);
     document.body.appendChild(cloneBar);
-
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         cloneBar.classList.add("active");
       });
     });
-
-    // Обработчики для поискового поля в клоне
-    const cloneSearchInput = cloneBar.querySelector("#searchInputClone");
-    if (cloneSearchInput) {
-      cloneSearchInput.addEventListener("input", syncInputs);
-      cloneSearchInput.addEventListener("focus", cloneFocus);
-      cloneSearchInput.addEventListener("blur", cloneBlur);
-      cloneSearchInput.addEventListener("input", () => {
-        const textWidth = cloneSearchInput.scrollWidth;
+    if (cloneInput) {
+      cloneInput.addEventListener("input", syncInputs);
+      cloneInput.addEventListener("focus", cloneFocus);
+      cloneInput.addEventListener("blur", cloneBlur);
+      cloneInput.addEventListener("input", () => {
+        const textWidth = cloneInput.scrollWidth;
         if (
-          textWidth > cloneSearchInput.clientWidth &&
+          textWidth > cloneInput.clientWidth &&
           cloneBar.classList.contains("focused") &&
           cloneBar.offsetWidth < 500
         ) {
@@ -274,26 +221,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-
-    // Обработчик для кнопки поиска в клоне
     if (cloneBtn) {
       cloneBtn.addEventListener("click", () => {
         searchButton.click();
       });
     }
-
-    // Обработчик для кнопки категорий в клоне
     clonedCatBtn.addEventListener("click", toggleCategoryDrawer);
-
-    // Обработчик для кнопки "Прокрутить вверх"
     scrollTopBtn.addEventListener("click", scrollToTop);
   }
 
-  // Прокрутить страницу вверх
   function scrollToTop() {
     const scrollDuration = 100;
     const scrollStep = window.scrollY / (scrollDuration / 16);
-
     function step() {
       if (window.scrollY > 0) {
         window.scrollTo(0, window.scrollY - scrollStep);
@@ -303,14 +242,12 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(step);
   }
 
-  // Фокус на клоновом инпуте
   function cloneFocus() {
     isFocused = true;
     cloneBar.classList.add("focused");
     searchBar.classList.add("focused");
   }
 
-  // Потеря фокуса на клоновом инпуте
   function cloneBlur() {
     isFocused = false;
     cloneBar.classList.remove("focused");
@@ -320,7 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Фокус на исходном input
   function handleFocus() {
     if (isScrolled) {
       isFocused = true;
@@ -329,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Потеря фокуса исходного input
   function handleBlur() {
     if (isScrolled) {
       isFocused = false;
@@ -345,7 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Реакция на скролл
   function handleScroll() {
     if (window.scrollY > 0 && !isScrolled) {
       isScrolled = true;
@@ -358,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Подписываемся на события скролла, фокуса
   window.addEventListener("scroll", handleScroll);
   if (searchInput) {
     searchInput.addEventListener("input", syncInputs);
@@ -368,8 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ========================================================
   // Дополнительная логика для мобильной версии поиска
-  // Новая иконка поиска должна переводить фокус в поле ввода,
-  // а при активном вводе скрывать выбор представительства и расширять поле на всю ширину.
   // ========================================================
   const mobileTopPanel = document.querySelector(".hide-desktop .top-panel");
   const mobileSearchInput = document.querySelector(
@@ -397,54 +328,218 @@ document.addEventListener("DOMContentLoaded", () => {
   let superActiveTitle = null; // Текущая супер-активная категория
   let categories = [];
 
-  // Показываем подкатегории выбранной категории
+  const isMobile = window.matchMedia("(max-width: 800px)").matches;
+  if (isMobile && subcategoriesContainer) {
+    subcategoriesContainer.parentNode.removeChild(subcategoriesContainer);
+  }
+
+  // Вспомогательные функции для анимированного раскрытия/закрытия
+  function expandSection(section) {
+    // Устанавливаем max-height равным scrollHeight и после transition устанавливаем "none"
+    section.style.maxHeight = section.scrollHeight + "px";
+    section.addEventListener("transitionend", function handler(e) {
+      if (e.propertyName === "max-height") {
+        section.style.maxHeight = "none";
+        section.removeEventListener("transitionend", handler);
+      }
+    });
+  }
+
+  function collapseSection(section) {
+    // Устанавливаем текущую высоту, затем в следующем кадре устанавливаем 0
+    section.style.maxHeight = section.scrollHeight + "px";
+    section.offsetHeight; // принудительный reflow
+    section.style.maxHeight = "0px";
+  }
+
+  // Функция закрытия соседних элементов (только один открытый на уровне)
+  function closeSiblingSubcats(clickedTitle) {
+    const parentContainer = clickedTitle.parentNode.parentNode; // контейнер с .accordion-subcat
+    const siblingBlocks = parentContainer.querySelectorAll(".accordion-subcat");
+    siblingBlocks.forEach((block) => {
+      const title = block.querySelector(".accordion-subcat-title");
+      if (
+        title &&
+        title !== clickedTitle &&
+        title.classList.contains("expanded")
+      ) {
+        const content = title.nextElementSibling;
+        if (content) {
+          collapseSection(content);
+        }
+        title.classList.remove("expanded");
+      }
+    });
+  }
+
+  // Функция создания содержимого аккордеона с поддержкой вложенности (мобильная версия)
+  function createAccordionContent(category, level = 0) {
+    const accordionContent = document.createElement("div");
+    accordionContent.className = "accordion-content";
+    accordionContent.style.maxHeight = "0px";
+    category.subcategories?.forEach((subcat) => {
+      const subcatBlock = document.createElement("div");
+      subcatBlock.className = "accordion-subcat";
+      subcatBlock.dataset.level = level;
+      const subcatTitle = document.createElement("div");
+      subcatTitle.className = "accordion-subcat-title";
+      subcatTitle.style.paddingLeft = `${30 * (level + 1)}px`;
+      subcatTitle.textContent = subcat.title;
+      if (
+        (subcat.subcategories && subcat.subcategories.length) ||
+        (subcat.subitems && subcat.subitems.length)
+      ) {
+        const arrow = document.createElement("span");
+        arrow.className = "accordion-arrow";
+        arrow.innerHTML = "&#9660;";
+        subcatTitle.appendChild(arrow);
+      }
+      subcatBlock.appendChild(subcatTitle);
+      if (subcat.subcategories && subcat.subcategories.length) {
+        const nestedContent = createAccordionContent(subcat, level + 1);
+        subcatBlock.appendChild(nestedContent);
+      }
+      if (subcat.subitems && subcat.subitems.length) {
+        const subitemsContainer = document.createElement("div");
+        subitemsContainer.className = "accordion-subitems";
+        subitemsContainer.style.maxHeight = "0px";
+        subcat.subitems.forEach((item) => {
+          const itemEl = document.createElement("div");
+          itemEl.className = "accordion-subitem";
+          itemEl.style.paddingLeft = `${30 * (level + 2)}px`;
+          itemEl.textContent = item;
+          subitemsContainer.appendChild(itemEl);
+        });
+        subcatBlock.appendChild(subitemsContainer);
+      }
+      accordionContent.appendChild(subcatBlock);
+    });
+    return accordionContent;
+  }
+
+  // Функция переключения аккордеона для верхнего уровня (мобильная версия)
+  function toggleAccordion(category, groupTitleEl) {
+    let accordionContent = groupTitleEl.nextElementSibling;
+    const parent = groupTitleEl.parentNode;
+    if (parent) {
+      parent.querySelectorAll(".group-title.active").forEach((title) => {
+        if (title !== groupTitleEl) {
+          title.classList.remove("active");
+          const content = title.nextElementSibling;
+          if (content?.classList.contains("accordion-content")) {
+            collapseSection(content);
+          }
+        }
+      });
+    }
+    if (
+      accordionContent &&
+      accordionContent.classList.contains("accordion-content")
+    ) {
+      if (groupTitleEl.classList.contains("active")) {
+        collapseSection(accordionContent);
+        groupTitleEl.classList.remove("active");
+      } else {
+        collapseAllSiblingsGroup(groupTitleEl);
+        expandSection(accordionContent);
+        groupTitleEl.classList.add("active");
+      }
+    } else {
+      const newAccordion = createAccordionContent(category);
+      groupTitleEl.insertAdjacentElement("afterend", newAccordion);
+      newAccordion.offsetHeight;
+      expandSection(newAccordion);
+      groupTitleEl.classList.add("active");
+    }
+    updateParentAccordions(groupTitleEl);
+  }
+
+  // Закрывает открытые элементы на том же уровне для главных категорий (мобильная версия)
+  function collapseAllSiblingsGroup(clickedGroup) {
+    const parent = clickedGroup.parentNode;
+    parent.querySelectorAll(".group-title.active").forEach((title) => {
+      if (title !== clickedGroup) {
+        title.classList.remove("active");
+        const content = title.nextElementSibling;
+        if (content?.classList.contains("accordion-content")) {
+          collapseSection(content);
+        }
+      }
+    });
+  }
+
+  // Универсальный обработчик для всех уровней вложенности подкатегорий (мобильная версия)
+  function setupSubcategoryToggles() {
+    document.body.addEventListener("click", function (e) {
+      const subcatTitle = e.target.closest(".accordion-subcat-title");
+      if (!subcatTitle) return;
+      e.stopPropagation();
+      // Закрываем все открытые соседние подкатегории на этом уровне
+      closeSiblingSubcats(subcatTitle);
+      const content = subcatTitle.nextElementSibling;
+      if (!content) return;
+      const computedMaxHeight = window.getComputedStyle(content).maxHeight;
+      if (computedMaxHeight === "0px" || computedMaxHeight === "0") {
+        expandSection(content);
+        subcatTitle.classList.add("expanded");
+      } else {
+        collapseSection(content);
+        subcatTitle.classList.remove("expanded");
+      }
+      updateParentAccordions(subcatTitle);
+    });
+  }
+
+  function updateParentAccordions(element) {
+    let parentAccordion = element.closest(".accordion-content");
+    while (parentAccordion) {
+      if (parentAccordion.style.maxHeight !== "none") {
+        parentAccordion.style.maxHeight = parentAccordion.scrollHeight + "px";
+      }
+      parentAccordion =
+        parentAccordion.parentNode.closest(".accordion-content");
+    }
+  }
+
+  setupSubcategoryToggles();
+
+  // Функция для десктопной версии: показываем подкатегории в виде колонок
   function showSubcategories(category) {
     subcategoriesContainer.innerHTML = "";
     subcategoriesContainer.classList.add("active");
-
     const columnsContainer = document.createElement("div");
     columnsContainer.className = "columns-container";
-
     const numColumns = 3;
     const columns = [];
-
     for (let i = 0; i < numColumns; i++) {
       const col = document.createElement("div");
       col.className = "subcategory-column";
       columnsContainer.appendChild(col);
       columns.push(col);
     }
-
     category.subcategories.forEach((subcat, index) => {
       const colIndex = index % numColumns;
       const column = columns[colIndex];
-
       const block = document.createElement("div");
       block.className = "subcategory-block";
-
       const titleEl = document.createElement("div");
       titleEl.className = "subcategory-title";
       titleEl.textContent = subcat.title;
       block.appendChild(titleEl);
-
-      // Если есть subitems
       if (Array.isArray(subcat.subitems) && subcat.subitems.length > 0) {
         const itemsEl = document.createElement("div");
         itemsEl.className = "subcategory-items active";
-
         const maxVisibleItems = 17;
         const hasMore = subcat.subitems.length > maxVisibleItems;
         const itemsToShow = hasMore
           ? subcat.subitems.slice(0, maxVisibleItems)
           : subcat.subitems;
-
         itemsToShow.forEach((item) => {
           const itemEl = document.createElement("div");
           itemEl.className = "subcategory-item";
           itemEl.textContent = item;
           itemsEl.appendChild(itemEl);
         });
-
         if (hasMore) {
           const showMoreEl = document.createElement("div");
           showMoreEl.className = "show-more";
@@ -465,17 +560,13 @@ document.addEventListener("DOMContentLoaded", () => {
           });
           itemsEl.appendChild(showMoreEl);
         }
-
         block.appendChild(itemsEl);
       }
-
       column.appendChild(block);
     });
-
     subcategoriesContainer.appendChild(columnsContainer);
   }
 
-  // Устанавливаем супер-активную категорию по клику
   function setSuperActive(titleElement) {
     if (superActiveTitle) {
       superActiveTitle.classList.remove("super-active");
@@ -484,18 +575,14 @@ document.addEventListener("DOMContentLoaded", () => {
     superActiveTitle.classList.add("super-active");
   }
 
-  // Отображаем подкатегории супер-активной категории
   function showSuperActiveSubcategories() {
     if (superActiveTitle) {
       const slug = superActiveTitle.getAttribute("data-slug");
       const category = categories.find((cat) => cat.slug === slug);
-      if (category) {
-        showSubcategories(category);
-      }
+      if (category) showSubcategories(category);
     }
   }
 
-  // Загружаем JSON с категориями
   fetch("/data/category.json")
     .then((response) => {
       if (!response.ok) {
@@ -509,13 +596,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("Категории отсутствуют в JSON.");
         return;
       }
-
-      // Рендерим категории в sidebar
       categories.forEach((cat) => {
         let element;
-
         if (cat.isSeparator) {
-          // Создаём неинтерактивную полосу-разделитель
           element = document.createElement("div");
           element.className = "sidebar-separator";
           if (cat.indent) {
@@ -529,7 +612,6 @@ document.addEventListener("DOMContentLoaded", () => {
           element = document.createElement("div");
           element.className = "group-title";
           element.setAttribute("data-slug", cat.slug);
-
           if (cat.icon) {
             const icon = document.createElement("i");
             icon.className = cat.icon;
@@ -539,40 +621,61 @@ document.addEventListener("DOMContentLoaded", () => {
             defaultIcon.className = "ri-folder-line";
             element.appendChild(defaultIcon);
           }
-
           const text = document.createElement("span");
           text.textContent = cat.title;
           element.appendChild(text);
-
-          element.addEventListener("mouseenter", () => {
-            document
-              .querySelectorAll(".group-title.active")
-              .forEach((el) => el.classList.remove("active"));
-            element.classList.add("active");
-            showSubcategories(cat);
-          });
-
-          element.addEventListener("click", (e) => {
-            e.stopPropagation();
-            setSuperActive(element);
-            showSubcategories(cat);
-          });
+          if (
+            isMobile &&
+            ((cat.subcategories && cat.subcategories.length) ||
+              (cat.subitems && cat.subitems.length))
+          ) {
+            const arrow = document.createElement("span");
+            arrow.className = "accordion-arrow";
+            arrow.innerHTML = "&#9660;";
+            element.appendChild(arrow);
+          }
+          if (isMobile) {
+            element.addEventListener("click", (e) => {
+              e.stopPropagation();
+              // Если элемент уже открыт – закрываем его, иначе открываем и закрываем другие ветки на этом уровне
+              if (element.classList.contains("active")) {
+                collapseSection(element.nextElementSibling);
+                element.classList.remove("active");
+              } else {
+                collapseAllSiblingsGroup(element);
+                toggleAccordion(cat, element);
+              }
+            });
+          } else {
+            element.addEventListener("mouseenter", () => {
+              document
+                .querySelectorAll(".group-title.active")
+                .forEach((el) => el.classList.remove("active"));
+              element.classList.add("active");
+              showSubcategories(cat);
+            });
+            element.addEventListener("click", (e) => {
+              e.stopPropagation();
+              setSuperActive(element);
+              showSubcategories(cat);
+            });
+          }
         }
-
         sidebar.appendChild(element);
       });
-
-      const firstTitle = sidebar.querySelector(".group-title");
-      if (firstTitle) {
-        setSuperActive(firstTitle);
-        showSubcategories(categories[0]);
+      if (!isMobile) {
+        const firstTitle = sidebar.querySelector(".group-title");
+        if (firstTitle) {
+          setSuperActive(firstTitle);
+          showSubcategories(categories[0]);
+        }
       }
     })
     .catch((err) => {
       console.error("Ошибка при загрузке категорий:", err);
     });
 
-  if (sidebar) {
+  if (sidebar && !isMobile) {
     sidebar.addEventListener("mouseleave", () => {
       document
         .querySelectorAll(".group-title.active")
@@ -599,7 +702,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let contactsData = {};
   let mapInitialized = false;
 
-  // Фильтрация городов
   function filterCities(searchTerm) {
     if (!searchTerm.trim()) {
       renderCities(contactsData);
@@ -617,33 +719,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCities(filtered);
   }
 
-  // Рендер городов
   function renderCities(data) {
     cityListContainer.innerHTML = "";
     const sortedLetters = Object.keys(data).sort();
-
     for (const letter of sortedLetters) {
       const letterGroup = document.createElement("div");
       letterGroup.classList.add("letter-group");
-
       const h3 = document.createElement("h3");
       h3.textContent = letter;
       letterGroup.appendChild(h3);
-
       const ul = document.createElement("ul");
       ul.classList.add("city-list");
-
       data[letter].forEach((cityItem) => {
         const li = document.createElement("li");
         li.classList.add("city");
-
         const toggleBtn = document.createElement("button");
         toggleBtn.classList.add("toggle");
         toggleBtn.textContent = cityItem.name;
-
         const detailsDiv = document.createElement("div");
         detailsDiv.classList.add("details");
-
         if (cityItem.address) {
           const addressP = document.createElement("p");
           addressP.textContent = "Адрес: " + cityItem.address;
@@ -663,29 +757,24 @@ document.addEventListener("DOMContentLoaded", () => {
             detailsDiv.appendChild(emailP);
           });
         }
-
         const chooseBtn = document.createElement("button");
         chooseBtn.classList.add("choose-office-button");
         chooseBtn.textContent = "Выбрать представительство";
         chooseBtn.addEventListener("click", () => selectCity(cityItem.name));
         detailsDiv.appendChild(chooseBtn);
-
         toggleBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           li.classList.toggle("active");
         });
-
         li.appendChild(toggleBtn);
         li.appendChild(detailsDiv);
         ul.appendChild(li);
       });
-
       letterGroup.appendChild(ul);
       cityListContainer.appendChild(letterGroup);
     }
   }
 
-  // Выбор города
   function selectCity(name) {
     currentCityElements.forEach((el) => {
       el.innerHTML = `<span>${name}</span>`;
@@ -697,7 +786,6 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleButton.textContent = "Выбрать на карте";
   }
 
-  // Инициализация карты
   async function initMapSelection() {
     const mapLoading = document.createElement("div");
     mapLoading.id = "mapLoading";
@@ -705,14 +793,12 @@ document.addEventListener("DOMContentLoaded", () => {
     mapLoading.style.textAlign = "center";
     mapLoading.style.marginTop = "20px";
     mapSelectionContainer.appendChild(mapLoading);
-
     try {
       const response = await fetch("/data/contacts_with_coordinates.json");
       if (!response.ok) {
         throw new Error(`Ошибка загрузки JSON: ${response.status}`);
       }
       const contacts = await response.json();
-
       const groupedContacts = {};
       for (const cities of Object.values(contacts)) {
         for (const city of cities) {
@@ -724,7 +810,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
       }
-
       function createGeoObjects() {
         const geoObjects = [];
         for (const [coords, office] of Object.entries(groupedContacts)) {
@@ -758,7 +843,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return geoObjects;
       }
-
       const clusterer = new ymaps.Clusterer({
         preset: "islands#invertedVioletClusterIcons",
         groupByCoordinates: false,
@@ -767,19 +851,15 @@ document.addEventListener("DOMContentLoaded", () => {
         geoObjectHideIconOnBalloonOpen: false,
       });
       clusterer.add(createGeoObjects());
-
       const mapSelection = new ymaps.Map("mapSelection", {
         center: [55.76, 37.64],
         zoom: 4,
         controls: ["zoomControl", "fullscreenControl"],
       });
-
       mapSelection.geoObjects.add(clusterer);
-
       if (clusterer.getGeoObjects().length) {
         mapSelection.setBounds(clusterer.getBounds(), { checkZoomRange: true });
       }
-
       window.selectOffice = function (name) {
         currentCityElements.forEach((el) => {
           el.innerHTML = `<span>${name}</span>`;
@@ -790,7 +870,6 @@ document.addEventListener("DOMContentLoaded", () => {
         closeCityDrawer();
         toggleButton.textContent = "Выбрать на карте";
       };
-
       mapLoading.remove();
     } catch (error) {
       console.error("Ошибка при инициализации карты выбора:", error);
@@ -807,7 +886,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toggleButton.addEventListener("click", () => {
     const isMapVisible = selectionModeContainer.classList.contains("map-mode");
-
     if (isMapVisible) {
       selectionModeContainer.classList.remove("map-mode");
       toggleButton.textContent = "Выбрать на карте";
