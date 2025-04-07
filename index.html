@@ -505,21 +505,33 @@
     <!-- Подключение библиотек для формирования документов -->
     <script src="/js/excel_pdf.js" defer></script>
     <!-- SheetJS для Excel -->
+    <!-- SheetJS для Excel -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
       defer
     ></script>
-    <!-- noUiSlider JS скрипт красивого слайдера цен-->
-    <script src="/js/nouislider.min.js" defer></script>
-    <!-- jsPDF и html2canvas для PDF -->
+    <!-- jsPDF -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
       defer
     ></script>
+    <!-- jsPDF-AutoTable (обязательно!) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"
+      defer
+    ></script>
+    <!-- html2canvas (если он вам нужен для других задач) -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
       defer
     ></script>
+    <!-- Ваш скрипт должен быть подключён последним -->
+    <script src="/js/excel_pdf.js" defer></script>
+
+    <!-- noUiSlider JS скрипт красивого слайдера цен-->
+    <script src="/js/nouislider.min.js" defer></script>
+    <!-- jsPDF и html2canvas для PDF -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Скрипт регистрации -->
     <script src="/js/registration.js" defer></script>
