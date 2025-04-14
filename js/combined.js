@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function toggleCategoryDrawer(event) {
     event.preventDefault();
+    event.stopPropagation(); // Предотвращаем всплытие, чтобы не сработал handleOutsideClick
     if (isCategoryOpen) {
       closeCategoryDrawer();
     } else {
@@ -66,20 +67,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Обработчик клика вне шторки
+  function handleOutsideClick(event) {
+    if (
+      isCityOpen &&
+      !cityDrawer.contains(event.target) &&
+      !cityButtons[0].contains(event.target)
+    ) {
+      // Если клик был вне шторки и не по кнопке открытия шторки
+      closeCityDrawer();
+    }
+  }
+
   function openCityDrawer() {
     cityDrawer.classList.add("show");
     isCityOpen = true;
     showOverlay();
+
+    // Добавляем обработчик клика после открытия шторки
+    setTimeout(() => {
+      document.addEventListener("click", handleOutsideClick);
+    }, 10);
   }
 
   function closeCityDrawer() {
     cityDrawer.classList.remove("show");
     isCityOpen = false;
     if (!isCategoryOpen) hideOverlay();
+
+    // Удаляем обработчик клика после закрытия шторки
+    document.removeEventListener("click", handleOutsideClick);
   }
 
   function toggleCityDrawer(event) {
     event.preventDefault();
+    event.stopPropagation(); // Предотвращаем всплытие, чтобы не сработал handleOutsideClick
+
     if (isCityOpen) {
       closeCityDrawer();
     } else {
@@ -96,8 +119,14 @@ document.addEventListener("DOMContentLoaded", () => {
   openCategoriesButtons.forEach((btn) => {
     btn.addEventListener("click", toggleCategoryDrawer);
   });
+
   cityButtons.forEach((btn) => {
     btn.addEventListener("click", toggleCityDrawer);
+  });
+
+  // Предотвращаем закрытие при клике внутри шторки
+  cityDrawer.addEventListener("click", (event) => {
+    event.stopPropagation();
   });
 
   // ========================================================
@@ -297,25 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.addEventListener("input", syncInputs);
     searchInput.addEventListener("focus", handleFocus);
     searchInput.addEventListener("blur", handleBlur);
-  }
-
-  // ========================================================
-  // Дополнительная логика для мобильной версии поиска
-  // ========================================================
-  const mobileTopPanel = document.querySelector(".hide-desktop .top-panel");
-  const mobileSearchInput = document.querySelector(
-    ".hide-desktop .top-panel__left .search-bar input#searchInput"
-  );
-  if (searchIconButton && mobileSearchInput && mobileTopPanel) {
-    searchIconButton.addEventListener("click", () => {
-      mobileSearchInput.focus();
-    });
-    mobileSearchInput.addEventListener("focus", () => {
-      mobileTopPanel.classList.add("search-active");
-    });
-    mobileSearchInput.addEventListener("blur", () => {
-      mobileTopPanel.classList.remove("search-active");
-    });
   }
 
   // ========================================================

@@ -52,55 +52,21 @@
         return;
       }
 
-      // Если контейнер специальных кнопок отсутствует – создаём его
-      this.buttonsContainer = this.tabs.querySelector(".tabs-buttons");
-      if (!this.buttonsContainer) {
-        this.buttonsContainer = document.createElement("div");
-        this.buttonsContainer.classList.add("tabs-buttons");
-
-        // Кнопка «Создать корзину»
-        this.createCartButton = document.createElement("button");
-        this.createCartButton.id = "create-cart-button";
-        this.createCartButton.classList.add("create-cart-button");
-        this.createCartButton.setAttribute(
-          "data-tooltip",
-          "Создать новую корзину"
-        );
-        this.createCartButton.innerHTML = `<span style="pointer-events: none;">Создать новую корзину</span>`;
-
-        // Кнопка «Чат»
-        this.createChatButton = document.createElement("button");
-        this.createChatButton.id = "create-chat-button";
-        this.createChatButton.classList.add("create-chat-button");
-        this.createChatButton.setAttribute("data-tooltip", "Написать в чат");
-        this.createChatButton.innerHTML = `<span style="pointer-events: none;">Написать в чат</span>`;
-
-        this.buttonsContainer.appendChild(this.createChatButton);
-        this.buttonsContainer.appendChild(this.createCartButton);
-        this.tabs.appendChild(this.buttonsContainer);
-      } else {
-        this.createCartButton = this.buttonsContainer.querySelector(
-          "#create-cart-button"
-        );
-        this.createChatButton = this.buttonsContainer.querySelector(
-          "#create-chat-button"
-        );
-      }
+      // Реорганизация структуры вкладок для поддержки горизонтальной прокрутки
+      this.restructureTabsContainer();
 
       // Инициализация вкладок
       this.tabCounter = 0;
       this.tabNames = new Set();
-      Array.from(this.tabs.children).forEach((child) => {
-        if (child !== this.buttonsContainer) {
-          const tab = child.querySelector(".tab");
-          if (tab) {
-            this.tabNames.add(tab.dataset.name);
-            // Если название начинается с "Корзина", добавляем номер в набор
-            if (tab.dataset.name.startsWith("Корзина")) {
-              const number = parseInt(tab.dataset.name.split(" ")[1]);
-              if (!isNaN(number)) {
-                this.cartNumbers.add(number);
-              }
+      Array.from(this.tabsScrollContainer.children).forEach((child) => {
+        const tab = child.querySelector(".tab");
+        if (tab) {
+          this.tabNames.add(tab.dataset.name);
+          // Если название начинается с "Корзина", добавляем номер в набор
+          if (tab.dataset.name.startsWith("Корзина")) {
+            const number = parseInt(tab.dataset.name.split(" ")[1]);
+            if (!isNaN(number)) {
+              this.cartNumbers.add(number);
             }
           }
         }
@@ -118,11 +84,9 @@
               console.error("Tab Manager не найден.");
               return;
             }
-            const existingTab = Array.from(tabManager.tabs.children).find(
-              (child) =>
-                child !== tabManager.buttonsContainer &&
-                child.dataset.name === "Корзина 1"
-            );
+            const existingTab = Array.from(
+              tabManager.tabsScrollContainer.children
+            ).find((child) => child.dataset.name === "Корзина 1");
             if (existingTab) {
               tabManager.activateTab(existingTab.dataset.tab);
             } else {
@@ -346,21 +310,27 @@
       this.openPageAsTab("Главная", "/pages/index.html");
       this.updateCreateCartButtonVisibility();
 
+      // Инициализация скроллинга вкладок
+      this.initTabsScrolling();
+
       // При изменении размеров окна обновляем высоту страницы и, если используется Constructable Stylesheets, обновляем списки adoptedStyleSheets
       window.addEventListener("resize", () => {
         this.updatePageHeight();
         if (this.useConstructableStylesheets) {
           this.updateAdoptedStylesheets();
         }
+        // Обновляем индикаторы скролла при изменении размера окна
+        this.updateScrollIndicators();
       });
 
       // Обработчик кликов в основном документе
       this.initializeMainDocumentLinkHandler();
 
-      // Наблюдатель за изменениями в контейнере вкладок (для мобильной версии)
-      if (window.innerWidth <= 800 && "ResizeObserver" in window) {
+      // Наблюдатель за изменениями в контейнере вкладок
+      if ("ResizeObserver" in window) {
         const tabsResizeObserver = new ResizeObserver(() => {
           this.updatePageHeight();
+          this.updateScrollIndicators();
         });
         tabsResizeObserver.observe(this.tabs);
       }
@@ -378,6 +348,442 @@
       // ------------------------------------------------------------------
     }
 
+    // Метод для реорганизации структуры контейнера вкладок
+    restructureTabsContainer() {
+      // Сохраняем оригинальный HTML контейнера
+      const originalTabsHTML = this.tabs.innerHTML;
+
+      // Очищаем контейнер
+      this.tabs.innerHTML = "";
+
+      // Создаем контейнер для скроллируемых вкладок
+      this.tabsScrollContainer = document.createElement("div");
+      this.tabsScrollContainer.classList.add("tabs-scroll-container");
+
+      // Создаем контейнер для кнопок
+      this.buttonsContainer = document.createElement("div");
+      this.buttonsContainer.classList.add("tabs-buttons");
+
+      // Добавляем оба контейнера в основной контейнер вкладок
+      this.tabs.appendChild(this.tabsScrollContainer);
+      this.tabs.appendChild(this.buttonsContainer);
+
+      // Временный div для парсинга оригинального HTML
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = originalTabsHTML;
+
+      // Перемещаем все существующие вкладки в контейнер для скролла
+      const originalTabs = tempDiv.querySelectorAll(".tab");
+      originalTabs.forEach((tab) => {
+        // Добавляем атрибут draggable для перетаскивания
+        tab.setAttribute("draggable", "true");
+        this.tabsScrollContainer.appendChild(tab);
+      });
+
+      // Находим или создаем кнопки
+      const originalButtonsContainer = tempDiv.querySelector(".tabs-buttons");
+
+      if (originalButtonsContainer) {
+        // Используем существующие кнопки
+        this.createChatButton = originalButtonsContainer.querySelector(
+          "#create-chat-button"
+        );
+        this.createCartButton = originalButtonsContainer.querySelector(
+          "#create-cart-button"
+        );
+
+        // Очищаем контейнер кнопок и добавляем кнопки с иконками
+        this.buttonsContainer.innerHTML = "";
+      } else {
+        // Создаем новые кнопки
+        this.createChatButton = document.createElement("button");
+        this.createChatButton.id = "create-chat-button";
+        this.createChatButton.classList.add("create-chat-button");
+        this.createChatButton.setAttribute("data-tooltip", "Написать в чат");
+
+        this.createCartButton = document.createElement("button");
+        this.createCartButton.id = "create-cart-button";
+        this.createCartButton.classList.add("create-cart-button");
+        this.createCartButton.setAttribute(
+          "data-tooltip",
+          "Создать новую корзину"
+        );
+      }
+
+      // Добавляем текст и иконки для адаптивности (иконки будут показаны только на мобильном)
+      this.createChatButton.innerHTML = `
+        <span class="button-text" style="pointer-events: none;">Написать в чат</span>
+        <i class="button-icon ri-chat-3-line" style="pointer-events: none; display: none;"></i>
+      `;
+      this.createCartButton.innerHTML = `
+        <span class="button-text" style="pointer-events: none;">Создать новую корзину</span>
+        <i class="button-icon ri-shopping-basket-line" style="pointer-events: none; display: none;"></i>
+      `;
+
+      // Добавляем кнопки в контейнер
+      this.buttonsContainer.appendChild(this.createChatButton);
+      this.buttonsContainer.appendChild(this.createCartButton);
+
+      // Добавляем стили для новой структуры
+      this.addTabsStyles();
+
+      // Инициализируем перетаскивание для всех уже существующих вкладок
+      const tabs = this.tabsScrollContainer.querySelectorAll(".tab");
+      tabs.forEach((tab) => {
+        this.initTabDragAndDrop(tab);
+      });
+
+      // Создаем индикатор перетаскивания
+      this.dropIndicator = document.createElement("div");
+      this.dropIndicator.classList.add("tab-drop-indicator");
+      this.tabsScrollContainer.appendChild(this.dropIndicator);
+    }
+
+    // Метод для добавления стилей для новой структуры вкладок
+    addTabsStyles() {
+      const styleElement = document.createElement("style");
+      styleElement.textContent = `
+        .tabs {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          position: relative;
+        }
+        
+        .tabs-scroll-container {
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          scroll-behavior: smooth;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          flex: 1;
+          white-space: nowrap;
+          max-width: calc(100% - 80px);
+        }
+        
+        .tabs-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .tab {
+          margin-right: 5px;
+          user-select: none;
+        }
+        
+        .tab-title {
+          user-select: none;
+        }
+        
+        .tab[contenteditable="true"] {
+          user-select: text;
+        }
+        
+        .tabs-buttons {
+          display: flex;
+          gap: 5px;
+          margin-left: 5px;
+          flex-shrink: 0;
+          align-items: center;
+        }
+        
+        /* Стили для кнопок не модифицируем, используем только для иконок/текста */
+        .create-chat-button i, .create-cart-button i {
+          font-size: 1.2em;
+        }
+        
+        /* Текст показывается по умолчанию */
+        .button-text {
+          display: inline-block;
+        }
+        
+        /* Иконки скрыты по умолчанию */
+        .button-icon {
+          display: none;
+        }
+        
+        .tab-scroll-indicator {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          opacity: 0.6;
+          font-size: 12px;
+          padding: 2px;
+          background: rgba(0,0,0,0.1);
+          border-radius: 3px;
+          display: none;
+          pointer-events: none;
+        }
+        
+        .tab-scroll-left {
+          left: 0;
+          border-radius: 0 3px 3px 0;
+        }
+        
+        .tab-scroll-right {
+          right: 80px;
+          border-radius: 3px 0 0 3px;
+        }
+        
+        /* Стили для перетаскивания */
+        .tab.dragging {
+          opacity: 0.5;
+        }
+        
+        .tab-drop-indicator {
+          border-right: 2px dashed #007d7e;
+          height: 75%;
+          position: absolute;
+          top: 12.5%;
+          z-index: 10;
+          pointer-events: none;
+          display: none;
+        }
+        
+        @media (max-width: 800px) {
+          .tabs-scroll-container {
+            max-width: calc(100% - 70px);
+          }
+          
+          /* В мобильной версии скрываем текст и показываем иконки */
+          .button-text {
+            display: none;
+          }
+          
+          .button-icon {
+            display: inline-block !important;
+          }
+          
+          .tab-scroll-right {
+            right: 70px;
+          }
+        }
+      `;
+      document.head.appendChild(styleElement);
+    }
+
+    // Метод для инициализации горизонтального скролла вкладок
+    initTabsScrolling() {
+      // Обработчик прокрутки колесиком мыши
+      this.tabsScrollContainer.addEventListener("wheel", (e) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          this.tabsScrollContainer.scrollLeft += e.deltaY;
+          this.updateScrollIndicators();
+        }
+      });
+
+      // Создаём индикаторы скролла
+      this.createScrollIndicators();
+
+      // Обновляем индикаторы при скролле
+      this.tabsScrollContainer.addEventListener("scroll", () => {
+        this.updateScrollIndicators();
+      });
+
+      // Начальное обновление индикаторов
+      this.updateScrollIndicators();
+    }
+
+    // Метод для создания индикаторов скролла
+    createScrollIndicators() {
+      // Левый индикатор
+      this.leftScrollIndicator = document.createElement("div");
+      this.leftScrollIndicator.classList.add(
+        "tab-scroll-indicator",
+        "tab-scroll-left"
+      );
+      this.leftScrollIndicator.innerHTML = "◄";
+
+      // Правый индикатор
+      this.rightScrollIndicator = document.createElement("div");
+      this.rightScrollIndicator.classList.add(
+        "tab-scroll-indicator",
+        "tab-scroll-right"
+      );
+      this.rightScrollIndicator.innerHTML = "►";
+
+      this.tabs.appendChild(this.leftScrollIndicator);
+      this.tabs.appendChild(this.rightScrollIndicator);
+    }
+
+    // Метод для обновления индикаторов скролла
+    updateScrollIndicators() {
+      if (
+        !this.leftScrollIndicator ||
+        !this.rightScrollIndicator ||
+        !this.tabsScrollContainer
+      )
+        return;
+
+      const hasLeftScroll = this.tabsScrollContainer.scrollLeft > 0;
+      const hasRightScroll =
+        this.tabsScrollContainer.scrollLeft <
+        this.tabsScrollContainer.scrollWidth -
+          this.tabsScrollContainer.clientWidth -
+          1;
+
+      this.leftScrollIndicator.style.display = hasLeftScroll ? "block" : "none";
+      this.rightScrollIndicator.style.display = hasRightScroll
+        ? "block"
+        : "none";
+    }
+
+    // Метод для инициализации Drag and Drop для вкладок
+    initTabDragAndDrop(tab) {
+      // Создаем индикатор места вставки, если его еще нет
+      if (!this.dropIndicator) {
+        this.dropIndicator = document.createElement("div");
+        this.dropIndicator.classList.add("tab-drop-indicator");
+        this.tabsScrollContainer.appendChild(this.dropIndicator);
+      }
+
+      tab.addEventListener("dragstart", (e) => {
+        // Предотвращаем перетаскивание, если редактируется название
+        if (tab.querySelector('.tab-title[contenteditable="true"]')) {
+          e.preventDefault();
+          return false;
+        }
+
+        // Сохраняем ID перетаскиваемой вкладки
+        e.dataTransfer.setData("text/plain", tab.dataset.tab);
+        e.dataTransfer.effectAllowed = "move";
+
+        // Добавляем класс для визуального стиля перетаскивания
+        tab.classList.add("dragging");
+
+        // Устанавливаем отступы для правильного позиционирования курсора
+        const rect = tab.getBoundingClientRect();
+        e.dataTransfer.setDragImage(tab, rect.width / 2, rect.height / 2);
+
+        // Отключаем перетаскивание на изображениях и кнопках внутри вкладки
+        const nonDraggableElements = tab.querySelectorAll(
+          "img, button, .tab-edit-button"
+        );
+        nonDraggableElements.forEach((el) => {
+          el.setAttribute("draggable", "false");
+        });
+      });
+
+      tab.addEventListener("dragend", () => {
+        tab.classList.remove("dragging");
+        this.hideDropIndicator();
+      });
+
+      // Обработчики для tabsScrollContainer (область, где можно бросить вкладку)
+      this.tabsScrollContainer.addEventListener("dragover", (e) => {
+        e.preventDefault(); // Разрешаем drop
+        e.dataTransfer.dropEffect = "move";
+        this.updateDropIndicatorPosition(e);
+      });
+
+      this.tabsScrollContainer.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+      });
+
+      this.tabsScrollContainer.addEventListener("dragleave", (e) => {
+        // Скрываем индикатор, только если мышь покидает контейнер вкладок
+        const relatedTarget = e.relatedTarget;
+        if (!this.tabsScrollContainer.contains(relatedTarget)) {
+          this.hideDropIndicator();
+        }
+      });
+
+      this.tabsScrollContainer.addEventListener("drop", (e) => {
+        e.preventDefault();
+
+        const draggedTabId = e.dataTransfer.getData("text/plain");
+        const draggedTab = this.tabsScrollContainer.querySelector(
+          `.tab[data-tab="${draggedTabId}"]`
+        );
+
+        if (!draggedTab) return;
+
+        const dropPosition = this.getDropPosition(e);
+        if (!dropPosition) return;
+
+        // Перемещаем вкладку в новую позицию
+        if (dropPosition.target && dropPosition.beforeTarget) {
+          this.tabsScrollContainer.insertBefore(
+            draggedTab,
+            dropPosition.target
+          );
+        } else {
+          this.tabsScrollContainer.appendChild(draggedTab);
+        }
+
+        // Скрываем индикатор места вставки
+        this.hideDropIndicator();
+      });
+    }
+
+    // Метод для обновления позиции индикатора вставки
+    updateDropIndicatorPosition(e) {
+      const dropPosition = this.getDropPosition(e);
+
+      if (!dropPosition) {
+        this.hideDropIndicator();
+        return;
+      }
+
+      const { target, beforeTarget } = dropPosition;
+
+      if (target) {
+        const rect = target.getBoundingClientRect();
+
+        if (beforeTarget) {
+          // Показываем индикатор слева от целевой вкладки
+          this.dropIndicator.style.left = `${
+            rect.left - this.tabsScrollContainer.getBoundingClientRect().left
+          }px`;
+        } else {
+          // Показываем индикатор справа от целевой вкладки
+          this.dropIndicator.style.left = `${
+            rect.right - this.tabsScrollContainer.getBoundingClientRect().left
+          }px`;
+        }
+
+        this.dropIndicator.style.display = "block";
+      } else {
+        this.hideDropIndicator();
+      }
+    }
+
+    // Метод для определения позиции вставки
+    getDropPosition(e) {
+      // Получаем элемент под курсором
+      const targetElement = e.target.closest(".tab");
+
+      // Если курсор не над вкладкой или над перетаскиваемой вкладкой, возвращаем null
+      if (!targetElement || targetElement.classList.contains("dragging")) {
+        return null;
+      }
+
+      // Игнорируем, если это кнопка и не вкладка
+      if (targetElement.closest(".tabs-buttons")) {
+        return null;
+      }
+
+      const rect = targetElement.getBoundingClientRect();
+      const mouseX = e.clientX;
+
+      // Определяем, должна ли вкладка быть вставлена перед или после целевой вкладки
+      const beforeMiddle = mouseX < rect.left + rect.width / 2;
+
+      return {
+        target: targetElement,
+        beforeTarget: beforeMiddle,
+      };
+    }
+
+    // Метод для скрытия индикатора вставки
+    hideDropIndicator() {
+      if (this.dropIndicator) {
+        this.dropIndicator.style.display = "none";
+      }
+    }
+
     // --------------- [BASKET MANAGEMENT METHODS] ---------------
     setActiveCart(cartId) {
       if (!cartId) return;
@@ -387,9 +793,9 @@
     }
 
     renameCart(cartId, newTitle) {
-      let tab = this.tabs.querySelector(".tab.active");
+      let tab = this.tabsScrollContainer.querySelector(".tab.active");
       if (!tab) {
-        tab = Array.from(this.tabs.children).find(
+        tab = Array.from(this.tabsScrollContainer.children).find(
           (el) => el.dataset && el.dataset.name === cartId
         );
       }
@@ -432,7 +838,7 @@
     }
 
     updateActiveCartIcons() {
-      const activeTab = this.tabs.querySelector(".tab.active");
+      const activeTab = this.tabsScrollContainer.querySelector(".tab.active");
       if (activeTab) {
         let iconEl = activeTab.querySelector(".tab-cart-activate-icon");
         if (!iconEl) {
@@ -447,8 +853,8 @@
         }
         iconEl.className = "tab-cart-activate-icon ri-pushpin-fill";
       }
-      const otherTabs = Array.from(this.tabs.children).filter(
-        (el) => el !== this.buttonsContainer && !el.classList.contains("active")
+      const otherTabs = Array.from(this.tabsScrollContainer.children).filter(
+        (el) => !el.classList.contains("active")
       );
       otherTabs.forEach((tab) => {
         const iconEl = tab.querySelector(".tab-cart-activate-icon");
@@ -650,9 +1056,8 @@
     }
 
     async openPageAsTab(title, url) {
-      const existingTab = Array.from(this.tabs.children).find(
-        (child) =>
-          child !== this.buttonsContainer && child.dataset.name === title
+      const existingTab = Array.from(this.tabsScrollContainer.children).find(
+        (child) => child.dataset.name === title
       );
       if (existingTab) {
         const tabId = existingTab.dataset.tab;
@@ -670,9 +1075,8 @@
         title = this.findNextCartName();
         this.cartNumbers.add(parseInt(title.split(" ")[1]));
       } else {
-        const existingTab = Array.from(this.tabs.children).find(
-          (child) =>
-            child !== this.buttonsContainer && child.dataset.name === title
+        const existingTab = Array.from(this.tabsScrollContainer.children).find(
+          (child) => child.dataset.name === title
         );
         if (existingTab) {
           this.activateTab(existingTab.dataset.tab);
@@ -685,20 +1089,53 @@
       tab.classList.add("tab");
       tab.setAttribute("data-tab", tabId);
       tab.setAttribute("data-name", title);
+      tab.setAttribute("draggable", "true"); // Делаем таб перетаскиваемым
       tab.innerHTML = `
         <span class="tab-title">${title}</span>
         <button class="close-tab" title="Закрыть вкладку">&times;</button>
       `;
-      this.tabs.insertBefore(tab, this.buttonsContainer);
+      this.tabsScrollContainer.appendChild(tab);
       this.tabNames.add(title);
       if (isCart) {
         this.activeCartNames[tabId] = title;
         this.notifyCartUpdate();
       }
+
       const titleElement = tab.querySelector(".tab-title");
       if (isCart) {
-        titleElement.setAttribute("contenteditable", "true");
+        // Создаем отдельный элемент для редактирования вместо contenteditable
+        const editButton = document.createElement("span");
+        editButton.classList.add("tab-edit-button");
+        editButton.innerHTML = "✎";
+        editButton.style.cssText = `
+          margin-left: 4px;
+          cursor: pointer;
+          opacity: 0.5;
+          font-size: 10px;
+        `;
+
+        tab.appendChild(editButton);
+
+        // Редактирование только при клике на кнопку редактирования
+        editButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          titleElement.setAttribute("contenteditable", "true");
+          // При редактировании отключаем перетаскивание
+          tab.setAttribute("draggable", "false");
+          titleElement.focus();
+
+          // Выделяем весь текст
+          const range = document.createRange();
+          range.selectNodeContents(titleElement);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        });
+
         titleElement.addEventListener("blur", () => {
+          titleElement.setAttribute("contenteditable", "false");
+          // Возвращаем возможность перетаскивания
+          tab.setAttribute("draggable", "true");
           const newName = titleElement.textContent.trim();
           if (newName) {
             tab.dataset.name = newName;
@@ -709,7 +1146,19 @@
           this.notifyCartUpdate();
           this.updatePageHeight();
         });
+
+        // Обработка клавиши Enter для завершения редактирования
+        titleElement.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            titleElement.blur();
+          }
+        });
       }
+
+      // Добавляем обработчики перетаскивания
+      this.initTabDragAndDrop(tab);
+
       const contentDiv = document.createElement("div");
       contentDiv.classList.add("content");
       contentDiv.setAttribute("data-content", tabId);
@@ -764,6 +1213,8 @@
       this.updateTabsVisibility();
       this.updateCreateCartButtonVisibility();
       this.updatePageHeight();
+      // Обновляем индикаторы скролла после добавления новой вкладки
+      this.updateScrollIndicators();
       return tabId;
     }
 
@@ -807,29 +1258,26 @@
     }
 
     activateTab(tabId) {
-      this.tabs.querySelectorAll(".tab").forEach((t) => {
+      this.tabsScrollContainer.querySelectorAll(".tab").forEach((t) => {
         t.classList.remove("active");
         const titleEl = t.querySelector(".tab-title");
-        if (titleEl && t.dataset.tab !== tabId) {
+        if (titleEl) {
           titleEl.setAttribute("contenteditable", "false");
         }
       });
       this.tabContent.querySelectorAll(".content").forEach((c) => {
         c.style.display = "none";
       });
-      const activeTab = this.tabs.querySelector(`.tab[data-tab="${tabId}"]`);
+      const activeTab = this.tabsScrollContainer.querySelector(
+        `.tab[data-tab="${tabId}"]`
+      );
       const activeContent = this.tabContent.querySelector(
         `.content[data-content="${tabId}"]`
       );
       if (activeTab && activeContent) {
         activeTab.classList.add("active");
         activeContent.style.display = "block";
-        if (activeTab.dataset.name) {
-          const titleEl = activeTab.querySelector(".tab-title");
-          if (titleEl) {
-            titleEl.setAttribute("contenteditable", "true");
-          }
-        }
+
         this.currentActiveTab = tabId;
         this.tabShadowRoots[tabId] = activeContent.shadowRoot;
         // Обновляем высоту активного содержимого и пересчитываем её после рендера
@@ -838,13 +1286,32 @@
           this.updatePageHeight();
         });
         console.log(`Вкладка "${activeTab.dataset.name}" активирована.`);
+
+        // Прокручиваем вкладку в область видимости, если она не полностью видна
+        const tabRect = activeTab.getBoundingClientRect();
+        const containerRect = this.tabsScrollContainer.getBoundingClientRect();
+
+        if (tabRect.left < containerRect.left) {
+          // Если вкладка слева за пределами видимости
+          this.tabsScrollContainer.scrollLeft +=
+            tabRect.left - containerRect.left - 10;
+        } else if (tabRect.right > containerRect.right) {
+          // Если вкладка справа за пределами видимости
+          this.tabsScrollContainer.scrollLeft +=
+            tabRect.right - containerRect.right + 10;
+        }
+
+        // Обновляем индикаторы скролла после активации вкладки
+        this.updateScrollIndicators();
       } else {
         console.warn(`Не удалось найти вкладку или содержимое с ID: ${tabId}`);
       }
     }
 
     closeTab(tabId) {
-      const tabEl = this.tabs.querySelector(`.tab[data-tab="${tabId}"]`);
+      const tabEl = this.tabsScrollContainer.querySelector(
+        `.tab[data-tab="${tabId}"]`
+      );
       const contentEl = this.tabContent.querySelector(
         `.content[data-content="${tabId}"]`
       );
@@ -865,7 +1332,8 @@
           }
         }
         if (isActive) {
-          const remainingTabs = this.tabs.querySelectorAll(".tab");
+          const remainingTabs =
+            this.tabsScrollContainer.querySelectorAll(".tab");
           if (remainingTabs.length > 0) {
             const lastTabId =
               remainingTabs[remainingTabs.length - 1].getAttribute("data-tab");
@@ -875,17 +1343,20 @@
         this.updateTabsVisibility();
         this.updateCreateCartButtonVisibility();
         this.updatePageHeight();
-        const openTabs = this.tabs.querySelectorAll(".tab");
+        const openTabs = this.tabsScrollContainer.querySelectorAll(".tab");
         const isOnlyMain =
           openTabs.length === 1 && openTabs[0].dataset.name === "Главная";
         if (openTabs.length === 0 || isOnlyMain) {
           this.openPageAsTab("Главная", "/pages/index.html");
         }
+
+        // Обновляем индикаторы скролла после удаления вкладки
+        this.updateScrollIndicators();
       }
     }
 
     updateTabsVisibility() {
-      const openTabs = this.tabs.querySelectorAll(".tab");
+      const openTabs = this.tabsScrollContainer.querySelectorAll(".tab");
       if (openTabs.length === 1 && openTabs[0].dataset.name === "Главная") {
         this.tabs.classList.add("collapsed");
       } else {
@@ -897,10 +1368,6 @@
       this.createCartButton.style.display = "block";
     }
 
-    /* Новый метод updatePageHeight для мобильной версии.
-       Если вкладок нет (контейнер имеет класс "collapsed"), то отступ устанавливается равным высоте шапки.
-       Если вкладки присутствуют, margin обнуляется и доступная высота рассчитывается динамически
-       на основе позиции активного содержимого относительно окна. */
     updatePageHeight() {
       if (window.innerWidth <= 800) {
         const topPanel = document.querySelector(".top-panel");
@@ -960,22 +1427,6 @@
         }
         document.body.style.overflow = "";
         document.documentElement.style.overflow = "";
-      }
-    }
-
-    async openPageAsTab(title, url) {
-      const existingTab = Array.from(this.tabs.children).find(
-        (child) =>
-          child !== this.buttonsContainer && child.dataset.name === title
-      );
-      if (existingTab) {
-        const tabId = existingTab.dataset.tab;
-        this.activateTab(tabId);
-        return tabId;
-      } else {
-        const isCart = title.startsWith("Корзина");
-        const tabId = await this.createTab(title, url, isCart);
-        return tabId;
       }
     }
   }

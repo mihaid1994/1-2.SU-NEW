@@ -63,7 +63,6 @@ html {
   display: flex; /* Flexbox для кнопок */
   align-items: center; /* Центрируем кнопки по вертикали */
   gap: 20px; /* Расстояние между кнопками */
-
   padding-right: 30px;
 }
 
@@ -148,13 +147,8 @@ header {
 .content {
   flex: 1;
   padding: 10px;
-  margin-right: 325px;
   transition: margin-right 0.3s ease-in-out;
   margin-bottom: 10px;
-}
-
-.content.full-width {
-  margin-right: 10px;
 }
 
 /* Заголовки */
@@ -252,19 +246,11 @@ h1 .header-text {
 
 /* Контейнер для изображений товаров в заголовке */
 .header-images-container {
-  display: none;
+  display: flex;
   flex-wrap: nowrap;
   gap: 5px;
   margin-left: 10px;
   overflow-x: auto;
-}
-
-.header-images-container.collapsed {
-  display: flex;
-}
-
-.header-right.collapsed {
-  display: flex;
 }
 
 /* Стили для изображений товаров в заголовке */
@@ -278,7 +264,7 @@ h1 .header-text {
 
 /* Контейнер для элементов справа в заголовке */
 .header-right {
-  display: none; /* Скрываем по умолчанию */
+  display: flex;
   flex-direction: column;
   align-items: flex-end;
   margin-left: auto;
@@ -309,10 +295,6 @@ h1 .header-text {
 /* Контент секции доставки */
 .delivery-content {
   padding-top: 10px;
-}
-
-.delivery-content.collapsed {
-  display: none;
 }
 
 /* Таблицы товаров */
@@ -570,10 +552,6 @@ h1 .header-text {
   transform: scale(0.95);
 }
 
-/* Остальные стили остаются без изменений */
-
-/* Продолжение вашего оригинального CSS */
-
 /* Контейнер для действий */
 .actions-container {
   display: flex;
@@ -737,12 +715,6 @@ th {
 }
 
 /* Стрелка для сворачивания/разворачивания */
-.delivery-header.collapsed .arrow {
-  color: #5e5e5e;
-  transform: rotate(180deg); /* Поворачиваем стрелку */
-}
-
-/* Стрелка располагается вправо только в развернутом состоянии */
 .delivery-header .arrow {
   font-size: 18px;
   color: #5e5e5e;
@@ -750,10 +722,6 @@ th {
   margin-right: 10px; /* Оставляем только отступ справа */
   margin-left: 10px;
   transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.delivery-header:not(.collapsed) .arrow {
-  margin-left: auto;
 }
 
 /* Изображение в заголовке */
@@ -765,17 +733,6 @@ th {
   object-fit: cover;
   transition: transform 0.3s ease;
   cursor: pointer;
-}
-
-/* Дополнительные стили для состояния при наведении на изображения в заголовке */
-.header-images-container .product-image:hover {
-  transform: scale(1);
-}
-
-/* Дополнительные стили для корректного отображения свернутых секций */
-.delivery-header.collapsed .collapsed-sum,
-.delivery-header.collapsed .collapsed-order-button {
-  display: block;
 }
 
 .order-discount {
@@ -1095,4 +1052,86 @@ th {
   border: solid #4e4e4e;
   border-width: 0 3px 3px 0; /* Толщина линий галочки */
   pointer-events: none; /* Галочка не кликабельна */
+}
+
+/* Уведомления */
+.notification-card {
+  background-color: #d9994f;
+  padding: 8px;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.card-header .header-text {
+  font-size: 12px;
+}
+
+.exclamation-circle {
+  width: 20px;
+  height: 20px;
+  background-color: #ffad42;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.notification-card button {
+  background-color: #a6763e;
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.notification-card button:hover {
+  background-color: #887864;
+}
+
+/* Цвет кружочка при наведении */
+.notification-card .exclamation-circle:hover,
+.cloned-exclamation-circle:hover {
+  background-color: #ffad42;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* Стили для позиций без остатка */
+.positions-without-remainder {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.positions-without-remainder h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.positions-without-remainder ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.positions-without-remainder li {
+  margin-bottom: 5px;
+  font-size: 14px;
 }

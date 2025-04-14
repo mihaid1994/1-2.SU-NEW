@@ -39,7 +39,7 @@ body {
 .group-title .accordion-arrow {
   margin-left: auto;
   transition: transform 0.3s ease;
-  font-size: 1.08em; /* было 0.9em, увеличено в 1,2 раза */
+  font-size: 0.9em; /* было 0.9em, увеличено в 1,2 раза */
   color: #666;
 }
 

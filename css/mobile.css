@@ -25,151 +25,68 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Стили для логотипа */
-.logo-button {
-  position: absolute;
-  top: 50%;
-  left: 30px;
-  transform: translateY(-50%);
-  height: 80%;
-  transition: left 0.5s ease, opacity 0.5s ease;
-  z-index: 1000;
-  cursor: pointer;
-}
-
-.logo-button img {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-}
-
-@media (max-width: 1450px) {
-  .logo-button {
-    left: -150px;
-    opacity: 0;
-  }
-}
-
-@media (min-width: 1451px) {
-  .logo-button {
-    left: 30px;
-    opacity: 1;
-  }
-}
-
 /* Стили для мобильной верхней панели */
 .top-panel {
-  position: absolute; /* Фиксированное положение относительно окна */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   background-color: #ffffff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 5px;
-  z-index: 10005; /* Очень высокий слой, чтобы быть поверх шторки */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 10px 0;
+  z-index: 10005;
 }
 
 .top-panel .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
-  max-width: 100vw;
+  padding: 0 10px;
 }
 
-/* Левая часть верхней панели – строка поиска (50% ширины) */
-.top-panel__left {
-  width: 50%;
-}
-
-.top-panel__left .search-bar {
+/* Строка поиска на всю ширину */
+.top-panel .search-bar {
   width: 100%;
   display: flex;
   align-items: center;
   position: relative;
-  transition: all 0.3s ease;
 }
 
-.top-panel__left .search-input {
+.top-panel .search-input {
   width: 100%;
-  padding: 8px 50px 8px 8px;
+  padding: 10px 70px 10px 10px;
   border-radius: 10px;
   border: 1px solid transparent;
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
   font-size: 14px;
-  box-sizing: border-box;
-  transition: box-shadow 0.3s ease, width 0.3s ease;
 }
 
-.top-panel__left .search-input::placeholder {
+.top-panel .search-input::placeholder {
   transition: transform 0.2s ease, opacity 0.2s ease;
   transform: translateX(0);
   opacity: 1;
 }
 
-.top-panel__left .search-input:focus::placeholder {
+.top-panel .search-input:focus::placeholder {
   transform: translateX(100%);
   opacity: 0;
 }
 
-.top-panel__left .search-button {
+.top-panel .search-button {
   position: absolute;
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 6px;
   background-color: #377271;
   color: #ffffff;
   border: none;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease, transform 0.3s ease, right 0.3s ease;
-  display: flex;
-  align-items: center;
+  transition: background-color 0.3s ease;
 }
 
-.top-panel__left .search-button:hover {
+.top-panel .search-button:hover {
   background-color: #ffad42;
-}
-
-/* Правая часть верхней панели – блок выбора представительства (50% ширины) */
-.top-panel__right {
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0; /* Убираем внутренние отступы */
-  margin: 0; /* Убираем внешние отступы */
-}
-
-.top-panel__right .city-selection-wrapper {
-  position: relative;
-}
-
-.top-panel__right .selected-city-button {
-  background: none;
-  border: none;
-  color: #7e7e7e;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  padding: 0; /* Убираем внутренние отступы */
-  margin: 0; /* Убираем внешние отступы */
-  line-height: 1; /* Сброс высоты строки */
-}
-
-.top-panel__right .selected-city-button i {
-  margin-left: 4px;
-}
-
-.top-panel__right .selected-city-button:hover {
-  color: #ce7a0c;
 }
 
 /* Фиксированная нижняя панель */
@@ -191,7 +108,8 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
+  padding: 5px 0;
 }
 
 /* Элементы нижней панели – дублируемые кнопки */
@@ -238,6 +156,54 @@ body {
 /* Убираем нижний отступ у последнего элемента */
 .account .dropdown .link-buttons > *:last-child {
   margin-bottom: 0;
+}
+
+/* Стили для кнопки выбора представительства в шторке аккаунта */
+.link-buttons .city-selection-wrapper {
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px; /* Увеличиваем отступ снизу */
+  display: block;
+}
+
+.link-buttons .selected-city-button {
+  background: none;
+  border: none;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  white-space: nowrap;
+  width: 100%;
+  text-align: right;
+  justify-content: flex-end;
+  padding: 0;
+  min-height: 30px; /* Минимальная высота для клика */
+}
+
+.link-buttons .selected-city-button:hover {
+  color: #ffad42;
+}
+
+.link-buttons .selected-city-button span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 85%; /* Ограничиваем ширину текста */
+  text-align: right;
+}
+
+.link-buttons .selected-city-button i {
+  margin-left: 4px;
+  align-self: center;
+}
+
+.link-buttons .exclamation-mark {
+  color: orange;
+  font-size: 16px;
+  margin-right: 4px;
+  align-self: center;
 }
 
 .orders-button2 {
@@ -308,6 +274,7 @@ body {
   transform: none;
   padding-top: 5px;
   color: #494949;
+  font-size: 24px;
 }
 
 #ArrowButton {
@@ -383,10 +350,6 @@ body {
   border-radius: 8px;
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
   background-color: #fafafa;
-}
-
-#UserButton {
-  font-size: 24px;
 }
 
 .orders-button:hover,
@@ -481,6 +444,7 @@ body {
   align-items: flex-start;
   margin-top: 10px;
   gap: 2px;
+  font-size: 18px;
 }
 
 .icon-group:hover i {
@@ -629,24 +593,6 @@ body {
   right: 78px;
 }
 
-.icon-group i {
-  margin: 0;
-  padding: 0;
-  vertical-align: top;
-  cursor: pointer;
-}
-
-.icon-group {
-  display: inline-flex;
-  align-items: flex-start;
-  font-size: 18px;
-  gap: 9px;
-}
-
-.icon-group:hover i {
-  color: rgb(0, 0, 0);
-}
-
 .icon-group i.active {
   color: orange;
 }
@@ -791,7 +737,7 @@ body {
 
 .city-drawer {
   position: fixed;
-  top: 40px;
+  top: 45px;
   right: -100%;
   width: 100%;
   max-width: 700px;
@@ -1009,33 +955,20 @@ body {
 /* Unified account dropdown (mobile) */
 #accountDropdownUnified {
   position: fixed; /* Фиксированное положение относительно окна */
-  top: 40px; /* Прикрепляем к верху */
+  top: 45px; /* Прикрепляем к верху */
   right: -500px; /* Изначально спрятана за правой границей экрана */
   width: 100%; /* Уменьшенная ширина для мобильных устройств */
   height: 100vh; /* Полная высота окна (viewport height) */
   background-color: #ffffff;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-  z-index: 40;
+  z-index: 840;
   transition: right 0.3s ease-in-out; /* Плавное и быстрое выдвижение/скрытие */
   padding: 20px; /* Немного меньшие отступы */
+  overflow-y: auto; /* Добавляем прокрутку для длинного содержимого */
 }
 
 #accountDropdownUnified.show {
   right: 0;
-}
-
-/* Когда активирован режим поиска */
-.top-panel.search-active {
-  justify-content: center;
-}
-
-.top-panel.search-active .top-panel__left {
-  width: 100%;
-  transition: width 0.3s ease;
-}
-
-.top-panel.search-active .top-panel__right {
-  display: none;
 }
 
 /* ===== Корректировки для вкладок с учётом шапки ===== */

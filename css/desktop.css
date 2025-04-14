@@ -385,6 +385,7 @@ body {
   border-radius: 8px;
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
   background-color: #fafafa;
+  width: calc(100% - 20px); /* Обеспечиваем ширину блока с учетом отступов */
 }
 
 #UserButton {
@@ -397,24 +398,32 @@ body {
 }
 
 /* Стили для кнопок внутри .info-buttons */
-.account .dropdown .info-buttons .icon-group {
+.account .info-buttons .icon-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
   cursor: pointer;
   color: #333;
   transition: color 0.3s ease;
-  display: flex;
-  align-items: center;
   gap: 5px;
+  margin-top: 10px;
+  text-align: right;
 }
 
-.account .dropdown .info-buttons .icon-group:hover {
+.account .info-buttons > .icon-group:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.account .info-buttons .icon-group:hover {
   color: #ffad42;
 }
 
-.account .dropdown .info-buttons .icon-group:hover i {
+.account .info-buttons .icon-group:hover i {
   color: #ffad42;
 }
 
-.account .dropdown .info-buttons .icon-group.active i {
+.account .info-buttons .icon-group.active i {
   color: #ffad42;
 }
 
@@ -479,10 +488,13 @@ body {
 }
 
 .icon-group {
-  display: inline-flex;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: flex-start;
   margin-top: 10px;
   gap: 2px;
+  white-space: nowrap !important;
 }
 
 .icon-group:hover i {
@@ -628,23 +640,6 @@ body {
   right: 78px;
 }
 
-.icon-group i {
-  margin: 0;
-  padding: 0;
-  vertical-align: top;
-  cursor: pointer;
-}
-
-.icon-group {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 2px;
-}
-
-.icon-group:hover i {
-  color: rgb(0, 0, 0);
-}
-
 .icon-group i.active {
   color: orange;
 }
@@ -690,14 +685,15 @@ body {
 }
 
 /* ================================================ */
-/* ========== Ниже добавляем стили выбора города ========== */
+/* ========== Обновленные стили выбора города ========== */
 /* ================================================ */
 
+/* Обновленные стили для кнопки выбора представительства */
 .city-selection-wrapper {
-  position: absolute;
-  top: 15px;
-  right: 15px;
+  position: relative;
   z-index: 10000;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .selected-city-button {
@@ -709,10 +705,25 @@ body {
   display: flex;
   align-items: center;
   font-size: 15px;
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 5px 0;
 }
 
-.selected-city-button i {
+.selected-city-button span {
+  display: flex;
+  align-items: center;
+}
+
+.selected-city-button i.ri-arrow-down-s-line {
   margin-left: 4px;
+}
+
+.exclamation-mark {
+  color: orange;
+  margin-right: 5px;
+  font-size: 16px;
 }
 
 .selected-city-button:hover {
@@ -981,17 +992,68 @@ body {
 #accountDropdownUnified {
   position: fixed; /* Фиксированное положение относительно окна */
   top: 80px; /* Прикрепляем к верху */
-  right: -300px; /* Изначально спрятана за правой границей экрана */
-  width: 300px; /* Уменьшенная ширина */
+  right: -400px; /* Изначально спрятана за правой границей экрана */
+  width: 400px; /* Уменьшенная ширина */
   height: 100vh; /* Полная высота окна (viewport height) */
   background-color: #ffffff;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 930;
   transition: right 0.3s ease-in-out; /* Плавное и быстрое выдвижение/скрытие */
   padding: 30px;
+  overflow-y: auto;
 }
 
 /* Когда шторка открыта, сдвигаем её до края экрана */
 #accountDropdownUnified.show {
   right: 0;
+}
+
+/* Обновленные стили для элементов внутри шторки аккаунта */
+.link-buttons .city-selection-wrapper {
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.link-buttons .selected-city-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Изменено с flex-end на space-between */
+  text-align: right;
+  padding: 0;
+  min-height: 30px;
+}
+
+.link-buttons .selected-city-button span {
+  display: flex;
+  align-items: center;
+  flex: 1; /* Добавлено, чтобы занимать всё доступное пространство */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%; /* Увеличено с 85% до 100% */
+  text-align: right;
+  justify-content: flex-end;
+}
+
+/* Отдельные стили для текстового контейнера */
+.link-buttons .selected-city-button #currentCity {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.link-buttons .selected-city-button i {
+  margin-left: 4px;
+  align-self: center;
+  flex-shrink: 0; /* Предотвращает сжатие иконки */
+}
+
+.link-buttons .exclamation-mark {
+  color: orange;
+  font-size: 16px;
+  margin-right: 4px;
+  align-self: center;
+  flex-shrink: 0; /* Предотвращает сжатие иконки */
 }

@@ -117,20 +117,6 @@
               <i id="ArrowButton" class="ri-arrow-down-s-line"></i>
             </a>
           </div>
-
-          <!-- Контейнер для выбора города (для десктопа) -->
-          <div class="city-selection-wrapper">
-            <button
-              id="selectedCity"
-              class="selected-city-button no-city-chosen"
-            >
-              <span id="currentCity">
-                <i class="ri-alert-circle-line exclamation-mark"></i>
-                <span> Выберите представительство </span>
-              </span>
-              <i class="ri-arrow-down-s-line"></i>
-            </button>
-          </div>
         </div>
 
         <!-- Вторая строка с кнопками (десктопная) -->
@@ -176,46 +162,22 @@
       <!-- Верхняя панель мобильной версии -->
       <div class="top-panel">
         <div class="container">
-          <!-- Логотип -->
-          <div class="logo-button" data-tooltip="На главную страницу">
-            <img
-              src="/images/svg/Logo/energomixlogo.svg"
-              alt="Energomix Logo"
+          <!-- Строка поиска без вложенных div'ов -->
+          <div class="search-bar">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="1-2.SU NEW"
+              class="search-input"
+              data-tooltip="Введите название товара для поиска"
             />
-          </div>
-          <!-- Левая часть: Строка поиска (50% ширины) -->
-          <div class="top-panel__left">
-            <div class="search-bar">
-              <input
-                type="text"
-                id="searchInput"
-                placeholder="1-2.SU NEW"
-                class="search-input"
-                data-tooltip="Введите название товара для поиска"
-              />
-              <button
-                id="searchButton"
-                class="search-button"
-                data-tooltip="Нажмите для поиска товаров"
-              >
-                Поиск
-              </button>
-            </div>
-          </div>
-          <!-- Правая часть: Блок выбора представительства (50% ширины) -->
-          <div class="top-panel__right">
-            <div class="city-selection-wrapper">
-              <button
-                id="selectedCity"
-                class="selected-city-button no-city-chosen"
-              >
-                <span id="currentCity">
-                  <i class="ri-alert-circle-line exclamation-mark"></i>
-                  <span> Выберите представительство </span>
-                </span>
-                <i class="ri-arrow-down-s-line"></i>
-              </button>
-            </div>
+            <button
+              id="searchButton"
+              class="search-button"
+              data-tooltip="Нажмите для поиска товаров"
+            >
+              Поиск
+            </button>
           </div>
         </div>
       </div>
@@ -264,6 +226,16 @@
       id="accountDropdownUnified"
     >
       <div class="link-buttons">
+        <!-- Перемещенный контейнер для выбора города -->
+        <div class="city-selection-wrapper">
+          <button id="selectedCity" class="selected-city-button no-city-chosen">
+            <span id="currentCity">
+              <i class="ri-alert-circle-line exclamation-mark"></i>
+              <span> Выберите представительство </span>
+            </span>
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+        </div>
         <button class="orders-button2">Журнал заказов</button>
         <button class="waitlist-button">Лист ожидания</button>
         <button data-tooltip="Ваш рабочий стол" class="Cabinet-button">
@@ -496,8 +468,7 @@
 
     <!-- Подключение глобального скрипта коммуникации между страницами проекта -->
     <script src="/js/globalcomm.js" defer></script>
-    <!-- Логика перетаскивания вкладок -->
-    <script src="/js/tabs-drag.js" defer></script>
+
     <!-- Объединенный скрипт (вместо отдельных /js/categories.js и /js/city.js) -->
     <script src="/js/combined.js" defer></script>
     <!-- Имитация ввода текста в поиск -->
