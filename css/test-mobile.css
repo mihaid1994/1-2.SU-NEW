@@ -103,8 +103,8 @@ body {
 
 .tab.active {
   background-color: #ff8c00;
-  height: 35px;
-  margin-top: 0;
+  height: 32px;
+  margin-top: 3px;
   box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -142,28 +142,4 @@ body {
 
 .edit-tab:hover {
   color: #ffcc00;
-}
-
-/* ===== Корректировки для мобильной версии ===== */
-@media screen and (max-width: 800px) {
-  /* Предположим, что мобильная шапка задаёт высоту через переменную */
-  :root {
-    --header-height: 50px; /* Значение, определяемое в другом файле */
-  }
-  /* Смещение всего содержимого, чтобы шапка не перекрывала вкладки */
-  body {
-    padding-top: var(--header-height);
-  }
-  /* Полоса вкладок начинается ниже шапки и занимает нужную высоту при переносе строк */
-  .tabs {
-    margin-top: var(--header-height);
-    height: auto;
-  }
-  .tab {
-    height: auto;
-    padding: 5px 18px 5px 10px;
-  }
-  .tab.active {
-    height: auto;
-  }
 }

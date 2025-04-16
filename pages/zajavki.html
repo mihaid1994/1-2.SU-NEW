@@ -6,6 +6,16 @@
     <title>Журнал документов Заявки</title>
     <link rel="stylesheet" href="/css/returns.css" />
     <link
+      rel="stylesheet"
+      href="/css/returns.css"
+      media="screen and (min-width: 801px)"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/returns-mobile.css"
+      media="screen and (max-width: 800px)"
+    />
+    <link
       href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
       rel="stylesheet"
     />
@@ -151,21 +161,16 @@
 
       <!-- Всплывающее окно -->
       <div
-        id="iframe-container"
+        id="order-modal-container"
         class="hidden"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="iframe-close"
+        aria-labelledby="modal-close"
       >
-        <div id="iframe-close" role="button" tabindex="0" aria-label="Закрыть">
-          ✖
-        </div>
-        <iframe
-          id="iframe-content"
-          src=""
-          frameborder="0"
-          title="Содержимое документа"
-        ></iframe>
+        <div
+          id="order-details-container"
+          style="width: 100%; height: 100%"
+        ></div>
       </div>
     </div>
   </body>

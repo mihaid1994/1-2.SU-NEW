@@ -1,0 +1,341 @@
+/* Мобильные стили для страницы "Журнал заказов" */
+body,
+html {
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
+}
+
+/* Контейнер приложения */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Верхний поиск */
+.search-container {
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  margin: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-header-unique {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-header-input-unique {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.search-header-button-unique {
+  background-color: #517d79;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.search-header-button-unique:hover {
+  background-color: #476b68;
+}
+
+/* Фильтры */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.expand-search,
+.zkz-switch,
+#column-selector {
+  flex: 1;
+  min-width: 45%;
+  padding: 12px;
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Расширенный поиск */
+.search-filters-unique {
+  padding: 10px 0;
+}
+
+.filter-row-unique {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-select-unique,
+.filter-input-text-unique,
+.filter-input-date-unique {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.filter-button-unique {
+  align-self: flex-end;
+  background-color: #ffb74c;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Карточки вместо таблицы */
+.data-table {
+  display: none; /* Скрываем таблицу на мобильных */
+}
+
+/* Контейнер для карточек */
+.cards-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Стиль карточки */
+.order-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Заголовок карточки */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Содержимое карточки */
+.card-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+}
+
+.card-label {
+  color: #777;
+  font-size: 14px;
+}
+
+.card-value {
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Статус */
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+}
+
+.status-text {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Кликабельный элемент в карточке */
+.card-clickable {
+  color: rgb(0, 44, 110);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Выпадающий список колонок */
+.filters .dropdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 300px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1010;
+  padding: 15px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.filters .dropdown.open {
+  display: block;
+}
+
+.filters .dropdown label {
+  padding: 12px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.filters .dropdown label:hover {
+  background-color: #f5f5f5;
+}
+
+/* Сортировка */
+.sort-button {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px;
+  font-size: 14px;
+}
+
+.sort-options {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 300px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1010;
+  padding: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: none;
+}
+
+.sort-options.open {
+  display: block;
+}
+
+.sort-option {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sort-option:last-child {
+  border-bottom: none;
+}
+
+/* Всплывающее окно iframe */
+#iframe-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  z-index: 1000;
+  display: none;
+}
+
+#iframe-close {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  background: #cb6b17;
+  color: white;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+#iframe-content {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Фон затемнения */
+#blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+}
+
+#blur-overlay.active {
+  display: block;
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  padding: 15px;
+  margin-top: auto;
+}
+
+.footer-container {
+  text-align: center;
+  color: #333;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
