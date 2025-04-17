@@ -1,7 +1,7 @@
 // Имя кеша, меняйте при обновлении приложения
 const CACHE_NAME = "1-2-su-v1.0.0";
 
-// Список файлов для кеширования при установке
+// Минимальный список файлов для кеширования
 const filesToCache = [
   "/",
   "/index.html",
@@ -30,16 +30,8 @@ const filesToCache = [
   "/images/icons/icon-192x192.png",
   "/images/icons/icon-384x384.png",
   "/images/icons/icon-512x512.png",
-  // Логотип
+  // Базовые изображения
   "/images/svg/Logo/energomixlogo.svg",
-  // Основные изображения
-  "/images/jpg/ban/kontakty-2.jpg",
-  "/images/jpg/Brandfull/image1.jpg",
-  "/images/jpg/Brandfull/image2.jpg",
-  "/images/jpg/Brandfull/image3.jpg",
-  "/images/jpg/Brandfull/image4.jpg",
-  "/images/jpg/Brandfull/image5.jpg",
-  "/images/jpg/Brandfull/image6.jpg",
 ];
 
 // Установка Service Worker
@@ -75,4 +67,11 @@ self.addEventListener("fetch", (event) => {
       return response || fetch(event.request);
     })
   );
+});
+
+// Обработка сообщений
+self.addEventListener("message", (event) => {
+  if (event.data.action === "skipWaiting") {
+    self.skipWaiting();
+  }
 });
