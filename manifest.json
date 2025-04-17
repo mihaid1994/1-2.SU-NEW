@@ -3,7 +3,7 @@
   "short_name": "1-2.SU",
   "description": "Торговая платформа Энергомикс",
   "start_url": "/index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#4285f4",
   "icons": [
