@@ -42,35 +42,24 @@ const filesToCache = [
   "/images/jpg/Brandfull/image6.jpg",
 ];
 
-// При установке Service Worker
+// Установка Service Worker
 self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Installing Service Worker...", event);
-
-  // Пропускаем стадию ожидания и сразу активируем
   self.skipWaiting();
-
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Caching app shell");
       return cache.addAll(filesToCache);
     })
   );
 });
 
-// При активации Service Worker
+// Активация Service Worker
 self.addEventListener("activate", (event) => {
-  console.log("[Service Worker] Activating Service Worker...", event);
-
-  // Получаем контроль сразу после активации
   self.clients.claim();
-
-  // Удаляем старые кеши
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log("[Service Worker] Removing old cache:", cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -79,72 +68,11 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// При запросе ресурсов (стратегия: сначала кеш, потом сеть)
+// Стратегия кеширования: сначала кеш, потом сеть
 self.addEventListener("fetch", (event) => {
-  // Пропускаем запросы API и другие динамические ресурсы
-  if (event.request.url.includes("/api/") || event.request.method !== "GET") {
-    return;
-  }
-
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Если ресурс найден в кеше, возвращаем его
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      // Иначе обращаемся к сети
-      return fetch(event.request)
-        .then((response) => {
-          // Проверяем валидность ответа
-          if (
-            !response ||
-            response.status !== 200 ||
-            response.type !== "basic"
-          ) {
-            return response;
-          }
-
-          // Клонируем ответ, т.к. он может быть использован только один раз
-          const responseToCache = response.clone();
-
-          // Добавляем в кеш для дальнейшего использования
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-
-          return response;
-        })
-        .catch((error) => {
-          console.log(
-            "[Service Worker] Fetch failed; returning offline page",
-            error
-          );
-          // Если не можем получить ресурс, показываем офлайн-страницу
-          if (event.request.mode === "navigate") {
-            return caches.match("/index.html");
-          }
-
-          // Или возвращаем заглушку для изображений
-          if (event.request.destination === "image") {
-            return new Response(
-              '<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">' +
-                '<rect width="400" height="300" fill="#f0f0f0"/>' +
-                '<text x="50%" y="50%" font-size="24" text-anchor="middle" fill="#999">Офлайн</text>' +
-                "</svg>",
-              { headers: { "Content-Type": "image/svg+xml" } }
-            );
-          }
-
-          return new Response("Ресурс недоступен в офлайн-режиме");
-        });
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
   );
-});
-
-// Обработка сообщений (для принудительного обновления)
-self.addEventListener("message", (event) => {
-  if (event.data.action === "skipWaiting") {
-    self.skipWaiting();
-  }
 });
