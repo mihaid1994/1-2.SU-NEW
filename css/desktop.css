@@ -259,7 +259,8 @@ body {
 .chat-button,
 .Cabinet-button,
 .settings-ac-button,
-.waitlist-button {
+.waitlist-button,
+.productcardbutton {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -280,7 +281,8 @@ body {
 .Cabinet-button:hover,
 .settings-ac-button:hover,
 .waitlist-button:hover,
-.open-categories-button:hover {
+.open-categories-button:hover,
+.productcardbutton:hover {
   color: #ffad42;
 }
 

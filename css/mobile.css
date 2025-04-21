@@ -226,7 +226,8 @@ body {
 .chat-button,
 .Cabinet-button,
 .settings-ac-button,
-.waitlist-button {
+.waitlist-button,
+.productcardbutton {
   display: flex;
   align-items: center;
   gap: 10px;

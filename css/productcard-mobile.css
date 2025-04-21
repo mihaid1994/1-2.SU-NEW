@@ -1,0 +1,991 @@
+/* productcard-mobile.css - для экранов с максимальной шириной 800px */
+
+/* Общие стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  font-size: 14px;
+}
+
+.Clear {
+  clear: both;
+}
+
+.FloatRight {
+  float: right;
+}
+
+/* Основная обёртка */
+.PageContainer {
+  width: 100%;
+}
+
+.ContentContainer {
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px;
+}
+
+/* Баннер */
+.BannerWrapper {
+  margin-bottom: 5px;
+}
+
+.BannerContainer {
+  position: relative;
+}
+
+.BannerImage {
+  width: 100%;
+  display: block;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+
+.BannerText {
+  position: absolute;
+  top: 45%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+  font-weight: 600;
+  font-family: "San Francisco", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+.BannerMark {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 12px;
+  background: rgb(255, 255, 255);
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Хлебные крошки */
+.BreadcrumbsContainer {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 5px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.BreadcrumbsContainer::-webkit-scrollbar {
+  display: none; /* Chrome и Safari */
+}
+
+/* Список хлебных крошек */
+.BreadcrumbsList {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  flex-wrap: nowrap;
+}
+
+/* Элемент списка */
+.BreadcrumbsItem,
+.BreadcrumbsItemCurrent {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+/* Ссылка хлебных крошек */
+.BreadcrumbLink {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.BreadcrumbLink:hover {
+  color: #457f8d;
+}
+
+/* Карточка товара */
+.ProductCard {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+  background-color: #ffffff;
+}
+
+.ProductTitle {
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.CatalogMarksLine {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.StoreCode {
+  font-size: 13px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.MarksRight {
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.MarksRight .MarksText {
+  margin-right: 10px;
+  font-size: 13px;
+  color: #999;
+  cursor: pointer;
+}
+
+.PrintIcon {
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+}
+
+/* Изменение на одноколоночную структуру */
+.ProductDisplayed {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+/* Блок изображений (теперь первый) */
+.ProductImages {
+  width: 100%;
+  order: 1;
+}
+
+.ProductThumbs {
+  display: flex;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE и Edge */
+  padding-bottom: 5px;
+}
+
+.ProductThumbs::-webkit-scrollbar {
+  display: none; /* Chrome и Safari */
+}
+
+.ThumbSlide {
+  margin-right: 5px;
+  flex: 0 0 auto;
+}
+
+.ThumbLink {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.ThumbImage {
+  max-width: 50px;
+  height: auto;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ProductImageBig {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.BigImage {
+  width: 90%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Блок цены (теперь второй) */
+.ProductColumnLeft {
+  width: 100%;
+  order: 2;
+}
+
+.ProductOffer {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  margin-bottom: 15px;
+}
+
+.PriceCover {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.CityPrice {
+  color: #666;
+  margin-bottom: 0;
+  font-size: 13px;
+}
+
+.PriceValue {
+  font-size: 1.4rem;
+  color: #818181;
+  font-weight: bold;
+}
+
+.OldPrice {
+  display: block;
+  text-decoration: line-through;
+  margin-left: 0;
+  margin-top: 3px;
+  color: #999;
+  font-size: 13px;
+}
+
+/* Блок кратности */
+.Multiplicity {
+  font-size: 13px;
+  color: #666;
+  margin: 8px 0;
+}
+
+.BuySection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.NumsToBuy {
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.NumMinus,
+.NumPlus {
+  background: #f9f9f9;
+  border: none;
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.NumInput {
+  width: 40px;
+  text-align: center;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.BuyButton {
+  background: #e0522d;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 60%;
+  height: 40px;
+}
+
+.BuyButton:hover {
+  background: #d33e19;
+}
+
+.OfferInfo {
+  margin-bottom: 12px;
+}
+
+.AvailabilityCount {
+  font-size: 13px;
+  color: rgb(24, 107, 89);
+}
+
+.OfferManage {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.OfferManage span {
+  cursor: pointer;
+  color: #666;
+  font-size: 13px;
+}
+
+.OfferManage i {
+  margin-right: 4px;
+}
+
+.FastLinks {
+  display: flex;
+  gap: 15px;
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Боковая информация (бренд) */
+.BrandAdditionalInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.BrandLogo img {
+  max-width: 60px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.BrandAllItems {
+  font-size: 13px;
+}
+
+.BrandAllItems .Gray {
+  margin-right: 5px;
+}
+
+/* Дополнительные коды */
+.ExtraCodesBlock {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #333;
+}
+
+.CodeLine {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Блок характеристик (теперь третий) */
+.ProductColumnRight {
+  width: 100%;
+  order: 3;
+}
+
+.DescriptionInfo {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.ShortPropsBlock {
+  position: relative;
+  max-height: 300px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.ShortPropsBlock.expanded {
+  max-height: none;
+}
+
+.ShortPropsBlock:not(.expanded)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.ShortPropsBlock h5 {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.FeatureList {
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.FeatureList li {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.FeatureList .Gray {
+  color: #777;
+}
+
+.GoToFullDesc,
+.documentation-link,
+.delivery-link {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  width: 100%;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  color: #2d7596;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+/* Дата */
+.ProductAfterLine {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Блок "С этим товаром покупают" и "Аналоги" */
+.AlsoLeftWidth,
+.RecentViewsBlock {
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.MiniHorizontalTiles {
+  display: flex;
+  gap: 10px;
+  transition: transform 0.5s ease;
+}
+
+.SaleTileItem {
+  width: 140px;
+  min-width: 140px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  background-color: #ffffff;
+  padding: 8px;
+  flex: 0 0 auto;
+}
+
+.SaleImageLink img {
+  max-width: 100%;
+  display: block;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.SaleName {
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.4em;
+  line-height: 1.2em;
+}
+
+.SaleData {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SalePrice {
+  color: #818181;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.SaleBuyButton {
+  background: rgb(130, 155, 150);
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.carousel-button {
+  background-color: rgb(219, 219, 219);
+  border: none;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.prev-button {
+  left: 5px;
+}
+
+.next-button {
+  right: 5px;
+}
+
+/* Контейнер с аналогами */
+.AnalogsContainer {
+  margin-top: 12px;
+}
+
+.AnalogsContainer h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.AnalogCount {
+  font-size: 13px;
+  color: #666;
+}
+
+.ShowAllAnalogs {
+  font-size: 13px;
+  color: #2d7596;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: normal;
+  margin-left: auto;
+}
+
+/* Скроллер аналогов */
+.AnalogsScroller {
+  display: flex;
+  gap: 8px;
+  padding: 5px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  padding-bottom: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.AnalogsScroller::-webkit-scrollbar {
+  height: 4px;
+}
+
+.AnalogsScroller::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.AnalogItem {
+  flex: 0 0 auto;
+  width: 50px;
+  height: 50px;
+  padding: 3px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+.AnalogItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Табы */
+.TabsContainer {
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  transition: height 0.3s ease;
+}
+
+.TabsNav {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.TabsNav::-webkit-scrollbar {
+  display: none;
+}
+
+.TabItemNav {
+  font-weight: bold;
+  color: #555;
+  position: relative;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.TabItemNav.activeTab {
+  color: #457f8d;
+}
+
+.TabPanel {
+  display: none;
+}
+
+.TabPanel.activePanel {
+  display: block;
+}
+
+/* Таблицы */
+.InfoTable,
+.CharacteristicsTable,
+.LogisticsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.InfoTable th,
+.InfoTable td,
+.CharacteristicsTable td,
+.LogisticsTable th,
+.LogisticsTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 13px;
+}
+
+.CharacteristicsTable td:first-child {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  width: 60%;
+}
+
+/* Адаптация секций данных для мобильных */
+.AdditionalInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.CharacteristicsSection,
+.LogisticsSection {
+  width: 100%;
+}
+
+.CharacteristicsSection h3,
+.LogisticsSection h3 {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Документы и сертификаты */
+.DocsList {
+  margin: 12px 0;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.DocItem {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-width: 100%;
+}
+
+.DocTitle {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.UploadDate {
+  font-size: 11px;
+  color: #888;
+  position: static;
+  display: block;
+  margin-top: 3px;
+  right: auto;
+}
+
+.DownloadBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #888;
+  transition: color 0.3s;
+  align-self: flex-end;
+  margin-top: -20px;
+}
+
+/* Кнопка "Предложить документ" */
+.AddDocBtn {
+  display: block;
+  width: 100%;
+  margin: 15px auto 0;
+  background: rgb(107, 172, 159);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s ease;
+  font-size: 14px;
+}
+
+/* Оверлей изображения */
+#ImageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+}
+
+#ImageOverlayBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#ImageOverlayPic {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
+  width: 90%;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+  background: #fff;
+}
+
+.OverlayNavLeft,
+.OverlayNavRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: #ffffff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.OverlayNavLeft {
+  left: 10px;
+}
+
+.OverlayNavRight {
+  right: 10px;
+}
+
+.OverlayThumbs {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+}
+
+.OverlayThumb img {
+  width: 40px;
+}
+
+/* Модальное окно */
+.AnalogModalOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.AnalogModalContent {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  width: 95%;
+  margin: 50px auto;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.AnalogModalContentAll {
+  max-width: 95vw;
+  width: 95vw;
+  margin: 5vh auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Фиксированная панель покупки (для мобильной версии) */
+.StickyBuyBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.StickyBuyBar.visible {
+  transform: translateY(0);
+}
+
+.StickyBuyBar .PriceValue {
+  font-size: 1.2rem;
+}
+
+.StickyBuyBar .BuyButton {
+  width: auto;
+}
+
+/* Футер */
+.footer {
+  background-color: rgb(213, 213, 213);
+  color: white;
+  padding: 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.footer-container {
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.footer-link {
+  color: #28383d;
+  text-decoration: none;
+}
+
+/* Уведомления */
+.NotificationContainer {
+  position: fixed;
+  top: 20px;
+  right: 10px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 300px;
+}
+
+.notification {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
