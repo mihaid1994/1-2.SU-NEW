@@ -12,12 +12,18 @@
     "initFunctions": ["initializeDashboard"]
   },
   "/pages/search_cat.html": {
-    "scripts": ["/js/filter.js", "/js/table_card.js", "/js/tooltip.js"],
+    "scripts": [
+      "/js/filter.js",
+      "/js/table_card.js",
+      "/js/tooltip.js",
+      "/js/mobile-view.js"
+    ],
     "initFunctions": [
       "initFilterMenu",
       "initTableCardView",
       "initTooltips",
-      "handleSearchQuery"
+      "handleSearchQuery",
+      "initMobileView"
     ]
   },
   "/pages/zajavki.html": {

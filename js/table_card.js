@@ -1,4 +1,16 @@
 window.initTableCardView = function (root = document) {
+  // Mobile detection - exit early if on mobile
+  const isMobile =
+    window.innerWidth <= 768 ||
+    navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/iPhone|iPad|iPod/i);
+
+  if (isMobile) {
+    console.log("Mobile device detected, table card view not initialized");
+    return;
+  }
+
+  // Continue with the original functionality for desktop only
   let isCardView = false;
   let dataCache = null;
   let imageCache = {};
