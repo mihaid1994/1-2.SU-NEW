@@ -178,7 +178,7 @@
         });
       }
       const productCardButtons =
-        document.querySelectorAll("#productcardbutton");
+        document.querySelectorAll(".productcardbutton");
       if (productCardButtons.length > 0) {
         productCardButtons.forEach((productCardButton) => {
           productCardButton.addEventListener("click", async (e) => {
