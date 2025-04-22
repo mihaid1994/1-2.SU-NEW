@@ -260,7 +260,8 @@ body {
 .Cabinet-button,
 .settings-ac-button,
 .waitlist-button,
-.productcardbutton {
+.productcardbutton,
+.podborbutton {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -282,7 +283,8 @@ body {
 .settings-ac-button:hover,
 .waitlist-button:hover,
 .open-categories-button:hover,
-.productcardbutton:hover {
+.productcardbutton:hover,
+.podborbutton:hover {
   color: #ffad42;
 }
 

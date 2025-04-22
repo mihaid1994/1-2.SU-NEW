@@ -1,4 +1,17 @@
 window.initversusFunction = function (root = document) {
+  // Определяем, является ли устройство мобильным
+  const isMobile =
+    window.innerWidth <= 768 ||
+    navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/iPhone|iPad|iPod/i);
+
+  if (isMobile) {
+    console.log(
+      "Мобильное устройство определено, versus.js не инициализирован"
+    );
+    return;
+  }
+
   const d = root;
 
   // Функция, которая будет выполнена сразу, если DOM уже готов или если это не document

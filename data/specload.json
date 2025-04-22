@@ -64,7 +64,7 @@
     "initFunctions": ["initProductcardTest"]
   },
   "/pages/versus.html": {
-    "scripts": ["/js/versus.js"],
-    "initFunctions": ["initversusFunction"]
+    "scripts": ["/js/versus.js", "/js/versus-mobile.js"],
+    "initFunctions": ["initversusFunction", "initVersusMobileFunction"]
   }
 }
